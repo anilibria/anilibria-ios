@@ -4,7 +4,7 @@
 # Лицензия #
 Исходный код распостраняется под лицензией GPL v3
 
-> Copyright (C) 2020  Ivan Mofrozov [(w-e-r-n-e-r@bk.ru)](mailto:w-e-r-n-e-r@bk.ru)
+> Copyright (C) 2020 [Ivan Morozov](https://github.com/Allui)
 > 
 > This program is free software; you can redistribute it and/or modify
 > it under the terms of the GNU General Public License as published by

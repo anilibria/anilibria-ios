@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CommentsViewController" customModule="Anilibria" customModuleProvider="target">
+            <connections>
+                <outlet property="view" destination="iN0-l3-epB" id="CnX-Za-DFI"/>
+                <outlet property="webView" destination="mcc-q6-lS7" id="eJb-Rf-Z57"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <wkWebView contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="mcc-q6-lS7">
+                    <rect key="frame" x="0.0" y="44" width="414" height="852"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <wkWebViewConfiguration key="configuration">
+                        <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                        <wkPreferences key="preferences" javaScriptCanOpenWindowsAutomatically="YES"/>
+                    </wkWebViewConfiguration>
+                </wkWebView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="50y-J1-S2E" customClass="GradientView" customModule="Anilibria" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="44" width="414" height="5"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="5" id="R8l-WV-Ct6"/>
+                    </constraints>
+                    <viewLayoutGuide key="safeArea" id="hHA-5y-cmk"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="color" keyPath="firstColor">
+                            <color key="value" red="0.0" green="0.0" blue="0.0" alpha="0.14999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="secondColor">
+                            <color key="value" red="0.0" green="0.0" blue="0.0" alpha="0.01" colorSpace="custom" customColorSpace="sRGB"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="string" keyPath="gradientTypeName" value="topBottom"/>
+                    </userDefinedRuntimeAttributes>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="50y-J1-S2E" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="2De-dl-aWu"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="mcc-q6-lS7" secondAttribute="trailing" id="5go-U3-ioq"/>
+                <constraint firstItem="mcc-q6-lS7" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="804-W7-nS3"/>
+                <constraint firstItem="50y-J1-S2E" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="Ihf-NE-y6R"/>
+                <constraint firstItem="mcc-q6-lS7" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="JXO-Wd-4vL"/>
+                <constraint firstAttribute="bottom" secondItem="mcc-q6-lS7" secondAttribute="bottom" id="LdP-Uj-GYd"/>
+                <constraint firstItem="50y-J1-S2E" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="iGl-fR-Pab"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <point key="canvasLocation" x="137.68115942028987" y="133.92857142857142"/>
+        </view>
+    </objects>
+</document>

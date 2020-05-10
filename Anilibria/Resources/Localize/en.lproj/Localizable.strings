@@ -1,0 +1,346 @@
+//AGREEMENT
+"url.agreement" = "http://meetmaker.mintrocket.ru/api/v1/agreement?language=en";
+
+//TOAST
+"toast.saved" = "Saved";
+"toast.done" = "Done";
+"toast.report_sended" = "Sended";
+"toast.main_photo" = "Main Photo";
+"toast.friend_request_sended" = "Friend request sent";
+"toast.friend_deleted" = "Deleted from friends";
+"toast.favorite_added" = "Favorited";
+"toast.favorite_removed" = "Removed from favorites";
+
+//ALERT
+"alert.title.error" = "Error";
+"alert.title.emty" = "Empty";
+"alert.title.deleting" = "Deleting";
+"alert.title.load_error" = "Error";
+"alert.title.warning" = "Warning";
+
+"alert.message.exit" = "Do you really want to leave?";
+"alert.message.try_again" = "Try again";
+"alert.message.photo_limit" = "Unfortunately you can upload only 5 photos!";
+"alert.message.delete_friend" = "Are you sure you want to remove the user from your friends?";
+"alert.message.no_items" = "Nothing found";
+"alert.message.delete_review" = "Are you sure you want to remove this review?";
+"alert.message.delete_comment" = "Are you sure you want to remove this comment?";
+
+//PERMISSION
+"permission.title" = "Permission";
+"permission.photo" = "To upload a photo, we need access to \"Photo\".\nAccess can be submitted via \"Settings\"";
+"permission.camera" = "To upload a photo, we need access to \"Camera\".\nAccess can be submitted via \"Settings\"";
+"permission.location" = "For this section to work, you must allow access to Location.\nAccess can be submitted via \"Settings\"";
+
+//ERROR
+"Error.required_fields_empty" = "Fill in required fields!";
+"Error.not_all_fields_correctly_filled" = "Not all fields are filled correctly!";
+"Error.network" = "Network error:";
+"Error.review_empty" = "Fill in review!";
+
+//BUTTONS
+"buttons.yes" = "Yes";
+"buttons.no" = "No";
+"buttons.send_code" = "Send соde";
+"buttons.done" = "Done";
+"buttons.resend_code" = "Resend code";
+"buttons.signup" = "Sign up";
+"buttons.signout" = "Sign out";
+"buttons.select_photo" = "Select photo";
+"buttons.create_meeting" = "New Meeting";
+"buttons.join_meeting" = "Join";
+"buttons.cancel" = "Cancel";
+"buttons.settings" = "Settings";
+"buttons.camera" = "Camera";
+"buttons.library" = "Photo Library";
+"buttons.save" = "Save";
+"buttons.next" = "Next";
+"buttons.skip" = "Skip";
+"buttons.report" = "Report";
+"buttons.send" = "Send";
+"buttons.reset" = "Reset";
+"buttons.delete" = "Delete";
+
+//MENU
+"menu.main" = "Main";
+"menu.friends" = "Friends";
+"menu.messages" = "Messages";
+"menu.categories" = "Categories";
+"menu.meetings" = "Meetings";
+"menu.requests" = "Requests";
+"menu.places" = "New places";
+"menu.notifications" = "Notifications";
+"menu.store" = "Store";
+"menu.rating" = "Rating";
+"menu.favorite" = "Favorites";
+"menu.support" = "Support";
+"menu.invite" = "Invite a friend";
+
+//CATEGORY
+"category.meetings" = "Meetings";
+"category.hobby" = "Hobby";
+"category.travels" = "Travels";
+"category.business" = "Business";
+"category.sport" = "Sport";
+"category.other" = "Other";
+
+//COMMON
+"common.genders.male" = "Male";
+"common.genders.female" = "Female";
+"common.search" = "Search";
+"common.level" = "level";
+"common.short_level" = "lvl";
+"common.photo_counter" = "Photo %i of %i";
+"common.day_of_week.short.monday" = "Mon";
+"common.day_of_week.short.tuesday" = "Tue";
+"common.day_of_week.short.wednesday" = "Wed";
+"common.day_of_week.short.thursday" = "Thu";
+"common.day_of_week.short.friday" = "Fri";
+"common.day_of_week.short.saturday" = "Sat";
+"common.day_of_week.short.sunday" = "Sun";
+"common.day_of_week.long.monday" = "Monday";
+"common.day_of_week.long.tuesday" = "Tuesday";
+"common.day_of_week.long.wednesday" = "Wednesday";
+"common.day_of_week.long.thursday" = "Thursday";
+"common.day_of_week.long.friday" = "Friday";
+"common.day_of_week.long.saturday" = "Saturday";
+"common.day_of_week.long.sunday" = "Sunday";
+"common.day_of_week.day_off" = "Day off";
+"common.time_range.start" = "Opening";
+"common.time_range.end" = "Closing";
+"common.discount" = "discount";
+"common.message_input_placeholder" = "Enter your message";
+"common.value.meter" = "m";
+"common.value.kilometr" = "km";
+
+//CHOICE SCREEN
+"choice.title.language" = "Select language";
+"choice.title.languages" = "Select languages";
+"choice.title.city" = "Select city";
+"choice.title.address" = "Select address";
+
+//AUTH SREEN
+"screen.auth.title" = "Authorization";
+"screen.auth.description" = "To register, select the country and enter the phone number";
+
+//SMS CODE SCREEN
+"screen.sms_code.title" = "Entering the code";
+"screen.sms_code.description" = "An SMS with an access code has been sent to your phone number. Please enter it in the field";
+
+//BLANK PROFILE SCREEN
+"screen.blank_profile.title" = "Profile";
+
+"screen.blank_profile.phone" = "Phone";
+"screen.blank_profile.last_name" = "Second name";
+"screen.blank_profile.first_name" = "Name";
+"screen.blank_profile.gender" = "Sex";
+"screen.blank_profile.birthday" = "Date of Birthday";
+"screen.blank_profile.city" = "City";
+"screen.blank_profile.language" = "Interface language";
+
+"screen.blank_profile.agreement.begin" = "By registering, you agree to our ";
+"screen.blank_profile.agreement.conditions" = "Terms";
+"screen.blank_profile.agreement.join" = " and ";
+"screen.blank_profile.agreement.confidential" = "Privacy Policy";
+
+//MAIN SCREEN
+"screen.main.title" = "Main";
+
+"screen.main.meeting.join_random_place" = "Join a random meeting in the location";
+"screen.main.meeting.create_random_place" = "Create a meeting in a random location";
+"screen.main.meeting.join_random_institution" = "Join a random meeting in a place";
+"screen.main.meeting.create_random_institution" = "Create a meeting in a random place";
+
+//MY PROFILE SCREEN
+"screen.profile.my.title" = "My profile";
+"screen.profile.title" = "View profile";
+
+"screen.profile.categories" = "Interests";
+"screen.profile.socials" = "My social networks";
+"screen.profile.gender" = "Sex";
+"screen.profile.birthday" = "Date of Birthday";
+"screen.profile.phone" = "Phone";
+"screen.profile.email" = "E-mail";
+"screen.profile.languages" = "Languages";
+"screen.profile.about" = "About me";
+
+"screen.profile.segment.info" = "Info";
+"screen.profile.segment.institutions" = "Places";
+"screen.profile.segment.friends" = "Friends";
+"screen.profile.segment.history" = "History";
+
+"screen.profile.empty.no_my_institution_title" = "No places";
+"screen.profile.empty.no_my_institution_text" = "You have not added any places yet";
+"screen.profile.empty.no_institution_title" = "Empty";
+"screen.profile.empty.no_institution_text" = "Information about places is not available";
+"screen.profile.empty.no_friends_title" = "Empty";
+"screen.profile.empty.no_friends_text" = "Information about friends is not available";
+"screen.profile.empty.no_history_title" = "Empty";
+"screen.profile.empty.no_history_text" = "History is not available";
+
+"screen.profile.settings.change_phone" = "Change phone number";
+"screen.profile.settings.institutions" = "Settings of places";
+"screen.profile.settings.privacy" = "Privacy settings";
+"screen.profile.settings.edit_profile" = "Edit profile";
+
+//MY PRIVACY SCREEN
+"screen.privacy.title" = "Privacy settings";
+
+"screen.privacy.full_access" = "Full access";
+"screen.privacy.partial_access" = "Partial access";
+"screen.privacy.closed_access" = "Closed access";
+
+"screen.privacy.item.phone" = "Phone number is visible";
+"screen.privacy.item.email" = "E-mail is open";
+"screen.privacy.item.social" = "Socials are open";
+"screen.privacy.item.messages" = "Receive messages from all users";
+"screen.privacy.item.messages_partial" = "Receive messages from friends only";
+"screen.privacy.item.friends" = "Everyone sees my friends";
+
+//PROFILE EDIT SCREEN
+"screen.edit_profile.title" = "Edit profile";
+"screen.edit_profile.vk" = "VK profile";
+"screen.edit_profile.fb" = "Facebook profile";
+
+//CATEGORIES SCREEN
+"screen.categories.title" = "Categories";
+
+//SUBCATEGORIES SCREEN
+"screen.subcategories.title" = "Categories";
+"screen.subcategories.select" = "Select categories:";
+
+//INSTITUTION SCREEN
+"screen.institution.title" = "Institution profile";
+"screen.institution.score_title" = "Users score";
+"screen.institution.work_time" = "Schedule";
+
+"screen.institution.segment.info" = "Info";
+"screen.institution.segment.review" = "Review";
+"screen.institution.segment.meeting" = "Meetings";
+
+"screen.institution.socials" = "We are in social networks";
+
+"screen.institution.settings.rating" = "Raise the rating";
+"screen.institution.settings.edit_profile" = "Edit profile";
+"screen.institution.settings.change_work" = "Change the schedule";
+
+"screen.institution.empty.no_review_title" = "No reviews";
+"screen.institution.empty.no_review_text" = "There are no reviews";
+"screen.institution.empty.no_meeting_title" = "No meetings";
+"screen.institution.empty.no_meeting_text" = "Have been no meetings yet";
+
+//INSTITUTION EDIT SCREEN
+"screen.institution_edit.create_title" = "New place";
+"screen.institution_edit.edit_title" = "Edit place";
+
+"screen.institution_edit.name" = "Name";
+"screen.institution_edit.category" = "Place category";
+"screen.institution_edit.address" = "Address";
+"screen.institution_edit.phone" = "Phone";
+"screen.institution_edit.vk_path" = "Profile VKontakte";
+"screen.institution_edit.fb_path" = "Profile Facebook";
+"screen.institution_edit.about" = "About place";
+"screen.institution_edit.discount" = "Discount";
+
+"screen.institution_edit.set_discount" = "Give a discount";
+
+//WORK TIME SCREEN
+"screen.work_time.title" = "Schedule";
+
+//FRIENDS SCREEN
+"screen.friends.title" = "Friends";
+"screen.friends.empty.no_friends_title" = "No friends";
+"screen.friends.empty.no_friends" = "You have not added any friends yet";
+
+// USER LIST SCREEN
+"screen.users_list.title" = "Users";
+"screen.users_list.empty.no_users_title" = "No users";
+"screen.users_list.empty.no_users" = "No users found for this query";
+
+//USERS FILTER
+"screen.users_filter.title" = "Filter";
+"screen.users_filter.city" = "City";
+"screen.users_filter.gender" = "Sex";
+"screen.users_filter.language" = "Language";
+"screen.users_filter.age" = "Age";
+"screen.users_filter.rating" = "Rating";
+
+//COMMON FILTER
+"screen.common_filter.title" = "Filter";
+"screen.common_filter.city" = "City";
+"screen.common_filter.categories" = "Categories";
+"screen.common_filter.rating" = "Rating";
+"screen.common_filter.discount" = "Discount";
+"screen.common_filter.grantingDiscount" = "Granting of a discount";
+
+//SUPPORT SCREEN
+"screen.support.title.common" = "Support";
+"screen.support.title.report" = "Report";
+"screen.support.theme" = "Theme";
+"screen.support.email" = "E-mail";
+"screen.support.message" = "Message";
+"screen.support.complaint" = "Complaint";
+"screen.support.complaint.institution" = "Complaint about the place";
+"screen.support.complaint.place" = "Complaint about the location";
+"screen.support.complaint.user" = "Complaint about the user";
+
+//INSTITUTION PRIVACY SCREEN
+"screen.institution_privacy.title" = "Settings of places";
+"screen.institution_privacy.privacy_text" = "Allow other users to see links to my place?";
+
+//SEND REVIEW SCREEN
+"screen.send_review.title" = "New review";
+"screen.send_review.question" = "Did you like this place?";
+"screen.send_review.review" = "Review";
+"screen.send_review.send_review" = "Add review";
+
+//COMMENTS SCREEN
+"screen.comments.title" = "Review";
+
+//RATING SCREEN
+"screen.rating.title" = "Rating";
+"screen.rating.segment.users" = "Users";
+"screen.rating.segment.institutions" = "Places";
+"screen.rating.segment.places" = "Locations";
+
+//REQUESTS SCREEN
+"screen.requests.title" = "Requests";
+"screen.requests.segment.incoming" = "Incoming";
+"screen.requests.segment.outgoing" = "Outgoing";
+
+"screen.requests.empty.no_incoming_requests_title" = "No incoming requests";
+"screen.requests.empty.no_incoming_requests" = "You have not any incoming requests yet";
+"screen.requests.empty.no_outgoing_requests_title" = "No outgoing requests";
+"screen.requests.empty.no_outgoing_requests" = "You have not any outgoing requests yet";
+
+"screen.requests.transactions.result.positive" = "Request accepted";
+"screen.requests.transactions.result.negative" = "Request denied";
+"alert.message.delete_all_requests" = "Delete all %@ requests?";
+
+"screen.requests.transactions.incoming.he_add_friend_message" = "Отправил вам заявку на добавление в друзья. Вы хотите добавить этого пользователя в друзья?";
+"screen.requests.transactions.incoming.she_add_friend_message" = "Отправила вам заявку на добавление в друзья. Вы хотите добавить этого пользователя в друзья?";
+
+"screen.requests.transactions.outgoing.add_friend" = "Вы отправили этому пользователю заявку на добавление в друзья.";
+
+//NEW PLACES SCREEN
+"screen.new_places.title" = "New places";
+"screen.new_places.empty.no_places_title" = "No places";
+"screen.new_places.empty.no_places" = "No places found for this query";
+
+//FAVORITES SCREEN
+"screen.favorites.title" = "Favorites";
+"screen.favorites.empty.no_favorites_title" = "No favorites";
+"screen.favorites.empty.no_favorites" = "You have not any favorites yet";
+
+//NOTIFY SCREEN
+"screen.notify.title" = "Notifications";
+"screen.notify.empty.no_notificatins_title" = "No notifications";
+"screen.notify.empty.no_notificatins" = "You have not notifications yet";
+
+//MAP SCREEN
+"screen.map.title" = "Location on map";
+
+// CHATS LIST SCREEN
+"screen.chats_list.title" = "Messages";
+"screen.chats_list.empty.no_messages_title" = "No messages";
+"screen.chats_list.empty.no_messages" = "You have not messages yet";

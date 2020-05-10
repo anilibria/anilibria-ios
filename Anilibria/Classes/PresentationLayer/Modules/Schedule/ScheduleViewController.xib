@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ScheduleViewController" customModule="Anilibria" customModuleProvider="target">
+            <connections>
+                <outlet property="collectionView" destination="Uvh-Sh-ehh" id="f0J-aA-tzC"/>
+                <outlet property="view" destination="iN0-l3-epB" id="Jva-IN-xtm"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Uvh-Sh-ehh">
+                    <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <collectionViewLayout key="collectionViewLayout" id="moC-9N-P7C" customClass="IGListCollectionViewLayout"/>
+                </collectionView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KWn-oB-ciq" customClass="HideableView" customModule="Anilibria" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="44" width="414" height="5"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z7d-Os-WWD" customClass="GradientView" customModule="Anilibria" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="5"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="color" keyPath="firstColor">
+                                    <color key="value" red="0.0" green="0.0" blue="0.0" alpha="0.14999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="color" keyPath="secondColor">
+                                    <color key="value" red="0.0" green="0.0" blue="0.0" alpha="0.01" colorSpace="custom" customColorSpace="sRGB"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="string" keyPath="gradientTypeName" value="topBottom"/>
+                            </userDefinedRuntimeAttributes>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="5" id="85A-vI-aL3"/>
+                        <constraint firstAttribute="bottom" secondItem="Z7d-Os-WWD" secondAttribute="bottom" id="CjS-5r-v3d"/>
+                        <constraint firstAttribute="trailing" secondItem="Z7d-Os-WWD" secondAttribute="trailing" id="d50-rK-d01"/>
+                        <constraint firstItem="Z7d-Os-WWD" firstAttribute="top" secondItem="KWn-oB-ciq" secondAttribute="top" id="fa1-fB-Pty"/>
+                        <constraint firstItem="Z7d-Os-WWD" firstAttribute="leading" secondItem="KWn-oB-ciq" secondAttribute="leading" id="x4w-C0-nCc"/>
+                    </constraints>
+                    <connections>
+                        <outlet property="scrollView" destination="Uvh-Sh-ehh" id="9XX-x8-a5f"/>
+                    </connections>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="Uvh-Sh-ehh" secondAttribute="bottom" id="090-eD-Csd"/>
+                <constraint firstItem="Uvh-Sh-ehh" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="4fg-4W-GH5"/>
+                <constraint firstItem="Uvh-Sh-ehh" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="KUa-EX-SNj"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Uvh-Sh-ehh" secondAttribute="trailing" id="Rrw-ie-eWN"/>
+                <constraint firstItem="KWn-oB-ciq" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="VsS-uN-UbO"/>
+                <constraint firstItem="KWn-oB-ciq" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="pZe-F7-Kns"/>
+                <constraint firstItem="KWn-oB-ciq" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="s7f-37-wds"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+        </view>
+    </objects>
+</document>

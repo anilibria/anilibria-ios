@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="6aQ-4a-VDE" customClass="FilterHeaderCell" customModule="Anilibria" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="160"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="160"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iFP-Qd-vPS">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="160"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Фильтр" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="auQ-yy-Vey">
+                                <rect key="frame" x="16" y="16" width="53" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Релиз завершен" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kDr-rC-ay5">
+                                <rect key="frame" x="16" y="44" width="117.5" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kKg-tM-hT6">
+                                <rect key="frame" x="255" y="37.5" width="51" height="31"/>
+                                <color key="onTintColor" red="0.70742018399999995" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <action selector="switchAction:" destination="6aQ-4a-VDE" eventType="valueChanged" id="0d1-hB-Qiz"/>
+                                </connections>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Сортировка" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eQj-Aj-r63">
+                                <rect key="frame" x="16" y="92" width="86" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="VNt-tW-KHX">
+                                <rect key="frame" x="16" y="120" width="288" height="29"/>
+                                <segments>
+                                    <segment title="Популярность"/>
+                                    <segment title="Новизна"/>
+                                </segments>
+                                <color key="tintColor" red="0.70742018399999995" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <action selector="segmentAction:" destination="6aQ-4a-VDE" eventType="valueChanged" id="Lrz-yi-sIY"/>
+                                </connections>
+                            </segmentedControl>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="eQj-Aj-r63" firstAttribute="leading" secondItem="iFP-Qd-vPS" secondAttribute="leading" constant="16" id="0fU-jH-uNX"/>
+                            <constraint firstAttribute="trailing" secondItem="VNt-tW-KHX" secondAttribute="trailing" constant="16" id="59L-24-UNq"/>
+                            <constraint firstItem="VNt-tW-KHX" firstAttribute="leading" secondItem="iFP-Qd-vPS" secondAttribute="leading" constant="16" id="8Qd-RB-2Xl"/>
+                            <constraint firstAttribute="trailing" secondItem="kKg-tM-hT6" secondAttribute="trailing" constant="16" id="9aK-Mq-i30"/>
+                            <constraint firstItem="VNt-tW-KHX" firstAttribute="top" secondItem="eQj-Aj-r63" secondAttribute="bottom" constant="10" id="Azp-h6-gZn"/>
+                            <constraint firstItem="kDr-rC-ay5" firstAttribute="leading" secondItem="iFP-Qd-vPS" secondAttribute="leading" constant="16" id="H15-ul-u4z"/>
+                            <constraint firstItem="auQ-yy-Vey" firstAttribute="top" secondItem="iFP-Qd-vPS" secondAttribute="top" constant="16" id="ita-zk-CxM"/>
+                            <constraint firstItem="eQj-Aj-r63" firstAttribute="top" secondItem="kDr-rC-ay5" secondAttribute="bottom" constant="30" id="k8n-ab-QDh"/>
+                            <constraint firstItem="kDr-rC-ay5" firstAttribute="top" secondItem="auQ-yy-Vey" secondAttribute="bottom" constant="10" id="teb-MO-nMW"/>
+                            <constraint firstItem="auQ-yy-Vey" firstAttribute="leading" secondItem="iFP-Qd-vPS" secondAttribute="leading" constant="16" id="yZW-p6-UIc"/>
+                            <constraint firstItem="kKg-tM-hT6" firstAttribute="centerY" secondItem="kDr-rC-ay5" secondAttribute="centerY" id="zSy-Qb-wWk"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="iFP-Qd-vPS" firstAttribute="top" secondItem="6aQ-4a-VDE" secondAttribute="top" id="9AE-AX-2Or"/>
+                <constraint firstAttribute="trailing" secondItem="iFP-Qd-vPS" secondAttribute="trailing" id="TG0-2l-sTj"/>
+                <constraint firstAttribute="bottom" secondItem="iFP-Qd-vPS" secondAttribute="bottom" id="XBb-Y3-27N"/>
+                <constraint firstItem="iFP-Qd-vPS" firstAttribute="leading" secondItem="6aQ-4a-VDE" secondAttribute="leading" id="kin-QX-HLN"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="M3T-MD-5eZ"/>
+            <size key="customSize" width="320" height="168"/>
+            <connections>
+                <outlet property="filterTitleLabel" destination="auQ-yy-Vey" id="H5m-3k-9YO"/>
+                <outlet property="releaseSwitchView" destination="kKg-tM-hT6" id="ixf-vy-LtN"/>
+                <outlet property="releaseTitleLabel" destination="kDr-rC-ay5" id="pPC-Pl-Dgx"/>
+                <outlet property="segmentControl" destination="VNt-tW-KHX" id="eYP-Pi-sn2"/>
+                <outlet property="sortTitleLabel" destination="eQj-Aj-r63" id="BQa-3q-RAl"/>
+            </connections>
+            <point key="canvasLocation" x="-20.289855072463769" y="-5.3571428571428568"/>
+        </collectionViewCell>
+    </objects>
+</document>

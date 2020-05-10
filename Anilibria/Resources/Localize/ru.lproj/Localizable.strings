@@ -1,0 +1,103 @@
+//ALERT
+"alert.title.error" = "Ошибка";
+"alert.title.warning" = "Внимание!";
+
+"alert.message.exit" = "Вы действительно хотите выйти?";
+
+
+//ERROR
+"error.authorization_failed" = "Не удалось авторизоваться :(";
+"error.social_authorization_failed" = "Не найден связанный аккаунт";
+"error.authorization_invailid" = "Вы больше не авторизованы :(";
+
+"error.configiration_empty" = "Невозможно загрузить файл кофигурации :(";
+"error.configiration_broken" = "Файл кофигурации поврежден D:";
+"error.configiration_not_found" = "(｡•́︿•̀｡)\nК сожалению, мы не смогли подобрать для вас оптимальную конфигурацию для работы приложения. Для дальнейшей работы приложения вам понадобится VPN.";
+
+//BUTTONS
+"buttons.yes" = "Да";
+"buttons.no" = "Нет";
+"buttons.done" = "Готово";
+"buttons.signIn" = "ВОЙТИ";
+"buttons.signOut" = "Выйти";
+"buttons.signIn" = "Войти";
+"buttons.settings" = "Настройки";
+"buttons.cancel" = "Отмена";
+"buttons.retry" = "Повторить";
+"buttons.next" = "Пропустить";
+
+//COMMON
+"common.today" = "Сегодня";
+"common.msk_time_zone" = "(по МСК)";
+"common.week_day.mon" = "Понедельник";
+"common.week_day.tue" = "Вторник";
+"common.week_day.wen" = "Среда";
+"common.week_day.thu" = "Четверг";
+"common.week_day.fri" = "Пятница";
+"common.week_day.sat" = "Суббота";
+"common.week_day.sun" = "Воскресенье";
+"common.week_day.on_mon" = "в понедельник";
+"common.week_day.on_tue" = "во вторник";
+"common.week_day.on_wen" = "в среду";
+"common.week_day.on_thu" = "в четверг";
+"common.week_day.on_fri" = "в пятницу";
+"common.week_day.on_sat" = "в субботу";
+"common.week_day.on_sun" = "в воскресенье";
+
+"common.quality.sd" = "480p";
+"common.quality.hd" = "720p";
+"common.quality.full_hd" = "1080p";
+
+"common.google_search.query" = "Найти в гугле \"%@\"";
+"common.filter_search.title" = "Искать по жанрам и годам";
+
+"common.donate_pls" = "Понравилась озвучка?\nПоддержи проект :3";
+"common.guest" = "Гость";
+
+//PERMISSION
+"permission.title" = "Разрешение";
+"permission.push" = "Для работы уведомлений вы должны разрешить \"Допуск уведомлений\".\nРазрешение можно установить через \"Настройки\"";
+
+//NEWS SCREEN
+"screen.news.title" = "YouTube";
+
+//CATALOG SCREEN
+"screen.catalog.title" = "Поиск";
+
+//FEED SCREEN
+"screen.feed.title" = "Лента";
+"screen.feed.soon_title" = "Ожидается";
+"screen.feed.schedule" = "Рассписание";
+"screen.feed.updates_title" = "Обновления";
+"screen.feed.random_release" = "СЛУЧАЙНЫЙ РЕЛИЗ";
+
+//FILTER SCREEN
+"screen.filter.genres" = "Жанры";
+"screen.filter.years" = "Года";
+"screen.filter.seasons" = "Сезоны";
+
+//SERIES SCREEN
+"screen.series.title" = "Описание";
+"screen.series.year" = "Год: ";
+"screen.series.voices" = "Голоса: ";
+"screen.series.type" = "Тип: ";
+"screen.series.status" = "Состояние релиза: ";
+"screen.series.genres" = "Жанр: ";
+"screen.series.added_date" = "Добавлен ";
+"screen.series.downloaded" = "Файл %@ сохранен в папку\n~/Downloads/%@";
+
+//COMMENTS SCREEN
+"screen.comments.title" = "Комментарии";
+
+//AUTH SCREEN
+"screen.auth.title" = "Авторизация";
+
+//SETTINGS SCREEN
+"screen.settings.title" = "Настройки";
+
+//STUB VIEW
+"stub.title" = "Нет данных";
+"stub.favorite.message" = "Здесь будут отображаться ваши избранные релизы";
+"stub.history.message" = "Здесь будет отображаться локальная история простомра релизов";
+"stub.message_not_found" = "По запросу \"%@\" ничего не найдено";
+

@@ -12,12 +12,10 @@ public struct SocialOAuthData: Decodable {
     private(set) var errorUrlPattern: String = ""
 
     public init(from decoder: Decoder) throws {
-        try decoder.apply { values in
-            key <- values["key"]
-            title <- values["title"]
-            socialUrl <- values["socialUrl"] <- URLConverter("")
-            resultPattern <- values["resultPattern"]
-            errorUrlPattern <- values["errorUrlPattern"]
-        }
+		self.key <- decoder["key"]
+		self.title <- decoder["title"]
+		self.socialUrl <- decoder["socialUrl"] <- URLConverter("")
+		self.resultPattern <- decoder["resultPattern"]
+		self.errorUrlPattern <- decoder["errorUrlPattern"]
     }
 }

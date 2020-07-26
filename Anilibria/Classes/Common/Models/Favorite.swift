@@ -6,9 +6,7 @@ public final class Favorite: NSObject, Decodable {
 
     public init(from decoder: Decoder) throws {
         super.init()
-        try decoder.apply { values in
-            rating <- values["rating"]
-            added <- values["added"]
-        }
+        self.rating <- decoder["rating"]
+		self.added <- decoder["added"]
     }
 }

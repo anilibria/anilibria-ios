@@ -17,8 +17,3 @@ public func <- <V>(value: inout V, other: V?) {
 public func <- <V, C: Converter>(value: V, converter: C) -> C.ToValue where V == C.FromValue {
     return converter.convert(from: value)
 }
-
-postfix operator |
-public postfix func | <V>(value: V) -> V.Type {
-    return V.self
-}

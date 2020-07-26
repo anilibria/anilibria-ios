@@ -12,7 +12,7 @@ public final class NewsCell: RippleViewCell {
         .set(font: UIFont.font(ofSize: 15, weight: .medium))
 
     func configure(_ item: News) {
-        self.titleLabel.attributedText = self|.titleBuilder.build(item.title)
+        self.titleLabel.attributedText = Self.titleBuilder.build(item.title)
         self.commentsCountLabel.text = "\(item.comments)"
         self.viewsCountLabel.text = "\(item.views)"
         self.imageView.setImage(from: item.image,

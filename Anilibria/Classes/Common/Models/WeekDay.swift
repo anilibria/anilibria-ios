@@ -37,11 +37,11 @@ public enum WeekDay: String, Codable {
     ]
 
     var name: String {
-        return self|.names[self]!
+        return Self.names[self]!
     }
 
     var onDay: String {
-        return self|.onDays[self]!
+        return Self.onDays[self]!
     }
 
     static func getMsk() -> WeekDay {

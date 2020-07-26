@@ -12,10 +12,8 @@ public struct ServerResponse: Decodable {
     private(set) var error: AppError?
 
     public init(from decoder: Decoder) throws {
-        try decoder.apply { values in
-            key <- values["key"]
-            message <- values["mes"]
-            error <- values["err"] <- ErrorConverter()
-        }
+        self.key <- decoder["key"]
+		self.message <- decoder["mes"]
+		self.error <- decoder["err"] <- ErrorConverter()
     }
 }

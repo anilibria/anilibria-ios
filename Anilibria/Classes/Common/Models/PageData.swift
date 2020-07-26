@@ -6,10 +6,8 @@ public final class PageData<T: Decodable>: NSObject, Decodable {
 
     public init(from decoder: Decoder) throws {
         super.init()
-        try decoder.apply { values in
-            items <- values["items"]
-            pagination <- values["pagination"]
-        }
+		self.items <- decoder["items"]
+		self.pagination <- decoder["pagination"]
     }
 }
 
@@ -21,11 +19,9 @@ public final class PaginationData: NSObject, Decodable {
 
     public init(from decoder: Decoder) throws {
         super.init()
-        try decoder.apply { values in
-            page <- values["page"]
-            perPage <- values["perPage"]
-            allPages <- values["allPages"]
-            allItems <- values["allItems"]
-        }
+		self.page <- decoder["page"]
+		self.perPage <- decoder["perPage"]
+		self.allPages <- decoder["allPages"]
+		self.allItems <- decoder["allItems"]
     }
 }

@@ -22,17 +22,15 @@ public final class Torrent: NSObject, Decodable {
 
     public init(from decoder: Decoder) throws {
         super.init()
-        try decoder.apply { values in
-            id <- values["id"]
-            torrentHash <- values["hash"]
-            leechers <- values["leechers"]
-            seeders <- values["seeders"]
-            completed <- values["completed"]
-            quality <- values["quality"]
-            series <- values["series"]
-            size <- values["size"]
-            url <- values["url"] <- URLConverter(Configuration.imageServer)
-            ctime <- values["ctime"] <- DateConverter()
-        }
+		self.id <- decoder["id"]
+		self.torrentHash <- decoder["hash"]
+		self.leechers <- decoder["leechers"]
+		self.seeders <- decoder["seeders"]
+		self.completed <- decoder["completed"]
+		self.quality <- decoder["quality"]
+		self.series <- decoder["series"]
+		self.size <- decoder["size"]
+		self.url <- decoder["url"] <- URLConverter(Configuration.imageServer)
+		self.ctime <- decoder["ctime"] <- DateConverter()
     }
 }

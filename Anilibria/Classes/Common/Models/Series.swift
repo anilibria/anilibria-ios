@@ -46,30 +46,28 @@ public final class Series: NSObject, Codable {
         let urlConverter = URLConverter(Configuration.imageServer)
         let charactersConverter = SpecialCharactersConverter()
         let decorator = ArrayConverterDecorator(charactersConverter)
-        try decoder.apply { values in
-            id <- values["id"]
-            code <- values["code"]
-            names <- values["names"] <- decorator
-            count <- values["series"]
-            poster <- values["poster"] <- urlConverter
-            lastRelease <- values["last"] <- StringDateConverter()
-            originalDate <- values["last"]
-            moon <- values["moon"] <- urlConverter
-            announce <- values["announce"] <- charactersConverter
-            status <- values["status"]
-            statusCode <- values["statusCode"]
-            type <- values["type"] <- charactersConverter
-            genres <- values["genres"]
-            voices <- values["voices"]
-            year <- values["year"]
-            season <- values["season"]
-            day <- values["day"]
-            playlist <- values["playlist"]
-            favorite <- values["favorite"]
-            desc <- values["description"] <- AttributedConverter(css: Css.text())
-            originalDesc <- values["description"]
-            torrents <- values["torrents"]
-        }
+		self.id <- decoder["id"]
+		self.code <- decoder["code"]
+		self.names <- decoder["names"] <- decorator
+		self.count <- decoder["series"]
+		self.poster <- decoder["poster"] <- urlConverter
+		self.lastRelease <- decoder["last"] <- StringDateConverter()
+		self.originalDate <- decoder["last"]
+		self.moon <- decoder["moon"] <- urlConverter
+		self.announce <- decoder["announce"] <- charactersConverter
+		self.status <- decoder["status"]
+		self.statusCode <- decoder["statusCode"]
+		self.type <- decoder["type"] <- charactersConverter
+		self.genres <- decoder["genres"]
+		self.voices <- decoder["voices"]
+		self.year <- decoder["year"]
+		self.season <- decoder["season"]
+		self.day <- decoder["day"]
+		self.playlist <- decoder["playlist"]
+		self.favorite <- decoder["favorite"]
+		self.desc <- decoder["description"] <- AttributedConverter(css: Css.text())
+		self.originalDesc <- decoder["description"]
+		self.torrents <- decoder["torrents"]
     }
 
     public func encode(to encoder: Encoder) throws {

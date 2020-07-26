@@ -6,11 +6,9 @@ public struct User: Codable {
     private(set) var avatar: URL?
 
     public init(from decoder: Decoder) throws {
-        try decoder.apply { values in
-            id <- values["id"]
-            name <- values["login"]
-            avatar <- values["avatar"] <- URLConverter(Configuration.imageServer)
-        }
+		self.id <- decoder["id"]
+		self.name <- decoder["login"]
+		self.avatar <- decoder["avatar"] <- URLConverter(Configuration.imageServer)
     }
 
     public func encode(to encoder: Encoder) throws {

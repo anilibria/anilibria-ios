@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -11,6 +11,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OtherViewController" customModule="Anilibria" customModuleProvider="target">
             <connections>
                 <outlet property="authButton" destination="Xdv-mt-B69" id="bj8-Y1-Eiz"/>
+                <outlet property="historyView" destination="n7x-2Y-gdd" id="myb-as-b0A"/>
                 <outlet property="linksStakView" destination="ZrU-yx-N20" id="gXy-Ym-Ybp"/>
                 <outlet property="userNameLabel" destination="OuO-Q2-EIi" id="PeN-lR-mn6"/>
                 <outlet property="view" destination="iN0-l3-epB" id="MPU-aW-DUG"/>

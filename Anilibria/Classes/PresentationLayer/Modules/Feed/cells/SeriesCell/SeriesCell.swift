@@ -20,7 +20,7 @@ public final class SeriesCell: RippleViewCell {
             self.titleLabel.text = "\(name) (\(item.count))"
         }
         if let value = item.desc {
-            self.descLabel.attributedText = self|.textBuilder.build(value.string)
+            self.descLabel.attributedText = Self.textBuilder.build(value.string)
         } else {
             self.descLabel.text = ""
         }

@@ -25,6 +25,18 @@ protocol SeriesRoute {
 extension SeriesRoute where Self: RouterProtocol {
     func open(series: Series) {
         let module = SeriesContainerAssembly.createModule(series: series, parent: self)
-        PushRouter(target: module, parent: self.controller).move()
+
+		switch UIDevice.current.userInterfaceIdiom {
+		case .pad:
+			if let secondView = self.controller.splitViewController?.viewControllers.last as? UINavigationController {
+				secondView.pushViewController(module, animated: true)
+			} else {
+				let result = BaseNavigationController(rootViewController: module)
+				self.controller.showDetailViewController(result, sender: nil)
+				UIApplication.getWindow()?.fadeTransition()
+			}
+		default:
+			PushRouter(target: module, parent: self.controller).move()
+		}
     }
 }

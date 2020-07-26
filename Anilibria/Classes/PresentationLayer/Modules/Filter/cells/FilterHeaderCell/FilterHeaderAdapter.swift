@@ -33,7 +33,8 @@ public final class FilterHeaderAdapter: ListSectionController, Interactable {
 
     public override func didUpdate(to object: Any) {
         self.item = object as? FilterHeaderItem
-        let width: CGFloat = UIApplication.getWindow()?.frame.width ?? 0
+        var width: CGFloat = UIApplication.getWindow()?.frame.width ?? 0
+		width = min(width, 414)
         self.size = CGSize(width: width, height: 160)
     }
 }

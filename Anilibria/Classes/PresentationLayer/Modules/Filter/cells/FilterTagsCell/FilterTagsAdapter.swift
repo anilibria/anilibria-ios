@@ -43,7 +43,8 @@ public final class FilterTagsAdapter: ListSectionController {
 
     public override func didUpdate(to object: Any) {
         self.item = object as? FilterTagsItem
-        let width: CGFloat = UIApplication.getWindow()?.frame.width ?? 0
+        var width: CGFloat = UIApplication.getWindow()?.frame.width ?? 0
+		width = min(width, 414)
         self.sizes = [CGSize(width: width, height: 40)]
         self.sizes = self.sizes + self.item.items.map(FilterTagCell.size)
     }

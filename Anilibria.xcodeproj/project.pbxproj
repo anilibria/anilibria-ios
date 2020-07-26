@@ -204,6 +204,8 @@
 		C783950F22D0DC8400ACC353 /* FilterData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C783950E22D0DC8400ACC353 /* FilterData.swift */; };
 		C783951122D0DD3400ACC353 /* GenresRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C783951022D0DD3400ACC353 /* GenresRequest.swift */; };
 		C783951322D0DD6A00ACC353 /* YearsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C783951222D0DD6A00ACC353 /* YearsRequest.swift */; };
+		C78D920224CDD79600EB8EA0 /* PlaceholderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78D920124CDD79600EB8EA0 /* PlaceholderViewController.swift */; };
+		C78D920424CDD7AF00EB8EA0 /* PlaceholderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C78D920324CDD7AF00EB8EA0 /* PlaceholderViewController.xib */; };
 		C799EBB822DDA29100C6BD9B /* SignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C799EBB722DDA29100C6BD9B /* SignInViewController.xib */; };
 		C799EBBC22DE042100C6BD9B /* MRTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = C799EBBB22DE042000C6BD9B /* MRTextField.swift */; };
 		C799EBBE22DE04CD00C6BD9B /* UITextFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C799EBBD22DE04CC00C6BD9B /* UITextFieldExtension.swift */; };
@@ -567,6 +569,8 @@
 		C783950E22D0DC8400ACC353 /* FilterData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterData.swift; sourceTree = "<group>"; };
 		C783951022D0DD3400ACC353 /* GenresRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenresRequest.swift; sourceTree = "<group>"; };
 		C783951222D0DD6A00ACC353 /* YearsRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YearsRequest.swift; sourceTree = "<group>"; };
+		C78D920124CDD79600EB8EA0 /* PlaceholderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderViewController.swift; sourceTree = "<group>"; };
+		C78D920324CDD7AF00EB8EA0 /* PlaceholderViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlaceholderViewController.xib; sourceTree = "<group>"; };
 		C799EBB722DDA29100C6BD9B /* SignInViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SignInViewController.xib; sourceTree = "<group>"; };
 		C799EBBB22DE042000C6BD9B /* MRTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MRTextField.swift; sourceTree = "<group>"; };
 		C799EBBD22DE04CC00C6BD9B /* UITextFieldExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITextFieldExtension.swift; sourceTree = "<group>"; };
@@ -1248,6 +1252,15 @@
 			path = cells;
 			sourceTree = "<group>";
 		};
+		C78D920024CDD74600EB8EA0 /* PlaceholderViewController */ = {
+			isa = PBXGroup;
+			children = (
+				C78D920124CDD79600EB8EA0 /* PlaceholderViewController.swift */,
+				C78D920324CDD7AF00EB8EA0 /* PlaceholderViewController.xib */,
+			);
+			path = PlaceholderViewController;
+			sourceTree = "<group>";
+		};
 		C799EBBF22DEBF4E00C6BD9B /* SessionService */ = {
 			isa = PBXGroup;
 			children = (
@@ -1757,6 +1770,7 @@
 		C7D462AF22CC74EE00E763DF /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C78D920024CDD74600EB8EA0 /* PlaceholderViewController */,
 				C737924C22E0AF2F00DDF2B2 /* StabView */,
 				C737924922E0A02100DDF2B2 /* SearchView */,
 				C7D686AA22D8E24700CF4190 /* Player */,
@@ -2121,6 +2135,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C78D920424CDD7AF00EB8EA0 /* PlaceholderViewController.xib in Resources */,
 				C7D4635A22CE61DF00E763DF /* nyan_cat.json in Resources */,
 				C7B0F2CE22D73E7300540CA9 /* CommentsAuthViewController.xib in Resources */,
 				C783950922D0C78000ACC353 /* FilterTagTitleCell.xib in Resources */,
@@ -2299,6 +2314,7 @@
 				C78394B322CF66B300ACC353 /* PlayListItem.swift in Sources */,
 				C783949D22CF316E00ACC353 /* AppUrlRoute.swift in Sources */,
 				C7D462DF22CC74EF00E763DF /* RefreshIndicator.swift in Sources */,
+				C78D920224CDD79600EB8EA0 /* PlaceholderViewController.swift in Sources */,
 				C7B0F2C222D6012500540CA9 /* TouchesScrollView.swift in Sources */,
 				C7D4633C22CC772800E763DF /* Language.swift in Sources */,
 				C737923222E0157F00DDF2B2 /* DraggableView.swift in Sources */,

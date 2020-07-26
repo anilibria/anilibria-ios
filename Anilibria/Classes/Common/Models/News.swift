@@ -11,14 +11,12 @@ public final class News: NSObject, Decodable {
 
     public init(from decoder: Decoder) throws {
         super.init()
-        try decoder.apply { values in
-            id <- values["id"]
-            title <- (values["title"] <- SpecialCharactersConverter())
-            image <- values["image"] <- URLConverter(Configuration.imageServer)
-            vidUrl <- values["vid"] <- YouTubeConverter()
-            views <- values["views"]
-            comments <- values["comments"]
-            date <- values["timestamp"] <- DateConverter()
-        }
+		self.id <- decoder["id"]
+		self.title <- decoder["title"] <- SpecialCharactersConverter()
+		self.image <- decoder["image"] <- URLConverter(Configuration.imageServer)
+		self.vidUrl <- decoder["vid"] <- YouTubeConverter()
+		self.views <- decoder["views"]
+		self.comments <- decoder["comments"]
+		self.date <- decoder["timestamp"] <- DateConverter()
     }
 }

@@ -6,9 +6,7 @@ public final class BlockInfo: NSObject, Decodable {
 
     public init(from decoder: Decoder) throws {
         super.init()
-        try decoder.apply { values in
-            isBlocked <- values["blocked"]
-            reason <- values["reason"]
-        }
+        self.isBlocked <- decoder["blocked"]
+		self.reason <- decoder["reason"]
     }
 }

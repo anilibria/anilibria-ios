@@ -40,3 +40,12 @@ extension UIDevice {
     }
 }
 
+extension UIApplication {
+	static var keyWindowSize: CGSize {
+		guard let window = getWindow() else {
+			return .zero
+		}
+		
+		return window.frame.size
+	}
+}

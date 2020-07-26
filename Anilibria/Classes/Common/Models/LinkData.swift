@@ -48,12 +48,10 @@ public final class LinkData: NSObject, Codable {
 
     public init(from decoder: Decoder) throws {
         super.init()
-        try decoder.apply { values in
-            title <- values["title"]
-            absoluteLink <- values["absoluteLink"] <- URLConverter(Configuration.server)
-            sitePagePath <- values["sitePagePath"] <- URLConverter(Configuration.server)
-            linkType <- values["icon"]
-        }
+		self.title <- decoder["title"]
+		self.absoluteLink <- decoder["absoluteLink"] <- URLConverter(Configuration.server)
+		self.sitePagePath <- decoder["sitePagePath"] <- URLConverter(Configuration.server)
+		self.linkType <- decoder["icon"]
     }
 
     public func encode(to encoder: Encoder) throws {

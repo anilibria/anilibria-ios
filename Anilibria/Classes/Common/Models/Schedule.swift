@@ -6,9 +6,7 @@ public final class Schedule: NSObject, Decodable {
 
     public init(from decoder: Decoder) throws {
         super.init()
-        try decoder.apply { values in
-            day <- values["day"]
-            items <- values["items"]
-        }
+		self.day <- decoder["day"]
+		self.items <- decoder["items"]
     }
 }

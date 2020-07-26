@@ -32,8 +32,41 @@ final class MainContainerRouter: BaseRouter, MainContainerRoutable {
 
         self.controller = module
         if let value = module {
-            let result = BaseNavigationController(rootViewController: value)
+			let result: UIViewController
+
+			if UIDevice.current.userInterfaceIdiom == .pad {
+				result = self.viewForPad(type: type, module: value)
+			} else {
+				result = BaseNavigationController(rootViewController: value)
+			}
+
             ShowChildRouter(target: result, parent: self.container).move()
         }
     }
+
+	private func viewForPad(type: MenuItemType, module: UIViewController) -> UIViewController {
+		if type == .news {
+			return BaseNavigationController(rootViewController: module)
+		}
+
+		let splitview = UISplitViewController()
+		splitview.preferredPrimaryColumnWidthFraction = 0.5
+		splitview.maximumPrimaryColumnWidth = 2000
+		splitview.preferredDisplayMode = UISplitViewController.DisplayMode.allVisible
+
+		if type == .other {
+			let history = HistoryAssembly.createModule()
+			splitview.viewControllers = [
+				BaseNavigationController(rootViewController: module),
+				BaseNavigationController(rootViewController: history)
+			]
+		} else {
+			splitview.viewControllers = [
+				BaseNavigationController(rootViewController: module),
+				PlaceholderViewController()
+			]
+		}
+
+		return splitview
+	}
 }

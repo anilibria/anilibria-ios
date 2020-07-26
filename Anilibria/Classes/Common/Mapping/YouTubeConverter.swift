@@ -14,6 +14,6 @@ public final class YouTubeConverter: Converter {
             return urlString.toURL()
         }
 
-        return "\(self|.ytubePrefix)\(urlString)".toURL()
+        return "\(Self.ytubePrefix)\(urlString)".toURL()
     }
 }

@@ -39,6 +39,13 @@ class BaseCollectionViewController: BaseViewController, ListAdapterDataSource {
         self.adapter.collectionView = self.collectionView
         self.collectionView.contentInset.bottom = self.defaultBottomInset
         self.adapter.dataSource = self
+
+		NotificationCenter.default.addObserver(
+			self,
+			selector: #selector(rotated),
+			name: UIDevice.orientationDidChangeNotification,
+			object: nil
+		)
     }
 
     public override func viewWillLayoutSubviews() {
@@ -78,6 +85,11 @@ class BaseCollectionViewController: BaseViewController, ListAdapterDataSource {
     public func refresh() {
         // override me
     }
+
+	@objc
+	private func rotated() {
+		self.reload()
+	}
 
     // MARK: - Methods
 

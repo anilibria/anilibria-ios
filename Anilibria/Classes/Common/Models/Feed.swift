@@ -6,10 +6,8 @@ public final class Feed: NSObject, Decodable {
 
     public init(from decoder: Decoder) throws {
         super.init()
-        try decoder.apply { values in
-            series <- values["release"]
-            news <- values["youtube"]
-        }
+		self.series <- decoder["release"]
+		self.news <- decoder["youtube"]
     }
 
     var value: NSObject? {

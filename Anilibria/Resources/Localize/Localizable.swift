@@ -344,7 +344,7 @@ internal enum L10n {
     }
 
     internal enum History {
-      /// Здесь будет отображаться локальная история простомра релизов
+      /// Здесь будет отображаться локальная история просмотра релизов
       internal static var message: String {
           return L10n.tr("Localizable", "stub.history.message")
       }

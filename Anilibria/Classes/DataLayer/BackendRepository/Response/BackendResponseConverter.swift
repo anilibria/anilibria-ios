@@ -46,11 +46,9 @@ public final class ApiResponse<T: Decodable>: Decodable {
     var error: ApiError?
 
     public init(from decoder: Decoder) throws {
-        try decoder.apply { values in
-            status <- values["status"]
-            data <- values["data"]
-            error <- values["error"]
-        }
+        self.status <- decoder["status"]
+		self.data <- decoder["data"]
+		self.error <- decoder["error"]
 
         if self.data == nil,
             let type = T.self as? ExpressibleByNilLiteral.Type,

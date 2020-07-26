@@ -6,6 +6,7 @@ final class OtherViewController: BaseViewController {
     @IBOutlet var userNameLabel: UILabel!
     @IBOutlet var authButton: UIButton!
     @IBOutlet var linksStakView: UIStackView!
+	@IBOutlet var historyView: UIView!
 
     var handler: OtherEventHandler!
 
@@ -14,6 +15,10 @@ final class OtherViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.handler.didLoad()
+
+		if UIDevice.current.userInterfaceIdiom == .pad {
+			historyView.isHidden = true
+		}
     }
 
     override func viewWillAppear(_ animated: Bool) {

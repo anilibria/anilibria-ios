@@ -28,7 +28,16 @@ public final class NewsCellAdapter: ListSectionController, Interactable {
 
     public override func didUpdate(to object: Any) {
         self.item = object as? News
-        let width: CGFloat = self.collectionContext!.containerSize.width
+		var width: CGFloat = UIApplication.keyWindowSize.width
+
+		if UIDevice.current.userInterfaceIdiom == .pad {
+			if UIDevice.current.orientation.isLandscape {
+				 width = width / 3
+			} else {
+				 width = width / 2
+			}
+		}
+
         let height: CGFloat = NewsCell.height(for: self.item, with: width)
         self.size = CGSize(width: width, height: height)
     }

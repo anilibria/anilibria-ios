@@ -18,19 +18,14 @@ public final class MRLoaderManager: NSObject {
     }
 
     private func createView() -> (view: UIView, loader: Loader, activity: Activity) {
-        let view = UIView(frame: UIScreen.main.bounds)
-
         let custom = self.type.init()
-        custom.frame = view.bounds
         custom.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(custom)
-        self.constraints(view: custom)
 
         let activity = ActivityItem { [weak self] in
-            self?.updateFrame(for: view)
+            self?.updateFrame(for: custom)
         }
 
-        return (view, custom, activity)
+        return (custom, custom, activity)
     }
 
     public static func configure<T>(with type: T.Type) where T: LoaderView {
@@ -71,6 +66,7 @@ public final class MRLoaderManager: NSObject {
 
         view.alpha = 0
         target?.addSubview(view)
+		self.constraints(view: view)
 
         if animated {
             UIView.animate(withDuration: 0.2) {
@@ -98,7 +94,7 @@ public final class MRLoaderManager: NSObject {
         }
     }
 
-    fileprivate func constraints(view: UIView) {
+    fileprivate class func constraints(view: UIView) {
         let views = ["view": view]
         let horizontalConstraints = NSLayoutConstraint.constraints(withVisualFormat: "H:|[view]|",
                                                                    options: [],

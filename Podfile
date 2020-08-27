@@ -1,6 +1,8 @@
 use_frameworks!
 inhibit_all_warnings!
 
+load 'remove_unsupported_libraries.rb'
+
 target 'Anilibria' do
     #Network
     pod 'Kingfisher', '5.13.0'
@@ -20,12 +22,36 @@ target 'Anilibria' do
     #UI
     pod 'MXParallaxHeader'
     pod 'IGListKit', :git => 'https://github.com/Instagram/IGListKit.git', :commit => 'f50f3c7'
-    
-    post_install do |installer|
-        installer.pods_project.targets.each do |target|
-            target.build_configurations.each do |config|
-                config.build_settings['SWIFT_VERSION'] = '5'
-            end
-        end
-    end
+end
+
+def unsupported_pods
+    ['YandexMobileMetrica']
+end
+
+def supported_pods
+    [
+			'Kingfisher',
+			'Alamofire',
+			'DITranquillity',
+			'RxSwift',
+			'RxCocoa',
+			'Localize-Swift',
+			'lottie-ios',
+			'FirebaseCore',
+			'Firebase/Messaging',
+			'Firebase/Crashlytics',
+			'MXParallaxHeader',
+			'IGListKit'
+		]
+end
+
+post_install do |installer|
+	$verbose = true # remove or set to false to avoid printing
+	installer.configure_support_catalyst(supported_pods, unsupported_pods)
+	
+	installer.pods_project.targets.each do |target|
+		target.build_configurations.each do |config|
+			config.build_settings['SWIFT_VERSION'] = '5'
+		end
+	end
 end

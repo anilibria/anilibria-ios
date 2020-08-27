@@ -11,7 +11,7 @@ struct Constants {
 
 struct Sizes {
     static let maxWidth: CGFloat = 500
-    static let minSize: CGSize = CGSize(width: 480, height: 800)
+    static let minSize: CGSize = CGSize(width: 1000, height: 800)
     static let maxSize: CGSize = CGSize(width: CGFloat.greatestFiniteMagnitude,
                                         height: CGFloat.greatestFiniteMagnitude)
     

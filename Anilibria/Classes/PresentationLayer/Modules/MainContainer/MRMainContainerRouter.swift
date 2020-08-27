@@ -51,7 +51,14 @@ final class MainContainerRouter: BaseRouter, MainContainerRoutable {
 
 		let splitview = UISplitViewController()
 		splitview.preferredPrimaryColumnWidthFraction = 0.5
+		
+		#if targetEnvironment(macCatalyst)
+		splitview.maximumPrimaryColumnWidth = Sizes.minSize.width/2
+		splitview.minimumPrimaryColumnWidth = Sizes.minSize.width/2
+		#else
 		splitview.maximumPrimaryColumnWidth = 2000
+		#endif
+		
 		splitview.preferredDisplayMode = UISplitViewController.DisplayMode.allVisible
 
 		if type == .other {

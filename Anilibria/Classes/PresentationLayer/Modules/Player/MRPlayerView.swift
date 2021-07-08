@@ -1,5 +1,6 @@
 import RxSwift
 import UIKit
+import AVKit
 
 // MARK: - View Controller
 
@@ -14,8 +15,10 @@ final class PlayerViewController: BaseViewController {
     @IBOutlet var videoSliderView: TouchableSlider!
     @IBOutlet var playerContainer: UIView!
     @IBOutlet var loaderContainer: UIView!
+    @IBOutlet var container: UIView!
 
     private let playerView = PlayerView()
+    private let airplayView = AVRoutePickerView()
     private let timeFormatter = FormatterFactory.time.create()
     private var canUpdateTime: Bool = true
     private var playlist: [PlaylistItem] = []
@@ -40,6 +43,7 @@ final class PlayerViewController: BaseViewController {
         self.addTermenateAppObserver()
         self.setupPlayer()
         self.setupSwitcher()
+        self.setupAirPlay()
         self.videoSliderView.setThumbImage(#imageLiteral(resourceName: "icon_circle.pdf"), for: .normal)
 
         let font: UIFont = UIFont.monospacedDigitSystemFont(ofSize: 12, weight: .regular)
@@ -116,6 +120,12 @@ final class PlayerViewController: BaseViewController {
         tap.numberOfTapsRequired = 1
         tap.numberOfTouchesRequired = 1
         self.playerContainer.addGestureRecognizer(tap)
+    }
+
+    private func setupAirPlay() {
+        airplayView.tintColor = .white
+        container.addSubview(airplayView)
+        airplayView.pinToParent()
     }
 
     private func clearLabels() {

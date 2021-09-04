@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -28,8 +26,12 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gsN-nq-dXI">
-                    <rect key="frame" x="0.0" y="37" width="320" height="30"/>
+                    <rect key="frame" x="0.0" y="71" width="320" height="30"/>
                     <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Ow-R9-8xS" customClass="CircleView" customModule="Anilibria" customModuleProvider="target">
+                            <rect key="frame" x="124" y="0.0" width="72" height="30"/>
+                            <color key="backgroundColor" red="0.70588235290000001" green="0.0" blue="0.0" alpha="0.80000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
+                        </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0000" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zBr-Jq-2i1">
                             <rect key="frame" x="124" y="0.0" width="72" height="30"/>
                             <constraints>
@@ -120,7 +122,7 @@
                                 </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                         </view>
-                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vJS-gg-avE" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
+                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vJS-gg-avE" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
                             <rect key="frame" x="124" y="0.0" width="72" height="30"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="72" id="GOl-PB-gRs"/>
@@ -135,21 +137,22 @@
                             </userDefinedRuntimeAttributes>
                             <connections>
                                 <action selector="titleTapped:" destination="-1" eventType="touchUpInside" id="sRK-Rp-jIJ"/>
+                                <outlet property="rippleContainerView" destination="0Ow-R9-8xS" id="ebs-Q9-JMB"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aQI-Sd-Wki">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aQI-Sd-Wki">
                             <rect key="frame" x="44" y="0.0" width="72" height="30"/>
                             <connections>
                                 <action selector="previosTapped:" destination="-1" eventType="touchUpInside" id="wxj-Xo-aAg"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ojc-jO-tIf">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ojc-jO-tIf">
                             <rect key="frame" x="204" y="0.0" width="72" height="30"/>
                             <connections>
                                 <action selector="nextTapped:" destination="-1" eventType="touchUpInside" id="t7g-JJ-j35"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vCQ-kf-Bwh" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vCQ-kf-Bwh" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="0.0" width="70" height="30"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="70" id="AcV-ep-gHl"/>
@@ -164,7 +167,7 @@
                                 <outlet property="rippleContainerView" destination="QeL-vs-d7d" id="L37-OR-xtR"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kbm-0x-NvH" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kbm-0x-NvH" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
                             <rect key="frame" x="250" y="0.0" width="70" height="30"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="70" id="Lhe-IY-80R"/>
@@ -189,10 +192,13 @@
                         <constraint firstAttribute="bottom" secondItem="beE-tP-KN2" secondAttribute="bottom" id="4uo-gJ-Q50"/>
                         <constraint firstItem="aQI-Sd-Wki" firstAttribute="trailing" secondItem="beE-tP-KN2" secondAttribute="trailing" id="8yh-sj-S8g"/>
                         <constraint firstItem="13x-kM-7xx" firstAttribute="top" secondItem="gsN-nq-dXI" secondAttribute="top" id="9G1-ad-CYK"/>
+                        <constraint firstItem="vJS-gg-avE" firstAttribute="top" secondItem="0Ow-R9-8xS" secondAttribute="top" id="9Vp-C8-UeU"/>
                         <constraint firstAttribute="bottom" secondItem="kbm-0x-NvH" secondAttribute="bottom" id="ARh-ii-Xvi"/>
+                        <constraint firstItem="vJS-gg-avE" firstAttribute="leading" secondItem="0Ow-R9-8xS" secondAttribute="leading" id="BFq-Aw-dof"/>
                         <constraint firstItem="2fb-5J-o6B" firstAttribute="centerX" secondItem="gsN-nq-dXI" secondAttribute="centerX" id="Ctw-xb-QSy"/>
                         <constraint firstAttribute="bottom" secondItem="bzU-Rr-SHg" secondAttribute="bottom" id="E9x-vo-Lds"/>
                         <constraint firstItem="zBr-Jq-2i1" firstAttribute="centerX" secondItem="gsN-nq-dXI" secondAttribute="centerX" id="GaQ-FL-gMO"/>
+                        <constraint firstItem="vJS-gg-avE" firstAttribute="trailing" secondItem="0Ow-R9-8xS" secondAttribute="trailing" id="Hyn-4H-hXc"/>
                         <constraint firstItem="QeL-vs-d7d" firstAttribute="leading" secondItem="gsN-nq-dXI" secondAttribute="leading" constant="9" id="Jmb-IU-YY4"/>
                         <constraint firstItem="aQI-Sd-Wki" firstAttribute="top" secondItem="beE-tP-KN2" secondAttribute="top" id="LYk-Ef-wpI"/>
                         <constraint firstAttribute="bottom" secondItem="zBr-Jq-2i1" secondAttribute="bottom" id="LsG-11-6nq"/>
@@ -208,6 +214,7 @@
                         <constraint firstAttribute="height" constant="30" id="gOG-w4-MvN"/>
                         <constraint firstAttribute="bottom" secondItem="vCQ-kf-Bwh" secondAttribute="bottom" id="gbN-eU-clH"/>
                         <constraint firstItem="aQI-Sd-Wki" firstAttribute="bottom" secondItem="beE-tP-KN2" secondAttribute="bottom" id="h7m-sd-oDx"/>
+                        <constraint firstItem="vJS-gg-avE" firstAttribute="bottom" secondItem="0Ow-R9-8xS" secondAttribute="bottom" id="huk-8q-fX1"/>
                         <constraint firstItem="bzU-Rr-SHg" firstAttribute="top" secondItem="Ojc-jO-tIf" secondAttribute="top" id="ihU-2v-5GS"/>
                         <constraint firstAttribute="bottom" secondItem="vJS-gg-avE" secondAttribute="bottom" id="obP-Go-Dad"/>
                         <constraint firstItem="QeL-vs-d7d" firstAttribute="top" secondItem="gsN-nq-dXI" secondAttribute="top" id="pLd-BY-HbD"/>
@@ -221,6 +228,7 @@
                     </constraints>
                 </view>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <gestureRecognizers/>
             <constraints>
@@ -229,7 +237,6 @@
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="gsN-nq-dXI" secondAttribute="bottom" id="i2o-bh-Le1"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
                 <outletCollection property="gestureRecognizers" destination="3dy-Vd-pxT" appends="YES" id="j8A-G4-ULI"/>
                 <outletCollection property="gestureRecognizers" destination="l1O-wH-azi" appends="YES" id="PHb-ox-7je"/>

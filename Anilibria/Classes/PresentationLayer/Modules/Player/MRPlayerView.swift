@@ -16,6 +16,7 @@ final class PlayerViewController: BaseViewController {
     @IBOutlet var playerContainer: UIView!
     @IBOutlet var loaderContainer: UIView!
     @IBOutlet var container: UIView!
+    @IBOutlet var rewindButtons: [RewindView] = []
 
     private let playerView = PlayerView()
     private let airplayView = AVRoutePickerView()
@@ -26,6 +27,8 @@ final class PlayerViewController: BaseViewController {
     private var currentIndex: Int = 0
     private var currentTime: Double = 0
     private var bag: DisposeBag!
+
+    private let rewindTimes: [Double] = [-15, -5, 5, 15]
 
     private var uiIsVisible: Bool = true {
         didSet {
@@ -43,6 +46,7 @@ final class PlayerViewController: BaseViewController {
         self.addTermenateAppObserver()
         self.setupPlayer()
         self.setupSwitcher()
+        self.setupRewind()
         self.setupAirPlay()
         self.videoSliderView.setThumbImage(#imageLiteral(resourceName: "icon_circle.pdf"), for: .normal)
 
@@ -120,6 +124,28 @@ final class PlayerViewController: BaseViewController {
         tap.numberOfTapsRequired = 1
         tap.numberOfTouchesRequired = 1
         self.playerContainer.addGestureRecognizer(tap)
+    }
+
+    private func setupRewind() {
+        rewindButtons.enumerated().forEach { offset, view in
+            view.set(time: rewindTimes[offset])
+            view.setDidTap { [weak self] in self?.apply(rewind: $0) }
+        }
+    }
+
+    private func apply(rewind time: Double) {
+        guard playerView.duration != nil else { return }
+        let newTime = videoSliderView.value + Float(time)
+
+        let playing = playerView.isPlaying
+        if playing { playerView.togglePlay() }
+
+        sliderTouchDown(self)
+        videoSliderView.setValue(newTime, animated: true)
+        sliderValueChanged(self)
+        sliderTouchUp(self)
+
+        if playing { playerView.togglePlay() }
     }
 
     private func setupAirPlay() {
@@ -320,5 +346,25 @@ public final class TouchableSlider: UISlider {
         self.setValue(percent * self.maximumValue, animated: false)
         self.sendActions(for: .touchDown)
         self.sendActions(for: .touchUpInside)
+    }
+}
+
+final class RewindView: CircleView {
+    @IBOutlet var titleLabel: UILabel!
+    private var tapHandler: Action<Double>?
+
+    private var time: Double = 0
+
+    func set(time: Double) {
+        self.time = time
+        self.titleLabel.text = "\(Int(abs(time)))"
+    }
+
+    func setDidTap(_ action: Action<Double>?) {
+        self.tapHandler = action
+    }
+
+    @IBAction func tapAction(_ sender: Any) {
+        self.tapHandler?(time)
     }
 }

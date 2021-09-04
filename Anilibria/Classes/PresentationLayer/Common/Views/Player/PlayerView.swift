@@ -44,6 +44,8 @@ public final class PlayerView: UIView {
     private var observer: Any?
     private var keyBag: Any?
 
+    public private(set) var duration: Double?
+
     public private(set) var isPlaying: Bool = false {
         didSet {
             self.playRelay.onNext(self.isPlaying)
@@ -99,6 +101,7 @@ public final class PlayerView: UIView {
 
     func setVideo(url: URL) -> Single<Double?> {
         self.isPlaying = false
+        self.duration = nil
         self.player?.pause()
         self.keyBag = nil
         self.statusRelay.onNext(.unknown)
@@ -135,6 +138,7 @@ public final class PlayerView: UIView {
         }
         .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
         .observeOn(MainScheduler.instance)
+        .do(onSuccess: { [weak self] duration in self?.duration = duration })
     }
 
     func set(time: Double) {

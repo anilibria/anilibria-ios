@@ -110,3 +110,4 @@ linphone/arm/*
 linphone/x86/*
 
 funimp\.sh
+*.dmg

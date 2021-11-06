@@ -1,6 +1,6 @@
 #!/bin/bash
+cd ..
 
-VERSION="1.0.0"
 APP_NAME="Anilibria"
 
 IOS_APP_DIR=./Build/Build/Products/Release-iphoneos
@@ -9,21 +9,8 @@ MACOS_APP_DIR=./Build/Build/Products/Release-maccatalyst
 IOS_APP=$IOS_APP_DIR/$APP_NAME.app
 MACOS_APP=${MACOS_APP_DIR}/${APP_NAME}.app
 
-DMG_CREATOR=/Applications/DMG\ Canvas.app/Contents/Resources/dmgcanvas
-
-while test $# -gt 0; do
-    case "$1" in
-        -v)
-            shift
-            VERSION=$1
-            shift
-            ;;
-        *)
-            echo "$1 is not a recognized flag!"
-            exit 0
-        ;;
-    esac
-done
+VERSION=$(xcodebuild -showBuildSettings | grep MARKETING_VERSION | tr -d 'MARKETING_VERSION =')
+echo $VERSION
 
 makeIPA () {
     if [ -d $IOS_APP_DIR ]; then
@@ -62,6 +49,10 @@ makeMacOSApp () {
         rm -rf $MACOS_APP_DIR
     fi
 
+    if [ -d $APP_NAME\ Catalyst.app ]; then
+        rm -rf $APP_NAME\ Catalyst.app
+    fi
+
     xcodebuild \
         -workspace $APP_NAME.xcworkspace \
         -scheme $APP_NAME \
@@ -74,10 +65,13 @@ makeMacOSApp () {
         exit 1
     fi
 
-    mv $MACOS_APP "./${APP_NAME} Catalyst.app"
-}
+    mv $MACOS_APP $APP_NAME\ Catalyst.app
+    create-dmg $APP_NAME\ Catalyst.app
 
-cd ..
+    if [ -d $APP_NAME\ Catalyst.app ]; then
+        rm -rf $APP_NAME\ Catalyst.app
+    fi
+}
 
 TARGET=13.0
 makeIPA

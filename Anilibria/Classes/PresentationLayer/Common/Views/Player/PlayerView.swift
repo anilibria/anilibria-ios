@@ -159,5 +159,6 @@ public final class PlayerView: UIView {
         if let observer = self.observer {
             self.player?.removeTimeObserver(observer)
         }
+        _ = try? AVAudioSession.sharedInstance().setActive(false)
     }
 }

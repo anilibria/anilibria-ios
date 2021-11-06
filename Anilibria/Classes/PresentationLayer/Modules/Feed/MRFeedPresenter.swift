@@ -25,8 +25,13 @@ final class FeedPresenter {
     private var scheduleBlock: [NSObject] = []
     private var schedules: [Schedule] = []
     private let updates = TitleItem(L10n.Screen.Feed.updatesTitle)
+
     private lazy var randomSeries = ActionItem(L10n.Screen.Feed.randomRelease) { [weak self] in
         self?.selectRandom()
+    }
+
+    private lazy var history = ActionItem(L10n.Screen.Feed.history) { [weak self] in
+        self?.selectHistory()
     }
 
     private lazy var paginator: Paginator = Paginator<Feed, IntPaging>(IntPaging()) { [unowned self] in
@@ -109,6 +114,10 @@ extension FeedPresenter: FeedEventHandler {
             .disposed(by: self.bag)
     }
 
+    func selectHistory() {
+        self.router.openHistory()
+    }
+
     func search() {
         self.router.openSearchScreen()
     }
@@ -154,7 +163,7 @@ extension FeedPresenter: FeedEventHandler {
 
     private func create(_ feeds: [Feed]) {
         self.items = self.scheduleBlock +
-            [self.randomSeries, self.updates] +
+            [self.randomSeries, self.history, self.updates] +
             feeds.compactMap { $0.value }
     }
 

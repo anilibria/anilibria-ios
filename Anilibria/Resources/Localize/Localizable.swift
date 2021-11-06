@@ -239,6 +239,10 @@ internal enum L10n {
     }
 
     internal enum Feed {
+      /// ИСТОРИЯ
+      internal static var history: String {
+          return L10n.tr("Localizable", "screen.feed.history")
+      }
       /// СЛУЧАЙНЫЙ РЕЛИЗ
       internal static var randomRelease: String {
           return L10n.tr("Localizable", "screen.feed.random_release")

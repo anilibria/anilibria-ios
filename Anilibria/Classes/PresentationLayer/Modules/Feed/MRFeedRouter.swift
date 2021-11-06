@@ -6,6 +6,7 @@ protocol FeedRoutable: BaseRoutable,
     AppUrlRoute,
     ScheduleRoute,
     SearchRoute,
-    SeriesRoute {}
+    SeriesRoute,
+    HistoryRoute {}
 
 final class FeedRouter: BaseRouter, FeedRoutable {}

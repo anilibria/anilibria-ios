@@ -70,6 +70,7 @@
 "screen.feed.schedule" = "Рассписание";
 "screen.feed.updates_title" = "Обновления";
 "screen.feed.random_release" = "СЛУЧАЙНЫЙ РЕЛИЗ";
+"screen.feed.history" = "ИСТОРИЯ";
 
 //FILTER SCREEN
 "screen.filter.genres" = "Жанры";

@@ -7,6 +7,7 @@ import AVKit
 final class PlayerViewController: BaseViewController {
     @IBOutlet var hidableViews: [UIView]!
     @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var pipButton: UIButton!
     @IBOutlet var playPauseButton: RippleButton!
     @IBOutlet var playPauseIconView: UIImageView!
     @IBOutlet var switcherView: SwitcherView!
@@ -20,6 +21,7 @@ final class PlayerViewController: BaseViewController {
 
     private let playerView = PlayerView()
     private let airplayView = AVRoutePickerView()
+    private var pictureInPictureController: AVPictureInPictureController?
     private let timeFormatter = FormatterFactory.time.create()
     private var canUpdateTime: Bool = true
     private var playlist: [PlaylistItem] = []
@@ -27,6 +29,7 @@ final class PlayerViewController: BaseViewController {
     private var currentIndex: Int = 0
     private var currentTime: Double = 0
     private var bag: DisposeBag!
+    private var pipObservation: Any?
 
     private let rewindTimes: [Double] = [-15, -5, 5, 15]
 
@@ -48,6 +51,7 @@ final class PlayerViewController: BaseViewController {
         self.setupSwitcher()
         self.setupRewind()
         self.setupAirPlay()
+        self.setupPictureInPicture()
         self.videoSliderView.setThumbImage(#imageLiteral(resourceName: "icon_circle.pdf"), for: .normal)
 
         let font: UIFont = UIFont.monospacedDigitSystemFont(ofSize: 12, weight: .regular)
@@ -130,6 +134,23 @@ final class PlayerViewController: BaseViewController {
         rewindButtons.enumerated().forEach { offset, view in
             view.set(time: rewindTimes[offset])
             view.setDidTap { [weak self] in self?.apply(rewind: $0) }
+        }
+    }
+
+    func setupPictureInPicture() {
+        if AVPictureInPictureController.isPictureInPictureSupported() {
+            pipButton.isHidden = false
+            pictureInPictureController = AVPictureInPictureController(playerLayer: playerView.playerLayer)
+            pictureInPictureController?.delegate = self
+
+            pipObservation = pictureInPictureController?.observe(
+                \AVPictureInPictureController.isPictureInPicturePossible,
+                 options: [.initial, .new]
+            ) { [weak self] _, change in
+                self?.pipButton.isEnabled = change.newValue ?? false
+            }
+        } else {
+            pipButton.isHidden = true
         }
     }
 
@@ -230,6 +251,10 @@ final class PlayerViewController: BaseViewController {
         return.portrait
     }
 
+    override var prefersHomeIndicatorAutoHidden: Bool {
+        return true
+    }
+
     // MARK: - Actions
 
     override func appWillTerminate() {
@@ -274,6 +299,15 @@ final class PlayerViewController: BaseViewController {
         let item = self.playlist[index]
         self.handler.settings(quality: self.currentQuality, for: item)
     }
+
+    @IBAction func togglePictureInPictureMode(_ sender: UIButton) {
+        guard let pipController = pictureInPictureController else { return }
+        if pipController.isPictureInPictureActive == true {
+            pipController.stopPictureInPicture()
+        } else {
+            pipController.startPictureInPicture()
+        }
+    }
 }
 
 extension PlayerViewController: PlayerViewBehavior {
@@ -313,6 +347,15 @@ extension PlayerViewController: PlayerViewBehavior {
         let index = self.switcherView.currentIndex
         self.currentQuality = quality
         self.set(playItem: index, seek: self.currentTime)
+    }
+}
+
+extension PlayerViewController: AVPictureInPictureControllerDelegate {
+    func pictureInPictureController(
+        _ pictureInPictureController: AVPictureInPictureController,
+        restoreUserInterfaceForPictureInPictureStopWithCompletionHandler completionHandler: @escaping (Bool) -> Void
+    ) {
+        completionHandler(true)
     }
 }
 

@@ -1,12 +1,12 @@
 import UIKit
 
 extension UICollectionViewCell {
-    static func className() -> String {
+    static var defaultNibName: String {
         return String(describing: self)
     }
 
     static func loadFromNib(frame: CGRect? = nil) -> Self? {
-        let item = Bundle.main.loadNibNamed(className(), owner: nil, options: nil)?.first
+        let item = Bundle.main.loadNibNamed(defaultNibName, owner: nil, options: nil)?.first
         let view = item >> self
         if let value = frame {
             view?.updateFrame(value)

@@ -17,7 +17,7 @@ extension UIImageView {
         }
         options.append(
             .retryStrategy(
-                DelayRetryStrategy(maxRetryCount: maxRetryCount, retryInterval: .seconds(0.2))
+                DelayRetryStrategy(maxRetryCount: maxRetryCount, retryInterval: .seconds(0.1))
             )
         )
         self.kf.setImage(

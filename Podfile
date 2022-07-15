@@ -5,7 +5,7 @@ load 'remove_unsupported_libraries.rb'
 
 target 'Anilibria' do
     #Network
-    pod 'Kingfisher', '5.13.0'
+    pod 'Kingfisher', '5.15.8'
     pod 'Alamofire', '4.8.2'
 
     #Utils

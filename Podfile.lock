@@ -69,9 +69,9 @@ PODS:
   - IGListDiffKit (4.0.0)
   - IGListKit (4.0.0):
     - IGListDiffKit (= 4.0.0)
-  - Kingfisher (5.13.0):
-    - Kingfisher/Core (= 5.13.0)
-  - Kingfisher/Core (5.13.0)
+  - Kingfisher (5.15.8):
+    - Kingfisher/Core (= 5.15.8)
+  - Kingfisher/Core (5.15.8)
   - Localize-Swift (2.0.0)
   - lottie-ios (3.1.1)
   - MXParallaxHeader (1.1.0)
@@ -105,7 +105,7 @@ DEPENDENCIES:
   - Firebase/Messaging
   - FirebaseCore
   - IGListKit (from `https://github.com/Instagram/IGListKit.git`, commit `f50f3c7`)
-  - Kingfisher (= 5.13.0)
+  - Kingfisher (= 5.15.8)
   - Localize-Swift (= 2.0.0)
   - lottie-ios (= 3.1.1)
   - MXParallaxHeader
@@ -175,7 +175,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: 06eb53bb579efe7099152735900dd04bf09e7275
   IGListDiffKit: 665d6cf43ce726e676013db9c7d6c4294259b6b2
   IGListKit: fd5a5d21935298f5849fa49d426843cff97b77c7
-  Kingfisher: 0d334cada987fcddbe9b5cec516406e1ee9d4748
+  Kingfisher: a3c03d702433fa6cfedabb2bddbe076fb8f2e902
   Localize-Swift: c798ec9286494866f7068f85f7c71283ac5bdab4
   lottie-ios: 43a472d22b2dd2bed292cc4010c0b4d2e66d3ba8
   MXParallaxHeader: de3c867e10ba46e8f6e20c8ee1f2a910372b3b94
@@ -188,6 +188,6 @@ SPEC CHECKSUMS:
   SwiftLazy: dcb1edc6c2b633ba2e68f28554d9dd6d1c0bfd13
   YandexMobileMetrica: ea82087806f175981c9eccbb8e35f1d4ee35d788
 
-PODFILE CHECKSUM: 46cc122db800d7271ad27b9cb400262ae383562a
+PODFILE CHECKSUM: e1f1f403df972098b43274573ec3cb782fb2a7de
 
-COCOAPODS: 1.10.2
+COCOAPODS: 1.11.3

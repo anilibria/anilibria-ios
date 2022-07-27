@@ -247,7 +247,7 @@ internal enum L10n {
       internal static var randomRelease: String {
           return L10n.tr("Localizable", "screen.feed.random_release")
       }
-      /// Рассписание
+      /// Расписание
       internal static var schedule: String {
           return L10n.tr("Localizable", "screen.feed.schedule")
       }

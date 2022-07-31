@@ -67,7 +67,7 @@
 //FEED SCREEN
 "screen.feed.title" = "Лента";
 "screen.feed.soon_title" = "Ожидается";
-"screen.feed.schedule" = "Рассписание";
+"screen.feed.schedule" = "Расписание";
 "screen.feed.updates_title" = "Обновления";
 "screen.feed.random_release" = "СЛУЧАЙНЫЙ РЕЛИЗ";
 "screen.feed.history" = "ИСТОРИЯ";

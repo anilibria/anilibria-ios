@@ -205,7 +205,7 @@ extension UIViewController {
     }
 }
 
-fileprivate protocol UIViewRedrawDelegate: class {
+fileprivate protocol UIViewRedrawDelegate: AnyObject {
     func didLayoutSubviews()
 }
 

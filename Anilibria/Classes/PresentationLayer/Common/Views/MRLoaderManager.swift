@@ -152,7 +152,7 @@ public final class ActivityHolder: ActivityDisposable {
     }
 }
 
-private protocol Activity: class {
+private protocol Activity: AnyObject {
     var uuid: UUID { get }
     func onDisposed(_ action: @escaping () -> Void)
 }

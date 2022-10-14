@@ -2,11 +2,11 @@ import UIKit
 
 protocol RouteCommand {}
 
-protocol RouterCommandResponder: class {
+protocol RouterCommandResponder: AnyObject {
     func respond(command: RouteCommand) -> Bool
 }
 
-protocol Router: class {
+protocol Router: AnyObject {
     var parentRouter: Router? { get }
     var responder: RouterCommandResponder? { get set }
     func execute(_ command: RouteCommand)

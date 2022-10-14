@@ -3,7 +3,7 @@ import UIKit
 
 // MARK: - Contracts
 
-protocol ChoiceSheetViewBehavior: class {
+protocol ChoiceSheetViewBehavior: AnyObject {
     func set(items: [ListDiffable])
 }
 

@@ -2,7 +2,7 @@ import UIKit
 
 // MARK: - Contracts
 
-protocol PlayerViewBehavior: class {
+protocol PlayerViewBehavior: AnyObject {
     func set(name: String,
              playlist: [PlaylistItem],
              playItemIndex: Int,

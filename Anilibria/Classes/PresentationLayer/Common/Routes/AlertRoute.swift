@@ -1,4 +1,4 @@
-protocol AlertRoute: class {
+protocol AlertRoute: AnyObject {
     func openAlert(title: String, message: String, buttons: [AlertButton], tapBlock: Action<Int>?, userData: Any?)
     func openAlert(title: String, message: String, buttons: [String], tapBlock: Action<Int>?)
     func openAlert(title: String, message: String)

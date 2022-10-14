@@ -10,7 +10,7 @@ final class AppConfigurationServicePart: DIPart {
     }
 }
 
-protocol AppConfigurationService: class {
+protocol AppConfigurationService: AnyObject {
     func fetchState() -> Observable<ConfigurationState>
     func startConfiguration() -> Single<ConfigurationState>
     func manualComplete()

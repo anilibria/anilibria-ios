@@ -6,7 +6,7 @@ import Foundation
 /// and response processing
 ///
 /// For example see JsonResponseConverter
-protocol BackendResponseConverter: class {
+protocol BackendResponseConverter: AnyObject {
     /// Convert NetworkResponse to pair (ResponseData?, Error?)
     /// - parameter data: Response from NetworkService
     /// - returns: (ResponseData?, Error?)

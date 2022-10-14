@@ -9,7 +9,7 @@ final class FavoriteServicePart: DIPart {
     }
 }
 
-protocol FavoriteService: class {
+protocol FavoriteService: AnyObject {
     func fetchSeries() -> Single<[Series]>
     func favorite(add: Bool, series: Series) -> Single<Unit>
 }

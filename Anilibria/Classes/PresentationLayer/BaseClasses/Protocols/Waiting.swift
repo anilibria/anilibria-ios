@@ -1,6 +1,6 @@
 import UIKit
 
-public protocol WaitingBehavior: class {
+public protocol WaitingBehavior: AnyObject {
     var isLoading: Bool { get }
     func showLoading(fullscreen: Bool) -> ActivityDisposable?
 }

@@ -1,6 +1,6 @@
 import Foundation
 
-protocol RefreshEventHandler: class {
+protocol RefreshEventHandler: AnyObject {
     func refresh()
 }
 

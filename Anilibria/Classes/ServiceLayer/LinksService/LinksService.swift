@@ -9,7 +9,7 @@ final class LinksServicePart: DIPart {
     }
 }
 
-protocol LinksService: class {
+protocol LinksService: AnyObject {
     func fetchLinks() -> Single<[LinkData]>
 }
 

@@ -21,7 +21,7 @@ final class AdapterManager {
     }
 }
 
-protocol Interactable: class {
+protocol Interactable: AnyObject {
     associatedtype Handler
     var handler: Handler? { get set }
 }

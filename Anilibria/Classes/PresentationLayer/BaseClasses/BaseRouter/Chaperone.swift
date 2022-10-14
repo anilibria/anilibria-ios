@@ -5,7 +5,7 @@ public protocol ChaperoneRouter {
     func move()
 }
 
-public protocol StatusBarChangeable: class {
+public protocol StatusBarChangeable: AnyObject {
     var statusBarStyle: UIStatusBarStyle { get set }
 }
 

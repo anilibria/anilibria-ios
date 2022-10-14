@@ -7,7 +7,7 @@ import UIKit
 import YandexMobileMetrica
 #endif
 
-public protocol DependenciesConfiguration: class {
+public protocol DependenciesConfiguration: AnyObject {
     func setup()
     func configuredContainer() -> DIContainer
 }

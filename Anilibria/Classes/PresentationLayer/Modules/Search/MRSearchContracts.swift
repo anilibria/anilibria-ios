@@ -3,7 +3,7 @@ import UIKit
 
 // MARK: - Contracts
 
-protocol SearchViewBehavior: class {
+protocol SearchViewBehavior: AnyObject {
     func set(items: [ListDiffable])
 }
 

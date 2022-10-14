@@ -1,6 +1,6 @@
 import UIKit
 
-public protocol ViewControllerEventHandler: class {
+public protocol ViewControllerEventHandler: AnyObject {
     func didLoad()
     func willDisappear()
     func willClose()

@@ -1,6 +1,6 @@
 import UIKit
 
-public protocol DraggableViewDelegate: class {
+public protocol DraggableViewDelegate: AnyObject {
     func didStart()
     func didEnd(_ isOpen: Bool)
     func progressChanged(value: CGFloat)

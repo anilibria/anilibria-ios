@@ -9,7 +9,7 @@ final class SessionServicePart: DIPart {
     }
 }
 
-protocol SessionService: class {
+protocol SessionService: AnyObject {
     func fetchState() -> Observable<SessionState>
 
     func signIn(login: String, password: String, code: String) -> Single<User>

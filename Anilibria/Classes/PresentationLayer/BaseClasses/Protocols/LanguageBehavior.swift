@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol LanguageBehavior: class {
+public protocol LanguageBehavior: AnyObject {
     func languageDidChanged()
 }
 

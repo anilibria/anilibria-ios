@@ -2,7 +2,7 @@ import UIKit
 
 // MARK: - Contracts
 
-protocol SettingsViewBehavior: class {
+protocol SettingsViewBehavior: AnyObject {
     func set(name: String, version: String)
     func set(quality: VideoQuality)
     func set(global: Bool, animated: Bool)

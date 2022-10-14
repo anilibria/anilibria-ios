@@ -3,7 +3,7 @@ import UIKit
 
 // MARK: - Contracts
 
-protocol FilterViewBehavior: class {
+protocol FilterViewBehavior: AnyObject {
     func set(items: [ListDiffable])
 }
 

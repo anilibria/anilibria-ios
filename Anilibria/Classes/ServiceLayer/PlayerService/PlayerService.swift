@@ -9,7 +9,7 @@ final class PlayerServicePart: DIPart {
     }
 }
 
-protocol PlayerService: class {
+protocol PlayerService: AnyObject {
     func fetchSettings() -> PlayerSettings
     func update(settings: PlayerSettings)
 

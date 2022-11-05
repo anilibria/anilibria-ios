@@ -9,19 +9,18 @@ extension UIView {
         return view
     }
     
-    func pinToParent() {
-        guard let parent = self.superview else {
-            fatalError("no superview")
+    func constraintEdgesToSuperview(_ edges: LayoutInsets = .init()) {
+        guard let superview = self.superview else {
+            assertionFailure("superview is required")
+            return
         }
-        self.translatesAutoresizingMaskIntoConstraints = false
-        let constraints = [
-            self.trailingAnchor.constraint(equalTo: parent.trailingAnchor),
-            self.leadingAnchor.constraint(equalTo: parent.leadingAnchor),
-            self.bottomAnchor.constraint(equalTo: parent.bottomAnchor),
-            self.topAnchor.constraint(equalTo: parent.topAnchor)
-        ]
-        
-        NSLayoutConstraint.activate(constraints)
+        translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            edges.top.map { topAnchor.constraint(equalTo: superview.topAnchor, constant: $0) },
+            edges.bottom.map { superview.bottomAnchor.constraint(equalTo: bottomAnchor, constant: $0) },
+            edges.left.map { leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: $0) },
+            edges.right.map { superview.trailingAnchor.constraint(equalTo: trailingAnchor, constant: $0) }
+        ].compactMap { $0 })
     }
     
     func fadeTransition(_ duration: Double = 0.3) {
@@ -48,4 +47,18 @@ extension UIApplication {
 		
 		return window.frame.size
 	}
+}
+
+public struct LayoutInsets {
+    public var top: CGFloat?
+    public var left: CGFloat?
+    public var bottom: CGFloat?
+    public var right: CGFloat?
+
+    public init(top: CGFloat? = 0, left: CGFloat? = 0, bottom: CGFloat? = 0, right: CGFloat? = 0) {
+        self.top = top
+        self.left = left
+        self.bottom = bottom
+        self.right = right
+    }
 }

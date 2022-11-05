@@ -89,7 +89,7 @@ final class PlayerViewController: BaseViewController {
 
     private func setupPlayer() {
         self.playerContainer.addSubview(self.playerView)
-        self.playerView.pinToParent()
+        self.playerView.constraintEdgesToSuperview()
 
         self.playerView.getCurrentTime()
             .filter { [weak self] _ in
@@ -172,7 +172,7 @@ final class PlayerViewController: BaseViewController {
     private func setupAirPlay() {
         airplayView.tintColor = .white
         container.addSubview(airplayView)
-        airplayView.pinToParent()
+        airplayView.constraintEdgesToSuperview()
     }
 
     private func clearLabels() {

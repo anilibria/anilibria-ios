@@ -48,10 +48,4 @@ end
 post_install do |installer|
 	$verbose = true # remove or set to false to avoid printing
 	installer.configure_support_catalyst(supported_pods, unsupported_pods)
-	
-	installer.pods_project.targets.each do |target|
-		target.build_configurations.each do |config|
-			config.build_settings['SWIFT_VERSION'] = '5'
-		end
-	end
 end

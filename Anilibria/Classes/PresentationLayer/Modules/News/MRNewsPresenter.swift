@@ -1,5 +1,5 @@
 import DITranquillity
-import RxSwift
+import Combine
 import UIKit
 
 final class NewsPart: DIPart {
@@ -18,7 +18,7 @@ final class NewsPresenter {
 
     private let feedService: FeedService
 
-    private var bag: DisposeBag! = DisposeBag()
+    private var bag = Set<AnyCancellable>()
     private var activity: ActivityDisposable?
     private var items: [News] = []
 

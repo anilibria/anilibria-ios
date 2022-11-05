@@ -1,5 +1,5 @@
 import DITranquillity
-import RxSwift
+import Combine
 
 final class SessionServicePart: DIPart {
     static func load(container: DIContainer) {
@@ -10,54 +10,51 @@ final class SessionServicePart: DIPart {
 }
 
 protocol SessionService: AnyObject {
-    func fetchState() -> Observable<SessionState>
+    func fetchState() -> AnyPublisher<SessionState, Never>
 
-    func signIn(login: String, password: String, code: String) -> Single<User>
-    func signInSocial(url: URL) -> Single<User>
+    func signIn(login: String, password: String, code: String) -> AnyPublisher<User, Error>
+    func signInSocial(url: URL) -> AnyPublisher<User, Error>
 
-    func fetchUser() -> Single<User>
+    func fetchUser() -> AnyPublisher<User, Error>
 
-    func fetchSocialData() -> Single<SocialOAuthData?>
+    func fetchSocialData() -> AnyPublisher<SocialOAuthData?, Error>
 
     func forceLogout()
     func logout()
 }
 
 final class SessionServiceImp: SessionService {
-    let schedulers: SchedulerProvider
     let backendRepository: BackendRepository
     let userRepository: UserRepository
     let clearManager: ClearableManager
 
-    private var bag: DisposeBag = DisposeBag()
+    private var bag = Set<AnyCancellable>()
     private var data: SocialOAuthData?
 
-    private let statusRelay: BehaviorSubject<SessionState>
+    private let statusRelay: CurrentValueSubject<SessionState, Never>
 
-    init(schedulers: SchedulerProvider,
-         clearManager: ClearableManager,
+    init(clearManager: ClearableManager,
          backendRepository: BackendRepository,
          userRepository: UserRepository) {
-        self.schedulers = schedulers
         self.clearManager = clearManager
         self.backendRepository = backendRepository
         self.userRepository = userRepository
 
         if let user = self.userRepository.getUser() {
-            self.statusRelay = BehaviorSubject(value: .user(user))
+            self.statusRelay = CurrentValueSubject(.user(user))
         } else {
-            self.statusRelay = BehaviorSubject(value: .guest)
+            self.statusRelay = CurrentValueSubject(.guest)
         }
     }
 
-    func fetchState() -> Observable<SessionState> {
+    func fetchState() -> AnyPublisher<SessionState, Never> {
         return self.statusRelay
-            .subscribeOn(self.schedulers.background)
-            .observeOn(self.schedulers.main)
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
     }
 
-    func signIn(login: String, password: String, code: String) -> Single<User> {
-        return Single.deferred { [unowned self] in
+    func signIn(login: String, password: String, code: String) -> AnyPublisher<User, Error> {
+        return Deferred { [unowned self] in
             let request = LoginRequest(login: login,
                                        password: password,
                                        code: code)
@@ -69,19 +66,20 @@ final class SessionServiceImp: SessionService {
                         return self.backendRepository
                             .request(request)
                     }
-                    return .error(AppError.server(message: L10n.Error.authorizationFailed))
+                    return AnyPublisher<User, Error>.fail(AppError.server(message: L10n.Error.authorizationFailed))
                 }
-                .do(onSuccess: { [unowned self] user in
+                .do(onNext: { [unowned self] user in
                     self.userRepository.set(user: user)
-                    self.statusRelay.onNext(.user(user))
+                    self.statusRelay.send(.user(user))
                 })
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
-    func signInSocial(url: URL) -> Single<User> {
-        return Single.deferred { [unowned self] in
+    func signInSocial(url: URL) -> AnyPublisher<User, Error> {
+        return Deferred<AnyPublisher<User, Error>> { [unowned self] in
             let request = JustURLRequest<Unit>(url: url)
             return self.backendRepository
                 .request(request)
@@ -90,35 +88,39 @@ final class SessionServiceImp: SessionService {
                     return self.backendRepository
                         .request(request)
                 }
-                .do(onSuccess: { [unowned self] user in
+                .do(onNext: { [unowned self] user in
                     self.userRepository.set(user: user)
-                    self.statusRelay.onNext(.user(user))
+                    self.statusRelay.send(.user(user))
                 })
-                .catchError { _ in
-                    .error(AppError.server(message: L10n.Error.socialAuthorizationFailed))
+                .mapError {
+                    print($0)
+                    return AppError.server(message: L10n.Error.socialAuthorizationFailed)
                 }
+                .eraseToAnyPublisher()
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
-    func fetchUser() -> Single<User> {
-        return Single.deferred { [unowned self] in
+    func fetchUser() -> AnyPublisher<User, Error> {
+        return Deferred { [unowned self] in
             let request = UserRequest()
             return self.backendRepository
                 .request(request)
-                .do(onSuccess: { [unowned self] user in
+                .do(onNext: { [unowned self] user in
                     self.userRepository.set(user: user)
                 })
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
-    func fetchSocialData() -> Single<SocialOAuthData?> {
-        return Single.deferred { [unowned self] in
+    func fetchSocialData() -> AnyPublisher<SocialOAuthData?, Error> {
+        return Deferred<AnyPublisher<SocialOAuthData?, Error>> { [unowned self] in
             if let data = self.data {
-                return .just(data)
+                return AnyPublisher<SocialOAuthData?, Error>.just(data)
             }
 
             let request = SocialDataRequest()
@@ -127,28 +129,30 @@ final class SessionServiceImp: SessionService {
                 .map {
                     $0.first(where: { $0.key == .vk })
                 }
-                .do(onSuccess: { [unowned self] item in
+                .do(onNext: { [unowned self] item in
                     self.data = item
                 })
+                .eraseToAnyPublisher()
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
     func forceLogout() {
         self.clearManager.clear()
-        self.statusRelay.onNext(.guest)
+        self.statusRelay.send(.guest)
     }
 
     func logout() {
-        Single<Unit>.deferred { [unowned self] in
+        Deferred { [unowned self] in
             let request = LogoutRequest()
             return self.backendRepository
                 .request(request)
         }
-        .subscribeOn(self.schedulers.background)
-        .subscribe()
-        .disposed(by: self.bag)
+        .subscribe(on: DispatchQueue.global())
+        .sink()
+        .store(in: &bag)
 
         self.forceLogout()
     }

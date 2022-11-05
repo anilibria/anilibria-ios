@@ -1,4 +1,3 @@
-import Alamofire
 import Foundation
 
 /// Request configuration protocol
@@ -30,13 +29,6 @@ protocol BackendAPIRequest {
     /// Default: empty
     var headers: [String: String] { get }
 
-    /// Dictionary for transferring files to the server.
-    ///
-    /// Enables the multipart/form-data mode, if not nil or not empty.
-    ///
-    /// Default: nil
-    var multiPartData: [String: NetworkManager.MultiPartData]? { get }
-
     /// Converter for processing the response, if the default converter for this request does inappropriate
     /// from the configuration of BeckendService
     ///
@@ -61,10 +53,6 @@ extension BackendAPIRequest {
 
     var headers: [String: String] {
         return [:]
-    }
-
-    var multiPartData: [String: NetworkManager.MultiPartData]? {
-        return nil
     }
 
     var customResponseConverter: BackendResponseConverter? {

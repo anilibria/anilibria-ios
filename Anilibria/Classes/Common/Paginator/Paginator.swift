@@ -1,6 +1,6 @@
 import Foundation
 import IGListKit
-import RxSwift
+import Combine
 
 /**
  * Created on Kotlin by Konstantin Tskhovrebov (aka @terrakok) on 22.07.17.
@@ -42,17 +42,17 @@ public enum PaginatorData<T> {
 }
 
 final class Paginator<T, P: Paging> {
-    private let requestFactory: (P.Value) -> Single<[T]>
+    private let requestFactory: (P.Value) -> AnyPublisher<[T], Error>
     private let paging: P
     public let handler: Handler<T> = Handler()
 
-    init(_ paging: P, requestFactory: @escaping (P.Value) -> Single<[T]>) {
+    init(_ paging: P, requestFactory: @escaping (P.Value) -> AnyPublisher<[T], Error>) {
         self.requestFactory = requestFactory
         self.paging = paging
     }
 
     private lazy var currentState: State = EmptyState(self)
-    private var disposable: Disposable?
+    private var subscriber: AnyCancellable?
 
     func restart() {
         self.currentState.restart()
@@ -71,9 +71,8 @@ final class Paginator<T, P: Paging> {
     }
 
     private func loadPage(_ page: P.Value) {
-        self.disposable?.dispose()
-        self.disposable = self.requestFactory(page)
-            .subscribe(onSuccess: { [weak self] in self?.currentState.newData($0) },
+        self.subscriber = self.requestFactory(page)
+            .sink(onNext: { [weak self] in self?.currentState.newData($0) },
                        onError: { [weak self] in self?.currentState.fail($0) })
     }
 
@@ -90,7 +89,7 @@ final class Paginator<T, P: Paging> {
 
         override func release() {
             paginator.currentState = ReleasedState(paginator)
-            paginator.disposable?.dispose()
+            paginator.subscriber?.cancel()
         }
     }
 
@@ -120,7 +119,7 @@ final class Paginator<T, P: Paging> {
 
         override func release() {
             paginator.currentState = ReleasedState(paginator)
-            paginator.disposable?.dispose()
+            paginator.subscriber?.cancel()
         }
     }
 
@@ -141,7 +140,7 @@ final class Paginator<T, P: Paging> {
 
         override func release() {
             paginator.currentState = ReleasedState(paginator)
-            paginator.disposable?.dispose()
+            paginator.subscriber?.cancel()
         }
     }
 
@@ -162,7 +161,7 @@ final class Paginator<T, P: Paging> {
 
         override func release() {
             paginator.currentState = ReleasedState(paginator)
-            paginator.disposable?.dispose()
+            paginator.subscriber?.cancel()
         }
     }
 
@@ -188,7 +187,7 @@ final class Paginator<T, P: Paging> {
 
         override func release() {
             paginator.currentState = ReleasedState(paginator)
-            paginator.disposable?.dispose()
+            paginator.subscriber?.cancel()
         }
     }
 
@@ -223,7 +222,7 @@ final class Paginator<T, P: Paging> {
 
         override func release() {
             paginator.currentState = ReleasedState(paginator)
-            paginator.disposable?.dispose()
+            paginator.subscriber?.cancel()
         }
     }
 
@@ -264,7 +263,7 @@ final class Paginator<T, P: Paging> {
 
         override func release() {
             paginator.currentState = ReleasedState(paginator)
-            paginator.disposable?.dispose()
+            paginator.subscriber?.cancel()
         }
     }
 
@@ -284,7 +283,7 @@ final class Paginator<T, P: Paging> {
 
         override func release() {
             paginator.currentState = ReleasedState(paginator)
-            paginator.disposable?.dispose()
+            paginator.subscriber?.cancel()
         }
     }
 

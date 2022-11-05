@@ -8,7 +8,6 @@ final class MainContainerViewController: BaseViewController {
 
     var handler: MainContainerEventHandler!
     private var pages: [MenuControllerData] = []
-    private var currentPages: [MenuControllerData] = []
 
     // MARK: - Life cycle
 
@@ -20,28 +19,23 @@ final class MainContainerViewController: BaseViewController {
 
     func setupPager() {
         self.pagerView.delegate = self
-        self.pagerView.didIndexChanged { [weak self] index in
-            if let type = self?.currentPages[safe: index]?.type {
-                self?.menuTabBar.set(selected: type)
-            }
-        }
+        self.pagerView.isScrollEnabled = false
     }
 }
 
 extension MainContainerViewController: PagerViewDelegate {
     func numberOfPages(for pagerView: PagerView) -> Int {
-        currentPages.count
+        pages.count
     }
 
     func pagerView(_ pagerView: PagerView, pageFor index: Int) -> UIViewController? {
-        currentPages[safe: index]?.controller
+        pages[safe: index]?.controller
     }
 }
 
 extension MainContainerViewController: MainContainerViewBehavior {
     func set(items: [MenuItem]) {
         self.pages = MenuItemsControllersFactory.create(for: items)
-        self.currentPages = pages
         self.menuTabBar.set(items) { [weak self] type in
             self?.handler.select(item: type)
         }
@@ -49,14 +43,13 @@ extension MainContainerViewController: MainContainerViewBehavior {
 
     func set(selected: MenuItemType) {
         self.menuTabBar.set(selected: selected)
-        if let index = currentPages.firstIndex(where: { $0.type == selected }) {
-            self.pagerView.scrollTo(index: index, animated: true)
+        if let index = pages.firstIndex(where: { $0.type == selected }) {
+            self.pagerView.scrollTo(index: index, animated: false)
         }
     }
 
     func change(visible: Bool, for item: MenuItemType) {
         self.menuTabBar.change(visible: visible, for: item)
-        self.currentPages.removeAll(where: { $0.type == item })
     }
 }
 

@@ -1,4 +1,4 @@
-import RxSwift
+import Combine
 import UIKit
 
 // MARK: - View Controller
@@ -43,15 +43,14 @@ final class SignInViewController: BaseViewController {
     }
 
     private func subscribes() {
-        let sequence = Observable
-            .combineLatest(self.loginField.rx.text.orEmpty,
-                           self.passwordField.rx.text.orEmpty,
-                           resultSelector: { ($0, $1) })
-
-        sequence.subscribe(onNext: { [weak self] in
+        Publishers.ThreadSafeCombineLatest(
+            self.loginField.textPublisher.map { $0 ?? "" },
+            self.passwordField.textPublisher.map { $0 ?? "" }
+        )
+        .sink(onNext: { [weak self] in
             self?.logInButton.isEnabled = !($0.isEmpty || $1.isEmpty)
         })
-            .disposed(by: self.disposeBag)
+        .store(in: &subscribers)
     }
 
     override func keyBoardWillShow(keyboardHeight: CGFloat) {

@@ -1,6 +1,6 @@
 import DITranquillity
 import Foundation
-import RxSwift
+import Combine
 
 class BackendRepositoryPart: DIPart {
     static func load(container: DIContainer) {
@@ -11,7 +11,7 @@ class BackendRepositoryPart: DIPart {
 }
 
 protocol BackendRepository {
-    func request<T: BackendAPIRequest>(_ request: T) -> Single<T.ResponseObject>
+    func request<T: BackendAPIRequest>(_ request: T) -> AnyPublisher<T.ResponseObject, Error>
     func apply(_ settings: AniSettings)
 }
 
@@ -21,7 +21,7 @@ final class BackendRepositoryImp: BackendRepository, Loggable {
     }
 
     public let config: BackendConfiguration
-    fileprivate let networkManager: NetworkManager!
+    fileprivate let networkManager: NetworkManager
 
     init(config: BackendConfiguration) {
         self.config = config
@@ -34,22 +34,15 @@ final class BackendRepositoryImp: BackendRepository, Loggable {
         self.networkManager.restartWith(proxy: settings.proxy)
     }
 
-    func request<T: BackendAPIRequest>(_ request: T) -> Single<T.ResponseObject> {
-        return self.createSequence(for: request)
-            .flatMap { [unowned self] data -> Single<T.ResponseObject> in
-                self.convertResponse(request: request, data: data)
+    func request<T: BackendAPIRequest>(_ request: T) -> AnyPublisher<T.ResponseObject, Error> {
+        return self.defaultRequest(request)
+            .tryMap { [unowned self] data in
+                try self.convertResponse(request: request, data: data)
             }
+            .eraseToAnyPublisher()
     }
 
-    private func createSequence<T: BackendAPIRequest>(for request: T) -> Single<NetworkManager.NetworkResponse> {
-        if request.multiPartData?.isEmpty == false {
-            fatalError("not implemented")
-        } else {
-            return self.defaultRequest(request)
-        }
-    }
-
-    private func defaultRequest<T: BackendAPIRequest>(_ request: T) -> Single<NetworkManager.NetworkResponse> {
+    private func defaultRequest<T: BackendAPIRequest>(_ request: T) -> AnyPublisher<NetworkResponse, Error> {
         return self.networkManager.request(url: request.buildUrl(),
                                            method: request.method,
                                            params: request.parameters,
@@ -57,26 +50,20 @@ final class BackendRepositoryImp: BackendRepository, Loggable {
     }
 
     private func convertResponse<T: BackendAPIRequest>(request: T,
-                                                       data: NetworkManager.NetworkResponse) -> Single<T.ResponseObject> {
-        return Single.deferred { [unowned self] in
-            var (response, error): (T.ResponseObject?, Error?)
-            if let converter = request.customResponseConverter {
-                (response, error) = converter.convert(T.self, response: data)
-            } else {
-                (response, error) = self.config.converter.convert(T.self, response: data)
-            }
-            if let result = response {
-                return Single.just(result)
-            } else if let e = error {
-                return Single.error(e)
-            } else {
-                return Single.error(AppError.unexpectedError(message: "empty"))
-            }
+                                                       data: NetworkResponse) throws -> T.ResponseObject {
+        var (response, error): (T.ResponseObject?, Error?)
+        if let converter = request.customResponseConverter {
+            (response, error) = converter.convert(T.self, response: data)
+        } else {
+            (response, error) = self.config.converter.convert(T.self, response: data)
         }
-    }
-
-    public func cancel() {
-        self.networkManager.cancel()
+        if let result = response {
+            return result
+        } else if let e = error {
+            throw e
+        } else {
+            throw AppError.unexpectedError(message: "empty")
+        }
     }
 }
 

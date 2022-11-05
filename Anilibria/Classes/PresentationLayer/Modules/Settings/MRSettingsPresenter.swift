@@ -1,5 +1,5 @@
 import DITranquillity
-import RxSwift
+import Combine
 import UIKit
 
 final class SettingsPart: DIPart {
@@ -22,7 +22,7 @@ final class SettingsPresenter {
     private let sessionService: SessionService
     private let notifyService: NotifyService
 
-    private let bag: DisposeBag = DisposeBag()
+    private var bag = Set<AnyCancellable>()
 
     init(playerService: PlayerService,
          sessionService: SessionService,

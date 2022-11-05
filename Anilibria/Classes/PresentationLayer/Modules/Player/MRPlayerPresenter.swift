@@ -1,5 +1,5 @@
 import DITranquillity
-import RxSwift
+import Combine
 import UIKit
 
 final class PlayerPart: DIPart {
@@ -17,7 +17,7 @@ final class PlayerPresenter {
     private var router: PlayerRoutable!
     private var series: Series!
     private var playlist: [PlaylistItem] = []
-    private var bag: DisposeBag = DisposeBag()
+    private var bag = Set<AnyCancellable>()
 
     private let playerService: PlayerService
 
@@ -57,10 +57,10 @@ extension PlayerPresenter: PlayerEventHandler {
     func didLoad() {
         self.playerService
             .fetchPlayerContext(for: self.series)
-            .subscribe(onSuccess: { [weak self] context in
+            .sink(onNext: { [weak self] context in
                 self?.run(with: context)
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
     }
 
     func select(playItemIndex: Int) {
@@ -91,8 +91,8 @@ extension PlayerPresenter: PlayerEventHandler {
                                     time: time)
         self.playerService
             .set(context: context, for: self.series)
-            .subscribe()
-            .disposed(by: self.bag)
+            .sink()
+            .store(in: &bag)
     }
 
     private func run(with context: PlayerContext?) {

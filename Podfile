@@ -6,14 +6,11 @@ load 'remove_unsupported_libraries.rb'
 target 'Anilibria' do
     #Network
     pod 'Kingfisher', '7.4.1'
-    pod 'Alamofire', '4.8.2'
 
     #Utils
-    pod 'DITranquillity', '3.9.3'
-    pod 'RxSwift', '5.0.1'
-    pod 'RxCocoa', :git => 'https://github.com/ReactiveX/RxSwift.git', :commit => '01f927a'
+    pod 'DITranquillity', '4.3.5'
     pod 'Localize-Swift', '2.0.0'
-    pod 'lottie-ios', '3.1.1'
+    pod 'lottie-ios', '3.5.0'
     pod 'YandexMobileMetrica'
     pod 'FirebaseCore'
     pod 'Firebase/Messaging'
@@ -31,10 +28,7 @@ end
 def supported_pods
     [
 			'Kingfisher',
-			'Alamofire',
 			'DITranquillity',
-			'RxSwift',
-			'RxCocoa',
 			'Localize-Swift',
 			'lottie-ios',
 			'FirebaseCore',

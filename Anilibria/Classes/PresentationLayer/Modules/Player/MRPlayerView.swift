@@ -1,4 +1,4 @@
-import RxSwift
+import Combine
 import UIKit
 import AVKit
 
@@ -28,7 +28,7 @@ final class PlayerViewController: BaseViewController {
     private var currentQuality: VideoQuality = .fullHd
     private var currentIndex: Int = 0
     private var currentTime: Double = 0
-    private var bag: DisposeBag!
+    private var bag: AnyCancellable?
     private var pipObservation: Any?
 
     private let rewindTimes: [Double] = [-15, -5, 5, 15]
@@ -95,23 +95,23 @@ final class PlayerViewController: BaseViewController {
             .filter { [weak self] _ in
                 self?.canUpdateTime ?? false
             }
-            .subscribe(onNext: { [weak self] time in
+            .sink(onNext: { [weak self] time in
                 let value = Float(time)
                 self?.currentTime = time
                 self?.videoSliderView.setValue(value, animated: true)
                 self?.updateLabels()
             })
-            .disposed(by: self.disposeBag)
+            .store(in: &subscribers)
 
         self.playerView.getPlayChanges()
-            .subscribe(onNext: { [weak self] value in
+            .sink(onNext: { [weak self] value in
                 let image: UIImage = value ? #imageLiteral(resourceName: "icon_pause") : #imageLiteral(resourceName: "icon_play")
                 self?.playPauseIconView.templateImage = image
             })
-            .disposed(by: self.disposeBag)
+            .store(in: &subscribers)
 
         self.playerView.getStatusSequence()
-            .subscribe(onNext: { [weak self] value in
+            .sink(onNext: { [weak self] value in
                 switch value {
                 case .unknown, .waitingToPlay:
                     self?.setLoader(visible: true)
@@ -122,7 +122,7 @@ final class PlayerViewController: BaseViewController {
                     self?.setLoader(visible: false)
                 }
             })
-            .disposed(by: self.disposeBag)
+            .store(in: &subscribers)
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.playerTapped))
         tap.numberOfTapsRequired = 1
@@ -207,11 +207,10 @@ final class PlayerViewController: BaseViewController {
             self.currentQuality = bestQuality
         }
         if let url = item.video[self.currentQuality] {
-            self.bag = DisposeBag()
-            self.playerView.setVideo(url: url)
+            self.bag = self.playerView.setVideo(url: url)
                 .filter { $0 != nil }
                 .map { $0! }
-                .subscribe(onSuccess: { [weak self] duration in
+                .sink(onNext: { [weak self] duration in
                     self?.videoSliderView.minimumValue = Float(0)
                     self?.videoSliderView.maximumValue = Float(duration)
                     if duration == 0 {
@@ -221,7 +220,6 @@ final class PlayerViewController: BaseViewController {
                     }
                     self?.playerView.set(time: time)
                 })
-                .disposed(by: self.bag)
         }
     }
 
@@ -327,8 +325,8 @@ extension PlayerViewController: PlayerViewBehavior {
                 self?.clearLabels()
                 self?.setLoader(visible: true)
             })
-            .debounce(.seconds(1), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] index in
+            .debounce(for: .seconds(1), scheduler: RunLoop.main)
+            .sink(onNext: { [weak self] index in
                 self?.currentQuality = quality
                 var seekTime = 0.0
                 if index == playItemIndex {
@@ -336,7 +334,7 @@ extension PlayerViewController: PlayerViewBehavior {
                 }
                 self?.set(playItem: index, seek: seekTime)
             })
-            .disposed(by: self.disposeBag)
+            .store(in: &subscribers)
     }
 
     func set(playItemIndex: Int) {

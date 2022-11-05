@@ -1,5 +1,5 @@
 import DITranquillity
-import RxSwift
+import Combine
 import UIKit
 
 final class SignInPart: DIPart {
@@ -19,7 +19,7 @@ final class SignInPresenter {
     private let sessionService: SessionService
 
     private var socialData: SocialOAuthData?
-    private let bag: DisposeBag = DisposeBag()
+    private var bag = Set<AnyCancellable>()
 
     init(sessionService: SessionService) {
         self.sessionService = sessionService
@@ -36,13 +36,13 @@ extension SignInPresenter: SignInEventHandler {
         self.sessionService
             .fetchSocialData()
             .manageActivity(self.view.showLoading(fullscreen: false))
-            .subscribe(onSuccess: { [weak self] data in
+            .sink(onNext: { [weak self] data in
                 self?.socialData = data
                 self?.view.set(socialLogin: true)
             }, onError: { [weak self] _ in
                 self?.view.set(socialLogin: false)
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
     }
 
     func back() {
@@ -63,11 +63,11 @@ extension SignInPresenter: SignInEventHandler {
         self.sessionService
             .signIn(login: login, password: password, code: code)
             .manageActivity(self.view.showLoading(fullscreen: false))
-            .subscribe(onSuccess: { [weak self] _ in
+            .sink(onNext: { [weak self] _ in
                 self?.back()
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
     }
 }

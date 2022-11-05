@@ -1,6 +1,5 @@
 import IGListKit
-import RxCocoa
-import RxSwift
+import Combine
 import UIKit
 
 // MARK: - View Controller
@@ -44,14 +43,14 @@ final class SearchViewController: BaseCollectionViewController {
     }
 
     private func setupSearchField() {
-        self.searchField.rx.controlEvent(.editingChanged)
-            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] in
+        self.searchField.publisher(for: .editingChanged)
+            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
+            .sink(onNext: { [weak self] in
                 if let text = self?.searchField.text {
                     self?.handler.search(query: text)
                 }
             })
-            .disposed(by: self.disposeBag)
+            .store(in: &subscribers)
     }
 
     override func keyBoardWillShow(keyboardHeight: CGFloat) {

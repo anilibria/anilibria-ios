@@ -1,5 +1,4 @@
-import RxCocoa
-import RxSwift
+import Combine
 import UIKit
 
 public final class SearchView: UIView {
@@ -11,8 +10,8 @@ public final class SearchView: UIView {
         }
     }
 
-    private let bag: DisposeBag = DisposeBag()
-    private let queryRelay: PublishRelay<String> = PublishRelay()
+    private var bag = Set<AnyCancellable>()
+    private let queryRelay = PassthroughSubject<String, Never>()
 
     private var cancelIsHidden: Bool = true {
         didSet {
@@ -25,21 +24,19 @@ public final class SearchView: UIView {
     }
 
     private func setupSearchField() {
-        self.searchField.rx.text
-            .orEmpty
-            .subscribe(onNext: { [weak self] text in
-                self?.queryRelay.accept(text)
+        self.searchField.textPublisher.map { $0 ?? "" }
+            .sink(onNext: { [weak self] text in
+                self?.queryRelay.send(text)
                 self?.cancelIsHidden = text.isEmpty
                 self?.isSearching = !text.isEmpty
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
     }
 
     public private(set) var isSearching: Bool = false
 
-    func querySequence() -> Observable<String> {
-        return self.queryRelay.asObservable()
-            .distinctUntilChanged()
+    func querySequence() -> AnyPublisher<String, Never> {
+        return self.queryRelay.removeDuplicates().eraseToAnyPublisher()
     }
 
     @discardableResult
@@ -52,7 +49,7 @@ public final class SearchView: UIView {
         self.searchField.resignFirstResponder()
         self.isSearching = false
         self.searchField.text = ""
-        self.queryRelay.accept("")
+        self.queryRelay.send("")
     }
 
     public override var intrinsicContentSize: CGSize {

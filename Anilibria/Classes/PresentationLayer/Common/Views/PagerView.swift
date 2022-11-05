@@ -31,6 +31,16 @@ open class PagerView: UIView {
         }
     }
 
+    public var isScrollEnabled = true {
+        didSet {
+            if isScrollEnabled {
+                self.pageController.dataSource = self
+            } else {
+                self.pageController.dataSource = nil
+            }
+        }
+    }
+
     public var loopEnabled: Bool = false
     public weak var delegate: PagerViewDelegate?
 
@@ -62,25 +72,6 @@ open class PagerView: UIView {
         return delegate?.pagerView(self, pageFor: currentIndex)
     }
 
-    public var isScrollEnabled: Bool {
-        get {
-            var isEnabled: Bool = true
-            pageController.view.subviews.forEach {
-                if let subView = $0 as? UIScrollView {
-                    isEnabled = subView.isScrollEnabled
-                }
-            }
-            return isEnabled
-        }
-        set {
-            pageController.view.subviews.forEach {
-                if let subview = $0 as? UIScrollView {
-                    subview.isScrollEnabled = newValue
-                }
-            }
-        }
-    }
-
     public init(rootController: UIViewController?) {
         defer {
             self.rootController = rootController
@@ -96,7 +87,6 @@ open class PagerView: UIView {
 
     private func setup() {
         pageController.view.constraintEdgesToSuperview()
-       // requireGesture()
     }
 
     open func didIndexChanged(_ handler: @escaping (Int) -> Void) {
@@ -127,37 +117,10 @@ open class PagerView: UIView {
         }
     }
 
-    private func requireGesture() {
-        let gesture = rootController?.navigationController?.view
-            .gestureRecognizers?
-            .first { $0 is UIScreenEdgePanGestureRecognizer } as? UIScreenEdgePanGestureRecognizer
-        if gesture == nil { return }
-        let result = self.findSubviewOfClass(anyClass: UIScrollView.self, inView: self)
-
-        guard let subscrollviews = result as? [UIScrollView] else {
-            return
-        }
-
-        for subscrollview in subscrollviews {
-            subscrollview.panGestureRecognizer.require(toFail: gesture!)
-        }
-    }
-
-    private func findSubviewOfClass(anyClass: AnyClass, inView view: UIView) -> [UIView] {
-        var subviewsOfClass: [UIView] = []
-
-        if view.responds(to: #selector(getter: UIView.subviews)) {
-            for subview in view.subviews {
-                if subview.isKind(of: anyClass) {
-                    subviewsOfClass.append(subview)
-                }
-
-                let subsubviewOfClass = self.findSubviewOfClass(anyClass: anyClass, inView: subview)
-                subviewsOfClass.append(contentsOf: subsubviewOfClass)
-            }
-        }
-
-        return subviewsOfClass
+    open func resetIndexes() {
+        indexes.removeAllObjects()
+        let controller = getCenterController()
+        setIndex(currentIndex, for: controller)
     }
 }
 
@@ -170,6 +133,7 @@ extension PagerView: UIPageViewControllerDataSource {
         }
 
         let previousIndex = index - 1
+        print("TEST -> \(previousIndex) Before \(index) of \(viewController)")
 
         if previousIndex >= 0 {
             let controller = delegate?.pagerView(self, pageFor: previousIndex)
@@ -192,6 +156,7 @@ extension PagerView: UIPageViewControllerDataSource {
 
         let nextIndex = index + 1
         let count = delegate?.numberOfPages(for: self) ?? -1
+        print("TEST -> \(nextIndex) After \(index) of \(viewController)")
 
         if nextIndex < count {
             let controller = delegate?.pagerView(self, pageFor: nextIndex)
@@ -228,6 +193,12 @@ extension PagerView: UIPageViewControllerDelegate {
 extension PagerView: UIScrollViewDelegate {
 
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if let index = index(of: getCenterController()) {
+            currentIndex = index
+        }
+    }
+
+    private func getCenterController() -> UIViewController? {
         let result = pageController.children.compactMap { controller -> (position: CGFloat, controller: UIViewController?)? in
             guard let position = controller.view.superview?.convert(controller.view.center, to: self).x else {
                 return nil
@@ -236,9 +207,7 @@ extension PagerView: UIScrollViewDelegate {
         }
         .min(by: { first, second in first.position < second.position })
 
-        if let index = index(of: result?.controller) {
-            currentIndex = index
-        }
+        return result?.controller
     }
 }
 

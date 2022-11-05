@@ -1,7 +1,6 @@
 import DITranquillity
 import Foundation
-import RxCocoa
-import RxSwift
+import Combine
 
 final class DownloadServicePart: DIPart {
     static func load(container: DIContainer) {
@@ -12,43 +11,46 @@ final class DownloadServicePart: DIPart {
 }
 
 protocol DownloadService {
-    func download(torrent: Torrent, fileName: String) -> Single<Void>
+    func download(torrent: Torrent, fileName: String) -> AnyPublisher<Void, Error>
 }
 
 final class DownloadServiceImp: DownloadService {
-    let schedulers: SchedulerProvider
     let backendRepository: BackendRepository
 
-    init(schedulers: SchedulerProvider,
-         backendRepository: BackendRepository) {
-        self.schedulers = schedulers
+    init(backendRepository: BackendRepository) {
         self.backendRepository = backendRepository
     }
 
-    func download(torrent: Torrent, fileName: String) -> Single<Void> {
-        return Single.deferred {
-            guard let url = torrent.url else {
-                return .error(AppError.server(message: L10n.Error.authorizationFailed))
+    func download(torrent: Torrent, fileName: String) -> AnyPublisher<Void, Error> {
+        return Deferred {
+            guard let url = torrent.url, let data = try? Data(contentsOf: url) else {
+                return AnyPublisher<Data, Error>.fail(AppError.server(message: L10n.Error.authorizationFailed))
             }
-            let data = try Data(contentsOf: url)
-            return .just(data)
+
+            return AnyPublisher<Data, Error>.just(data)
         }
         .flatMap { [unowned self] in self.save(data: $0, name: fileName)}
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
-    private func save(data: Data, name: String) -> Single<Void> {
-        return Single.deferred { [unowned self] in
-            let directory = try self.getDirectoryUrl()
-            try self.save(data: data,
-                          to: directory,
-                          with: name)
-            return .just(())
+    private func save(data: Data, name: String) -> AnyPublisher<Void, Error> {
+        return Deferred { [unowned self] in
+            do {
+                let directory = try self.getDirectoryUrl()
+                try self.save(data: data,
+                              to: directory,
+                              with: name)
+            } catch {
+                return AnyPublisher<Void, Error>.fail(error)
+            }
 
+            return AnyPublisher<Void, Error>.just(())
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
     private func getDirectoryUrl() throws -> URL {

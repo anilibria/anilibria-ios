@@ -1,5 +1,5 @@
 import DITranquillity
-import RxSwift
+import Combine
 import UIKit
 
 final class MainContainerPart: DIPart {
@@ -21,7 +21,7 @@ final class MainContainerPresenter {
     private let notifyService: NotifyService
     private let feedService: FeedService
 
-    private let bag: DisposeBag = DisposeBag()
+    private var bag = Set<AnyCancellable>()
 
     init(menuService: MenuService,
          sessionService: SessionService,
@@ -48,15 +48,15 @@ extension MainContainerPresenter: MainContainerEventHandler {
         self.select(item: .feed)
 
         self.menuService.fetchCurrentItem()
-            .subscribe(onNext: { [weak self] type in
+            .sink(onNext: { [weak self] type in
                 self?.view.set(selected: type)
                 self?.router.open(menu: type)
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
 
         self.sessionService
             .fetchState()
-            .subscribe(onNext: { [weak self] value in
+            .sink(onNext: { [weak self] value in
                 switch value {
                 case .guest:
                     if let current = self?.menuService.getSelected(), current == .favorite {
@@ -68,7 +68,7 @@ extension MainContainerPresenter: MainContainerEventHandler {
                 }
 
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
     }
 
     func select(item: MenuItemType) {
@@ -79,12 +79,12 @@ extension MainContainerPresenter: MainContainerEventHandler {
         self.notifyService.registerForRemoteNotification()
 
         self.notifyService.fetchDataSequence()
-            .subscribe(onNext: { [weak self] data in
+            .sink(onNext: { [weak self] data in
                 if let link = data.link {
                     self?.handle(url: link)
                 }
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
     }
 
     private func handle(url: URL) {
@@ -98,11 +98,11 @@ extension MainContainerPresenter: MainContainerEventHandler {
     private func load(code: String) {
         self.feedService.series(with: code)
             .manageActivity(self.view.showLoading(fullscreen: false))
-            .subscribe(onSuccess: { [weak self] item in
+            .sink(onNext: { [weak self] item in
                 self?.router.open(series: item)
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
     }
 }

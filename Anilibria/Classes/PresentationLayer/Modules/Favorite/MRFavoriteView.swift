@@ -42,11 +42,11 @@ final class FavoriteViewController: BaseCollectionViewController {
         if let value = self.searchView {
             self.navigationItem.titleView = value
             value.querySequence()
-                .subscribe(onNext: { [weak self] text in
+                .sink(onNext: { [weak self] text in
                     self?.currentQuery = text
                     self?.handler.search(query: text)
                 })
-                .disposed(by: self.disposeBag)
+                .store(in: &subscribers)
         }
         #if targetEnvironment(macCatalyst)
         self.navigationItem.setRightBarButtonItems([

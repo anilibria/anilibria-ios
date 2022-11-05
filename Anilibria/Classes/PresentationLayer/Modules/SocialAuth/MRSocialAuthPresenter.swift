@@ -1,5 +1,5 @@
 import DITranquillity
-import RxSwift
+import Combine
 import UIKit
 
 final class SocialAuthPart: DIPart {
@@ -19,7 +19,7 @@ final class SocialAuthPresenter {
 
     private let sessionService: SessionService
 
-    private let bag: DisposeBag = DisposeBag()
+    private var bag = Set<AnyCancellable>()
 
     init(sessionService: SessionService) {
         self.sessionService = sessionService
@@ -59,12 +59,12 @@ extension SocialAuthPresenter: SocialAuthEventHandler {
         self.sessionService
             .signInSocial(url: url)
             .manageActivity(self.view.showLoading(fullscreen: true))
-            .subscribe(onSuccess: { [weak self] _ in
+            .sink(onNext: { [weak self] _ in
                 self?.router.dissmiss()
             }, onError: { [weak self] error in
                 self?.back()
                 self?.router.show(error: error)
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
     }
 }

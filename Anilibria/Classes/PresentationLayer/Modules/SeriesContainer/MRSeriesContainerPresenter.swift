@@ -1,5 +1,5 @@
 import DITranquillity
-import RxSwift
+import Combine
 import UIKit
 
 final class SeriesContainerPart: DIPart {
@@ -20,8 +20,7 @@ final class SeriesContainerPresenter {
     private let feedService: FeedService
     private let sessionService: SessionService
 
-    private let bag: DisposeBag = DisposeBag()
-    private var shareBag: DisposeBag!
+    private var bag = Set<AnyCancellable>()
 
     init(feedService: FeedService,
          sessionService: SessionService) {
@@ -32,12 +31,12 @@ final class SeriesContainerPresenter {
     private func loadSchedules() {
         self.feedService.fetchSchedule()
             .manageActivity(self.view.showLoading(fullscreen: false))
-            .subscribe(onSuccess: { [weak self] items in
+            .sink(onNext: { [weak self] items in
                 self?.router.open(schedules: items)
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
     }
 }
 
@@ -78,7 +77,6 @@ extension SeriesContainerPresenter: SeriesContainerEventHandler {
     }
 
     func share(sourceView: UIView?) {
-        self.shareBag = DisposeBag()
         if let url = URLHelper.releaseUrl(self.series) {
             self.router.openShare(items: [url])
         }

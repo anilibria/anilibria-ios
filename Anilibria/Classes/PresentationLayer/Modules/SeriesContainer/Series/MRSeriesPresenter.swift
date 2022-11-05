@@ -1,5 +1,5 @@
 import DITranquillity
-import RxSwift
+import Combine
 import UIKit
 
 final class SeriesPart: DIPart {
@@ -22,7 +22,7 @@ final class SeriesPresenter {
     private let favoriteService: FavoriteService
     private let downloadService: DownloadService
 
-    private var bag: DisposeBag = DisposeBag()
+    private var bag = Set<AnyCancellable>()
 
     init(feedService: FeedService,
          sessionService: SessionService,
@@ -52,7 +52,7 @@ extension SeriesPresenter: SeriesEventHandler {
         self.view.can(watch: self.series.playlist.isEmpty == false)
         self.sessionService
             .fetchState()
-            .subscribe(onNext: { [weak self] state in
+            .sink(onNext: { [weak self] state in
                 switch state {
                 case .guest:
                     self?.view.can(favorite: false)
@@ -60,7 +60,7 @@ extension SeriesPresenter: SeriesEventHandler {
                     self?.view.can(favorite: true)
                 }
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
     }
 
     func select(genre: String) {
@@ -86,7 +86,7 @@ extension SeriesPresenter: SeriesEventHandler {
             self.favoriteService
                 .favorite(add: added, series: self.series)
                 .manageActivity(self.view.showLoading(fullscreen: false))
-                .subscribe(onSuccess: { [weak self] _ in
+                .sink(onNext: { [weak self] _ in
                     favorite.added = added
                     let value = added ? 1 : -1
                     favorite.rating += value
@@ -95,7 +95,7 @@ extension SeriesPresenter: SeriesEventHandler {
                 }, onError: { [weak self] error in
                     self?.router.show(error: error)
                 })
-                .disposed(by: self.bag)
+                .store(in: &bag)
         }
     }
 
@@ -106,12 +106,12 @@ extension SeriesPresenter: SeriesEventHandler {
     private func load(code: String) {
         self.feedService.series(with: code)
             .manageActivity(self.view.showLoading(fullscreen: false))
-            .subscribe(onSuccess: { [weak self] item in
+            .sink(onNext: { [weak self] item in
                 self?.router.execute(SeriesCommand(value: item))
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
     }
 
     func schedule() {
@@ -131,12 +131,12 @@ extension SeriesPresenter: SeriesEventHandler {
         name.removingRegexMatches(pattern: "[^A-Za-z0-9]+", replaceWith: "_")
         self.downloadService.download(torrent: torrent, fileName: name)
             .manageActivity(self.view.showLoading(fullscreen: false))
-            .subscribe(onSuccess: { [weak self] in
+            .sink(onNext: { [weak self] in
                 self?.router.openAlert(message: L10n.Screen.Series.downloaded(name, Constants.downloadFolder))
                 }, onError: { [weak self] error in
                     self?.router.show(error: error)
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
     }
 }
 

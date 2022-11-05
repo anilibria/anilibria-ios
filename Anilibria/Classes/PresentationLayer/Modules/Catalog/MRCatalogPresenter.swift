@@ -1,5 +1,5 @@
 import DITranquillity
-import RxSwift
+import Combine
 import UIKit
 
 final class CatalogPart: DIPart {
@@ -19,7 +19,7 @@ final class CatalogPresenter {
     private let feedService: FeedService
 
     private var activity: ActivityDisposable?
-    private var bag: DisposeBag = DisposeBag()
+    private var bag = Set<AnyCancellable>()
     private var items: [Series] = []
     private var filter: SeriesFilter = SeriesFilter()
 
@@ -85,23 +85,23 @@ extension CatalogPresenter: CatalogEventHandler {
     func select(series: Series) {
         self.feedService.series(with: series.code)
             .manageActivity(self.view.showLoading(fullscreen: false))
-            .subscribe(onSuccess: { [weak self] item in
+            .sink(onNext: { [weak self] item in
                 self?.router.open(series: item)
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
     }
 
     func openFilter() {
         self.feedService.fetchFiltedData()
             .manageActivity(self.view.showLoading(fullscreen: false))
-            .subscribe(onSuccess: { [weak self] data in
+            .sink(onNext: { [weak self] data in
                 self?.router.open(filter: self!.filter, data: data)
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
     }
 
     func search() {

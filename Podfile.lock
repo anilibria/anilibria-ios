@@ -1,7 +1,6 @@
 PODS:
-  - Alamofire (4.8.2)
-  - DITranquillity (3.9.3):
-    - SwiftLazy
+  - DITranquillity (4.3.5):
+    - SwiftLazy (>= 1.1.6)
   - Firebase/CoreOnly (6.16.0):
     - FirebaseCore (= 6.6.1)
   - Firebase/Crashlytics (6.16.0):
@@ -71,7 +70,7 @@ PODS:
     - IGListDiffKit (= 4.0.0)
   - Kingfisher (7.4.1)
   - Localize-Swift (2.0.0)
-  - lottie-ios (3.1.1)
+  - lottie-ios (3.5.0)
   - MXParallaxHeader (1.1.0)
   - nanopb (0.3.9011):
     - nanopb/decode (= 0.3.9011)
@@ -80,13 +79,7 @@ PODS:
   - nanopb/encode (0.3.9011)
   - PromisesObjC (1.2.8)
   - Protobuf (3.11.2)
-  - RxCocoa (5.0.1):
-    - RxRelay (~> 5)
-    - RxSwift (~> 5)
-  - RxRelay (5.0.1):
-    - RxSwift (~> 5)
-  - RxSwift (5.0.1)
-  - SwiftLazy (1.1.7)
+  - SwiftLazy (1.1.9)
   - YandexMobileMetrica (3.9.2):
     - YandexMobileMetrica/Static (= 3.9.2)
   - YandexMobileMetrica/Static (3.9.2):
@@ -97,23 +90,19 @@ PODS:
     - YandexMobileMetrica/Static/Core
 
 DEPENDENCIES:
-  - Alamofire (= 4.8.2)
-  - DITranquillity (= 3.9.3)
+  - DITranquillity (= 4.3.5)
   - Firebase/Crashlytics
   - Firebase/Messaging
   - FirebaseCore
   - IGListKit (from `https://github.com/Instagram/IGListKit.git`, commit `f50f3c7`)
   - Kingfisher (= 7.4.1)
   - Localize-Swift (= 2.0.0)
-  - lottie-ios (= 3.1.1)
+  - lottie-ios (= 3.5.0)
   - MXParallaxHeader
-  - RxCocoa (from `https://github.com/ReactiveX/RxSwift.git`, commit `01f927a`)
-  - RxSwift (= 5.0.1)
   - YandexMobileMetrica
 
 SPEC REPOS:
   trunk:
-    - Alamofire
     - DITranquillity
     - Firebase
     - FirebaseAnalyticsInterop
@@ -135,8 +124,6 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - Protobuf
-    - RxRelay
-    - RxSwift
     - SwiftLazy
     - YandexMobileMetrica
 
@@ -144,21 +131,14 @@ EXTERNAL SOURCES:
   IGListKit:
     :commit: f50f3c7
     :git: https://github.com/Instagram/IGListKit.git
-  RxCocoa:
-    :commit: 01f927a
-    :git: https://github.com/ReactiveX/RxSwift.git
 
 CHECKOUT OPTIONS:
   IGListKit:
     :commit: f50f3c7
     :git: https://github.com/Instagram/IGListKit.git
-  RxCocoa:
-    :commit: 01f927a
-    :git: https://github.com/ReactiveX/RxSwift.git
 
 SPEC CHECKSUMS:
-  Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
-  DITranquillity: 7aba075b73dbb1f321a1218dd3d9f1bd5ad9427b
+  DITranquillity: 6a80e6a1009b6149071817f28a586b1f6eed607b
   Firebase: 497158b816d0a86fc31babbd05546fcd7e6083ff
   FirebaseAnalyticsInterop: 3f86269c38ae41f47afeb43ebf32a001f58fcdae
   FirebaseCore: 85064903ed6c28e47fec9c7bd149d94ba1b6b6e7
@@ -175,17 +155,14 @@ SPEC CHECKSUMS:
   IGListKit: fd5a5d21935298f5849fa49d426843cff97b77c7
   Kingfisher: cd762a593a61b2fbecf7645c00f9a801a3ebfc9c
   Localize-Swift: c798ec9286494866f7068f85f7c71283ac5bdab4
-  lottie-ios: 43a472d22b2dd2bed292cc4010c0b4d2e66d3ba8
+  lottie-ios: c55158d67d0629a260625cc2ded2052b829e3c3e
   MXParallaxHeader: de3c867e10ba46e8f6e20c8ee1f2a910372b3b94
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
   Protobuf: dd1aaea7140debfe4dd0683fb8ef208e527ae153
-  RxCocoa: e741b9749968e8a143e2b787f1dfbff2b63d0a5c
-  RxRelay: 89d54507f4fd4d969e6ec1d4bd7f3673640b4640
-  RxSwift: e2dc62b366a3adf6a0be44ba9f405efd4c94e0c4
-  SwiftLazy: dcb1edc6c2b633ba2e68f28554d9dd6d1c0bfd13
+  SwiftLazy: 1657354f43dbd6a0a79e00ad67558d655c77bdc9
   YandexMobileMetrica: ea82087806f175981c9eccbb8e35f1d4ee35d788
 
-PODFILE CHECKSUM: 1f7be0a061711647a85ebf704ff8390d64e58d4c
+PODFILE CHECKSUM: 07171eeecf5935830f547bd555e695600a6ae7a6
 
 COCOAPODS: 1.11.3

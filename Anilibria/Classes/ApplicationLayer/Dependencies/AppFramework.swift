@@ -1,4 +1,3 @@
-import Alamofire
 import DITranquillity
 import Foundation
 
@@ -88,10 +87,6 @@ private class PersentersPart: DIPart {
 
 private class SomePart: DIPart {
     static func load(container: DIContainer) {
-        container.register(SchedulerProviderImp.init)
-            .as(SchedulerProvider.self)
-            .lifetime(.single)
-
         container.register {
             BackendConfiguration(converter: JsonResponseConverter(),
                                  interceptor: nil,
@@ -101,7 +96,7 @@ private class SomePart: DIPart {
 
         container.register(MainRetrier.init)
             .injection(cycle: true, { $0.sessionService = $1 })
-            .as(RequestRetrier.self)
+            .as(LoadRetrier.self)
             .lifetime(.single)
     }
 }

@@ -1,4 +1,4 @@
-import RxSwift
+import Combine
 import UIKit
 
 public final class SwitcherView: LoadableView {
@@ -13,10 +13,10 @@ public final class SwitcherView: LoadableView {
     private var canMoveLeft: Bool = true
     private var canMoveRight: Bool = true
 
-    private let selectedRelay: BehaviorSubject<Int> = .init(value: 0)
+    private let selectedRelay: CurrentValueSubject<Int, Never> = .init(0)
     private(set) var currentIndex: Int = 0 {
         didSet {
-            self.selectedRelay.onNext(self.currentIndex)
+            self.selectedRelay.send(self.currentIndex)
         }
     }
 
@@ -44,8 +44,8 @@ public final class SwitcherView: LoadableView {
         self.inittialState()
     }
 
-    public func getSelectedSequence() -> Observable<Int> {
-        return self.selectedRelay
+    public func getSelectedSequence() -> AnyPublisher<Int, Never> {
+        return self.selectedRelay.eraseToAnyPublisher()
     }
 
     public override func setupNib() {

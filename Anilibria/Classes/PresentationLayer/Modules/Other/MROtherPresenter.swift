@@ -1,5 +1,5 @@
 import DITranquillity
-import RxSwift
+import Combine
 import UIKit
 
 final class OtherPart: DIPart {
@@ -19,7 +19,7 @@ final class OtherPresenter {
     private let sessionService: SessionService
     private let linksService: LinksService
 
-    private let bag: DisposeBag = DisposeBag()
+    private var bag = Set<AnyCancellable>()
     private var isAuthorized = false
 
     init(sessionService: SessionService,
@@ -33,7 +33,7 @@ extension OtherPresenter: OtherEventHandler {
     func didLoad() {
         self.sessionService
             .fetchState()
-            .subscribe(onNext: { [weak self] state in
+            .sink(onNext: { [weak self] state in
                 switch state {
                 case .guest:
                     self?.isAuthorized = false
@@ -43,17 +43,17 @@ extension OtherPresenter: OtherEventHandler {
                     self?.view.set(user: value)
                 }
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
 
         self.linksService
             .fetchLinks()
             .manageActivity(self.view.showLoading(fullscreen: false))
-            .subscribe(onSuccess: { [weak self] items in
+            .sink(onNext: { [weak self] items in
                 self?.view.set(links: items)
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
 
     }
 

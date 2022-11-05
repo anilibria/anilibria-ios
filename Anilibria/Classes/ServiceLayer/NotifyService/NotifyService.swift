@@ -1,8 +1,7 @@
 import DITranquillity
 import FirebaseMessaging
 import FirebaseInstanceID
-import RxCocoa
-import RxSwift
+import Combine
 import UserNotifications
 
 class NotifyServicePart: DIPart {
@@ -15,7 +14,7 @@ class NotifyServicePart: DIPart {
 
 protocol NotifyService {
     func registerForRemoteNotification()
-    func fetchDataSequence() -> Observable<PushData>
+    func fetchDataSequence() -> AnyPublisher<PushData, Never>
 
     func getSettings() -> NotifySettings
     func set(settings: NotifySettings)
@@ -26,20 +25,17 @@ final class NotifyServiceImp: NSObject, NotifyService, Loggable {
         return .service
     }
 
-    let schedulers: SchedulerProvider
     let backendRepository: BackendRepository
     let notifyRepository: NotifySettingsRepository
 
-    private let dataSequence: BehaviorRelay<PushData?> = BehaviorRelay(value: nil)
+    private let dataSequence: CurrentValueSubject<PushData?, Never> = CurrentValueSubject(nil)
 
-    private let bag: DisposeBag = DisposeBag()
+    private var bag = Set<AnyCancellable>()
     private let allTopic = "all"
     private let iosTopic = "ios_all"
 
-    init(schedulers: SchedulerProvider,
-         backendRepository: BackendRepository,
+    init(backendRepository: BackendRepository,
          notifyRepository: NotifySettingsRepository) {
-        self.schedulers = schedulers
         self.backendRepository = backendRepository
         self.notifyRepository = notifyRepository
     }
@@ -60,9 +56,10 @@ final class NotifyServiceImp: NSObject, NotifyService, Loggable {
         self.updateGlobalSettings()
     }
 
-    func fetchDataSequence() -> Observable<PushData> {
+    func fetchDataSequence() -> AnyPublisher<PushData, Never> {
         return self.dataSequence
             .compactMap { $0 }
+            .eraseToAnyPublisher()
     }
 
     func getSettings() -> NotifySettings {
@@ -91,7 +88,7 @@ final class NotifyServiceImp: NSObject, NotifyService, Loggable {
     }
 
     private func handle(push: [String : Any]) {
-        self.dataSequence.accept(PushData(push))
+        self.dataSequence.send(PushData(push))
         self.log(.debug, "\(push)")
     }
 }

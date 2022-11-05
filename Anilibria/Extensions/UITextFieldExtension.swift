@@ -1,5 +1,4 @@
-import RxCocoa
-import RxSwift
+import Combine
 import UIKit
 
 extension UITextField {
@@ -20,4 +19,19 @@ extension UITextField {
 
 extension UITextContentType {
     public static let unspecified = UITextContentType(rawValue: "unspecified")
+}
+
+public extension UITextField {
+
+    var textPublisher: AnyPublisher<String?, Never> {
+        Just(text)
+            .merge(with:publisher(for: [.allEditingEvents, .valueChanged]).map { [weak self] in self?.text })
+            .eraseToAnyPublisher()
+    }
+
+    var hasAnyCharacter: AnyPublisher<Bool, Never> {
+        return textPublisher
+            .map { $0?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false }
+            .eraseToAnyPublisher()
+    }
 }

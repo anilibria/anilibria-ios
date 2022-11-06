@@ -64,7 +64,7 @@ extension SettingsPresenter: SettingsEventHandler {
         let qualities = VideoQuality.allCases
 
         let items = qualities.map {
-            ChoiceItem($0, title: $0.name, isSelected: playerSettings.quality == $0)
+            ChoiceItem($0, title: $0.name, isSelected: playerSettings.quality == $0, isLast: qualities.last == $0)
         }
 
         self.router.openSheet(with: items)

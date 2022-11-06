@@ -1,4 +1,3 @@
-import IGListKit
 import UIKit
 
 // MARK: - View Controller
@@ -47,22 +46,17 @@ final class FilterViewController: BaseCollectionViewController {
     @IBAction func applyAction(_ sender: Any) {
         self.handler.apply()
     }
-
-    // MARK: - Adapter creators
-
-    override func adapterCreators() -> [AdapterCreator] {
-        return [
-            FilterTagsAdapterCreator(),
-            FilterHeaderAdapterCreator(.init(changed: { [weak self] item in
-                self?.handler.change(filter: item)
-            }))
-        ]
-    }
 }
 
 extension FilterViewController: FilterViewBehavior {
-    func set(items: [ListDiffable]) {
-        self.items = items
-        self.update()
+    func set(header: FilterHeaderItem, items: [FilterTagsItem]) {
+        reload(sections: [
+            SectionAdapter([FilterHeaderAdapter(viewModel: header, action: { [weak self] item in
+                self?.handler.change(filter: item)
+            })]),
+            CompositeSectionAdapter(
+                items.map { FilterTagsSectionAdapter(item: $0) }
+            )
+        ], animated: false)
     }
 }

@@ -1,10 +1,9 @@
-import IGListKit
 import UIKit
 
 // MARK: - Contracts
 
 protocol FilterViewBehavior: AnyObject {
-    func set(items: [ListDiffable])
+    func set(header: FilterHeaderItem, items: [FilterTagsItem])
 }
 
 protocol FilterEventHandler: ViewControllerEventHandler {

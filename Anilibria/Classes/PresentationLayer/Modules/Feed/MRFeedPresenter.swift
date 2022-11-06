@@ -21,7 +21,7 @@ final class FeedPresenter {
 
     private var bag = Set<AnyCancellable>()
     private var activity: ActivityDisposable?
-    private var items: [NSObject] = []
+    // private var items: [NSObject] = []
     private var scheduleBlock: [NSObject] = []
     private var schedules: [Schedule] = []
     private let updates = TitleItem(L10n.Screen.Feed.updatesTitle)
@@ -162,17 +162,12 @@ extension FeedPresenter: FeedEventHandler {
     }
 
     private func create(_ feeds: [Feed]) {
-        self.items = self.scheduleBlock +
-            [self.randomSeries, self.history, self.updates] +
-            feeds.compactMap { $0.value }
+        let items = self.scheduleBlock + [self.randomSeries, self.history, self.updates] + feeds.compactMap { $0.value }
+        self.view.set(items: items)
     }
 
     private func append(_ feeds: [Feed]) {
-        self.items.append(contentsOf: feeds.compactMap { $0.value })
-    }
-
-    private func update() {
-        self.view.set(items: self.items)
+        self.view.append(items: feeds.compactMap { $0.value })
     }
 
     private func setupPaginator() {
@@ -187,7 +182,6 @@ extension FeedPresenter: FeedEventHandler {
                     self?.append(items)
                 }
                 self?.activity?.dispose()
-                self?.update()
             }
             .showEmptyError { [weak self] value in
                 if let error = value.error {

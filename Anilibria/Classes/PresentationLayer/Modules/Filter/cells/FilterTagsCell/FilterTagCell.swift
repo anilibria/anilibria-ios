@@ -23,7 +23,7 @@ public final class FilterTagCell: RippleViewCell {
 
     static func size(for item: Selectable<String>) -> CGSize {
         let height: CGFloat = 38
-        let width: CGFloat = self.titleBuilder.build(item.value).width(for: height) + 30
+        let width: CGFloat = self.titleBuilder.build(item.value).width(for: height) + 32
         return CGSize(width: width, height: height)
     }
 

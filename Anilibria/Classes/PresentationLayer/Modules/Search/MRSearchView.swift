@@ -1,4 +1,3 @@
-import IGListKit
 import Combine
 import UIKit
 
@@ -71,21 +70,10 @@ final class SearchViewController: BaseCollectionViewController {
         self.setupSearchField()
     }
 
-    // MARK: - Adapter creators
-
-    override func adapterCreators() -> [AdapterCreator] {
-        return [
-            SearchResultAdapterCreator(.init(select: { [weak self] item in
-                self?.handler.select(item: item)
-            }))
-        ]
-    }
-
     @IBAction func backAction(_ sender: Any) {
         self.searchField.resignFirstResponder()
         self.searchField.isUserInteractionEnabled = false
-        self.items = []
-        self.update { [weak self] _ in
+        self.reload(sections: []) { [weak self] in
             self?.searchContainerConstraint.constant = 35
             UIView.animate(withDuration: 0.3,
                            animations: { self?.view.layoutIfNeeded() },
@@ -95,9 +83,16 @@ final class SearchViewController: BaseCollectionViewController {
 }
 
 extension SearchViewController: SearchViewBehavior {
-    func set(items: [ListDiffable]) {
+    func set(items: [SearchValue]) {
         self.scrollView.isScrollEnabled = !items.isEmpty
-        self.items = items
-        self.update()
+        self.reload(sections:[
+            SectionAdapter(
+                items.map {
+                    SearchResultAdapter(viewModel: $0) { [weak self] item in
+                        self?.handler.select(item: item)
+                    }
+                }
+            )
+        ])
     }
 }

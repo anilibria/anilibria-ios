@@ -20,7 +20,6 @@ final class CatalogPresenter {
 
     private var activity: ActivityDisposable?
     private var bag = Set<AnyCancellable>()
-    private var items: [Series] = []
     private var filter: SeriesFilter = SeriesFilter()
 
     private lazy var paginator: Paginator = Paginator<Series, IntPaging>(IntPaging()) { [unowned self] in
@@ -121,12 +120,11 @@ extension CatalogPresenter: CatalogEventHandler {
             .showData { [weak self] value in
                 switch value.data {
                 case let .first(items):
-                    self?.items = items
+                    self?.view.set(items: items)
                 case let .next(items):
-                    self?.items.append(contentsOf: items)
+                    self?.view.append(items: items)
                 }
                 self?.activity?.dispose()
-                self?.view.set(items: self!.items)
             }
             .showEmptyError { [weak self] value in
                 if let error = value.error {

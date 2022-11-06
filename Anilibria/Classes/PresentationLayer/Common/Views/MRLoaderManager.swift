@@ -65,8 +65,11 @@ public final class MRLoaderManager: NSObject {
         }
 
         view.alpha = 0
-        target?.addSubview(view)
-		self.constraints(view: view)
+
+        if let target = target {
+            target.addSubview(view)
+            view.constraintEdgesToSuperview()
+        }
 
         if animated {
             UIView.animate(withDuration: 0.2) {
@@ -92,19 +95,6 @@ public final class MRLoaderManager: NSObject {
         } else {
             view.removeFromSuperview()
         }
-    }
-
-    fileprivate class func constraints(view: UIView) {
-        let views = ["view": view]
-        let horizontalConstraints = NSLayoutConstraint.constraints(withVisualFormat: "H:|[view]|",
-                                                                   options: [],
-                                                                   metrics: nil,
-                                                                   views: views)
-        let verticalConstraints = NSLayoutConstraint.constraints(withVisualFormat: "V:|[view]|",
-                                                                 options: [],
-                                                                 metrics: nil,
-                                                                 views: views)
-        NSLayoutConstraint.activate(horizontalConstraints + verticalConstraints)
     }
 }
 

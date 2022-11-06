@@ -1,4 +1,3 @@
-import IGListKit
 import UIKit
 
 // MARK: - View Controller
@@ -56,21 +55,20 @@ final class CatalogViewController: InfinityCollectionViewController {
         self.navigationItem.setRightBarButtonItems(items ,animated: false)
     }
 
-    // MARK: - Adapter creators
-
-    override func adapterCreators() -> [AdapterCreator] {
-        return [
-            SeriesCellAdapterCreator(.init(select: { [weak self] item in
-                self?.handler.select(series: item)
-            }))
-        ]
+    private func createAdapter(for item: Series) -> any CellAdapterProtocol {
+        SeriesCellAdapter(viewModel: item, seclect: { [weak self] item in
+            self?.handler.select(series: item)
+        })
     }
 }
 
 extension CatalogViewController: CatalogViewBehavior {
-    func set(items: [ListDiffable]) {
-        self.items = items
-        self.update()
+    func set(items: [Series]) {
+        self.reload(sections: [SectionAdapter(items.map(createAdapter))])
+    }
+
+    func append(items: [Series]) {
+        append(sections: [SectionAdapter(items.map(createAdapter))])
     }
 
     func setFilter(active: Bool) {

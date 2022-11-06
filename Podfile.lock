@@ -65,9 +65,6 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (6.5.1):
     - GoogleUtilities/Logger
-  - IGListDiffKit (4.0.0)
-  - IGListKit (4.0.0):
-    - IGListDiffKit (= 4.0.0)
   - Kingfisher (7.4.1)
   - Localize-Swift (2.0.0)
   - lottie-ios (3.5.0)
@@ -94,7 +91,6 @@ DEPENDENCIES:
   - Firebase/Crashlytics
   - Firebase/Messaging
   - FirebaseCore
-  - IGListKit (from `https://github.com/Instagram/IGListKit.git`, commit `f50f3c7`)
   - Kingfisher (= 7.4.1)
   - Localize-Swift (= 2.0.0)
   - lottie-ios (= 3.5.0)
@@ -116,7 +112,6 @@ SPEC REPOS:
     - GoogleDataTransport
     - GoogleDataTransportCCTSupport
     - GoogleUtilities
-    - IGListDiffKit
     - Kingfisher
     - Localize-Swift
     - lottie-ios
@@ -126,16 +121,6 @@ SPEC REPOS:
     - Protobuf
     - SwiftLazy
     - YandexMobileMetrica
-
-EXTERNAL SOURCES:
-  IGListKit:
-    :commit: f50f3c7
-    :git: https://github.com/Instagram/IGListKit.git
-
-CHECKOUT OPTIONS:
-  IGListKit:
-    :commit: f50f3c7
-    :git: https://github.com/Instagram/IGListKit.git
 
 SPEC CHECKSUMS:
   DITranquillity: 6a80e6a1009b6149071817f28a586b1f6eed607b
@@ -151,8 +136,6 @@ SPEC CHECKSUMS:
   GoogleDataTransport: 0048df6388dab1c254799f2a30365b1dffe20422
   GoogleDataTransportCCTSupport: f880d70972efa2ed1be4e9173a0f4c5f3dc2d176
   GoogleUtilities: 06eb53bb579efe7099152735900dd04bf09e7275
-  IGListDiffKit: 665d6cf43ce726e676013db9c7d6c4294259b6b2
-  IGListKit: fd5a5d21935298f5849fa49d426843cff97b77c7
   Kingfisher: cd762a593a61b2fbecf7645c00f9a801a3ebfc9c
   Localize-Swift: c798ec9286494866f7068f85f7c71283ac5bdab4
   lottie-ios: c55158d67d0629a260625cc2ded2052b829e3c3e
@@ -163,6 +146,6 @@ SPEC CHECKSUMS:
   SwiftLazy: 1657354f43dbd6a0a79e00ad67558d655c77bdc9
   YandexMobileMetrica: ea82087806f175981c9eccbb8e35f1d4ee35d788
 
-PODFILE CHECKSUM: 07171eeecf5935830f547bd555e695600a6ae7a6
+PODFILE CHECKSUM: 50e9293672c5fab7e50c2fa2d2f958acac02d77e
 
 COCOAPODS: 1.11.3

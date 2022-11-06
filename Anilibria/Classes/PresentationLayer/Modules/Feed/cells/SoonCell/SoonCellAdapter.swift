@@ -1,35 +1,31 @@
-import IGListKit
 import UIKit
 
-final class SoonCellAdapterCreator: BaseInteractiveAdapterCreator<Schedule, SoonCellAdapter> {}
+final class SoonCellAdapter: BaseCellAdapter<Schedule> {
+    private var size: CGSize?
+    private var selectAction: ((Series) -> Void)?
 
-struct SoonCellAdapterHandler {
-    let select: Action<Series>?
-}
-
-public final class SoonCellAdapter: ListSectionController, Interactable {
-    typealias Handler = SoonCellAdapterHandler
-    var handler: Handler?
-
-    private var item: Schedule!
-    private var size: CGSize = .zero
-
-    private static let template = NewsCell.loadFromNib(frame: UIScreen.main.bounds)!
-
-    public override func sizeForItem(at index: Int) -> CGSize {
-        return self.size
+    init(viewModel: Schedule, seclect: ((Series) -> Void)?) {
+        self.selectAction = seclect
+        super.init(viewModel: viewModel)
     }
 
-    public override func cellForItem(at index: Int) -> UICollectionViewCell {
-        let cell = self.dequeueReusableCell(of: SoonCell.self, at: index)
-        cell.configure(self.item, handler: self.handler)
-        return cell
-    }
+    override func sizeForItem(at index: IndexPath,
+                              collectionView: UICollectionView,
+                              layout collectionViewLayout: UICollectionViewLayout) -> CGSize {
+        if let size = size, size.width == collectionView.frame.width {
+            return size
+        }
 
-    public override func didUpdate(to object: Any) {
-        self.item = object as? Schedule
-        let width: CGFloat = self.collectionContext!.containerSize.width
+        let width: CGFloat = collectionView.frame.width
         let height: CGFloat = SoonCell.height(with: width)
-        self.size = CGSize(width: width, height: height)
+        let size = CGSize(width: width, height: height)
+        self.size = size
+        return size
+    }
+
+    override func cellForItem(at index: IndexPath, context: CollectionContext) -> UICollectionViewCell? {
+        let cell = context.dequeueReusableNibCell(type: SoonCell.self, for: index)
+        cell.configure(viewModel, handler: selectAction)
+        return cell
     }
 }

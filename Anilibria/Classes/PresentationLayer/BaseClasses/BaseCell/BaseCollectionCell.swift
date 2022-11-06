@@ -1,17 +1,13 @@
-import Foundation
-import IGListKit
+import UIKit
 
-class BaseCollectionCell: UICollectionViewCell, ListAdapterDataSource {
+class BaseCollectionCell: UICollectionViewCell {
     // MARK: - Outlets
 
     @IBOutlet var collectionView: UICollectionView!
-    var items: [ListDiffable] = []
 
     // MARK: - Properties
 
-    public lazy var adapter: ListAdapter = {
-        ListAdapter(updater: ListAdapterUpdater(), viewController: nil)
-    }()
+    public lazy var adapter = CollectionViewAdapter(collectionView: collectionView)
 
     public var scrollViewDelegate: UIScrollViewDelegate? {
         get {
@@ -22,10 +18,6 @@ class BaseCollectionCell: UICollectionViewCell, ListAdapterDataSource {
         }
     }
 
-    private lazy var manager: AdapterManager = { [unowned self] in
-        AdapterManager(items: self.adapterCreators())
-    }()
-
     // MARK: - Setup
 
     override func awakeFromNib() {
@@ -33,37 +25,15 @@ class BaseCollectionCell: UICollectionViewCell, ListAdapterDataSource {
         self.setup()
     }
 
-    func setup() {
-        self.adapter.collectionView = self.collectionView
-        self.adapter.dataSource = self
-    }
+    func setup() {}
 
     // MARK: - Methods
 
-    public func adapterCreators() -> [AdapterCreator] {
-        fatalError("Override me")
+    public func reload(sections: [any SectionAdapterProtocol]) {
+        self.adapter.reload(content: .init(sections))
     }
 
-    public func update(animated: Bool = true,
-                       completion: ListUpdaterCompletion? = nil) {
-        self.adapter.performUpdates(animated: animated, completion: completion)
-    }
-
-    public func reload(completion: ListUpdaterCompletion? = nil) {
-        self.adapter.reloadData(completion: completion)
-    }
-
-    // MARK: - IGListAdapterDataSource
-
-    public func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        return self.items
-    }
-
-    public func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
-        return self.manager.adapter(from: object)
-    }
-
-    public func emptyView(for listAdapter: ListAdapter) -> UIView? {
-        return nil
+    public func append(sections: [any SectionAdapterProtocol]) {
+        self.adapter.append(content: .init(sections))
     }
 }

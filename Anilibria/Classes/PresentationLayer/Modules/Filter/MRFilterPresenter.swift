@@ -58,8 +58,7 @@ extension FilterPresenter: FilterEventHandler {
     }
 
     private func configure() {
-        var items: [NSObject] = [
-            FilterHeaderItem(self.filter),
+        var items: [FilterTagsItem] = [
             self.generateSeasonsTags()
         ]
 
@@ -71,7 +70,8 @@ extension FilterPresenter: FilterEventHandler {
             items.append(genres)
         }
 
-        self.view.set(items: items)
+        self.view.set(header: FilterHeaderItem(filter),
+                      items: items)
     }
 
     private func generateSeasonsTags() -> FilterTagsItem {

@@ -1,10 +1,9 @@
-import IGListKit
 import UIKit
 
 // MARK: - Contracts
 
 protocol SearchViewBehavior: AnyObject {
-    func set(items: [ListDiffable])
+    func set(items: [SearchValue])
 }
 
 protocol SearchEventHandler: ViewControllerEventHandler {

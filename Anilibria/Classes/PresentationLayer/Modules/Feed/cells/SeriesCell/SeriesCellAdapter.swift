@@ -1,38 +1,26 @@
-import IGListKit
 import UIKit
 
-final class SeriesCellAdapterCreator: BaseInteractiveAdapterCreator<Series, SeriesCellAdapter> {}
+final class SeriesCellAdapter: BaseCellAdapter<Series> {
+    private var selectAction: ((Series) -> Void)?
 
-struct SeriesCellAdapterHandler {
-    let select: Action<Series>?
-}
-
-public final class SeriesCellAdapter: ListSectionController, Interactable {
-    typealias Handler = SeriesCellAdapterHandler
-    var handler: Handler?
-
-    private var item: Series!
-    private var size: CGSize = .zero
-
-    private static let template = NewsCell.loadFromNib(frame: UIScreen.main.bounds)!
-
-    public override func sizeForItem(at index: Int) -> CGSize {
-        return self.size
+    init(viewModel: Series, seclect: ((Series) -> Void)?) {
+        self.selectAction = seclect
+        super.init(viewModel: viewModel)
     }
 
-    public override func cellForItem(at index: Int) -> UICollectionViewCell {
-        let cell = self.dequeueReusableCell(of: SeriesCell.self, at: index)
-        cell.configure(self.item)
+    override func sizeForItem(at index: IndexPath,
+                              collectionView: UICollectionView,
+                              layout collectionViewLayout: UICollectionViewLayout) -> CGSize {
+        return CGSize(width: collectionView.frame.width, height: 140)
+    }
+
+    override func cellForItem(at index: IndexPath, context: CollectionContext) -> UICollectionViewCell? {
+        let cell = context.dequeueReusableNibCell(type: SeriesCell.self, for: index)
+        cell.configure(viewModel)
         return cell
     }
 
-    public override func didUpdate(to object: Any) {
-        self.item = object as? Series
-        let width: CGFloat = self.collectionContext!.containerSize.width
-        self.size = CGSize(width: width, height: 140)
-    }
-
-    public override func didSelectItem(at index: Int) {
-        self.handler?.select?(self.item)
+    override func didSelect(at index: IndexPath) {
+        self.selectAction?(viewModel)
     }
 }

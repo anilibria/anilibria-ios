@@ -1,5 +1,4 @@
-import Foundation
-import IGListKit
+import UIKit
 
 extension String {
     static func pluralsString(number: Int,

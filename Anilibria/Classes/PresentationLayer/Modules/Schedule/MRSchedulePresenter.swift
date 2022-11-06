@@ -47,15 +47,6 @@ extension SchedulePresenter: ScheduleEventHandler {
     }
 
     func didLoad() {
-        let items = self.schedules.reduce([NSObject]()) { (result, item) -> [NSObject] in
-            if item.items.isEmpty {
-                return result
-            }
-            let title = TitleItem(item.day?.name ?? "")
-
-            return result + [title] + item.items
-        }
-
-        self.view.set(items: items)
+        self.view.set(items: self.schedules)
     }
 }

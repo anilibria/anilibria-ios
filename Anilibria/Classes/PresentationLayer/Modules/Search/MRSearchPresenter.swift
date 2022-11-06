@@ -57,15 +57,13 @@ extension SearchPresenter: SearchEventHandler {
     }
 
     private func handle(_ items: [Series]) {
-        var values = items.map {
-            SearchItem(.series($0))
-        }
+        var values: [SearchValue] = items.map {.series($0) }
 
         if values.isEmpty && self.currentQuery.isEmpty == false {
             if (self.router.parentRouter is CatalogRoutable) == false {
-                values.append(SearchItem(.filter))
+                values.append(.filter)
             }
-            values.append(SearchItem(.google(self.currentQuery)))
+            values.append(.google(self.currentQuery))
         }
 
         self.view.set(items: values)

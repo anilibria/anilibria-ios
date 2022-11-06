@@ -1,4 +1,3 @@
-import IGListKit
 import UIKit
 
 // MARK: - View Controller
@@ -47,21 +46,11 @@ final class ChoiceSheetViewController: BaseCollectionViewController {
     @IBAction func backAction(_ sender: Any) {
         self.handler.back()
     }
-
-    // MARK: - Adapter creators
-
-    override func adapterCreators() -> [AdapterCreator] {
-        return [
-            ChoiceCellAdapterCreator(.init(select: { [weak self] value in
-                self?.handler.select(item: value)
-            }))
-        ]
-    }
 }
 
 extension ChoiceSheetViewController: ChoiceSheetViewBehavior {
-    func set(items: [ListDiffable]) {
-        self.items = items
-        self.reload()
+    func set(items: [ChoiceItem]) {
+        let section = ChoiceCellAdapterSectionFactory.create(for: items)
+        self.reload(sections: [section])
     }
 }

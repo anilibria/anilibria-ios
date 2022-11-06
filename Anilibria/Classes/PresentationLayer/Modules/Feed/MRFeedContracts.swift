@@ -1,10 +1,10 @@
-import IGListKit
 import UIKit
 
 // MARK: - Contracts
 
 protocol FeedViewBehavior: WaitingBehavior, InfinityLoadingBehavior {
-    func set(items: [ListDiffable])
+    func set(items: [NSObject])
+    func append(items: [NSObject])
 }
 
 protocol FeedEventHandler: ViewControllerEventHandler, InfinityLoadingEventHandler {

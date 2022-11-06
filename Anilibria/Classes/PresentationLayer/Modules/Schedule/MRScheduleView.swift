@@ -1,4 +1,3 @@
-import IGListKit
 import UIKit
 
 // MARK: - View Controller
@@ -17,20 +16,19 @@ final class ScheduleViewController: BaseCollectionViewController {
         super.setupStrings()
         self.navigationItem.title = L10n.Screen.Feed.schedule
     }
-
-    override func adapterCreators() -> [AdapterCreator] {
-        return [
-            TitleCellAdapterCreator(),
-            ScheduleSeriesCellAdapterCreator(.init(select: { [weak self] item in
-                self?.handler.select(series: item)
-            }))
-        ]
-    }
 }
 
 extension ScheduleViewController: ScheduleViewBehavior {
-    func set(items: [ListDiffable]) {
-        self.items = items
-        self.update()
+    func set(items: [Schedule]) {
+        let sections = items.reduce([any SectionAdapterProtocol]()) { _, item in
+            [SectionAdapter([TitleCellAdapter(viewModel: item.title)]),
+             ScheduleSeriesSectionAdapter(
+                item.items.map { ScheduleSeriesCellAdapter(viewModel: $0, seclect: { [weak self] series in
+                    self?.handler.select(series: series)
+                })}
+             )]
+        }
+
+        self.reload(sections: sections)
     }
 }

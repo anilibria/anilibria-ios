@@ -1,4 +1,3 @@
-import IGListKit
 import UIKit
 
 // MARK: - View Controller
@@ -13,6 +12,16 @@ final class HistoryViewController: BaseCollectionViewController {
     }
 
     private var currentQuery: String = ""
+    private var sectionAdapter = SectionAdapter([])
+    private lazy var seriesHandler = RemovableSeriesCellAdapterHandler(
+        select: { [weak self] item in
+            self?.searchView?.resignFirstResponder()
+            self?.handler.select(series: item)
+        },
+        delete: { [weak self] item in
+            self?.handler.delete(series: item)
+        }
+    )
 
     // MARK: - Life cycle
 
@@ -46,33 +55,27 @@ final class HistoryViewController: BaseCollectionViewController {
         self.collectionView.contentInset.bottom = self.defaultBottomInset
     }
 
-    // MARK: - Adapter creators
-
-    override func adapterCreators() -> [AdapterCreator] {
-        return [
-            RemovableSeriesCellAdapterCreator(.init(select: { [weak self] item in
-                self?.searchView?.resignFirstResponder()
-                self?.handler.select(series: item)
-                }, delete: { [weak self] item in
-                    self?.handler.delete(series: item)
-            }))
-        ]
-    }
-
-    override func emptyView(for listAdapter: ListAdapter) -> UIView? {
+    func updateEmptyView() {
         var text = L10n.Stub.History.message
         if self.searchView?.isSearching == true {
             text = L10n.Stub.messageNotFound(self.currentQuery)
         }
         self.stubView?.message = text
-
-        return self.stubView
     }
 }
 
 extension HistoryViewController: HistoryViewBehavior {
-    func set(items: [ListDiffable]) {
-        self.items = items
-        self.update()
+    func set(items: [Series]) {
+        if items.isEmpty {
+            self.updateEmptyView()
+            self.collectionView.backgroundView = self.stubView
+        } else {
+            self.collectionView.backgroundView = nil
+        }
+
+        sectionAdapter.set(items.map {
+            RemovableSeriesCellAdapter(viewModel: $0, handler: seriesHandler)
+        })
+        self.reload(sections: [sectionAdapter])
     }
 }

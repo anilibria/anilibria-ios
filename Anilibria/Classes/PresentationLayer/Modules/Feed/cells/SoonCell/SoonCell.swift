@@ -5,7 +5,6 @@ final class SoonCell: BaseCollectionCell {
     @IBOutlet var leftView: UIView!
     @IBOutlet var rightView: UIView!
 
-    private var handler: SoonCellAdapterHandler?
     private var bag: Any?
 
     override func awakeFromNib() {
@@ -13,7 +12,7 @@ final class SoonCell: BaseCollectionCell {
         self.collectionView.contentInset.right = 16
     }
 
-    func configure(_ item: Schedule, handler: SoonCellAdapterHandler?) {
+    func configure(_ item: Schedule, handler: ((Series) -> Void)?) {
         self.leftView.alpha = 0
         self.rightView.alpha = 0
         self.collectionView.contentOffset = .zero
@@ -23,9 +22,12 @@ final class SoonCell: BaseCollectionCell {
         } else {
             self.titleLabel.text = ""
         }
-        self.handler = handler
-        self.items = item.items
-        self.reload()
+
+        self.reload(sections: [
+            ScheduleSeriesSectionAdapter(
+                item.items.map { ScheduleSeriesCellAdapter(viewModel: $0, seclect: handler) }
+            )
+        ])
 
         self.bag = self.collectionView.observe(\.contentSize) { [weak self] (_, _) in
             self?.checkSize()
@@ -114,14 +116,6 @@ final class SoonCell: BaseCollectionCell {
         let width = Sizes.adapt(width)
         let height = (((width - 64)/3) * 10) / 7
         return height + 70
-    }
-
-    override func adapterCreators() -> [AdapterCreator] {
-        return [
-            ScheduleSeriesCellAdapterCreator(.init(select: { [weak self] item in
-                self?.handler?.select?(item)
-            }))
-        ]
     }
 
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {

@@ -1,10 +1,10 @@
-import IGListKit
 import UIKit
 
 // MARK: - Contracts
 
 protocol CatalogViewBehavior: WaitingBehavior, InfinityLoadingBehavior {
-    func set(items: [ListDiffable])
+    func set(items: [Series])
+    func append(items: [Series])
     func setFilter(active: Bool)
 }
 

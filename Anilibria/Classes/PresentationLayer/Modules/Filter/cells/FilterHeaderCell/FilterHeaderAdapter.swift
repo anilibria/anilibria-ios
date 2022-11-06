@@ -1,4 +1,3 @@
-import IGListKit
 import UIKit
 
 public final class FilterHeaderItem: NSObject {
@@ -8,33 +7,25 @@ public final class FilterHeaderItem: NSObject {
     }
 }
 
-final class FilterHeaderAdapterCreator: BaseInteractiveAdapterCreator<FilterHeaderItem, FilterHeaderAdapter> {}
+final class FilterHeaderAdapter: BaseCellAdapter<FilterHeaderItem> {
+    private let action: ((SeriesFilter) -> Void)?
 
-struct FilterHeaderAdapterHandler {
-    let changed: Action<SeriesFilter>?
-}
-
-public final class FilterHeaderAdapter: ListSectionController, Interactable {
-    typealias Handler = FilterHeaderAdapterHandler
-    var handler: Handler?
-
-    private var item: FilterHeaderItem!
-    private var size: CGSize = .zero
-
-    public override func sizeForItem(at index: Int) -> CGSize {
-        return self.size
+    init(viewModel: FilterHeaderItem, action: ((SeriesFilter) -> Void)?) {
+        self.action = action
+        super.init(viewModel: viewModel)
     }
 
-    public override func cellForItem(at index: Int) -> UICollectionViewCell {
-        let cell = self.dequeueReusableCell(of: FilterHeaderCell.self, at: index)
-        cell.configure(self.item, handler: self.handler?.changed)
+    override func sizeForItem(at index: IndexPath,
+                              collectionView: UICollectionView,
+                              layout collectionViewLayout: UICollectionViewLayout) -> CGSize {
+        var width: CGFloat = UIApplication.keyWindowSize.width
+        width = min(width, 414)
+        return CGSize(width: width, height: 160)
+    }
+
+    override func cellForItem(at index: IndexPath, context: CollectionContext) -> UICollectionViewCell? {
+        let cell = context.dequeueReusableNibCell(type: FilterHeaderCell.self, for: index)
+        cell.configure(viewModel, handler: action)
         return cell
-    }
-
-    public override func didUpdate(to object: Any) {
-        self.item = object as? FilterHeaderItem
-        var width: CGFloat = UIApplication.getWindow()?.frame.width ?? 0
-		width = min(width, 414)
-        self.size = CGSize(width: width, height: 160)
     }
 }

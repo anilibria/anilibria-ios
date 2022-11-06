@@ -18,7 +18,6 @@ target 'Anilibria' do
 
     #UI
     pod 'MXParallaxHeader'
-    pod 'IGListKit', :git => 'https://github.com/Instagram/IGListKit.git', :commit => 'f50f3c7'
 end
 
 def unsupported_pods
@@ -34,8 +33,7 @@ def supported_pods
 			'FirebaseCore',
 			'Firebase/Messaging',
 			'Firebase/Crashlytics',
-			'MXParallaxHeader',
-			'IGListKit'
+			'MXParallaxHeader'
 		]
 end
 

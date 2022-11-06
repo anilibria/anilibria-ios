@@ -1,4 +1,3 @@
-import IGListKit
 import UIKit
 
 public final class ActionItem: NSObject {
@@ -15,31 +14,22 @@ public final class ActionItem: NSObject {
     }
 }
 
-final class ActionCellAdapterCreator: BaseAdapterCreator<ActionItem, ActionCellAdapter> {}
+final class ActionCellAdapter: BaseCellAdapter<ActionItem> {
+    private var size: CGSize?
 
-public final class ActionCellAdapter: ListSectionController {
-    private var item: ActionItem!
-    private var size: CGSize = .zero
-
-    private static let template = NewsCell.loadFromNib(frame: UIScreen.main.bounds)!
-
-    public override func sizeForItem(at index: Int) -> CGSize {
-        return self.size
+    override func sizeForItem(at index: IndexPath,
+                              collectionView: UICollectionView,
+                              layout collectionViewLayout: UICollectionViewLayout) -> CGSize {
+        return  CGSize(width: collectionView.frame.width, height: 60)
     }
 
-    public override func cellForItem(at index: Int) -> UICollectionViewCell {
-        let cell = self.dequeueReusableCell(of: ActionCell.self, at: index)
-        cell.configure(self.item.title)
+    override func cellForItem(at index: IndexPath, context: CollectionContext) -> UICollectionViewCell? {
+        let cell = context.dequeueReusableNibCell(type: ActionCell.self, for: index)
+        cell.configure(viewModel.title)
         return cell
     }
 
-    public override func didUpdate(to object: Any) {
-        self.item = object as? ActionItem
-        let width: CGFloat = self.collectionContext!.containerSize.width
-        self.size = CGSize(width: width, height: 60)
-    }
-
-    public override func didSelectItem(at index: Int) {
-        self.item?.execute()
+    override func didSelect(at index: IndexPath) {
+        viewModel.execute()
     }
 }

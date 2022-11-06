@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -25,7 +25,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e7e-S3-8Eo" customClass="BorderedView" customModule="Anilibria" customModuleProvider="target">
-                    <rect key="frame" x="0.0" y="328" width="414" height="578"/>
+                    <rect key="frame" x="0.0" y="330.5" width="414" height="575.5"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -34,24 +34,24 @@
                     </userDefinedRuntimeAttributes>
                 </view>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XHX-RV-cHC">
-                    <rect key="frame" x="0.0" y="44" width="414" height="852"/>
+                    <rect key="frame" x="0.0" y="48" width="414" height="848"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hji-Na-PPg">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="852"/>
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="848"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FRj-Yd-6CF">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="284"/>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FRj-Yd-6CF">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="282.5"/>
                                     <connections>
                                         <action selector="backAction:" destination="-1" eventType="touchUpInside" id="MJA-Ze-DFG"/>
                                     </connections>
                                 </button>
                                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="OoR-Kc-jFf">
-                                    <rect key="frame" x="0.0" y="284" width="414" height="568"/>
+                                    <rect key="frame" x="0.0" y="282.5" width="414" height="565.5"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" id="Tgm-Ml-E4z"/>
                                     </constraints>
-                                    <collectionViewLayout key="collectionViewLayout" id="4Ga-up-UAQ" customClass="IGListCollectionViewLayout"/>
+                                    <collectionViewLayout key="collectionViewLayout" id="IhP-6q-5m1" customClass="LeftAlignedCollectionViewFlowLayout" customModule="Anilibria" customModuleProvider="target"/>
                                 </collectionView>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -82,7 +82,7 @@
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="DPj-7u-1wt">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="40"/>
                             <subviews>
-                                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qJy-oa-lb8" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
+                                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qJy-oa-lb8" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="207" height="40"/>
                                     <color key="backgroundColor" red="0.8784313725490196" green="0.8784313725490196" blue="0.8784313725490196" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
@@ -98,7 +98,7 @@
                                         <action selector="resetAction:" destination="-1" eventType="touchUpInside" id="T9A-OS-iMJ"/>
                                     </connections>
                                 </button>
-                                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tEQ-Ic-Ges" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
+                                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tEQ-Ic-Ges" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
                                     <rect key="frame" x="207" y="0.0" width="207" height="40"/>
                                     <color key="backgroundColor" red="0.70742018399999995" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
@@ -127,19 +127,20 @@
                         <constraint firstItem="DPj-7u-1wt" firstAttribute="leading" secondItem="V1D-DW-wjf" secondAttribute="leading" id="fBZ-bL-i1f"/>
                     </constraints>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="utT-W8-Ny9">
+                <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="utT-W8-Ny9">
                     <rect key="frame" x="0.0" y="0.0" width="0.0" height="896"/>
                     <connections>
                         <action selector="backAction:" destination="-1" eventType="touchUpInside" id="lFS-Gx-4Rc"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hac-IT-FJi">
+                <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hac-IT-FJi">
                     <rect key="frame" x="414" y="0.0" width="0.0" height="896"/>
                     <connections>
                         <action selector="backAction:" destination="-1" eventType="touchUpInside" id="Z2z-LV-n4x"/>
                     </connections>
                 </button>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="e7e-S3-8Eo" secondAttribute="bottom" constant="-10" id="0QG-KW-ept"/>
@@ -166,7 +167,6 @@
                 <constraint firstAttribute="bottom" secondItem="hac-IT-FJi" secondAttribute="bottom" id="teI-Iz-MfP"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="XHX-RV-cHC" secondAttribute="trailing" id="yb5-4I-oDO"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <point key="canvasLocation" x="47.4609375" y="35.13909224011713"/>
         </view>
     </objects>

@@ -19,7 +19,6 @@ final class PlayerViewController: BaseViewController {
     @IBOutlet var container: UIView!
     @IBOutlet var rewindButtons: [RewindView] = []
 
-    private let playerView = PlayerView()
     private let airplayView = AVRoutePickerView()
     private var pictureInPictureController: AVPictureInPictureController?
     private let timeFormatter = FormatterFactory.time.create()
@@ -40,6 +39,7 @@ final class PlayerViewController: BaseViewController {
     }
 
     var handler: PlayerEventHandler!
+    var playerView: (any Player)!
 
     // MARK: - Life cycle
 
@@ -138,10 +138,9 @@ final class PlayerViewController: BaseViewController {
     }
 
     func setupPictureInPicture() {
-        if AVPictureInPictureController.isPictureInPictureSupported() {
+        if let layer = playerView.playerLayer, AVPictureInPictureController.isPictureInPictureSupported() {
             pipButton.isHidden = false
-            pictureInPictureController = AVPictureInPictureController(playerLayer: playerView.playerLayer)
-            pictureInPictureController?.delegate = self
+            pictureInPictureController = AVPictureInPictureController(playerLayer: layer)
 
             pipObservation = pictureInPictureController?.observe(
                 \AVPictureInPictureController.isPictureInPicturePossible,
@@ -170,9 +169,13 @@ final class PlayerViewController: BaseViewController {
     }
 
     private func setupAirPlay() {
-        airplayView.tintColor = .white
-        container.addSubview(airplayView)
-        airplayView.constraintEdgesToSuperview()
+        if playerView.isAirplaySupported {
+            airplayView.tintColor = .white
+            container.addSubview(airplayView)
+            airplayView.constraintEdgesToSuperview()
+        } else {
+            container.isHidden = true
+        }
     }
 
     private func clearLabels() {
@@ -345,15 +348,6 @@ extension PlayerViewController: PlayerViewBehavior {
         let index = self.switcherView.currentIndex
         self.currentQuality = quality
         self.set(playItem: index, seek: self.currentTime)
-    }
-}
-
-extension PlayerViewController: AVPictureInPictureControllerDelegate {
-    func pictureInPictureController(
-        _ pictureInPictureController: AVPictureInPictureController,
-        restoreUserInterfaceForPictureInPictureStopWithCompletionHandler completionHandler: @escaping (Bool) -> Void
-    ) {
-        completionHandler(true)
     }
 }
 

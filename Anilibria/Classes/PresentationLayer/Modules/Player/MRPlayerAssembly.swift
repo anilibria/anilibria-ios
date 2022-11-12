@@ -4,6 +4,7 @@ final class PlayerAssembly {
     class func createModule(series: Series, parent: Router? = nil) -> PlayerViewController {
         let module = PlayerViewController()
         let router = PlayerRouter(view: module, parent: parent)
+        module.playerView = PlayerView()
         module.handler = MainAppCoordinator.shared.container.resolve()
         module.handler.bind(view: module, router: router, series: series)
         return module

@@ -2,43 +2,10 @@ import AVKit
 import Combine
 import UIKit
 
-public final class PlayerView: UIView {
-    enum Status {
-        case unknown
-        case failed
-        case radyToPlay
-        case playing
-        case pause
-        case waitingToPlay
-
-        static func convert(_ status: AVPlayer.Status) -> Status {
-            switch status {
-            case .failed:
-                return .failed
-            case .readyToPlay:
-                return .radyToPlay
-            default:
-                return .unknown
-            }
-        }
-
-        static func convert(_ status: AVPlayer.TimeControlStatus) -> Status {
-            switch status {
-            case .paused:
-                return .pause
-            case .playing:
-                return .playing
-            case .waitingToPlayAtSpecifiedRate:
-                return .waitingToPlay
-            default:
-                return .unknown
-            }
-        }
-    }
-
+public final class PlayerView: UIView, Player {
     private var secondsRelay: CurrentValueSubject<Double, Never> = CurrentValueSubject(0)
     private var playRelay: CurrentValueSubject<Bool, Never> = CurrentValueSubject(false)
-    private var statusRelay: PassthroughSubject<Status, Never> = PassthroughSubject()
+    private var statusRelay: PassthroughSubject<PlayerStatus, Never> = PassthroughSubject()
     private var bag = Set<AnyCancellable>()
     private var observer: Any?
     private var keyBag: Any?
@@ -55,19 +22,21 @@ public final class PlayerView: UIView {
         return AVPlayerLayer.self
     }
 
-    var playerLayer: AVPlayerLayer {
+    public var isAirplaySupported: Bool { true }
+
+    public var playerLayer: AVPlayerLayer? {
         if let value = layer as? AVPlayerLayer {
             return value
         }
-        fatalError()
+        return nil
     }
 
     private var player: AVPlayer? {
         get {
-            return self.playerLayer.player
+            return self.playerLayer?.player
         }
         set {
-            self.playerLayer.player = newValue
+            self.playerLayer?.player = newValue
         }
     }
 
@@ -80,25 +49,25 @@ public final class PlayerView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func getCurrentTime() -> AnyPublisher<Double, Never> {
+    public func getCurrentTime() -> AnyPublisher<Double, Never> {
         return self.secondsRelay
             .removeDuplicates()
             .eraseToAnyPublisher()
     }
 
-    func getPlayChanges() -> AnyPublisher<Bool, Never> {
+    public func getPlayChanges() -> AnyPublisher<Bool, Never> {
         return self.playRelay
             .removeDuplicates()
             .eraseToAnyPublisher()
     }
 
-    func getStatusSequence() -> AnyPublisher<Status, Never> {
+    public func getStatusSequence() -> AnyPublisher<PlayerStatus, Never> {
         return self.statusRelay
             .removeDuplicates()
             .eraseToAnyPublisher()
     }
 
-    func setVideo(url: URL) -> AnyPublisher<Double?, Error> {
+    public func setVideo(url: URL) -> AnyPublisher<Double?, Error> {
         self.isPlaying = false
         self.duration = nil
         self.player?.pause()
@@ -115,20 +84,20 @@ public final class PlayerView: UIView {
 
         let statusBag = self.player?.observe(\AVPlayer.status) { [weak self] _, _ in
             if let status = self?.player?.status {
-                self?.statusRelay.send(Status.convert(status))
+                self?.statusRelay.send(.from(status))
             }
         }
 
         let timeBag = self.player?.observe(\AVPlayer.timeControlStatus) { [weak self] _, _ in
             if let status = self?.player?.timeControlStatus {
-                self?.statusRelay.send(Status.convert(status))
+                self?.statusRelay.send(.from(status))
             }
         }
 
         self.keyBag = [statusBag, timeBag]
 
         let interval = CMTime(seconds: 1, preferredTimescale: 1)
-        self.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] in
+        self.observer = self.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] in
             self?.secondsRelay.send($0.seconds)
         }
 
@@ -141,12 +110,12 @@ public final class PlayerView: UIView {
         .eraseToAnyPublisher()
     }
 
-    func set(time: Double) {
+    public func set(time: Double) {
         let cmtime = CMTime(seconds: time, preferredTimescale: 1)
         self.player?.seek(to: cmtime, toleranceBefore: .zero, toleranceAfter: .zero)
     }
 
-    func togglePlay() {
+    public func togglePlay() {
         self.isPlaying.toggle()
         if self.isPlaying {
             self.player?.play()
@@ -160,5 +129,31 @@ public final class PlayerView: UIView {
             self.player?.removeTimeObserver(observer)
         }
         _ = try? AVAudioSession.sharedInstance().setActive(false)
+    }
+}
+
+private extension PlayerStatus {
+    static func from(_ status: AVPlayer.Status) -> PlayerStatus {
+        switch status {
+        case .failed:
+            return .failed
+        case .readyToPlay:
+            return .radyToPlay
+        default:
+            return .unknown
+        }
+    }
+
+    static func from(_ status: AVPlayer.TimeControlStatus) -> PlayerStatus {
+        switch status {
+        case .paused:
+            return .pause
+        case .playing:
+            return .playing
+        case .waitingToPlayAtSpecifiedRate:
+            return .waitingToPlay
+        default:
+            return .unknown
+        }
     }
 }

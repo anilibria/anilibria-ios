@@ -22,11 +22,8 @@ final class RemovableSeriesCellAdapter: BaseCellAdapter<Series> {
     override func cellForItem(at index: IndexPath, context: CollectionContext) -> UICollectionViewCell? {
         let cell = context.dequeueReusableNibCell(type: RemovableSeriesCell.self, for: index)
         cell.configure(viewModel)
-        cell.setDelete { [weak self] in
-            if let self = self {
-                self.handler.delete?(self.viewModel)
-            }
-
+        cell.setDelete { [handler, viewModel] in
+            handler.delete?(viewModel)
         }
         return cell
     }

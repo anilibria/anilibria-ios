@@ -29,17 +29,19 @@ class CollectionViewAdapter: NSObject {
     }
 
     func reload(content: CollectionContent, animated: Bool = true, completion: (() -> Void)? = nil) {
-        apply(content: content, for: Snapshot(), animated: animated, completion: completion)
+        var snapshot = Snapshot()
+
+        snapshot.appendSections(content.sections.compactMap { $0.sectionId })
+        for section in content.sections {
+            snapshot.appendItems(section.items, toSection: section.sectionId)
+        }
+
+        dataSource.apply(snapshot, animatingDifferences: animated, completion: completion)
         self.content = content
     }
 
     func append(content: CollectionContent, animated: Bool = true, completion: (() -> Void)? = nil) {
-        apply(content: content, for: dataSource.snapshot(), animated: animated, completion: completion)
-        self.content?.append(content)
-    }
-
-    private func apply(content: CollectionContent, for snapshot: Snapshot, animated: Bool, completion: (() -> Void)?) {
-        var snapshot = snapshot
+        var snapshot = dataSource.snapshot()
 
         snapshot.appendSections(content.sections.compactMap {
             if self.content?.contains($0) == true {
@@ -52,6 +54,7 @@ class CollectionViewAdapter: NSObject {
         }
 
         dataSource.apply(snapshot, animatingDifferences: animated, completion: completion)
+        self.content?.append(content)
     }
 
     private func makeDataSource() -> DataSource {

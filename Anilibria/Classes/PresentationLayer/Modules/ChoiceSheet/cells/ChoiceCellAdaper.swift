@@ -28,8 +28,8 @@ final class ChoiceCellAdapter: BaseCellAdapter<ChoiceItem> {
     }
 
     override func sizeForItem(at index: IndexPath,
-                     collectionView: UICollectionView,
-                     layout collectionViewLayout: UICollectionViewLayout) -> CGSize {
+                              collectionView: UICollectionView,
+                              layout collectionViewLayout: UICollectionViewLayout) -> CGSize {
         CGSize(width: collectionView.frame.width, height: 50)
     }
 }

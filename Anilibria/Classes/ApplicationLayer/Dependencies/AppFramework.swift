@@ -13,7 +13,6 @@ public class AppFramework: DIFramework {
 private class RepositoriesPart: DIPart {
     static let parts: [DIPart.Type] = [
         ConfigRepositoryPart.self,
-        NotifySettingsRepositoryPart.self,
         HistoryRepositoryPart.self,
         PlayerSettingsRepositoryPart.self,
         UserRepositoryPart.self,
@@ -37,7 +36,6 @@ private class RepositoriesPart: DIPart {
 private class ServicesPart: DIPart {
     static let parts: [DIPart.Type] = [
         AppConfigurationServicePart.self,
-        NotifyServicePart.self,
         PlayerServicePart.self,
         FavoriteServicePart.self,
         SessionServicePart.self,

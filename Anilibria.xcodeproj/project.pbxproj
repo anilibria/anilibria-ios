@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -109,7 +109,6 @@
 		C7326BB6234CCDFB00E194C1 /* AppConfigirationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7326BB5234CCDFB00E194C1 /* AppConfigirationService.swift */; };
 		C7326BB8234CDF1600E194C1 /* AniConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7326BB7234CDF1600E194C1 /* AniConfig.swift */; };
 		C7326BBB234CE70D00E194C1 /* CheckRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7326BBA234CE70D00E194C1 /* CheckRequest.swift */; };
-		C73290E123E4757400D65E61 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C73290E023E4757400D65E61 /* GoogleService-Info.plist */; };
 		C73290E4240270BF00D65E61 /* Torrent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73290E3240270BF00D65E61 /* Torrent.swift */; };
 		C73290E6240275EA00D65E61 /* TorrentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73290E5240275EA00D65E61 /* TorrentView.swift */; };
 		C73290E82402760200D65E61 /* TorrentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C73290E72402760200D65E61 /* TorrentView.xib */; };
@@ -331,9 +330,6 @@
 		C7D686B522DA44D100CF4190 /* ChoiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C7D686B422DA44D100CF4190 /* ChoiceCell.xib */; };
 		C7D686B722DA44E200CF4190 /* ChoiceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D686B622DA44E200CF4190 /* ChoiceCell.swift */; };
 		C7D686B922DA452300CF4190 /* ChoiceCellAdaper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D686B822DA452300CF4190 /* ChoiceCellAdaper.swift */; };
-		C7FD9DAF230681A900C56FB5 /* NotifyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FD9DAE230681A900C56FB5 /* NotifyService.swift */; };
-		C7FD9DCC230BCDEE00C56FB5 /* NotifySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FD9DCB230BCDEE00C56FB5 /* NotifySettings.swift */; };
-		C7FD9DCE230BCFC600C56FB5 /* NotifySettingsRepositiry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FD9DCD230BCFC600C56FB5 /* NotifySettingsRepositiry.swift */; };
 		C7FD9DD0230BD3F100C56FB5 /* PushData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FD9DCF230BD3F100C56FB5 /* PushData.swift */; };
 		C7FD9DD2230BE94600C56FB5 /* PermissionRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FD9DD1230BE94600C56FB5 /* PermissionRoute.swift */; };
 		C7FD9DD4230BE98900C56FB5 /* AlertRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7FD9DD3230BE98800C56FB5 /* AlertRoute.swift */; };
@@ -478,7 +474,6 @@
 		C7326BB5234CCDFB00E194C1 /* AppConfigirationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfigirationService.swift; sourceTree = "<group>"; };
 		C7326BB7234CDF1600E194C1 /* AniConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AniConfig.swift; sourceTree = "<group>"; };
 		C7326BBA234CE70D00E194C1 /* CheckRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckRequest.swift; sourceTree = "<group>"; };
-		C73290E023E4757400D65E61 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C73290E3240270BF00D65E61 /* Torrent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Torrent.swift; sourceTree = "<group>"; };
 		C73290E5240275EA00D65E61 /* TorrentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TorrentView.swift; sourceTree = "<group>"; };
 		C73290E72402760200D65E61 /* TorrentView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TorrentView.xib; sourceTree = "<group>"; };
@@ -705,10 +700,7 @@
 		C7D686B422DA44D100CF4190 /* ChoiceCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChoiceCell.xib; sourceTree = "<group>"; };
 		C7D686B622DA44E200CF4190 /* ChoiceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoiceCell.swift; sourceTree = "<group>"; };
 		C7D686B822DA452300CF4190 /* ChoiceCellAdaper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoiceCellAdaper.swift; sourceTree = "<group>"; };
-		C7FD9DAE230681A900C56FB5 /* NotifyService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotifyService.swift; sourceTree = "<group>"; };
 		C7FD9DC72307067E00C56FB5 /* Anilibria.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Anilibria.entitlements; sourceTree = "<group>"; };
-		C7FD9DCB230BCDEE00C56FB5 /* NotifySettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotifySettings.swift; sourceTree = "<group>"; };
-		C7FD9DCD230BCFC600C56FB5 /* NotifySettingsRepositiry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotifySettingsRepositiry.swift; sourceTree = "<group>"; };
 		C7FD9DCF230BD3F100C56FB5 /* PushData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushData.swift; sourceTree = "<group>"; };
 		C7FD9DD1230BE94600C56FB5 /* PermissionRoute.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PermissionRoute.swift; sourceTree = "<group>"; };
 		C7FD9DD3230BE98800C56FB5 /* AlertRoute.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertRoute.swift; sourceTree = "<group>"; };
@@ -1455,7 +1447,6 @@
 				C7182F3C244ED3390046B9ED /* LinksService */,
 				C7CD43602403AD19001FE5B2 /* DownloadService */,
 				C7326BB4234CCDD500E194C1 /* AppConfigurationService */,
-				C7FD9DAD230681A900C56FB5 /* NotifyService */,
 				C737925522E0BEE700DDF2B2 /* PlayerService */,
 				C737923D22E01C1800DDF2B2 /* FavoriteService */,
 				C799EBBF22DEBF4E00C6BD9B /* SessionService */,
@@ -1536,7 +1527,6 @@
 				C737925B22E0C01800DDF2B2 /* PlayerSettings.swift */,
 				C737926522E16D9600DDF2B2 /* PlayerContext.swift */,
 				C737926322E169C000DDF2B2 /* HistoryData.swift */,
-				C7FD9DCB230BCDEE00C56FB5 /* NotifySettings.swift */,
 				C7FD9DCF230BD3F100C56FB5 /* PushData.swift */,
 				C7326BB7234CDF1600E194C1 /* AniConfig.swift */,
 				C7182F40244ED39F0046B9ED /* LinkData.swift */,
@@ -1612,7 +1602,6 @@
 			children = (
 				C7182F42244ED5C00046B9ED /* LInksRepository */,
 				C7A8FED3233F9B1000485BCB /* ConfigRepository */,
-				C7FD9DCA230BCDB100C56FB5 /* NotifySettingsRepositiry */,
 				C737926722E16DF000DDF2B2 /* HistoryRepository */,
 				C737925822E0BF9900DDF2B2 /* PlayerSettingsRepository */,
 				C799EBD822DEC93F00C6BD9B /* UserRepository */,
@@ -1861,7 +1850,6 @@
 				C7D462D322CC74EF00E763DF /* Font */,
 				C7D462CF22CC74EF00E763DF /* Constants.swift */,
 				C7D686AF22D8F0E300CF4190 /* Formatters.swift */,
-				C73290E023E4757400D65E61 /* GoogleService-Info.plist */,
 				C7D4624E22CC73E100E763DF /* Info.plist */,
 				C7D4624922CC73E100E763DF /* Assets.xcassets */,
 				C7D462D622CC74EF00E763DF /* Configuration.swift */,
@@ -1948,22 +1936,6 @@
 			path = cells;
 			sourceTree = "<group>";
 		};
-		C7FD9DAD230681A900C56FB5 /* NotifyService */ = {
-			isa = PBXGroup;
-			children = (
-				C7FD9DAE230681A900C56FB5 /* NotifyService.swift */,
-			);
-			path = NotifyService;
-			sourceTree = "<group>";
-		};
-		C7FD9DCA230BCDB100C56FB5 /* NotifySettingsRepositiry */ = {
-			isa = PBXGroup;
-			children = (
-				C7FD9DCD230BCFC600C56FB5 /* NotifySettingsRepositiry.swift */,
-			);
-			path = NotifySettingsRepositiry;
-			sourceTree = "<group>";
-		};
 		D2790D24F985014CF661F30895566745 /* SocialAuth */ = {
 			isa = PBXGroup;
 			children = (
@@ -2044,14 +2016,13 @@
 			buildConfigurationList = C7D4625122CC73E100E763DF /* Build configuration list for PBXNativeTarget "Anilibria" */;
 			buildPhases = (
 				BC11612467F87E1726382BCC /* [CP] Check Pods Manifest.lock */,
-				C7D4634022CC78CC00E763DF /* ShellScript */,
+				C7D4634022CC78CC00E763DF /* L10n generation */,
 				C7D4623B22CC73DF00E763DF /* Sources */,
 				C7D4623C22CC73DF00E763DF /* Frameworks */,
 				C7D4623D22CC73DF00E763DF /* Resources */,
-				C7D4634222CC790900E763DF /* ShellScript */,
+				C7D4634222CC790900E763DF /* Lint */,
 				4880C22F23DAD192006FABE1 /* Embed PlugIns */,
 				F0D43917EF804CB5A3F71795 /* [CP] Embed Pods Frameworks */,
-				C73290E223E4849000D65E61 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -2137,7 +2108,6 @@
 				C7D4635422CE51B300E763DF /* MenuItemView.xib in Resources */,
 				C737924E22E0AF4100DDF2B2 /* StubView.xib in Resources */,
 				C78394C022CF76CB00ACC353 /* FeedViewController.xib in Resources */,
-				C73290E123E4757400D65E61 /* GoogleService-Info.plist in Resources */,
 				C7D4635122CE4D1D00E763DF /* MainContainerViewController.xib in Resources */,
 				C737924822E0A00600DDF2B2 /* SearchView.xib in Resources */,
 				C78394E522CFB6F100ACC353 /* ScheduleViewController.xib in Resources */,
@@ -2195,27 +2165,9 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C73290E223E4849000D65E61 /* ShellScript */ = {
+		C7D4634022CC78CC00E763DF /* L10n generation */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
-		};
-		C7D4634022CC78CC00E763DF /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -2223,6 +2175,7 @@
 			);
 			inputPaths = (
 			);
+			name = "L10n generation";
 			outputFileListPaths = (
 			);
 			outputPaths = (
@@ -2231,8 +2184,9 @@
 			shellPath = /bin/sh;
 			shellScript = "if which strings >/dev/null; then\nswiftgen run strings \"${SRCROOT}/${PROJECT_NAME}/Resources/Localize/ru.lproj/Localizable.strings\" --output \"${SRCROOT}/${PROJECT_NAME}/Resources/Localize/Localizable.swift\" -p \"${SRCROOT}/${PROJECT_NAME}/Resources/Localize/strings-swift4.stencil\"\nelse\necho \"warning: SwiftGen not installed, download from https://github.com/SwiftGen/SwiftGen\"\nfi\n";
 		};
-		C7D4634222CC790900E763DF /* ShellScript */ = {
+		C7D4634222CC790900E763DF /* Lint */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -2240,6 +2194,7 @@
 			);
 			inputPaths = (
 			);
+			name = Lint;
 			outputFileListPaths = (
 			);
 			outputPaths = (
@@ -2326,7 +2281,6 @@
 				C7182F44244ED5FA0046B9ED /* LinksRepository.swift in Sources */,
 				C799EBC322DEC0A900C6BD9B /* SessionState.swift in Sources */,
 				C7D4630222CC74EF00E763DF /* Chaperone.swift in Sources */,
-				C7FD9DCC230BCDEE00C56FB5 /* NotifySettings.swift in Sources */,
 				C78394B822CF6F9400ACC353 /* SeriesCellAdapter.swift in Sources */,
 				C73290E4240270BF00D65E61 /* Torrent.swift in Sources */,
 				C78394D422CF87CC00ACC353 /* SoonCellAdapter.swift in Sources */,
@@ -2494,7 +2448,6 @@
 				C799EBDC22DECA0A00C6BD9B /* UserDefaultsExtension.swift in Sources */,
 				813E60F04341368BC519DC417CEABDB7 /* MRFilterPresenter.swift in Sources */,
 				579ABA0B4E7685EC7DF0EA6B3C714BB8 /* MRFilterView.swift in Sources */,
-				C7FD9DAF230681A900C56FB5 /* NotifyService.swift in Sources */,
 				C73290E6240275EA00D65E61 /* TorrentView.swift in Sources */,
 				BC6DB6C5AD93619149A521F846C362AF /* MRFilterRouter.swift in Sources */,
 				E006D8CA7BA8F7B54080771C418FAF12 /* MRSearchAssembly.swift in Sources */,
@@ -2546,7 +2499,6 @@
 				C759F5AB234F6A9300F8736A /* ConfigurationContracts.swift in Sources */,
 				E520901F58DF4C8FE7488F68198FD174 /* MROtherPresenter.swift in Sources */,
 				5B63E71FA5311A641064BAE2E8273E81 /* MROtherView.swift in Sources */,
-				C7FD9DCE230BCFC600C56FB5 /* NotifySettingsRepositiry.swift in Sources */,
 				8FB876EBDFC6EE26ED720A07BE93B45A /* MROtherRouter.swift in Sources */,
 				54354CD0AEFEDEA69761897CBB56095C /* MRSignInAssembly.swift in Sources */,
 				C799EBCA22DEC20B00C6BD9B /* MainRetrier.swift in Sources */,

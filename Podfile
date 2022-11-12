@@ -12,9 +12,6 @@ target 'Anilibria' do
     pod 'Localize-Swift', '2.0.0'
     pod 'lottie-ios', '3.5.0'
     pod 'YandexMobileMetrica'
-    pod 'FirebaseCore'
-    pod 'Firebase/Messaging'
-    pod 'Firebase/Crashlytics'
 end
 
 def unsupported_pods
@@ -27,9 +24,6 @@ def supported_pods
 			'DITranquillity',
 			'Localize-Swift',
 			'lottie-ios',
-			'FirebaseCore',
-			'Firebase/Messaging',
-			'Firebase/Crashlytics'
 		]
 end
 

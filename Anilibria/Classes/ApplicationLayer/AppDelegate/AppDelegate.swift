@@ -1,13 +1,10 @@
-import Firebase
 import UIKit
-import FirebaseMessaging
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         HTTPCookieStorage.shared.cookieAcceptPolicy = .always
-        FirebaseApp.configure()
         MainAppCoordinator.shared.start()
         #if targetEnvironment(macCatalyst)
            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
@@ -26,7 +23,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return .all
     }
 
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-       Messaging.messaging().apnsToken = deviceToken
-    }
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {}
 }

@@ -18,18 +18,15 @@ final class MainContainerPresenter {
 
     private let menuService: MenuService
     private let sessionService: SessionService
-    private let notifyService: NotifyService
     private let feedService: FeedService
 
     private var bag = Set<AnyCancellable>()
 
     init(menuService: MenuService,
          sessionService: SessionService,
-         notifyService: NotifyService,
          feedService: FeedService) {
         self.menuService = menuService
         self.sessionService = sessionService
-        self.notifyService = notifyService
         self.feedService = feedService
     }
 }
@@ -41,7 +38,6 @@ extension MainContainerPresenter: MainContainerEventHandler {
     }
 
     func didLoad() {
-        self.setupNotify()
         let items = self.menuService.fetchItems()
         self.view.set(items: items)
 
@@ -73,36 +69,5 @@ extension MainContainerPresenter: MainContainerEventHandler {
 
     func select(item: MenuItemType) {
         self.menuService.setMenuItem(type: item)
-    }
-
-    private func setupNotify() {
-        self.notifyService.registerForRemoteNotification()
-
-        self.notifyService.fetchDataSequence()
-            .sink(onNext: { [weak self] data in
-                if let link = data.link {
-                    self?.handle(url: link)
-                }
-            })
-            .store(in: &bag)
-    }
-
-    private func handle(url: URL) {
-        if let code = URLHelper.isRelease(url: url) {
-            self.load(code: code)
-        } else {
-            self.router.open(url: .web(url))
-        }
-    }
-
-    private func load(code: String) {
-        self.feedService.series(with: code)
-            .manageActivity(self.view.showLoading(fullscreen: false))
-            .sink(onNext: { [weak self] item in
-                self?.router.open(series: item)
-            }, onError: { [weak self] error in
-                self?.router.show(error: error)
-            })
-            .store(in: &bag)
     }
 }

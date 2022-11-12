@@ -2,8 +2,8 @@ import Lottie
 import UIKit
 
 public class MRLoaderView: LoadableView, Loader {
-    private let animationView: AnimationView = AnimationView()
-    private let animation: Animation? = Animation.named("nyan_cat")
+    private let animationView: LottieAnimationView = LottieAnimationView()
+    private let animation: LottieAnimation? = LottieAnimation.named("nyan_cat")
     @IBOutlet var containerView: UIView! {
         didSet {
             self.configure()

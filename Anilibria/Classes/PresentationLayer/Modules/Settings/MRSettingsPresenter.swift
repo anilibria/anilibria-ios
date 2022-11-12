@@ -16,21 +16,16 @@ final class SettingsPresenter {
     private weak var view: SettingsViewBehavior!
     private var router: SettingsRoutable!
     private var playerSettings: PlayerSettings
-    private var notifySettings: NotifySettings
 
     private let playerService: PlayerService
     private let sessionService: SessionService
-    private let notifyService: NotifyService
 
     private var bag = Set<AnyCancellable>()
 
     init(playerService: PlayerService,
-         sessionService: SessionService,
-         notifyService: NotifyService) {
+         sessionService: SessionService) {
         self.playerService = playerService
         self.sessionService = sessionService
-        self.notifyService = notifyService
-        self.notifySettings = notifyService.getSettings()
         self.playerSettings = playerService.fetchSettings()
     }
 }
@@ -54,7 +49,6 @@ extension SettingsPresenter: SettingsEventHandler {
     }
 
     func didLoad() {
-        self.view.set(global: self.notifySettings.global, animated: false)
         self.view.set(quality: self.playerSettings.quality)
         self.view.set(name: Bundle.main.displayName ?? "",
                       version: Bundle.main.releaseVersionNumber ?? "")
@@ -68,17 +62,6 @@ extension SettingsPresenter: SettingsEventHandler {
         }
 
         self.router.openSheet(with: items)
-    }
-
-    func change(global: Bool) {
-        self.router.request(permission: .push) { [weak self] result in
-            if result {
-                self?.notifySettings.global = global
-                self?.notifyService.set(settings: self!.notifySettings)
-            } else {
-                self?.view.set(global: !global, animated: true)
-            }
-        }
     }
 
     private func update(_ quality: VideoQuality) {

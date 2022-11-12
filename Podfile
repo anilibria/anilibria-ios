@@ -11,7 +11,7 @@ target 'Anilibria' do
     pod 'DITranquillity', '4.3.5'
     pod 'Localize-Swift', '2.0.0'
     pod 'lottie-ios', '3.5.0'
-    pod 'YandexMobileMetrica'
+    pod 'YandexMobileMetrica', '4.4.0'
 end
 
 def unsupported_pods

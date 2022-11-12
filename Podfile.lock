@@ -68,7 +68,6 @@ PODS:
   - Kingfisher (7.4.1)
   - Localize-Swift (2.0.0)
   - lottie-ios (3.5.0)
-  - MXParallaxHeader (1.1.0)
   - nanopb (0.3.9011):
     - nanopb/decode (= 0.3.9011)
     - nanopb/encode (= 0.3.9011)
@@ -94,7 +93,6 @@ DEPENDENCIES:
   - Kingfisher (= 7.4.1)
   - Localize-Swift (= 2.0.0)
   - lottie-ios (= 3.5.0)
-  - MXParallaxHeader
   - YandexMobileMetrica
 
 SPEC REPOS:
@@ -115,7 +113,6 @@ SPEC REPOS:
     - Kingfisher
     - Localize-Swift
     - lottie-ios
-    - MXParallaxHeader
     - nanopb
     - PromisesObjC
     - Protobuf
@@ -139,13 +136,12 @@ SPEC CHECKSUMS:
   Kingfisher: cd762a593a61b2fbecf7645c00f9a801a3ebfc9c
   Localize-Swift: c798ec9286494866f7068f85f7c71283ac5bdab4
   lottie-ios: c55158d67d0629a260625cc2ded2052b829e3c3e
-  MXParallaxHeader: de3c867e10ba46e8f6e20c8ee1f2a910372b3b94
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
   Protobuf: dd1aaea7140debfe4dd0683fb8ef208e527ae153
   SwiftLazy: 1657354f43dbd6a0a79e00ad67558d655c77bdc9
   YandexMobileMetrica: ea82087806f175981c9eccbb8e35f1d4ee35d788
 
-PODFILE CHECKSUM: 50e9293672c5fab7e50c2fa2d2f958acac02d77e
+PODFILE CHECKSUM: 8db27de6fb41f856916bd1400e82b6e464ac3b2e
 
 COCOAPODS: 1.11.3

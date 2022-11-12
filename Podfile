@@ -15,9 +15,6 @@ target 'Anilibria' do
     pod 'FirebaseCore'
     pod 'Firebase/Messaging'
     pod 'Firebase/Crashlytics'
-
-    #UI
-    pod 'MXParallaxHeader'
 end
 
 def unsupported_pods
@@ -32,8 +29,7 @@ def supported_pods
 			'lottie-ios',
 			'FirebaseCore',
 			'Firebase/Messaging',
-			'Firebase/Crashlytics',
-			'MXParallaxHeader'
+			'Firebase/Crashlytics'
 		]
 end
 

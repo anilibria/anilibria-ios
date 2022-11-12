@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -15,6 +16,7 @@
                 <outlet property="favoriteButton" destination="2K1-Xt-21R" id="r3U-QH-z5U"/>
                 <outlet property="favoriteCountLabel" destination="agv-tY-JC3" id="hPR-BK-5rk"/>
                 <outlet property="favoriteStarView" destination="Rql-Gn-hbn" id="uLx-Ws-X6d"/>
+                <outlet property="headerContainerView" destination="Tck-c2-HNR" id="PVH-gj-daq"/>
                 <outlet property="paramsTextView" destination="Vw4-G6-Mqn" id="dhb-IU-lpE"/>
                 <outlet property="scrollView" destination="VTk-KK-TSM" id="Akn-xM-clU"/>
                 <outlet property="seconTitleLabel" destination="YZb-MF-Wl4" id="lc0-Jx-xhv"/>
@@ -42,6 +44,10 @@
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VTk-KK-TSM" customClass="TouchesScrollView" customModule="Anilibria" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="44" width="414" height="852"/>
                     <subviews>
+                        <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tck-c2-HNR">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="0.0"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Hg-c2-dS8">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="349.33333333333331"/>
                             <subviews>
@@ -77,7 +83,7 @@
                                                 <userDefinedRuntimeAttribute type="image" keyPath="templateImage" value="star-outline"/>
                                             </userDefinedRuntimeAttributes>
                                         </imageView>
-                                        <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2K1-Xt-21R" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
+                                        <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2K1-Xt-21R" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="0.0" width="44" height="22"/>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
@@ -351,7 +357,7 @@
                                                         <constraint firstAttribute="height" relation="lessThanOrEqual" constant="40" id="gnR-i6-0K8"/>
                                                     </constraints>
                                                 </stackView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gWR-lw-O1U">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gWR-lw-O1U">
                                                     <rect key="frame" x="0.0" y="0.0" width="316" height="40"/>
                                                     <connections>
                                                         <action selector="weekDaysAction:" destination="-1" eventType="touchUpInside" id="6yo-8s-Qn5"/>
@@ -417,7 +423,7 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eXk-os-Vg9" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eXk-os-Vg9" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="80"/>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
@@ -482,19 +488,22 @@
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="8Hg-c2-dS8" secondAttribute="trailing" id="5RQ-p7-2Dq"/>
+                        <constraint firstAttribute="trailing" secondItem="Tck-c2-HNR" secondAttribute="trailing" id="9OF-2Y-0Ar"/>
+                        <constraint firstItem="8Hg-c2-dS8" firstAttribute="top" secondItem="Tck-c2-HNR" secondAttribute="bottom" id="Cal-Xb-R2U"/>
                         <constraint firstItem="8Hg-c2-dS8" firstAttribute="top" secondItem="VTk-KK-TSM" secondAttribute="top" id="beq-yg-odk"/>
                         <constraint firstItem="8Hg-c2-dS8" firstAttribute="leading" secondItem="VTk-KK-TSM" secondAttribute="leading" id="miA-Jd-PeJ"/>
                         <constraint firstAttribute="bottom" secondItem="8Hg-c2-dS8" secondAttribute="bottom" id="sK1-xr-PET"/>
+                        <constraint firstItem="Tck-c2-HNR" firstAttribute="leading" secondItem="VTk-KK-TSM" secondAttribute="leading" id="sOZ-BT-YKq"/>
                         <constraint firstItem="8Hg-c2-dS8" firstAttribute="width" secondItem="VTk-KK-TSM" secondAttribute="width" id="wbb-al-fMa"/>
                     </constraints>
                 </scrollView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ROA-Jq-GvY" customClass="GradientView" customModule="Anilibria" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="44" width="414" height="5"/>
+                    <viewLayoutGuide key="safeArea" id="FQx-uk-vDA"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="5" id="jYb-lZ-NVZ"/>
                     </constraints>
-                    <viewLayoutGuide key="safeArea" id="FQx-uk-vDA"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="color" keyPath="firstColor">
                             <color key="value" red="0.0" green="0.0" blue="0.0" alpha="0.14999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
@@ -506,6 +515,7 @@
                     </userDefinedRuntimeAttributes>
                 </view>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="VTk-KK-TSM" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="Dyk-Nb-Vwx"/>
@@ -513,14 +523,17 @@
                 <constraint firstItem="VTk-KK-TSM" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="Jeh-cl-Doz"/>
                 <constraint firstItem="ROA-Jq-GvY" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="QpP-gi-PGX"/>
                 <constraint firstAttribute="bottom" secondItem="VTk-KK-TSM" secondAttribute="bottom" id="alM-Ok-ZL0"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="top" secondItem="Tck-c2-HNR" secondAttribute="top" id="g3C-Yp-jrA"/>
                 <constraint firstItem="ROA-Jq-GvY" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="veF-B4-BXK"/>
                 <constraint firstItem="ROA-Jq-GvY" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="yby-Nb-4mN"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <point key="canvasLocation" x="47.826086956521742" y="35.491071428571423"/>
         </view>
     </objects>
     <resources>
         <image name="star-outline" width="18" height="18"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

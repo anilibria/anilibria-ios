@@ -1,10 +1,10 @@
-import MXParallaxHeader
 import UIKit
 
 // MARK: - View Controller
 
 final class SeriesViewController: BaseViewController {
     @IBOutlet var scrollView: UIScrollView!
+    @IBOutlet var headerContainerView: UIView!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var seconTitleLabel: UILabel!
     @IBOutlet var favoriteCountLabel: UILabel!
@@ -69,10 +69,9 @@ final class SeriesViewController: BaseViewController {
     private func setupHeader() {
         if let header = SeriesHeaderView.fromNib() {
             self.header = header
-            self.scrollView.parallaxHeader.view = header
-            self.scrollView.parallaxHeader.mode = .fill
-            self.scrollView.parallaxHeader.height = 320
-
+            self.scrollView.contentInset.top = 320
+            self.headerContainerView.addSubview(header)
+            header.constraintEdgesToSuperview()
             self.header.setPlay { [weak self] in
                 self?.handler.play()
             }

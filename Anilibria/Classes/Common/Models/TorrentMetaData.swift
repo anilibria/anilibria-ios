@@ -1,5 +1,5 @@
 //
-//  Torrent.swift
+//  TorrentMetaData.swift
 //  Anilibria
 //
 //  Created by Иван Морозов on 23.02.2020.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public final class Torrent: NSObject, Decodable {
+public final class TorrentMetaData: NSObject, Decodable {
     var id: Int = 0
     var torrentHash: String = ""
     var leechers: Int = 0

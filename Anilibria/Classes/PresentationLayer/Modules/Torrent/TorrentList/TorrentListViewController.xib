@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TorrentListViewController" customModule="Anilibria" customModuleProvider="target">
+            <connections>
+                <outlet property="collectionView" destination="bty-GH-7Ok" id="ERW-xu-kzC"/>
+                <outlet property="view" destination="iN0-l3-epB" id="RL4-Hf-GR0"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="bty-GH-7Ok">
+                    <rect key="frame" x="0.0" y="48" width="414" height="814"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="YVy-gl-vWl">
+                        <size key="itemSize" width="50" height="50"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                </collectionView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W7v-i1-EeF" customClass="HideableView" customModule="Anilibria" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="48" width="414" height="5"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sLE-AU-zxv" customClass="GradientView" customModule="Anilibria" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="5"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="color" keyPath="firstColor">
+                                    <color key="value" red="0.0" green="0.0" blue="0.0" alpha="0.14999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="color" keyPath="secondColor">
+                                    <color key="value" red="0.0" green="0.0" blue="0.0" alpha="0.01" colorSpace="custom" customColorSpace="sRGB"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="string" keyPath="gradientTypeName" value="topBottom"/>
+                            </userDefinedRuntimeAttributes>
+                        </view>
+                    </subviews>
+                    <viewLayoutGuide key="safeArea" id="1dA-Zw-njk"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="sLE-AU-zxv" secondAttribute="bottom" id="8ko-Vf-Kh6"/>
+                        <constraint firstItem="sLE-AU-zxv" firstAttribute="leading" secondItem="W7v-i1-EeF" secondAttribute="leading" id="FCo-fq-xAG"/>
+                        <constraint firstAttribute="trailing" secondItem="sLE-AU-zxv" secondAttribute="trailing" id="Mx9-Jp-dXi"/>
+                        <constraint firstItem="sLE-AU-zxv" firstAttribute="top" secondItem="W7v-i1-EeF" secondAttribute="top" id="ZHp-Fm-lvv"/>
+                        <constraint firstAttribute="height" constant="5" id="sn5-Mp-qlg"/>
+                    </constraints>
+                    <connections>
+                        <outlet property="scrollView" destination="bty-GH-7Ok" id="GyC-l3-oC2"/>
+                    </connections>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="bty-GH-7Ok" secondAttribute="bottom" id="0hc-lJ-tNf"/>
+                <constraint firstItem="bty-GH-7Ok" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="M0Z-mw-mXq"/>
+                <constraint firstItem="W7v-i1-EeF" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="Mdj-N5-npq"/>
+                <constraint firstItem="W7v-i1-EeF" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="UkG-Lb-GoO"/>
+                <constraint firstItem="bty-GH-7Ok" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="YPA-Ev-VMQ"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="bty-GH-7Ok" secondAttribute="trailing" id="fRm-n7-lDu"/>
+                <constraint firstItem="W7v-i1-EeF" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="uTX-pa-iKT"/>
+            </constraints>
+            <point key="canvasLocation" x="139.13043478260872" y="20.758928571428569"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

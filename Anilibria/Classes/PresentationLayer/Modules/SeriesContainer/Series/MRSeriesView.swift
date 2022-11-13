@@ -132,17 +132,15 @@ extension SeriesViewController: SeriesViewBehavior {
         self.separatorView.isHidden = self.weekDaysContainer.isHidden &&
             self.anonceLabel.isHidden
 
-        #if targetEnvironment(macCatalyst)
         self.set(torrents: series.torrents)
-        #endif
     }
 
-    func set(torrents: [Torrent]) {
+    func set(torrents: [TorrentMetaData]) {
         let views = torrents.lazy.compactMap { item -> TorrentView? in
             let view = TorrentView.fromNib()
             view?.configure(item)
             view?.setTap { [weak self] in
-                self?.handler.download(torrent: $0)
+                self?.handler.open(torrent: $0)
             }
             return view
         }

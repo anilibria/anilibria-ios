@@ -15,7 +15,8 @@ protocol PlayerViewBehavior: AnyObject {
 protocol PlayerEventHandler: ViewControllerEventHandler {
     func bind(view: PlayerViewBehavior,
               router: PlayerRoutable,
-              series: Series)
+              series: Series,
+              playlist: [PlaylistItem]?)
 
     func settings(quality: VideoQuality, for item: PlaylistItem)
     func select(playItemIndex: Int)

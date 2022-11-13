@@ -37,6 +37,11 @@ public final class PlaylistItem: NSObject, Decodable {
         return self.video.keys.sorted(by: { $0.rawValue < $1.rawValue })
     }
 
+    public init(title: String, url: URL) {
+        self.title = title
+        self.video[.hd] = url
+    }
+
     public init(from decoder: Decoder) throws {
         super.init()
         let urlConverter = URLConverter(Configuration.server)

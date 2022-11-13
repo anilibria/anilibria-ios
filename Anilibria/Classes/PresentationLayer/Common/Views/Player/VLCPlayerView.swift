@@ -94,10 +94,18 @@ public final class VLCPlayerView: UIView, Player {
 
         let media = VLCMedia(url: url)
         player.media = media
+        player.play()
+        player.pause()
+        player.time = VLCTime(int: 0)
 
-        return Deferred {
+        return Deferred { [player] in
             media.lengthWait(until: Date() + 1.minutes)
+            media.parse(timeout: 0)
             let seconds = media.length.value.map { $0.doubleValue / 1000 }
+            print("PLAYER: - audioTrackNames: \(player.audioTrackNames)")
+            print("PLAYER: - videoSubTitlesNames: \(player.videoSubTitlesNames)")
+            player.currentAudioTrackIndex = player.audioTrackIndexes.last as? Int32 ?? -1
+            player.currentVideoSubTitleIndex = player.videoSubTitlesIndexes.last as? Int32 ?? -1
             return AnyPublisher<Double?, Error>.just(seconds)
         }
         .subscribe(on: DispatchQueue.global())

@@ -19,7 +19,7 @@ protocol SeriesEventHandler: ViewControllerEventHandler {
     func schedule()
     func back()
     func play()
-    func download(torrent: Torrent)
+    func open(torrent: TorrentMetaData)
 
     func favorite()
     func donate()

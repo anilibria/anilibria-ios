@@ -46,12 +46,13 @@ extension PlayerPresenter: RouterCommandResponder {
 extension PlayerPresenter: PlayerEventHandler {
     func bind(view: PlayerViewBehavior,
               router: PlayerRoutable,
-              series: Series) {
+              series: Series,
+              playlist: [PlaylistItem]?) {
         self.view = view
         self.router = router
         self.router.responder = self
         self.series = series
-        self.playlist = self.series.playlist.reversed()
+        self.playlist = playlist ?? self.series.playlist.reversed()
     }
 
     func didLoad() {

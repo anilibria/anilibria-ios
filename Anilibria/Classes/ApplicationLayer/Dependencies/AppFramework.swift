@@ -42,7 +42,7 @@ private class ServicesPart: DIPart {
         MenuServicePart.self,
         FeedServicePart.self,
         LinksServicePart.self,
-        DownloadServicePart.self
+        TorrentServicePart.self
     ]
 
     static func load(container: DIContainer) {
@@ -73,7 +73,8 @@ private class PersentersPart: DIPart {
         CatalogPart.self,
         SchedulePart.self,
         FeedPart.self,
-        NewsPart.self
+        NewsPart.self,
+        TorrentListPart.self
     ]
 
     static func load(container: DIContainer) {

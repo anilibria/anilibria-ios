@@ -20,18 +20,15 @@ final class SeriesPresenter {
     private let feedService: FeedService
     private let sessionService: SessionService
     private let favoriteService: FavoriteService
-    private let downloadService: DownloadService
 
     private var bag = Set<AnyCancellable>()
 
     init(feedService: FeedService,
          sessionService: SessionService,
-         favoriteService: FavoriteService,
-         downloadService: DownloadService) {
+         favoriteService: FavoriteService) {
         self.feedService = feedService
         self.sessionService = sessionService
         self.favoriteService = favoriteService
-        self.downloadService = downloadService
     }
 }
 
@@ -126,17 +123,8 @@ extension SeriesPresenter: SeriesEventHandler {
         self.router.openPlayer(series: self.series)
     }
 
-    func download(torrent: Torrent) {
-        var name = self.series.names.last ?? self.series.code
-        name.removingRegexMatches(pattern: "[^A-Za-z0-9]+", replaceWith: "_")
-        self.downloadService.download(torrent: torrent, fileName: name)
-            .manageActivity(self.view.showLoading(fullscreen: false))
-            .sink(onNext: { [weak self] in
-                self?.router.openAlert(message: L10n.Screen.Series.downloaded(name, Constants.downloadFolder))
-                }, onError: { [weak self] error in
-                    self?.router.show(error: error)
-            })
-            .store(in: &bag)
+    func open(torrent: TorrentMetaData) {
+        self.router.open(series: series, metadata: torrent)
     }
 }
 

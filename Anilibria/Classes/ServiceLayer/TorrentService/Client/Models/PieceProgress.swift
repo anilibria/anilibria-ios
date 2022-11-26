@@ -9,15 +9,20 @@
 import Foundation
 
 class PieceProgress {
+    let formatter = ByteCountFormatter()
     private let maxBacklog = 5
     let maxBlockSize = 16384
+    let maxStrikeCount = 10
 
     let piece: PieceWork
     var requested: Int = 0
     var backlog: Int = 0
+    private var strike = 0
+    private var startTime: Date = Date()
 
     private var sendHandler: ((PeerMessage) -> Void)?
     private var downloadingCompleted: ((PieceWork) -> Void)?
+    private var timeoutHandler: (() -> Void)?
 
     var isCompleted: Bool {
         piece.downloaded >= piece.length
@@ -34,6 +39,7 @@ class PieceProgress {
 
     func run(_ isChocked: Bool) {
         if isChocked { return }
+        startTime = Date()
         while backlog < maxBacklog && requested < piece.length {
             var blockSize = maxBlockSize
 
@@ -55,13 +61,26 @@ class PieceProgress {
         downloadingCompleted = action
     }
 
+    func setTimeout(_ action: (() -> Void)?) {
+        timeoutHandler = action
+    }
+
     func update(with message: PeerMessage, isChocked: Bool) {
         guard let size = try? message.parsePiece(index: piece.index, buffer: &piece.buffer) else { return }
         backlog -= 1
         piece.downloaded += size
+        let speed = Int64(Double(size) / abs(startTime.timeIntervalSinceNow)) // bytes per second
+
+        if speed / 1024 < 100 {
+            strike += 1
+        }
+
         if isCompleted {
             downloadingCompleted?(piece)
+        } else if strike > maxStrikeCount {
+            self.timeoutHandler?()
+        } else {
+            run(isChocked)
         }
-        run(isChocked)
     }
 }

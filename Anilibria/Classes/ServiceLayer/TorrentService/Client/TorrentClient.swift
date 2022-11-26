@@ -43,13 +43,9 @@ class TorrentClient {
             return nil
         }
 
-        guard let bounds = torrent.getPieceHashesBounds(for: file) else {
-            return nil
-        }
-
-        let pieces = (bounds.begin...bounds.end).map { index in
+        let pieces = file.position.boundsRange.map { index in
             let hash = torrent.pieceHashes[index]
-            let size = torrent.calculatePieceSize(index: index)
+            let size = torrent.calculatePieceSize(index: index, file: file)
             return PieceWork(index: index, hash: hash, length: size)
         }
 
@@ -58,7 +54,7 @@ class TorrentClient {
         work.results.receive(on: DispatchQueue.main).sink { [weak self] data in
             let left = self?.work?.getLeftCount() ?? 0
             let inProgress = self?.work?.getInProgressCount() ?? 0
-            print("== COMPLETE: - Piece [\(data.index)] - left: \(left) - in progress: \(inProgress)")
+            print("== COMPLETE: - Piece [\(data)] - left: \(left) - in progress: \(inProgress)")
             writer?.write(piece: data)
 
             if left == 0 && inProgress == 0 {

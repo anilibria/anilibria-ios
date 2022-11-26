@@ -8,7 +8,9 @@
 
 import Foundation
 
-class PieceWork {
+// private let formatter = ByteCountFormatter()
+
+class PieceWork: CustomDebugStringConvertible {
     let index: Int
     let hash: [UInt8]
     let length: Int
@@ -30,5 +32,12 @@ class PieceWork {
 
     func checkIntegrity() -> Bool {
         hash == Data(buffer).sha1()
+    }
+
+    var debugDescription: String {
+//        let d = formatter.string(for: downloaded) ?? "None"
+//        let l = formatter.string(for: length) ?? "None"
+//        return "\(index): \(d)/\(l) - \(Int(Double(downloaded)/Double(length) * 100))%"
+        return "\(index)"
     }
 }

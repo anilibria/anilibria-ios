@@ -40,7 +40,7 @@ class PeerClient: NSObject, StreamDelegate {
                     self.piceProgress = nil
                     self.waitForPiece = nil
                     workQueue.insert(piece)
-                    print("== Client \(self.peer.ip): return -- Piece [\(piece.index)]")
+                    print("== Client \(self.peer.ip): return -- Piece [\(piece)]")
                 }
             }
         }
@@ -163,19 +163,21 @@ class PeerClient: NSObject, StreamDelegate {
             return
         }
 
-        if msg.lackOfData {
-            print("-- \(self.peer.ip) - Message: \(msg.id) + lackOfData [\(piceProgress?.piece.index ?? -1)]")
-        }
         try handle(msg, leftBytes: leftBytes)
     }
 
     private func handle(_ msg: PeerMessage, leftBytes: [UInt8]?) throws {
         if msg.lackOfData {
+            if let piece = piceProgress?.piece {
+                print("-- \(self.peer.ip) - Message: \(msg.id) + lackOfData [\(piece)]")
+            }
             msgBuffer = msg
             return
         }
         msgBuffer = nil
-        print("-- \(self.peer.ip) - Message: \(msg.id) [\(piceProgress?.piece.index ?? -1)]")
+        if let piece = piceProgress?.piece {
+            print("-- \(self.peer.ip) - Message: \(msg.id) [\(piece)]")
+        }
 
         switch msg.id {
         case .bitfield:
@@ -207,6 +209,16 @@ class PeerClient: NSObject, StreamDelegate {
         }
         waitForPiece = nil
         isDownloading = true
+
+        guard
+            let firstIndex = workQueue.indexes.first,
+            let lastIndex = workQueue.indexes.last,
+            bitfield.hasPiece(index: firstIndex) || bitfield.hasPiece(index: lastIndex)
+        else {
+            state = .stopped
+            return
+        }
+
         if let piece = workQueue.next() {
             download(piece: piece)
         } else {
@@ -218,19 +230,23 @@ class PeerClient: NSObject, StreamDelegate {
     }
 
     private func download(piece: PieceWork) {
-        if bitfield.hasPiece(index: piece.index) {
-            self.attemptDownload(piece: piece)
-        } else if let pw = workQueue.next() {
-            self.download(piece: pw)
-            workQueue.insert(piece)
-        } else {
-            workQueue.insert(piece)
+        var piece = piece
+        while !bitfield.hasPiece(index: piece.index) {
+            if let pw = workQueue.exchange(piece) {
+                piece = pw
+            } else {
+                self.state = .stopped
+                return
+            }
         }
+
+        self.attemptDownload(piece: piece)
     }
 
     private func attemptDownload(piece: PieceWork) {
         piceProgress = PieceProgress(piece: piece)
         piceProgress?.setSender({ [weak self] in self?.send(message: $0)  })
+        piceProgress?.setTimeout({ [weak self] in self?.state = .stopped })
         piceProgress?.didComplete({ [weak self] (result) in
             if result.checkIntegrity() {
                 self?.workQueue.set(result: result)

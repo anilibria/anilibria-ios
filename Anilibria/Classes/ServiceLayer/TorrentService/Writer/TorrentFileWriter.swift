@@ -48,12 +48,28 @@ class TorrentFileWriter {
     }
 
     func write(piece: PieceWork) {
-        let bounds = torrent.calculateBoundsForPiece(index: piece.index)
-        piece.buffer.withUnsafeBytes {
-            self.channel?.write(offset: off_t(bounds.begin), data: DispatchData(bytes: $0), queue: queue, ioHandler: { done, _, error in
+        let data = prepare(piece: piece)
+        data.buffer.withUnsafeBytes {
+            self.channel?.write(offset: off_t(data.offset), data: DispatchData(bytes: $0), queue: queue, ioHandler: { done, _, error in
                 print("WRITE PIECE \(piece.index): Done - \(done) + \(error)")
             })
         }
+    }
+
+    func prepare(piece: PieceWork) -> (offset: Int, buffer: [UInt8]) {
+        let bounds = torrent.calculateBoundsForPiece(index: piece.index, file: file)
+        var offset = bounds.begin
+        if offset == 0 {
+            return (offset, Array(piece.buffer.dropFirst(file.position.dataInsets.begin)))
+        }
+        offset -= file.position.dataInsets.begin
+
+        let end = bounds.end - file.position.dataInsets.begin - file.position.dataInsets.end
+        if end == file.length {
+            return (offset, Array(piece.buffer.dropLast(file.position.dataInsets.end)))
+        }
+
+        return (offset, piece.buffer)
     }
 
     private static func getDirectoryUrl(name: String) -> URL? {

@@ -15,28 +15,21 @@ struct TorrentData {
     let pieceLength: Int
     let content: TorrentContent
 
-    func calculateBoundsForPiece(index: Int) -> (begin: Int, end: Int) {
-        let begin = index * pieceLength
+    func calculateBoundsForPiece(index: Int, file: TorrentFile) -> (begin: Int, end: Int) {
+        let fileBounds = file.position.hashesBounds
+        let updatedIndex = index - fileBounds.begin
+
+        let begin = updatedIndex * pieceLength
         var end = begin + pieceLength
-        if end > content.length {
-            end = content.length
+        if end > file.length && index == pieceHashes.count - 1 {
+            end = file.length
         }
         return (begin, end)
     }
 
-    func calculatePieceSize(index: Int) -> Int {
-        let (begin, end) = calculateBoundsForPiece(index: index)
+    func calculatePieceSize(index: Int, file: TorrentFile) -> Int {
+        let (begin, end) = calculateBoundsForPiece(index: index, file: file)
         return end - begin
-    }
-
-    func getPieceHashesBounds(for file: TorrentFile) -> (begin: Int, end: Int)? {
-        guard let index = content.files.firstIndex(of: file) else { return nil }
-        var begin = 0
-        if index != 0 {
-            begin = content.files[0..<index].reduce(0, { $0 + $1.calculatePiecesCount(with: pieceLength) })
-        }
-        let end = begin + content.files[index].calculatePiecesCount(with: pieceLength) - 1
-        return (begin, end)
     }
 }
 
@@ -48,7 +41,7 @@ extension TorrentData: BencodeDecodable {
             let infoSlice = info.slice,
             let piecesSlice = info["pieces"]?.slice,
             let pieceLength = info["piece length"]?.number,
-            let content = TorrentContent(from: info)
+            let content = TorrentContent(from: info, pieceLength: pieceLength)
         else {
             return nil
         }

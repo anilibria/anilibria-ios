@@ -13,7 +13,26 @@ struct TorrentFile: Hashable {
     let path: String
     let length: Int
 
-    func calculatePiecesCount(with pieceLength: Int) -> Int {
-        Int(ceil(Double(length) / Double(pieceLength)))
+    let position: DataPosition
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+        hasher.combine(path)
+        hasher.combine(length)
+    }
+
+    static func == (lhs: TorrentFile, rhs: TorrentFile) -> Bool {
+        lhs.hashValue == rhs.hashValue
+    }
+}
+
+struct DataPosition {
+    let hashesBounds: (begin: Int, end: Int)
+    let dataInsets: (begin: Int, end: Int)
+}
+
+extension DataPosition {
+    var boundsRange: ClosedRange<Int> {
+        (hashesBounds.begin...hashesBounds.end)
     }
 }

@@ -9,15 +9,13 @@
 import Foundation
 
 struct Bitfield {
-    let length: Int
     private(set) var data: [UInt8]
 
     var isEmpty: Bool {
         data.isEmpty
     }
 
-    init(length: Int = 0, data: [UInt8] = []) {
-        self.length = length
+    init(data: [UInt8] = []) {
         self.data = data
     }
 
@@ -27,10 +25,14 @@ struct Bitfield {
        return data[byteIndex] >> (7 - offset) & 1 != 0
    }
 
-   // SetPiece sets a bit in the bitfield
+    // SetPiece sets a bit in the bitfield
     mutating func setPiece(index: UInt32) {
-        let byteIndex = index / 8
+        let byteIndex = Int(index / 8)
         let offset = index % 8
-        data[Int(byteIndex)] |= 1 << (7 - offset)
+        let latIndex = data.count - 1
+        if latIndex < byteIndex {
+            data.append(contentsOf: [UInt8](repeating: 0, count: byteIndex - latIndex))
+        }
+        data[byteIndex] |= 1 << (7 - offset)
     }
 }

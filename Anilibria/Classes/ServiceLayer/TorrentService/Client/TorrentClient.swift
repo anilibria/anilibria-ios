@@ -51,10 +51,12 @@ class TorrentClient {
 
         let work = WorkQueue(pieces: pieces)
 
+        let length = file.position.boundsRange.count
         work.results.receive(on: DispatchQueue.main).sink { [weak self] data in
             let left = self?.work?.getLeftCount() ?? 0
             let inProgress = self?.work?.getInProgressCount() ?? 0
-            print("== COMPLETE: - Piece [\(data)] - left: \(left) - in progress: \(inProgress)")
+            let percentage = Int(Double(length - left + inProgress) / Double(length) * 100)
+            print("== COMPLETE: - Piece [\(data)] - left: \(left) - in progress: \(inProgress) : \(percentage)%")
             writer?.write(piece: data)
 
             if left == 0 && inProgress == 0 {

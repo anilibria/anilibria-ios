@@ -6,7 +6,7 @@ public typealias ActionIO<I, O> = (I) -> (O)
 public typealias Factory<O> = () -> (O)
 
 struct Constants {
-    static let torrentsFolder: String = "Torrents"
+    static let torrentsFolderName: String = "Anilibria Series"
     static let peerID = "-MI0001-\(UUID().uuidString.suffix(12))"
     static let port = 6882
 }

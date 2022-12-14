@@ -77,14 +77,17 @@ class TorrentFileWriter {
             return nil
         }
 
-        let torrentsFolder = directory.appendingPathComponent(name)
-        if FileManager.default.fileExists(atPath: torrentsFolder.path) {
-            return torrentsFolder
+        let targetFolder = directory
+            .appendingPathComponent(Constants.torrentsFolderName)
+            .appendingPathComponent(name)
+
+        if FileManager.default.fileExists(atPath: targetFolder.path) {
+            return targetFolder
         }
 
         do {
-            try FileManager.default.createDirectory(atPath: torrentsFolder.path, withIntermediateDirectories: true, attributes: nil)
-            return torrentsFolder
+            try FileManager.default.createDirectory(atPath: targetFolder.path, withIntermediateDirectories: true, attributes: nil)
+            return targetFolder
         } catch { }
         return nil
     }

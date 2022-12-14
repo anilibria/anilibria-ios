@@ -13,7 +13,6 @@ class WorkQueue {
     private var pieces: [PieceWork] = []
     private let lock = NSRecursiveLock()
     private var inProgressCount: Int = 0
-    let indexes: [Int]
 
     private let resultsSubject = PassthroughSubject<PieceWork, Never>()
     private let pieceReturnedSubject = PassthroughSubject<Void, Never>()
@@ -31,7 +30,6 @@ class WorkQueue {
     init(pieces: [PieceWork]) {
         self.pieces = pieces
         self.workCount = pieces.count
-        self.indexes = pieces.map { $0.index }
     }
 
     func next() -> PieceWork? {

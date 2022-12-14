@@ -168,20 +168,24 @@ class PeerClient: NSObject, StreamDelegate {
 
     private func handle(_ msg: PeerMessage, leftBytes: [UInt8]?) throws {
         if msg.lackOfData {
-            if let piece = piceProgress?.piece {
-                print("-- \(self.peer.ip) - Message: \(msg.id) + lackOfData [\(piece)]")
-            }
+            if let piece = piceProgress?.piece { print("-- \(self.peer.ip) - Message: \(msg.id) + lackOfData [\(piece)]") }
             msgBuffer = msg
             return
         }
         msgBuffer = nil
-        if let piece = piceProgress?.piece {
-            print("-- \(self.peer.ip) - Message: \(msg.id) [\(piece)]")
-        }
+        if let piece = piceProgress?.piece { print("-- \(self.peer.ip) - Message: \(msg.id) [\(piece)]") }
 
+        process(msg)
+
+        if let next = leftBytes {
+            try readMessage(next)
+        }
+    }
+
+    private func process(_ msg: PeerMessage) {
         switch msg.id {
         case .bitfield:
-            self.bitfield = Bitfield(length: msg.length - 1, data: msg.payload)
+            self.bitfield = Bitfield(data: msg.payload)
         case .unchoke:
             self.isChocked = false
             self.piceProgress?.run(isChocked)
@@ -197,10 +201,6 @@ class PeerClient: NSObject, StreamDelegate {
         default:
             break
         }
-
-        if let next = leftBytes {
-            try readMessage(next)
-        }
     }
 
     private func download() {
@@ -210,14 +210,14 @@ class PeerClient: NSObject, StreamDelegate {
         waitForPiece = nil
         isDownloading = true
 
-        guard
-            let firstIndex = workQueue.indexes.first,
-            let lastIndex = workQueue.indexes.last,
-            bitfield.hasPiece(index: firstIndex) || bitfield.hasPiece(index: lastIndex)
-        else {
-            state = .stopped
-            return
-        }
+//        guard
+//            let firstIndex = workQueue.indexes.first,
+//            let lastIndex = workQueue.indexes.last,
+//            bitfield.hasPiece(index: firstIndex) || bitfield.hasPiece(index: lastIndex)
+//        else {
+//            state = .stopped
+//            return
+//        }
 
         if let piece = workQueue.next() {
             download(piece: piece)

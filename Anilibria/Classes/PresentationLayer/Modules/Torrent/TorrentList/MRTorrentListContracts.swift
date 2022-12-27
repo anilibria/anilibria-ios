@@ -12,11 +12,11 @@ import UIKit
 
 protocol TorrentListViewBehavior: WaitingBehavior, RefreshBehavior {
     func set(title: String)
-    func set(items: [TorrentFile])
+    func set(items: [SeriesFile])
 }
 
 protocol TorrentListEventHandler: ViewControllerEventHandler, RefreshEventHandler {
     func bind(view: TorrentListViewBehavior, router: TorrentListRoutable, metadata: TorrentMetaData, series: Series)
 
-    func select(file: TorrentFile)
+    func select(file: SeriesFile)
 }

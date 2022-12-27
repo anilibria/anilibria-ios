@@ -92,25 +92,40 @@ public final class VLCPlayerView: UIView, Player {
         self.keyBag = nil
         self.statusRelay.send(.unknown)
 
-        let media = VLCMedia(url: url)
-        player.media = media
-
-        return Deferred { [player] in
+       return Deferred { () -> AnyPublisher<VLCMedia, Error> in
+            let media = VLCMedia(url: url)
             media.parse(timeout: 0)
-            media.lengthWait(until: Date() + 1.minutes)
-            let seconds = media.length.value.map { $0.doubleValue / 1000 }
-            print("PLAYER: - audioTrackNames: \(player.audioTrackNames)")
-            print("PLAYER: - videoSubTitlesNames: \(player.videoSubTitlesNames)")
-            player.currentAudioTrackIndex = player.audioTrackIndexes.last as? Int32 ?? -1
-            player.currentVideoSubTitleIndex = player.videoSubTitlesIndexes.last as? Int32 ?? -1
-            return AnyPublisher<Double?, Error>.just(seconds)
+            let seconds = media.lengthWait(until: Date() + 1.minutes).value
+            if seconds == 0 {
+                return AnyPublisher<VLCMedia, Error>.fail(AppError.error(code: 11))
+            }
+
+            return AnyPublisher<VLCMedia, Error>.just(media)
         }
+        .retry(Int.max)
         .subscribe(on: DispatchQueue.global())
         .receive(on: DispatchQueue.main)
-        .do(onNext: { [weak self] duration in
-            self?.duration = duration
-            self?.statusRelay.send(.radyToPlay)
+        .do(onNext: { [weak self] media in
+            guard let self = self else { return }
+            let duration = media.length.value.map { $0.doubleValue / 1000 }
+            self.duration = duration
+            self.player.media = media
+            let info = media.tracksInformation.compactMap { $0 as? [String: Any] }
+            let audio = AudioTrack.make(from: info)
+            let subtitles = Subtitles.make(from: info)
+
+            let jp = audio.first(where: { $0.language == "jpn" })
+            let sub = subtitles.first(where: { $0.name.lowercased().contains("субтитры") })
+
+            print("PLAYER: - audioTrackNames: \(self.player.audioTrackNames) - \(self.player.audioTrackIndexes)")
+            print("PLAYER: - videoSubTitlesNames: \(self.player.videoSubTitlesNames) - \(self.player.videoSubTitlesIndexes)")
+            print("PLAYER: - jp: \(jp?.id) - \(jp?.name)")
+            print("PLAYER: - sub: \(sub?.id) - \(sub?.name)")
+            self.player.currentAudioTrackIndex = jp?.id ?? -1
+            self.player.currentVideoSubTitleIndex = sub?.id as? Int32 ?? -1
+            self.statusRelay.send(.radyToPlay)
         })
+        .compactMap { [weak self] _ in self?.duration }
         .eraseToAnyPublisher()
     }
 
@@ -147,6 +162,46 @@ public final class VLCPlayerView: UIView, Player {
             break //  statusRelay.send(.waitingToPlay)
         default:
            break // statusRelay.send(.unknown)
+        }
+    }
+}
+
+struct AudioTrack {
+    var id: Int32
+    var name: String
+    var language: String
+
+    static func make(from info: [[String: Any]]) -> [AudioTrack] {
+        let audio = info.filter { $0[VLCMediaTracksInformationType] as? String == VLCMediaTracksInformationTypeAudio }
+        return audio.compactMap {
+            guard
+                let id = $0[VLCMediaTracksInformationId] as? Int32,
+                let lang = $0[VLCMediaTracksInformationLanguage] as? String,
+                let name = $0[VLCMediaTracksInformationDescription] as? String
+            else {
+                return nil
+            }
+            return AudioTrack(id: id, name: name, language: lang)
+        }
+    }
+}
+
+struct Subtitles {
+    var id: Int32
+    var name: String
+    var language: String
+
+    static func make(from info: [[String: Any]]) -> [Subtitles] {
+        let subTitles = info.filter { $0[VLCMediaTracksInformationType] as? String == VLCMediaTracksInformationTypeText }
+        return subTitles.compactMap {
+            guard
+                let id = $0[VLCMediaTracksInformationId] as? Int32,
+                let lang = $0[VLCMediaTracksInformationLanguage] as? String,
+                let name = $0[VLCMediaTracksInformationDescription] as? String
+            else {
+                return nil
+            }
+            return Subtitles(id: id, name: name, language: lang)
         }
     }
 }

@@ -8,10 +8,10 @@
 
 import UIKit
 
-final class TorrentFileCellAdapter: BaseCellAdapter<TorrentFile> {
-    private var selectAction: ((TorrentFile) -> Void)?
+final class TorrentFileCellAdapter: BaseCellAdapter<SeriesFile> {
+    private var selectAction: ((SeriesFile) -> Void)?
 
-    init(viewModel: TorrentFile, seclect: ((TorrentFile) -> Void)?) {
+    init(viewModel: SeriesFile, seclect: ((SeriesFile) -> Void)?) {
         self.selectAction = seclect
         super.init(viewModel: viewModel)
     }

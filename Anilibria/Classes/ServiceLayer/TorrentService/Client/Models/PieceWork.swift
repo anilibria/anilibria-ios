@@ -8,9 +8,7 @@
 
 import Foundation
 
-// private let formatter = ByteCountFormatter()
-
-class PieceWork: CustomDebugStringConvertible {
+class PieceWork: Hashable, Codable, CustomDebugStringConvertible {
     let index: Int
     let hash: [UInt8]
     let length: Int
@@ -18,12 +16,35 @@ class PieceWork: CustomDebugStringConvertible {
     var buffer: [UInt8]
     var downloaded: Int = 0
 
+    enum CodingKeys: CodingKey {
+        case index
+        case hash
+        case length
+        case buffer
+        case downloaded
+    }
+
     init(index: Int, hash: [UInt8], length: Int) {
         self.index = index
         self.hash = hash
         self.length = length
         self.buffer = [UInt8](repeating: 0, count: length)
 
+    }
+
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.index = try container.decode(Int.self, forKey: .index)
+        self.hash = try container.decode([UInt8].self, forKey: .hash)
+        self.length = try container.decode(Int.self, forKey: .length)
+        self.buffer = [UInt8](repeating: 0, count: length)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.index, forKey: .index)
+        try container.encode(self.hash, forKey: .hash)
+        try container.encode(self.length, forKey: .length)
     }
 
     func reset() {
@@ -35,9 +56,14 @@ class PieceWork: CustomDebugStringConvertible {
     }
 
     var debugDescription: String {
-//        let d = formatter.string(for: downloaded) ?? "None"
-//        let l = formatter.string(for: length) ?? "None"
-//        return "\(index): \(d)/\(l) - \(Int(Double(downloaded)/Double(length) * 100))%"
         return "\(index)"
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(hash)
+    }
+
+    static func == (lhs: PieceWork, rhs: PieceWork) -> Bool {
+        lhs.hashValue == rhs.hashValue
     }
 }

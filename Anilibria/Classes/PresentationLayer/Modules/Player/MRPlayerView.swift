@@ -320,6 +320,7 @@ extension PlayerViewController: PlayerViewBehavior {
         self.titleLabel.text = name
         self.playlist = playlist
 
+        self.switcherView.isHidden = playlist.count < 2
         self.switcherView.set(items: self.playlist,
                               index: playItemIndex,
                               title: { $0.title })

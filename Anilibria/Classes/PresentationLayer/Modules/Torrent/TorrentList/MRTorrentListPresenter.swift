@@ -25,9 +25,9 @@ final class TorrentListPresenter {
     private var router: TorrentListRoutable!
     private var metadata: TorrentMetaData!
     private var series: Series!
-    private var torrentData: TorrentData?
     private var activity: ActivityDisposable?
     private var bag = Set<AnyCancellable>()
+    private var client: TorrentClient?
 
     let torrentService: TorrentService
 
@@ -50,12 +50,17 @@ extension TorrentListPresenter: TorrentListEventHandler {
         load()
     }
 
-    func select(file: TorrentFile) {
-        guard let torrent = torrentData else { return }
-        self.torrentService.download(series: series, torrent: torrent, file: file)
+    func select(file: SeriesFile) {
+        if file.status == .ready {
+            open(file: file)
+            return
+        }
+        self.torrentService.makeClient(series: file)
             .manageActivity(self.view.showLoading(fullscreen: false))
-            .sink(onNext: { [weak self] url in
-                self?.open(file: file, url: url)
+            .sink(onNext: { [weak self] client in
+                self?.client = client
+                client.download()
+                self?.open(file: file)
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })
@@ -67,26 +72,21 @@ extension TorrentListPresenter: TorrentListEventHandler {
         load()
     }
 
-    private func open(file: TorrentFile, url: URL?) {
-        guard let url = url, let index = torrentData?.content.files.firstIndex(of: file) else { return }
-        router.openPlayer(series: series, playlistItem: .init(title: file.name,
-                                                              url: url))
+    private func open(file: SeriesFile?) {
+        guard let url = file?.filePath else { return }
+        router.openPlayer(series: series, playlistItem: .init(title: "", url: url))
     }
 
     private func load() {
         guard let url = metadata.url else { return }
-        self.torrentService.fetchTorrentData(for: url)
+        self.torrentService.fetchTorrentData(for: series, url: url)
             .manageActivity(activity)
-            .sink(onNext: { [weak self] item in
-                self?.updateData(item)
+            .sink(onNext: { [weak self] items in
+                self?.view.set(items: items)
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })
             .store(in: &bag)
     }
 
-    private func updateData(_ item: TorrentData) {
-        self.torrentData = item
-        self.view.set(items: item.content.files)
-    }
 }

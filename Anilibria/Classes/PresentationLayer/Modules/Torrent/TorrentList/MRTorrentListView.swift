@@ -34,7 +34,7 @@ extension TorrentListViewController: TorrentListViewBehavior {
         self.navigationItem.title = title
     }
 
-    func set(items: [TorrentFile]) {
+    func set(items: [SeriesFile]) {
         reload(sections: [SectionAdapter(
             items.map {
                 TorrentFileCellAdapter(viewModel: $0) { [weak self] file in

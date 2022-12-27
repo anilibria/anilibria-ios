@@ -20,9 +20,11 @@ public final class TorrentFileCell: RippleViewCell {
         }
     }
 
-    func configure(_ item: TorrentFile) {
-        self.titleLabel.text = item.name
-        self.descLabel.text = formatter.string(for: item.length)
+    func configure(_ item: SeriesFile) {
+        self.titleLabel.text = item.torrentFile.name
+        let current = formatter.string(for: item.fileSize) ?? ""
+        let expected = formatter.string(for: item.torrentFile.length) ?? ""
+        self.descLabel.text = "\(current)/\(expected)"
     }
 
     public override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {

@@ -110,7 +110,7 @@
                     </constraints>
                 </view>
                 <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="hOI-Qx-oer">
-                    <rect key="frame" x="16" y="682" width="124" height="60"/>
+                    <rect key="frame" x="16" y="698" width="124" height="60"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XAo-wh-P0J">
                             <rect key="frame" x="0.0" y="0.0" width="62" height="60"/>
@@ -243,7 +243,7 @@
                     </subviews>
                 </stackView>
                 <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="L6H-FA-e10">
-                    <rect key="frame" x="280" y="682" width="124" height="60"/>
+                    <rect key="frame" x="280" y="698" width="124" height="60"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NUW-5b-Odx">
                             <rect key="frame" x="0.0" y="0.0" width="62" height="60"/>
@@ -502,10 +502,10 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R3e-gU-uqT">
-                    <rect key="frame" x="0.0" y="742" width="414" height="154"/>
+                    <rect key="frame" x="0.0" y="758" width="414" height="138"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FQz-SE-DYR" customClass="ShadowView" customModule="Anilibria" customModuleProvider="target">
-                            <rect key="frame" x="0.0" y="154" width="414" height="100"/>
+                            <rect key="frame" x="0.0" y="138" width="414" height="100"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X8a-WE-7h7">
                                     <rect key="frame" x="-50" y="0.0" width="514" height="100"/>
@@ -535,96 +535,98 @@
                                 </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                         </view>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RlO-SJ-gLF" customClass="SwitcherView" customModule="Anilibria" customModuleProvider="target">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="30"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="30" id="UvR-JZ-3jS"/>
-                            </constraints>
-                        </view>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="O0t-yd-16C">
-                            <rect key="frame" x="16" y="46" width="390" height="44"/>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="STE-A3-xz9">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="74"/>
                             <subviews>
-                                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iIv-a7-A7K" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
-                                    <rect key="frame" x="346" y="0.0" width="44" height="44"/>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RlO-SJ-gLF" customClass="SwitcherView" customModule="Anilibria" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="30"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
-                                        <constraint firstAttribute="width" constant="44" id="NEA-dQ-0WA"/>
-                                        <constraint firstAttribute="height" constant="44" id="gde-On-fyt"/>
+                                        <constraint firstAttribute="height" constant="30" id="UvR-JZ-3jS"/>
                                     </constraints>
-                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <state key="normal" image="icon_settings"/>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                            <real key="value" value="22"/>
-                                        </userDefinedRuntimeAttribute>
-                                        <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
-                                            <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </userDefinedRuntimeAttribute>
-                                    </userDefinedRuntimeAttributes>
-                                    <connections>
-                                        <action selector="settingAction:" destination="-1" eventType="touchUpInside" id="GtR-eI-A5u"/>
-                                    </connections>
-                                </button>
-                                <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Rtn-PK-ED0">
-                                    <rect key="frame" x="0.0" y="0.0" width="338" height="44"/>
+                                </view>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="O0t-yd-16C">
+                                    <rect key="frame" x="0.0" y="30" width="414" height="44"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-99:99" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="lmJ-Xa-b6t">
-                                            <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
+                                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iIv-a7-A7K" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
+                                            <rect key="frame" x="362" y="0.0" width="44" height="44"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="44" id="2V7-YH-vyx"/>
+                                                <constraint firstAttribute="width" constant="44" id="NEA-dQ-0WA"/>
+                                                <constraint firstAttribute="height" constant="44" id="gde-On-fyt"/>
                                             </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                            <color key="textColor" white="1" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="2aL-I9-l3a" customClass="TouchableSlider" customModule="Anilibria" customModuleProvider="target">
-                                            <rect key="frame" x="50" y="0.0" width="238" height="45"/>
                                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <color key="minimumTrackTintColor" red="0.70742018399999995" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <color key="maximumTrackTintColor" white="1" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <state key="normal" image="icon_settings"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                    <real key="value" value="22"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
+                                                    <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
                                             <connections>
-                                                <action selector="sliderTouchDown:" destination="-1" eventType="touchDown" id="3Lk-wE-uce"/>
-                                                <action selector="sliderTouchUp:" destination="-1" eventType="touchUpInside" id="3gG-uq-OMc"/>
-                                                <action selector="sliderTouchUp:" destination="-1" eventType="touchUpOutside" id="JL0-ga-UNe"/>
-                                                <action selector="sliderValueChanged:" destination="-1" eventType="valueChanged" id="LhN-AG-wVi"/>
+                                                <action selector="settingAction:" destination="-1" eventType="touchUpInside" id="GtR-eI-A5u"/>
                                             </connections>
-                                        </slider>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-99:99" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="hcn-Af-hkk">
-                                            <rect key="frame" x="294" y="0.0" width="44" height="44"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="44" id="Oh7-AL-iv5"/>
-                                            </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                            <color key="textColor" white="1" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
+                                        </button>
+                                        <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Rtn-PK-ED0">
+                                            <rect key="frame" x="16" y="0.0" width="338" height="44"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-99:99" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="lmJ-Xa-b6t">
+                                                    <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="44" id="2V7-YH-vyx"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <color key="textColor" white="1" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="2aL-I9-l3a" customClass="TouchableSlider" customModule="Anilibria" customModuleProvider="target">
+                                                    <rect key="frame" x="50" y="0.0" width="238" height="45"/>
+                                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="minimumTrackTintColor" red="0.70742018399999995" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="maximumTrackTintColor" white="1" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <connections>
+                                                        <action selector="sliderTouchDown:" destination="-1" eventType="touchDown" id="3Lk-wE-uce"/>
+                                                        <action selector="sliderTouchUp:" destination="-1" eventType="touchUpInside" id="3gG-uq-OMc"/>
+                                                        <action selector="sliderTouchUp:" destination="-1" eventType="touchUpOutside" id="JL0-ga-UNe"/>
+                                                        <action selector="sliderValueChanged:" destination="-1" eventType="valueChanged" id="LhN-AG-wVi"/>
+                                                    </connections>
+                                                </slider>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-99:99" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="hcn-Af-hkk">
+                                                    <rect key="frame" x="294" y="0.0" width="44" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="44" id="Oh7-AL-iv5"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <color key="textColor" white="1" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </stackView>
                                     </subviews>
-                                </stackView>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstItem="Rtn-PK-ED0" firstAttribute="leading" secondItem="O0t-yd-16C" secondAttribute="leading" constant="16" id="7If-HS-lXv"/>
+                                        <constraint firstAttribute="height" constant="44" id="CNc-IY-FNV"/>
+                                        <constraint firstItem="Rtn-PK-ED0" firstAttribute="top" secondItem="O0t-yd-16C" secondAttribute="top" id="Eza-u9-SaK"/>
+                                        <constraint firstAttribute="trailing" secondItem="iIv-a7-A7K" secondAttribute="trailing" constant="8" id="IGm-ep-Ury"/>
+                                        <constraint firstAttribute="bottom" secondItem="iIv-a7-A7K" secondAttribute="bottom" id="MRU-Xw-sd5"/>
+                                        <constraint firstAttribute="bottom" secondItem="Rtn-PK-ED0" secondAttribute="bottom" id="McM-hU-XFJ"/>
+                                        <constraint firstItem="iIv-a7-A7K" firstAttribute="top" secondItem="O0t-yd-16C" secondAttribute="top" id="ZYv-aq-WhG"/>
+                                        <constraint firstItem="iIv-a7-A7K" firstAttribute="leading" secondItem="Rtn-PK-ED0" secondAttribute="trailing" constant="8" id="sGq-yu-tnP"/>
+                                    </constraints>
+                                </view>
                             </subviews>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstItem="Rtn-PK-ED0" firstAttribute="leading" secondItem="O0t-yd-16C" secondAttribute="leading" id="7If-HS-lXv"/>
-                                <constraint firstAttribute="height" constant="44" id="CNc-IY-FNV"/>
-                                <constraint firstItem="Rtn-PK-ED0" firstAttribute="top" secondItem="O0t-yd-16C" secondAttribute="top" id="Eza-u9-SaK"/>
-                                <constraint firstAttribute="trailing" secondItem="iIv-a7-A7K" secondAttribute="trailing" id="IGm-ep-Ury"/>
-                                <constraint firstAttribute="bottom" secondItem="iIv-a7-A7K" secondAttribute="bottom" id="MRU-Xw-sd5"/>
-                                <constraint firstAttribute="bottom" secondItem="Rtn-PK-ED0" secondAttribute="bottom" id="McM-hU-XFJ"/>
-                                <constraint firstItem="iIv-a7-A7K" firstAttribute="top" secondItem="O0t-yd-16C" secondAttribute="top" id="ZYv-aq-WhG"/>
-                                <constraint firstItem="iIv-a7-A7K" firstAttribute="leading" secondItem="Rtn-PK-ED0" secondAttribute="trailing" constant="8" id="sGq-yu-tnP"/>
-                            </constraints>
-                        </view>
+                        </stackView>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstItem="O0t-yd-16C" firstAttribute="top" secondItem="RlO-SJ-gLF" secondAttribute="bottom" constant="16" id="7Km-pz-X53"/>
                         <constraint firstItem="FQz-SE-DYR" firstAttribute="leading" secondItem="R3e-gU-uqT" secondAttribute="leading" id="Clk-G0-GLr"/>
-                        <constraint firstAttribute="trailing" secondItem="RlO-SJ-gLF" secondAttribute="trailing" id="PpZ-xb-Kli"/>
-                        <constraint firstAttribute="trailing" secondItem="O0t-yd-16C" secondAttribute="trailing" constant="8" id="S6T-Vj-zod"/>
                         <constraint firstAttribute="bottom" secondItem="FQz-SE-DYR" secondAttribute="bottom" constant="-100" id="WPm-qQ-XQB"/>
                         <constraint firstAttribute="trailing" secondItem="FQz-SE-DYR" secondAttribute="trailing" id="Xbk-X0-hDo"/>
-                        <constraint firstItem="RlO-SJ-gLF" firstAttribute="leading" secondItem="R3e-gU-uqT" secondAttribute="leading" id="lhP-ll-Rok"/>
-                        <constraint firstItem="O0t-yd-16C" firstAttribute="leading" secondItem="R3e-gU-uqT" secondAttribute="leading" constant="16" id="nSu-Kc-oP1"/>
-                        <constraint firstItem="RlO-SJ-gLF" firstAttribute="top" secondItem="R3e-gU-uqT" secondAttribute="top" id="wuO-s1-51D"/>
+                        <constraint firstItem="STE-A3-xz9" firstAttribute="top" secondItem="R3e-gU-uqT" secondAttribute="top" id="f7h-gz-sTH"/>
+                        <constraint firstItem="STE-A3-xz9" firstAttribute="leading" secondItem="R3e-gU-uqT" secondAttribute="leading" id="n8i-79-3BO"/>
+                        <constraint firstAttribute="trailing" secondItem="STE-A3-xz9" secondAttribute="trailing" id="yPZ-OJ-AW5"/>
                     </constraints>
                 </view>
             </subviews>
@@ -643,12 +645,12 @@
                 <constraint firstItem="Qlr-qX-D03" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="SNZ-bB-Mci"/>
                 <constraint firstItem="6Zg-Em-KU3" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="dLk-g9-LBu"/>
                 <constraint firstItem="hOI-Qx-oer" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="gDV-gg-zWw"/>
+                <constraint firstItem="STE-A3-xz9" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" constant="-30" id="hCK-R7-4Ua"/>
                 <constraint firstItem="R3e-gU-uqT" firstAttribute="top" secondItem="hOI-Qx-oer" secondAttribute="bottom" id="iWC-MX-Zaq"/>
                 <constraint firstItem="FIu-QE-9Gx" firstAttribute="centerY" secondItem="Qlr-qX-D03" secondAttribute="centerY" id="k7c-ma-E3D"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="L6H-FA-e10" secondAttribute="trailing" constant="10" id="r8h-Yw-qZm"/>
                 <constraint firstItem="Qlr-qX-D03" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="tst-bA-V5g"/>
                 <constraint firstItem="R3e-gU-uqT" firstAttribute="top" secondItem="L6H-FA-e10" secondAttribute="bottom" id="vNC-GO-u31"/>
-                <constraint firstItem="O0t-yd-16C" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" constant="-30" id="vp8-Ay-3oF"/>
                 <constraint firstItem="iA8-Jg-EAd" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="-100" id="xFj-8d-akT"/>
                 <constraint firstItem="JQm-oJ-c98" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="xqI-gB-yl2"/>
             </constraints>

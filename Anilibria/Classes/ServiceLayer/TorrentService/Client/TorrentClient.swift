@@ -10,8 +10,8 @@ import Foundation
 import Combine
 
 class TorrentClient {
-    let series: Series
-    let torrent: TorrentData
+    private let workRepository = WorkQueueRepository()
+    let series: SeriesFile
     let peers: [Peer]
     var work: WorkQueue?
 
@@ -19,47 +19,38 @@ class TorrentClient {
 
     var subscribers = Set<AnyCancellable>()
 
-    init(series: Series, torrent: TorrentData, peers: [Peer]) {
+    init(series: SeriesFile, peers: [Peer]) {
         self.series = series
-        self.torrent = torrent
         self.peers = peers
     }
 
     var clientsCount = 0
 
-    func download(file: TorrentFile) -> URL? {
-        guard torrent.content.files.contains(file) else {
-            return nil
-        }
+    func download(){
+        var writer = try? TorrentFileWriter(series: series)
+        let work = workRepository.getWork(for: series)
 
-        var writer: TorrentFileWriter?
-
-        do {
-            writer = try TorrentFileWriter(series: series, torrent: torrent, file: file)
-        } catch {
-            if case let .unexpectedError(message) = error as? AppError {
-                return URL(string: message)
-            }
-            return nil
-        }
-
-        let pieces = file.position.boundsRange.map { index in
-            let hash = torrent.pieceHashes[index]
-            let size = torrent.calculatePieceSize(index: index, file: file)
-            return PieceWork(index: index, hash: hash, length: size)
-        }
-
-        let work = WorkQueue(pieces: pieces)
-
-        let length = file.position.boundsRange.count
+        let startTime = Date()
+        var downloaded: Double = 0
+        let formatter = ByteCountFormatter()
         work.results.receive(on: DispatchQueue.main).sink { [weak self] data in
-            let left = self?.work?.getLeftCount() ?? 0
-            let inProgress = self?.work?.getInProgressCount() ?? 0
-            let percentage = Int(Double(length - left + inProgress) / Double(length) * 100)
-            print("== COMPLETE: - Piece [\(data)] - left: \(left) - in progress: \(inProgress) : \(percentage)%")
-            writer?.write(piece: data)
+            downloaded += Double(data.downloaded)
+            let speed = formatter.string(fromByteCount: Int64(downloaded / abs(startTime.timeIntervalSinceNow)))
+            print("=-= Speed: \(speed)/c")
 
-            if left == 0 && inProgress == 0 {
+            writer?.write(piece: data) { [weak self] succeeded in
+                if succeeded {
+                    self?.work?.setCompletedPiece(data)
+                    self?.saveWork()
+                    let left = self?.work?.getLeftCount() ?? 0
+                    let inProgress = self?.work?.getInProgressCount() ?? 0
+                    let percentage = Double(Int((self?.work?.progress.fractionCompleted ?? 0) * 10000))/100
+                    let peers = self?.clientsCount ?? 0
+                    print("== COMPLETE: - Piece [\(data)] - left: \(left) - in progress: \(inProgress) : \(percentage)% peers: \(peers)")
+                }
+            }
+
+            if self?.work?.progress.isFinished == true {
                 writer = nil
                 print("== SUCCESS!!!")
                 self?.subscribers.removeAll()
@@ -71,20 +62,27 @@ class TorrentClient {
         self.work = work
 
         self.clients = peers.compactMap {
-            let client = PeerClient(torrent: torrent, peer: $0, workQueue: work)
-            client?.$state.sink(receiveValue: { state in
+            let client = PeerClient(torrent: series.torrent, peer: $0, workQueue: work)
+            client?.$state.sink(receiveValue: { [weak self] state in
                 switch state {
                 case .initial:
-                    self.clientsCount += 1
+                    self?.clientsCount += 1
                 case .stopped:
-                    self.clientsCount -= 1
+                    self?.clientsCount -= 1
                 default:
                     break
                 }
             }).store(in: &self.subscribers)
             return client
         }
+    }
 
-        return writer?.filePath
+    private func saveWork() {
+        guard let work = work else { return }
+        if work.progress.isFinished == true {
+            try? workRepository.remove(work: work, for: series)
+        } else {
+            try? workRepository.update(work: work, for: series)
+        }
     }
 }

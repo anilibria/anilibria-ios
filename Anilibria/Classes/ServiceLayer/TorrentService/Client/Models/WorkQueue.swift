@@ -9,10 +9,10 @@
 import Foundation
 import Combine
 
-class WorkQueue {
+class WorkQueue: Codable {
     private var pieces: [PieceWork] = []
+    private var inProgressPieces: Set<PieceWork> = []
     private let lock = NSRecursiveLock()
-    private var inProgressCount: Int = 0
 
     private let resultsSubject = PassthroughSubject<PieceWork, Never>()
     private let pieceReturnedSubject = PassthroughSubject<Void, Never>()
@@ -25,6 +25,8 @@ class WorkQueue {
         pieceReturnedSubject.eraseToAnyPublisher()
     }
 
+    private(set) lazy var progress: Progress = Progress(totalUnitCount: Int64(workCount))
+
     let workCount: Int
 
     init(pieces: [PieceWork]) {
@@ -32,18 +34,35 @@ class WorkQueue {
         self.workCount = pieces.count
     }
 
+    required init(from decoder: Decoder) throws {
+        self.workCount = decoder["workCount"] ?? 0
+        self.pieces <- decoder["pieces"]
+        if let inProgress: [PieceWork] = decoder["inProgressPieces"] {
+            self.pieces.insert(contentsOf: inProgress, at: 0)
+        }
+        progress.completedUnitCount = Int64(workCount - pieces.count)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        encoder.apply { container in
+            container["workCount"] = workCount
+            container["pieces"] = pieces
+            container["inProgressPieces"] = inProgressPieces
+        }
+    }
+
     func next() -> PieceWork? {
         lock.sync {
             if pieces.isEmpty { return nil }
-            inProgressCount += 1
-            return pieces.removeFirst()
+            let item = pieces.removeFirst()
+            inProgressPieces.insert(item)
+            return item
         }
     }
 
     func exchange(_ item: PieceWork) -> PieceWork? {
         lock.sync {
             if pieces.isEmpty {
-                inProgressCount -= 1
                 pieces.insert(item, at: 0)
                 pieceReturnedSubject.send()
                 return nil
@@ -57,7 +76,7 @@ class WorkQueue {
 
     func insert(_ item: PieceWork) {
         lock.sync {
-            inProgressCount -= 1
+            inProgressPieces.remove(item)
             pieces.insert(item, at: 0)
             pieceReturnedSubject.send()
         }
@@ -65,14 +84,20 @@ class WorkQueue {
 
     func set(result: PieceWork) {
         lock.sync {
-            inProgressCount -= 1
             resultsSubject.send(result)
+        }
+    }
+
+    func setCompletedPiece(_ item: PieceWork) {
+        lock.sync {
+            progress.completedUnitCount += 1
+            inProgressPieces.remove(item)
         }
     }
 
     func getInProgressCount() -> Int {
         lock.sync {
-            return inProgressCount
+            return inProgressPieces.count
         }
     }
 

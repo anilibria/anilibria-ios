@@ -210,15 +210,6 @@ class PeerClient: NSObject, StreamDelegate {
         waitForPiece = nil
         isDownloading = true
 
-//        guard
-//            let firstIndex = workQueue.indexes.first,
-//            let lastIndex = workQueue.indexes.last,
-//            bitfield.hasPiece(index: firstIndex) || bitfield.hasPiece(index: lastIndex)
-//        else {
-//            state = .stopped
-//            return
-//        }
-
         if let piece = workQueue.next() {
             download(piece: piece)
         } else {

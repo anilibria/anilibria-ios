@@ -38,6 +38,7 @@
 		3FFF7B0E1233900846A87FE84FE6F9DB /* MRSettingsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D158221A7FF423831800AE869C5A0A1E /* MRSettingsPresenter.swift */; };
 		4623D782291FEBD100F9C3D4 /* VLCPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4623D781291FEBD100F9C3D4 /* VLCPlayerView.swift */; };
 		4623D784291FEC8800F9C3D4 /* PlayerStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4623D783291FEC8800F9C3D4 /* PlayerStatus.swift */; };
+		4637323C295AEE7000B60394 /* WorkQueueRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4637323B295AEE7000B60394 /* WorkQueueRepository.swift */; };
 		46418DDE2150CDFA41786178A9BA7E45 /* MRSeriesAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC84E235F4D311AB7F4A6D69C40F2B4A /* MRSeriesAssembly.swift */; };
 		46945634291680EC00145F48 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46945633291680EC00145F48 /* ArrayExtension.swift */; };
 		469456362916981A00145F48 /* NetworkProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469456352916981A00145F48 /* NetworkProtocols.swift */; };
@@ -430,6 +431,7 @@
 		3CE4119AF2A38C536D8CAAF145813DFC /* MROtherRouter.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MROtherRouter.swift; sourceTree = "<group>"; };
 		4623D781291FEBD100F9C3D4 /* VLCPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VLCPlayerView.swift; sourceTree = "<group>"; };
 		4623D783291FEC8800F9C3D4 /* PlayerStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerStatus.swift; sourceTree = "<group>"; };
+		4637323B295AEE7000B60394 /* WorkQueueRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkQueueRepository.swift; sourceTree = "<group>"; };
 		467D3CD771B3A17C42610B7F1E94C1C9 /* MRFeedRouter.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRFeedRouter.swift; sourceTree = "<group>"; };
 		46945633291680EC00145F48 /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
 		469456352916981A00145F48 /* NetworkProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkProtocols.swift; sourceTree = "<group>"; };
@@ -918,6 +920,14 @@
 			path = Favorite;
 			sourceTree = "<group>";
 		};
+		4637323A295AEE5D00B60394 /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				4637323B295AEE7000B60394 /* WorkQueueRepository.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
 		46A15F452920DB33002756AD /* TorrentService */ = {
 			isa = PBXGroup;
 			children = (
@@ -1018,6 +1028,7 @@
 		46A15F822920FD5B002756AD /* Client */ = {
 			isa = PBXGroup;
 			children = (
+				4637323A295AEE5D00B60394 /* Repository */,
 				46A15F852920FD7A002756AD /* Models */,
 				46A15F832920FD6C002756AD /* TorrentClient.swift */,
 				46A15F8C2920FE1B002756AD /* PeerClient.swift */,
@@ -2506,6 +2517,7 @@
 				C7D4632722CC74EF00E763DF /* AppFont.swift in Sources */,
 				C783951122D0DD3400ACC353 /* GenresRequest.swift in Sources */,
 				C78394A322CF416400ACC353 /* HideableView.swift in Sources */,
+				4637323C295AEE7000B60394 /* WorkQueueRepository.swift in Sources */,
 				C7648F1D22DCBB4800A3B092 /* SafariRoute.swift in Sources */,
 				C799EBCF22DEC4BD00C6BD9B /* UserRequest.swift in Sources */,
 				C7D462F822CC74EF00E763DF /* CodableExtension.swift in Sources */,

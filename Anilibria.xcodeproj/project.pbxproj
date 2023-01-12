@@ -40,6 +40,32 @@
 		4623D784291FEC8800F9C3D4 /* PlayerStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4623D783291FEC8800F9C3D4 /* PlayerStatus.swift */; };
 		4637323C295AEE7000B60394 /* WorkQueueRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4637323B295AEE7000B60394 /* WorkQueueRepository.swift */; };
 		46418DDE2150CDFA41786178A9BA7E45 /* MRSeriesAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC84E235F4D311AB7F4A6D69C40F2B4A /* MRSeriesAssembly.swift */; };
+		468E7685296C284D000852FC /* MPV.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 468E7676296C284D000852FC /* MPV.xcframework */; };
+		468E7687296C2874000852FC /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 468E7686296C286C000852FC /* libiconv.tbd */; };
+		468E7689296C288B000852FC /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 468E7688296C2882000852FC /* libz.tbd */; };
+		468E768B296C28A9000852FC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 468E768A296C28A8000852FC /* AudioToolbox.framework */; };
+		468E768D296C28B6000852FC /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 468E768C296C28B5000852FC /* AVFoundation.framework */; };
+		468E768F296C28F5000852FC /* MPVPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468E768E296C28F5000852FC /* MPVPlayerView.swift */; };
+		46905D1C296D795F003274D6 /* libnettle.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46905D08296D7957003274D6 /* libnettle.xcframework */; };
+		46905D1D296D7960003274D6 /* libass.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46905D09296D7958003274D6 /* libass.xcframework */; };
+		46905D1E296D7962003274D6 /* libgnutlsxx.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46905D0A296D7958003274D6 /* libgnutlsxx.xcframework */; };
+		46905D1F296D7963003274D6 /* libavcodec.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46905D0B296D7959003274D6 /* libavcodec.xcframework */; };
+		46905D20296D7964003274D6 /* libavdevice.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46905D0C296D7959003274D6 /* libavdevice.xcframework */; };
+		46905D22296D7968003274D6 /* libavfilter.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46905D0E296D795A003274D6 /* libavfilter.xcframework */; };
+		46905D23296D796A003274D6 /* libopus.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46905D0F296D795A003274D6 /* libopus.xcframework */; };
+		46905D24296D796C003274D6 /* libswscale.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46905D10296D795A003274D6 /* libswscale.xcframework */; };
+		46905D25296D796E003274D6 /* libfreetype.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46905D11296D795B003274D6 /* libfreetype.xcframework */; };
+		46905D26296D7971003274D6 /* libexpat.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46905D12296D795B003274D6 /* libexpat.xcframework */; };
+		46905D27296D7973003274D6 /* libpng16.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46905D13296D795C003274D6 /* libpng16.xcframework */; };
+		46905D28296D7976003274D6 /* libfontconfig.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46905D14296D795C003274D6 /* libfontconfig.xcframework */; };
+		46905D29296D7978003274D6 /* libfribidi.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46905D15296D795C003274D6 /* libfribidi.xcframework */; };
+		46905D2A296D797B003274D6 /* libavformat.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46905D16296D795D003274D6 /* libavformat.xcframework */; };
+		46905D2B296D797E003274D6 /* libgnutls.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46905D17296D795D003274D6 /* libgnutls.xcframework */; };
+		46905D2C296D7981003274D6 /* libharfbuzz.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46905D18296D795D003274D6 /* libharfbuzz.xcframework */; };
+		46905D2D296D7985003274D6 /* libhogweed.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46905D19296D795E003274D6 /* libhogweed.xcframework */; };
+		46905D2E296D7988003274D6 /* libswresample.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46905D1A296D795E003274D6 /* libswresample.xcframework */; };
+		46905D2F296D798B003274D6 /* libgmp.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46905D1B296D795F003274D6 /* libgmp.xcframework */; };
+		46905D31296D94BA003274D6 /* libavutil.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46905D30296D94BA003274D6 /* libavutil.xcframework */; };
 		46945634291680EC00145F48 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46945633291680EC00145F48 /* ArrayExtension.swift */; };
 		469456362916981A00145F48 /* NetworkProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469456352916981A00145F48 /* NetworkProtocols.swift */; };
 		469456382916B32100145F48 /* PublisherExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469456372916B32100145F48 /* PublisherExtension.swift */; };
@@ -83,6 +109,7 @@
 		46A4DAB029179EDA003944FD /* CollectionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A4DAAF29179EDA003944FD /* CollectionContext.swift */; };
 		46A4DAB22917A0D5003944FD /* BaseCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A4DAB12917A0D5003944FD /* BaseCollectionViewController.swift */; };
 		46A4DAB72917DF82003944FD /* LeftAlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A4DAB62917DF82003944FD /* LeftAlignedCollectionViewFlowLayout.swift */; };
+		46B90330297083230006D60C /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B9032F297083230006D60C /* VideoToolbox.framework */; };
 		478A6478D7BA4AB1DDDE943D972AF32F /* MRCommentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E02207B1DF4B17181B8FAA6CB086229E /* MRCommentsView.swift */; };
 		4880C22723DACE23006FABE1 /* MacApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 4880C22623DACE23006FABE1 /* MacApp.m */; };
 		4880C22C23DAD192006FABE1 /* MacBundle.bundle in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 4880C21F23DACDCD006FABE1 /* MacBundle.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -433,6 +460,32 @@
 		4623D783291FEC8800F9C3D4 /* PlayerStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerStatus.swift; sourceTree = "<group>"; };
 		4637323B295AEE7000B60394 /* WorkQueueRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkQueueRepository.swift; sourceTree = "<group>"; };
 		467D3CD771B3A17C42610B7F1E94C1C9 /* MRFeedRouter.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRFeedRouter.swift; sourceTree = "<group>"; };
+		468E7676296C284D000852FC /* MPV.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = MPV.xcframework; sourceTree = "<group>"; };
+		468E7686296C286C000852FC /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.0.sdk/usr/lib/libiconv.tbd; sourceTree = DEVELOPER_DIR; };
+		468E7688296C2882000852FC /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.0.sdk/usr/lib/libz.tbd; sourceTree = DEVELOPER_DIR; };
+		468E768A296C28A8000852FC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.0.sdk/System/Library/Frameworks/AudioToolbox.framework; sourceTree = DEVELOPER_DIR; };
+		468E768C296C28B5000852FC /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.0.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
+		468E768E296C28F5000852FC /* MPVPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MPVPlayerView.swift; sourceTree = "<group>"; };
+		46905D08296D7957003274D6 /* libnettle.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libnettle.xcframework; sourceTree = "<group>"; };
+		46905D09296D7958003274D6 /* libass.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libass.xcframework; sourceTree = "<group>"; };
+		46905D0A296D7958003274D6 /* libgnutlsxx.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libgnutlsxx.xcframework; sourceTree = "<group>"; };
+		46905D0B296D7959003274D6 /* libavcodec.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libavcodec.xcframework; sourceTree = "<group>"; };
+		46905D0C296D7959003274D6 /* libavdevice.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libavdevice.xcframework; sourceTree = "<group>"; };
+		46905D0E296D795A003274D6 /* libavfilter.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libavfilter.xcframework; sourceTree = "<group>"; };
+		46905D0F296D795A003274D6 /* libopus.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libopus.xcframework; sourceTree = "<group>"; };
+		46905D10296D795A003274D6 /* libswscale.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libswscale.xcframework; sourceTree = "<group>"; };
+		46905D11296D795B003274D6 /* libfreetype.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libfreetype.xcframework; sourceTree = "<group>"; };
+		46905D12296D795B003274D6 /* libexpat.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libexpat.xcframework; sourceTree = "<group>"; };
+		46905D13296D795C003274D6 /* libpng16.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libpng16.xcframework; sourceTree = "<group>"; };
+		46905D14296D795C003274D6 /* libfontconfig.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libfontconfig.xcframework; sourceTree = "<group>"; };
+		46905D15296D795C003274D6 /* libfribidi.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libfribidi.xcframework; sourceTree = "<group>"; };
+		46905D16296D795D003274D6 /* libavformat.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libavformat.xcframework; sourceTree = "<group>"; };
+		46905D17296D795D003274D6 /* libgnutls.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libgnutls.xcframework; sourceTree = "<group>"; };
+		46905D18296D795D003274D6 /* libharfbuzz.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libharfbuzz.xcframework; sourceTree = "<group>"; };
+		46905D19296D795E003274D6 /* libhogweed.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libhogweed.xcframework; sourceTree = "<group>"; };
+		46905D1A296D795E003274D6 /* libswresample.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libswresample.xcframework; sourceTree = "<group>"; };
+		46905D1B296D795F003274D6 /* libgmp.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libgmp.xcframework; sourceTree = "<group>"; };
+		46905D30296D94BA003274D6 /* libavutil.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libavutil.xcframework; sourceTree = "<group>"; };
 		46945633291680EC00145F48 /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
 		469456352916981A00145F48 /* NetworkProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkProtocols.swift; sourceTree = "<group>"; };
 		469456372916B32100145F48 /* PublisherExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublisherExtension.swift; sourceTree = "<group>"; };
@@ -476,6 +529,7 @@
 		46A4DAAF29179EDA003944FD /* CollectionContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionContext.swift; sourceTree = "<group>"; };
 		46A4DAB12917A0D5003944FD /* BaseCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewController.swift; sourceTree = "<group>"; };
 		46A4DAB62917DF82003944FD /* LeftAlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftAlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
+		46B9032F297083230006D60C /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.0.sdk/System/Library/Frameworks/VideoToolbox.framework; sourceTree = DEVELOPER_DIR; };
 		4880C21F23DACDCD006FABE1 /* MacBundle.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacBundle.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		4880C22123DACDCD006FABE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4880C22523DACE23006FABE1 /* MacApp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacApp.h; sourceTree = "<group>"; };
@@ -812,8 +866,34 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46905D28296D7976003274D6 /* libfontconfig.xcframework in Frameworks */,
+				468E768D296C28B6000852FC /* AVFoundation.framework in Frameworks */,
+				46905D2E296D7988003274D6 /* libswresample.xcframework in Frameworks */,
+				468E7687296C2874000852FC /* libiconv.tbd in Frameworks */,
+				46905D2A296D797B003274D6 /* libavformat.xcframework in Frameworks */,
+				468E768B296C28A9000852FC /* AudioToolbox.framework in Frameworks */,
+				468E7689296C288B000852FC /* libz.tbd in Frameworks */,
+				46905D20296D7964003274D6 /* libavdevice.xcframework in Frameworks */,
+				46B90330297083230006D60C /* VideoToolbox.framework in Frameworks */,
+				46905D1F296D7963003274D6 /* libavcodec.xcframework in Frameworks */,
+				46905D24296D796C003274D6 /* libswscale.xcframework in Frameworks */,
+				46905D2C296D7981003274D6 /* libharfbuzz.xcframework in Frameworks */,
+				46905D2D296D7985003274D6 /* libhogweed.xcframework in Frameworks */,
+				46905D2B296D797E003274D6 /* libgnutls.xcframework in Frameworks */,
+				46905D31296D94BA003274D6 /* libavutil.xcframework in Frameworks */,
+				46905D1E296D7962003274D6 /* libgnutlsxx.xcframework in Frameworks */,
+				46905D27296D7973003274D6 /* libpng16.xcframework in Frameworks */,
+				46905D26296D7971003274D6 /* libexpat.xcframework in Frameworks */,
 				C7B0F2CC22D6F0B100540CA9 /* WebKit.framework in Frameworks */,
+				46905D25296D796E003274D6 /* libfreetype.xcframework in Frameworks */,
+				46905D2F296D798B003274D6 /* libgmp.xcframework in Frameworks */,
+				46905D22296D7968003274D6 /* libavfilter.xcframework in Frameworks */,
+				46905D29296D7978003274D6 /* libfribidi.xcframework in Frameworks */,
+				468E7685296C284D000852FC /* MPV.xcframework in Frameworks */,
+				46905D1D296D7960003274D6 /* libass.xcframework in Frameworks */,
 				F9734546F0F72F2E42920767 /* Pods_Anilibria.framework in Frameworks */,
+				46905D23296D796A003274D6 /* libopus.xcframework in Frameworks */,
+				46905D1C296D795F003274D6 /* libnettle.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -872,6 +952,11 @@
 		1E00FA7C1790713686A9CDAF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				46B9032F297083230006D60C /* VideoToolbox.framework */,
+				468E768C296C28B5000852FC /* AVFoundation.framework */,
+				468E768A296C28A8000852FC /* AudioToolbox.framework */,
+				468E7688296C2882000852FC /* libz.tbd */,
+				468E7686296C286C000852FC /* libiconv.tbd */,
 				C7B0F2CB22D6F0B100540CA9 /* WebKit.framework */,
 				C87D8A91480E6CFF19170B9D /* Pods_Anilibria.framework */,
 			);
@@ -926,6 +1011,34 @@
 				4637323B295AEE7000B60394 /* WorkQueueRepository.swift */,
 			);
 			path = Repository;
+			sourceTree = "<group>";
+		};
+		468E7667296C284D000852FC /* xcframeworks */ = {
+			isa = PBXGroup;
+			children = (
+				46905D09296D7958003274D6 /* libass.xcframework */,
+				46905D30296D94BA003274D6 /* libavutil.xcframework */,
+				46905D0B296D7959003274D6 /* libavcodec.xcframework */,
+				46905D0C296D7959003274D6 /* libavdevice.xcframework */,
+				46905D0E296D795A003274D6 /* libavfilter.xcframework */,
+				46905D16296D795D003274D6 /* libavformat.xcframework */,
+				46905D12296D795B003274D6 /* libexpat.xcframework */,
+				46905D14296D795C003274D6 /* libfontconfig.xcframework */,
+				46905D11296D795B003274D6 /* libfreetype.xcframework */,
+				46905D15296D795C003274D6 /* libfribidi.xcframework */,
+				46905D1B296D795F003274D6 /* libgmp.xcframework */,
+				46905D17296D795D003274D6 /* libgnutls.xcframework */,
+				46905D0A296D7958003274D6 /* libgnutlsxx.xcframework */,
+				46905D18296D795D003274D6 /* libharfbuzz.xcframework */,
+				46905D19296D795E003274D6 /* libhogweed.xcframework */,
+				46905D08296D7957003274D6 /* libnettle.xcframework */,
+				46905D0F296D795A003274D6 /* libopus.xcframework */,
+				46905D13296D795C003274D6 /* libpng16.xcframework */,
+				46905D1A296D795E003274D6 /* libswresample.xcframework */,
+				46905D10296D795A003274D6 /* libswscale.xcframework */,
+				468E7676296C284D000852FC /* MPV.xcframework */,
+			);
+			path = xcframeworks;
 			sourceTree = "<group>";
 		};
 		46A15F452920DB33002756AD /* TorrentService */ = {
@@ -1534,6 +1647,7 @@
 			children = (
 				C7D4624122CC73DF00E763DF /* Anilibria */,
 				4880C22023DACDCD006FABE1 /* MacBundle */,
+				468E7667296C284D000852FC /* xcframeworks */,
 				C7D4624022CC73DF00E763DF /* Products */,
 				145B3CB0E3CCAC0C61FA629B /* Pods */,
 				1E00FA7C1790713686A9CDAF /* Frameworks */,
@@ -1941,8 +2055,8 @@
 				C7D462B022CC74EE00E763DF /* LoadableView.swift */,
 				C7D462B122CC74EE00E763DF /* MRLoaderManager.swift */,
 				C7D462B222CC74EE00E763DF /* RippleView.swift */,
-				C737923122E0157F00DDF2B2 /* DraggableView.swift */,
 				C737923322E015E300DDF2B2 /* DraggableRippleCell.swift */,
+				C737923122E0157F00DDF2B2 /* DraggableView.swift */,
 				C7D462B622CC74EF00E763DF /* BorderedView.swift */,
 				C7D462B722CC74EF00E763DF /* ShadowView.swift */,
 				C78394A222CF416400ACC353 /* HideableView.swift */,
@@ -2112,6 +2226,7 @@
 				4623D781291FEBD100F9C3D4 /* VLCPlayerView.swift */,
 				4623D783291FEC8800F9C3D4 /* PlayerStatus.swift */,
 				46A15F432920D1BD002756AD /* Player.swift */,
+				468E768E296C28F5000852FC /* MPVPlayerView.swift */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -2453,6 +2568,7 @@
 				C7D4633C22CC772800E763DF /* Language.swift in Sources */,
 				C737923222E0157F00DDF2B2 /* DraggableView.swift in Sources */,
 				C783950F22D0DC8400ACC353 /* FilterData.swift in Sources */,
+				468E768F296C28F5000852FC /* MPVPlayerView.swift in Sources */,
 				46A4DAB72917DF82003944FD /* LeftAlignedCollectionViewFlowLayout.swift in Sources */,
 				C78394AF22CF669500ACC353 /* Favorite.swift in Sources */,
 				C7D462E022CC74EF00E763DF /* CALayer+Animation.swift in Sources */,
@@ -2952,6 +3068,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 43;
 				DEVELOPMENT_TEAM = 9P3CNK2626;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"GLES_SILENCE_DEPRECATION=1",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/Anilibria/Resources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Anilibria;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
@@ -2978,6 +3099,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 43;
 				DEVELOPMENT_TEAM = 9P3CNK2626;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"GLES_SILENCE_DEPRECATION=1",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/Anilibria/Resources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Anilibria;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";

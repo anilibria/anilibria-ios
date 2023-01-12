@@ -13,7 +13,6 @@ target 'Anilibria' do
     pod 'Localize-Swift', '3.1.0'
     pod 'lottie-ios', '3.5.0'
     pod 'YandexMobileMetrica', '4.4.0'
-    pod 'MobileVLCKit', '3.5.0'
 end
 
 def unsupported_pods

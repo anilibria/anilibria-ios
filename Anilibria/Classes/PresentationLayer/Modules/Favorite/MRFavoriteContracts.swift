@@ -1,10 +1,9 @@
-import IGListKit
 import UIKit
 
 // MARK: - Contracts
 
 protocol FavoriteViewBehavior: WaitingBehavior, RefreshBehavior {
-    func set(items: [ListDiffable])
+    func set(items: [Series])
 }
 
 protocol FavoriteEventHandler: ViewControllerEventHandler, RefreshEventHandler {

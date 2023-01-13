@@ -76,7 +76,7 @@ makeMacOSApp () {
 TARGET=13.0
 makeIPA
 
-TARGET=11.2
-makeIPA
+# TARGET=11.2
+# makeIPA
 
 makeMacOSApp

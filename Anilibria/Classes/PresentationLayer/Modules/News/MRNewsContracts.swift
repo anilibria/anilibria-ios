@@ -1,10 +1,10 @@
-import IGListKit
 import UIKit
 
 // MARK: - Contracts
 
 protocol NewsViewBehavior: WaitingBehavior, InfinityLoadingBehavior {
-    func set(items: [ListDiffable])
+    func set(items: [News])
+    func append(items: [News])
 }
 
 protocol NewsEventHandler: ViewControllerEventHandler, InfinityLoadingEventHandler {

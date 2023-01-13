@@ -1,5 +1,5 @@
 import DITranquillity
-import RxSwift
+import Combine
 
 final class ConfigRepositoryPart: DIPart {
     static func load(container: DIContainer) {
@@ -20,12 +20,6 @@ protocol ConfigRepository {
 final class ConfigRepositoryImp: ConfigRepository {
     private let keyConfig: String = "ANI_CONFIG_KEY"
     private let keySettings: String = "ANI_SETTINGS_KEY"
-
-    let schedulers: SchedulerProvider
-
-    init(schedulers: SchedulerProvider) {
-        self.schedulers = schedulers
-    }
 
     func set(config: AniConfig) {
         UserDefaults.standard[keyConfig] = config

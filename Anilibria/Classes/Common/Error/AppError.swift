@@ -1,4 +1,3 @@
-import Alamofire
 import Foundation
 import LocalAuthentication
 
@@ -11,7 +10,7 @@ public enum AppError: Error {
 
     case error(code: Int)
     case responseError(code: Int)
-    case network(error: Error)
+    case network(statusCode: Int)
     case api(error: Error)
     case other(error: Error)
     case unexpectedError(message: String)
@@ -21,22 +20,18 @@ public enum AppError: Error {
 extension AppError: ErrorDisplayable {
     public var displayMessage: String? {
         switch self {
-        case let .api(error), let .network(error), let .other(error):
+        case let .api(error), let .other(error):
             return error.message
         case let .error(code), let .responseError(code):
             return "Error: \(code)"
+        case let .network(code):
+            if code == 401 {
+                return L10n.Error.authorizationInvailid
+            }
+            return "Network Error: \(code)"
         case let .unexpectedError(message), let .server(message):
             return message
         }
-    }
-}
-
-extension AFError: ErrorDisplayable {
-    public var displayMessage: String? {
-        if self.responseCode == 401 {
-            return L10n.Error.authorizationInvailid
-        }
-        return "Network \(self.responseCode ?? -1)"
     }
 }
 

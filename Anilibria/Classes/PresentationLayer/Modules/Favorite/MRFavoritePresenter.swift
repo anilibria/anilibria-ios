@@ -1,5 +1,5 @@
 import DITranquillity
-import RxSwift
+import Combine
 import UIKit
 
 final class FavoritePart: DIPart {
@@ -17,7 +17,7 @@ final class FavoritePresenter {
     private var router: FavoriteRoutable!
     private var items: [Series] = []
     private var query: String = ""
-    private var bag: DisposeBag = DisposeBag()
+    private var bag = Set<AnyCancellable>()
 
     let favoriteService: FavoriteService
     let feedService: FeedService
@@ -85,36 +85,36 @@ extension FavoritePresenter: FavoriteEventHandler {
         self.favoriteService
             .favorite(add: false, series: series)
             .manageActivity(self.view.showLoading(fullscreen: false))
-            .subscribe(onSuccess: { [weak self] _ in
+            .sink(onNext: { [weak self] _ in
                 self?.remove(series: series)
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
     }
 
     func select(series: Series) {
         self.feedService.series(with: series.code)
             .manageActivity(self.view.showLoading(fullscreen: false))
-            .subscribe(onSuccess: { [weak self] item in
+            .sink(onNext: { [weak self] item in
                 self?.router.open(series: item)
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
     }
 
     private func load(with activity: ActivityDisposable?) {
         self.favoriteService
             .fetchSeries()
             .manageActivity(activity)
-            .subscribe(onSuccess: { [weak self] items in
+            .sink(onNext: { [weak self] items in
                 self?.items = items
                 self?.showItems()
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
     }
 
     private func remove(series: Series) {

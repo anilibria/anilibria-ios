@@ -1,5 +1,6 @@
 import DITranquillity
-import RxSwift
+import Combine
+import Foundation
 
 final class FavoriteServicePart: DIPart {
     static func load(container: DIContainer) {
@@ -10,57 +11,57 @@ final class FavoriteServicePart: DIPart {
 }
 
 protocol FavoriteService: AnyObject {
-    func fetchSeries() -> Single<[Series]>
-    func favorite(add: Bool, series: Series) -> Single<Unit>
+    func fetchSeries() -> AnyPublisher<[Series], Error>
+    func favorite(add: Bool, series: Series) -> AnyPublisher<Unit, Error>
 }
 
 final class FavoriteServiceImp: FavoriteService {
-    let schedulers: SchedulerProvider
     let backendRepository: BackendRepository
 
-    private var bag: DisposeBag = DisposeBag()
+    private var bag = Set<AnyCancellable>()
 
-    init(schedulers: SchedulerProvider,
-         backendRepository: BackendRepository) {
-        self.schedulers = schedulers
+    init(backendRepository: BackendRepository) {
         self.backendRepository = backendRepository
     }
 
-    func fetchSeries() -> Single<[Series]> {
-        return Single.deferred { [unowned self] in
+    func fetchSeries() -> AnyPublisher<[Series], Error> {
+        return Deferred { [unowned self] in
             let request = FavoriteListRequest()
             return self.backendRepository
                 .request(request)
                 .map { $0.items }
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
-    func favorite(add: Bool, series: Series) -> Single<Unit> {
+    func favorite(add: Bool, series: Series) -> AnyPublisher<Unit, Error> {
         if add {
             return self.add(series: series)
         }
         return self.remove(series: series)
     }
 
-    func add(series: Series) -> Single<Unit> {
-        return Single.deferred { [unowned self] in
+    func add(series: Series) -> AnyPublisher<Unit, Error> {
+        return Deferred { [unowned self] in
             let request = AddFavoriteRequest(id: series.id)
             return self.backendRepository
                 .request(request)
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
-    func remove(series: Series) -> Single<Unit> {
-        return Single.deferred { [unowned self] in
+    func remove(series: Series) -> AnyPublisher<Unit, Error> {
+        return Deferred { [unowned self] in
             let request = RemoveFavoriteRequest(id: series.id)
             return self.backendRepository
                 .request(request)
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 }

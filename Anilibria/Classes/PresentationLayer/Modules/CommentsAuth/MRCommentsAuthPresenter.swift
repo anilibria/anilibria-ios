@@ -1,5 +1,5 @@
 import DITranquillity
-import RxSwift
+import Combine
 import UIKit
 
 final class CommentsAuthPart: DIPart {
@@ -16,7 +16,7 @@ final class CommentsAuthPresenter {
     private weak var view: CommentsAuthViewBehavior!
     private var router: CommentsAuthRoutable!
 
-    private let bag: DisposeBag = DisposeBag()
+    private var bag = Set<AnyCancellable>()
     private var activity: ActivityDisposable?
 }
 
@@ -40,26 +40,28 @@ extension CommentsAuthPresenter: CommentsAuthEventHandler {
 
     func success() {
         self.activity = self.view.showLoading(fullscreen: true)
-        let sequence = Single<HTTPCookie>.create { observer in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                if let cookie = HTTPCookieStorage.shared.cookies?.first(where: { $0.name == VKCookie.name }) {
-                    observer(.success(cookie))
-                    return
+        let sequence = Deferred {
+            Future<HTTPCookie, Error> { promise in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    if let cookie = HTTPCookieStorage.shared.cookies?.first(where: { $0.name == VKCookie.name }) {
+                        promise(.success(cookie))
+                        return
+                    }
+                    promise(.failure(AppError.error(code: -1)))
                 }
-                observer(.error(AppError.error(code: -1)))
             }
-            return Disposables.create()
-        }
+        }.eraseToAnyPublisher()
 
         sequence.retry(20)
-            .subscribe(onSuccess: { [weak self] cookie in
+
+            .sink(onNext: { [weak self] cookie in
                 self?.router.execute(CommentsAuthSuccess(vkCookie: cookie))
                 self?.activity?.dispose()
                 self?.back()
             }, onError: { [weak self] _ in
                 self?.activity?.dispose()
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
     }
 }
 

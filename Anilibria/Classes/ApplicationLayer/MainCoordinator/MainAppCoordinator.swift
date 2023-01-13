@@ -1,7 +1,7 @@
 import DITranquillity
 import Foundation
 import Kingfisher
-import RxSwift
+import Combine
 import UIKit
 
 public class MainAppCoordinator: Loggable {
@@ -20,7 +20,7 @@ public class MainAppCoordinator: Loggable {
 
     private let router: AppRouter
     private let appService: AppConfigurationService
-    private var bag: DisposeBag = DisposeBag()
+    private var bag = Set<AnyCancellable>()
 
     init(configuration: DependenciesConfiguration) {
         self.configuration = configuration
@@ -42,7 +42,7 @@ public class MainAppCoordinator: Loggable {
 
     private func openMainModule() {
         self.appService.fetchState()
-            .subscribe(onNext: { [weak self] state in
+            .sink(onNext: { [weak self] state in
                 switch state {
                 case .started:
                     self?.router.openLoadingScene()
@@ -50,6 +50,6 @@ public class MainAppCoordinator: Loggable {
                     self?.router.openDefaultScene()
                 }
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
     }
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,12 +20,12 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="c5V-r7-8dQ">
-                    <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                    <rect key="frame" x="0.0" y="48" width="414" height="814"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <collectionViewLayout key="collectionViewLayout" id="MFH-eY-lrj" customClass="IGListCollectionViewLayout"/>
+                    <collectionViewLayout key="collectionViewLayout" id="MFH-eY-lrj" customClass="LeftAlignedCollectionViewFlowLayout" customModule="Anilibria" customModuleProvider="target"/>
                 </collectionView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a54-gf-Bjo" customClass="HideableView" customModule="Anilibria" customModuleProvider="target">
-                    <rect key="frame" x="0.0" y="44" width="414" height="5"/>
+                    <rect key="frame" x="0.0" y="48" width="414" height="5"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="egA-ab-KCa" customClass="GradientView" customModule="Anilibria" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="5"/>
@@ -54,6 +54,7 @@
                     </connections>
                 </view>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="a54-gf-Bjo" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="124-ri-FWg"/>
@@ -64,7 +65,6 @@
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="a54-gf-Bjo" secondAttribute="trailing" id="erF-pZ-6ha"/>
                 <constraint firstItem="a54-gf-Bjo" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="o4e-X0-p2t"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <point key="canvasLocation" x="139" y="117"/>
         </view>
     </objects>

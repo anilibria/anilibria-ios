@@ -1,6 +1,4 @@
-import IGListKit
-import RxCocoa
-import RxSwift
+import Combine
 import UIKit
 
 // MARK: - View Controller
@@ -44,14 +42,14 @@ final class SearchViewController: BaseCollectionViewController {
     }
 
     private func setupSearchField() {
-        self.searchField.rx.controlEvent(.editingChanged)
-            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] in
+        self.searchField.publisher(for: .editingChanged)
+            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
+            .sink(onNext: { [weak self] in
                 if let text = self?.searchField.text {
                     self?.handler.search(query: text)
                 }
             })
-            .disposed(by: self.disposeBag)
+            .store(in: &subscribers)
     }
 
     override func keyBoardWillShow(keyboardHeight: CGFloat) {
@@ -72,21 +70,10 @@ final class SearchViewController: BaseCollectionViewController {
         self.setupSearchField()
     }
 
-    // MARK: - Adapter creators
-
-    override func adapterCreators() -> [AdapterCreator] {
-        return [
-            SearchResultAdapterCreator(.init(select: { [weak self] item in
-                self?.handler.select(item: item)
-            }))
-        ]
-    }
-
     @IBAction func backAction(_ sender: Any) {
         self.searchField.resignFirstResponder()
         self.searchField.isUserInteractionEnabled = false
-        self.items = []
-        self.update { [weak self] _ in
+        self.reload(sections: []) { [weak self] in
             self?.searchContainerConstraint.constant = 35
             UIView.animate(withDuration: 0.3,
                            animations: { self?.view.layoutIfNeeded() },
@@ -96,9 +83,16 @@ final class SearchViewController: BaseCollectionViewController {
 }
 
 extension SearchViewController: SearchViewBehavior {
-    func set(items: [ListDiffable]) {
+    func set(items: [SearchValue]) {
         self.scrollView.isScrollEnabled = !items.isEmpty
-        self.items = items
-        self.update()
+        self.reload(sections:[
+            SectionAdapter(
+                items.map {
+                    SearchResultAdapter(viewModel: $0) { [weak self] item in
+                        self?.handler.select(item: item)
+                    }
+                }
+            )
+        ])
     }
 }

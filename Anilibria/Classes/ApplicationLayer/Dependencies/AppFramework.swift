@@ -1,4 +1,3 @@
-import Alamofire
 import DITranquillity
 import Foundation
 
@@ -14,7 +13,6 @@ public class AppFramework: DIFramework {
 private class RepositoriesPart: DIPart {
     static let parts: [DIPart.Type] = [
         ConfigRepositoryPart.self,
-        NotifySettingsRepositoryPart.self,
         HistoryRepositoryPart.self,
         PlayerSettingsRepositoryPart.self,
         UserRepositoryPart.self,
@@ -38,7 +36,6 @@ private class RepositoriesPart: DIPart {
 private class ServicesPart: DIPart {
     static let parts: [DIPart.Type] = [
         AppConfigurationServicePart.self,
-        NotifyServicePart.self,
         PlayerServicePart.self,
         FavoriteServicePart.self,
         SessionServicePart.self,
@@ -88,10 +85,6 @@ private class PersentersPart: DIPart {
 
 private class SomePart: DIPart {
     static func load(container: DIContainer) {
-        container.register(SchedulerProviderImp.init)
-            .as(SchedulerProvider.self)
-            .lifetime(.single)
-
         container.register {
             BackendConfiguration(converter: JsonResponseConverter(),
                                  interceptor: nil,
@@ -101,7 +94,7 @@ private class SomePart: DIPart {
 
         container.register(MainRetrier.init)
             .injection(cycle: true, { $0.sessionService = $1 })
-            .as(RequestRetrier.self)
+            .as(LoadRetrier.self)
             .lifetime(.single)
     }
 }

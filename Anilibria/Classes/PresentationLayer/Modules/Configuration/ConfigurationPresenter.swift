@@ -1,5 +1,5 @@
 import DITranquillity
-import RxSwift
+import Combine
 import UIKit
 
 final class ConfigurationPart: DIPart {
@@ -16,7 +16,7 @@ final class ConfigurationPresenter {
     private weak var view: ConfigurationViewBehavior!
     private var router: ConfigurationRoutable!
 
-    private let bag: DisposeBag = DisposeBag()
+    private var bag = Set<AnyCancellable>()
 
     private let appService: AppConfigurationService
 
@@ -34,10 +34,10 @@ extension ConfigurationPresenter: ConfigurationEventHandler {
     func didLoad() {
         self.appService
             .startConfiguration()
-            .subscribe(onError: { [weak self] error in
+            .sink(onError: { [weak self] error in
                 self?.handle(error: error)
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
     }
 
     private func handle(error: Error) {

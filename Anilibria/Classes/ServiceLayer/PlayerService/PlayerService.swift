@@ -1,5 +1,5 @@
 import DITranquillity
-import RxSwift
+import Combine
 
 final class PlayerServicePart: DIPart {
     static func load(container: DIContainer) {
@@ -13,21 +13,18 @@ protocol PlayerService: AnyObject {
     func fetchSettings() -> PlayerSettings
     func update(settings: PlayerSettings)
 
-    func fetchSeriesHistory() -> Single<[Series]>
-    func fetchPlayerContext(for series: Series) -> Single<PlayerContext?>
-    func set(context: PlayerContext, for series: Series) -> Single<Void>
-    func removeHistory(for series: Series) -> Single<Void>
+    func fetchSeriesHistory() -> AnyPublisher<[Series], Error>
+    func fetchPlayerContext(for series: Series) -> AnyPublisher<PlayerContext?, Error>
+    func set(context: PlayerContext, for series: Series) -> AnyPublisher<Void, Error>
+    func removeHistory(for series: Series) -> AnyPublisher<Void, Error>
 }
 
 final class PlayerServiceImp: PlayerService {
-    private let schedulers: SchedulerProvider
     private let settingsRepository: PlayerSettingsRepository
     private let historyRepository: HistoryRepository
 
-    init(schedulers: SchedulerProvider,
-         settingsRepository: PlayerSettingsRepository,
+    init(settingsRepository: PlayerSettingsRepository,
          historyRepository: HistoryRepository) {
-        self.schedulers = schedulers
         self.settingsRepository = settingsRepository
         self.historyRepository = historyRepository
     }
@@ -40,42 +37,46 @@ final class PlayerServiceImp: PlayerService {
         self.settingsRepository.set(settings: settings)
     }
 
-    func fetchSeriesHistory() -> Single<[Series]> {
-        return Single.deferred { [unowned self] in
+    func fetchSeriesHistory() -> AnyPublisher<[Series], Error> {
+        return Deferred { [unowned self] in
             let series = self.historyRepository.getItems()
                 .map { $0.series }
-            return .just(series)
+            return AnyPublisher<[Series], Error>.just(series)
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
-    func fetchPlayerContext(for series: Series) -> Single<PlayerContext?> {
-        return Single.deferred { [unowned self] in
+    func fetchPlayerContext(for series: Series) -> AnyPublisher<PlayerContext?, Error> {
+        return Deferred { [unowned self] in
             let item = self.historyRepository.getItems()
                 .first(where: { $0.series.id == series.id })
-            return .just(item?.context)
+            return AnyPublisher<PlayerContext?, Error>.just(item?.context)
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
-    func set(context: PlayerContext, for series: Series) -> Single<Void> {
-        return Single.deferred { [unowned self] in
+    func set(context: PlayerContext, for series: Series) -> AnyPublisher<Void, Error> {
+        return Deferred { [unowned self] in
             let data = HistoryData(series: series, context: context)
             self.historyRepository.set(item: data)
-            return .just(())
+            return AnyPublisher<Void, Error>.just(())
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
-    func removeHistory(for series: Series) -> Single<Void> {
-        return Single.deferred { [unowned self] in
+    func removeHistory(for series: Series) -> AnyPublisher<Void, Error> {
+        return Deferred { [unowned self] in
             self.historyRepository.remove(data: series.id)
-            return .just(())
+            return  AnyPublisher<Void, Error>.just(())
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 }

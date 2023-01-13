@@ -1,110 +1,148 @@
+//
+//  PagerView.swift
+//
+//  Created by Ivan Morozov on 04.05.2021.
+//  Copyright © 2021 Whisk. All rights reserved.
+//
+
 import UIKit
 
 public typealias PageDirection = UIPageViewController.NavigationDirection
 
-public final class PagerView: UIView {
-    public var loopEnabled: Bool = false
+public protocol PagerViewDelegate: AnyObject {
+    func numberOfPages(for pagerView: PagerView) -> Int
+    func pagerView(_ pagerView: PagerView, pageFor index: Int) -> UIViewController?
+    func pagerView(_ pagerView: PagerView, willTransitionTo index: Int)
+    func firstPage(_ pagerView: PagerView) -> UIViewController?
+    func lastPage(_ pagerView: PagerView) -> UIViewController?
+}
 
-    private var pageControllers: [UIViewController] = []
-    private var indexHandler: Action<Int?>?
-    private lazy var pageController: UIPageViewController = UIPageViewController(transitionStyle: .scroll,
-                                                                                 navigationOrientation: .horizontal,
-                                                                                 options: nil)
-        .apply {
-        $0.delegate = self
-        self.addSubview($0.view)
+public extension PagerViewDelegate {
+    func pagerView(_ pagerView: PagerView, willTransitionTo index: Int) {}
+    func firstPage(_ pagerView: PagerView) -> UIViewController? { nil }
+    func lastPage(_ pagerView: PagerView) -> UIViewController? { nil }
+}
+
+open class PagerView: UIView {
+    @IBOutlet private weak var rootController: UIViewController? {
+        didSet {
+            rootController?.addChild(pageController)
+            pageController.didMove(toParent: rootController)
+        }
     }
 
-    private(set) var currentIndex: Int? {
+    public var isScrollEnabled = true {
         didSet {
-            if self.currentIndex != oldValue {
-                self.indexHandler?(self.currentIndex)
+            if isScrollEnabled {
+                self.pageController.dataSource = self
+            } else {
+                self.pageController.dataSource = nil
             }
         }
     }
 
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.setupNib()
+    public var loopEnabled: Bool = false
+    public weak var delegate: PagerViewDelegate?
+
+    private var indexes = NSMapTable<UIViewController, NSNumber>(keyOptions: .weakMemory, valueOptions: .strongMemory)
+
+    private var indexHandler: ((Int) -> Void)?
+
+    public private(set) lazy var pageController: UIPageViewController = {
+        let controller = PageViewController(transitionStyle: .scroll,
+                                            navigationOrientation: .horizontal,
+                                            options: nil)
+        controller.dataSource = self
+        controller.delegate = self
+        controller.scrollDelegate = self
+        self.addSubview(controller.view)
+        return controller
+    }()
+
+    public private(set) var currentIndex: Int = -1 {
+        didSet {
+            if currentIndex != oldValue {
+                indexHandler?(currentIndex)
+            }
+        }
+    }
+
+    public var currentViewController: UIViewController? {
+        if currentIndex < 0 { return nil }
+        return delegate?.pagerView(self, pageFor: currentIndex)
+    }
+
+    public init(rootController: UIViewController?) {
+        defer {
+            self.rootController = rootController
+            self.setup()
+        }
+        super.init(frame: .zero)
     }
 
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.setupNib()
+        self.setup()
     }
 
-    private func setupNib() {
-        self.pageController.view.pinToParent()
+    private func setup() {
+        pageController.view.constraintEdgesToSuperview()
     }
 
-    func set(controllers: [UIViewController]) {
-        self.pageControllers = controllers
-        if controllers.count > 1 {
-            self.pageController.dataSource = self
-        }
-    }
-
-    func didIndexChanged(_ handler: @escaping Action<Int?>) {
+    open func didIndexChanged(_ handler: @escaping (Int) -> Void) {
         self.indexHandler = handler
     }
 
-    func scrollTo(index: Int, direction: PageDirection, animated: Bool) {
-        if index < 0 || index >= self.pageControllers.count {
+    open func scrollTo(index: Int, direction: PageDirection? = nil, animated: Bool, completionHandler: (() -> Void)? = nil) {
+        guard
+            let delegate = delegate,
+            0..<delegate.numberOfPages(for: self) ~= index,
+            let controller = delegate.pagerView(self, pageFor: index),
+            currentIndex != index
+        else {
             return
         }
-        let controller = self.pageControllers[index]
-        self.currentIndex = index
-        self.pageController.setViewControllers([controller],
+
+        let direction = direction ?? (currentIndex < index ? .forward : .reverse)
+
+        setIndex(index, for: controller)
+
+        DispatchQueue.main.async { [weak self, weak pageController] in
+            pageController?.setViewControllers([controller],
                                                direction: direction,
-                                               animated: animated)
-    }
-
-    func require(gesture: UIScreenEdgePanGestureRecognizer?) {
-        if gesture == nil { return }
-        let result = self.findSubviewOfClass(anyClass: UIScrollView.self, inView: self)
-
-        guard let subscrollviews = result as? [UIScrollView] else {
-            return
-        }
-
-        for subscrollview in subscrollviews {
-            subscrollview.panGestureRecognizer.require(toFail: gesture!)
-        }
-    }
-
-    private func findSubviewOfClass(anyClass: AnyClass, inView view: UIView) -> [UIView] {
-        var subviewsOfClass: [UIView] = []
-
-        if view.responds(to: #selector(getter: UIView.subviews)) {
-            for subview in view.subviews {
-                if subview.isKind(of: anyClass) {
-                    subviewsOfClass.append(subview)
-                }
-
-                let subsubviewOfClass = self.findSubviewOfClass(anyClass: anyClass, inView: subview)
-                subviewsOfClass.append(contentsOf: subsubviewOfClass)
+                                               animated: animated) { _ in
+                self?.currentIndex = index
+                completionHandler?()
             }
         }
+    }
 
-        return subviewsOfClass
+    open func resetIndexes() {
+        indexes.removeAllObjects()
+        let controller = getCenterController()
+        setIndex(currentIndex, for: controller)
     }
 }
 
 extension PagerView: UIPageViewControllerDataSource {
+
     public func pageViewController(_ pageViewController: UIPageViewController,
                                    viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let index = pageControllers.firstIndex(of: viewController) else {
+        guard let index = index(of: viewController) else {
             return nil
         }
 
-        let beforeIndex = index - 1
+        let previousIndex = index - 1
+        print("TEST -> \(previousIndex) Before \(index) of \(viewController)")
 
-        if beforeIndex >= 0 {
-            return self.pageControllers[beforeIndex]
+        if previousIndex >= 0 {
+            let controller = delegate?.pagerView(self, pageFor: previousIndex)
+            setIndex(previousIndex, for: controller)
+            return controller
         }
 
         if self.loopEnabled {
-            return self.pageControllers.last
+            return delegate?.lastPage(self)
         }
 
         return nil
@@ -112,33 +150,83 @@ extension PagerView: UIPageViewControllerDataSource {
 
     public func pageViewController(_ pageViewController: UIPageViewController,
                                    viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let index = pageControllers.firstIndex(of: viewController) else {
+        guard let index = index(of: viewController) else {
             return nil
         }
 
-        let afterIndex = index + 1
+        let nextIndex = index + 1
+        let count = delegate?.numberOfPages(for: self) ?? -1
+        print("TEST -> \(nextIndex) After \(index) of \(viewController)")
 
-        if afterIndex < self.pageControllers.count {
-            return self.pageControllers[afterIndex]
+        if nextIndex < count {
+            let controller = delegate?.pagerView(self, pageFor: nextIndex)
+            setIndex(nextIndex, for: controller)
+            return controller
         }
 
         if self.loopEnabled {
-            return self.pageControllers.first
+            return delegate?.firstPage(self)
         }
 
         return nil
     }
+
+    private func index(of viewController: UIViewController?) -> Int? {
+        indexes.object(forKey: viewController)?.intValue
+    }
+
+    private func setIndex(_ index: Int, for viewController: UIViewController?) {
+        indexes.setObject(NSNumber(value: index), forKey: viewController)
+    }
 }
 
 extension PagerView: UIPageViewControllerDelegate {
+
     public func pageViewController(_ pageViewController: UIPageViewController,
-                                   didFinishAnimating finished: Bool,
-                                   previousViewControllers: [UIViewController],
-                                   transitionCompleted completed: Bool) {
-        if completed,
-            let presentedController = pageViewController.viewControllers?.first,
-            let index = pageControllers.firstIndex(of: presentedController) {
-            self.currentIndex = index
+                                   willTransitionTo pendingViewControllers: [UIViewController]) {
+        if let index = index(of: pendingViewControllers.first) {
+            delegate?.pagerView(self, willTransitionTo: index)
+        }
+    }
+}
+
+extension PagerView: UIScrollViewDelegate {
+
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if let index = index(of: getCenterController()) {
+            currentIndex = index
+        }
+    }
+
+    private func getCenterController() -> UIViewController? {
+        let result = pageController.children.compactMap { controller -> (position: CGFloat, controller: UIViewController?)? in
+            guard let position = controller.view.superview?.convert(controller.view.center, to: self).x else {
+                return nil
+            }
+            return (abs(position - self.center.x), controller)
+        }
+        .min(by: { first, second in first.position < second.position })
+
+        return result?.controller
+    }
+}
+
+private final class PageViewController: UIPageViewController {
+
+    public weak var scrollDelegate: UIScrollViewDelegate?
+
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        let gesture = navigationController?.interactivePopGestureRecognizer
+        view.subviews.forEach {
+            guard let scrollView = $0 as? UIScrollView else { return }
+            scrollView.delegate = scrollDelegate
+            if let gesture = gesture {
+                scrollView.gestureRecognizers?.forEach {
+                    $0.require(toFail: gesture)
+                }
+            }
         }
     }
 }

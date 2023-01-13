@@ -2,22 +2,40 @@ import UIKit
 
 // MARK: - View Controller
 
-final class MainContainerViewController: BaseViewController, ChildNavigationContainer {
+final class MainContainerViewController: BaseViewController {
     @IBOutlet var menuTabBar: MenuTabController!
-    @IBOutlet var childContainerView: UIView?
+    @IBOutlet var pagerView: PagerView!
 
     var handler: MainContainerEventHandler!
+    private var pages: [MenuControllerData] = []
 
     // MARK: - Life cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setupPager()
         self.handler.didLoad()
+    }
+
+    func setupPager() {
+        self.pagerView.delegate = self
+        self.pagerView.isScrollEnabled = false
+    }
+}
+
+extension MainContainerViewController: PagerViewDelegate {
+    func numberOfPages(for pagerView: PagerView) -> Int {
+        pages.count
+    }
+
+    func pagerView(_ pagerView: PagerView, pageFor index: Int) -> UIViewController? {
+        pages[safe: index]?.controller
     }
 }
 
 extension MainContainerViewController: MainContainerViewBehavior {
     func set(items: [MenuItem]) {
+        self.pages = MenuItemsControllersFactory.create(for: items)
         self.menuTabBar.set(items) { [weak self] type in
             self?.handler.select(item: type)
         }
@@ -25,6 +43,9 @@ extension MainContainerViewController: MainContainerViewBehavior {
 
     func set(selected: MenuItemType) {
         self.menuTabBar.set(selected: selected)
+        if let index = pages.firstIndex(where: { $0.type == selected }) {
+            self.pagerView.scrollTo(index: index, animated: false)
+        }
     }
 
     func change(visible: Bool, for item: MenuItemType) {

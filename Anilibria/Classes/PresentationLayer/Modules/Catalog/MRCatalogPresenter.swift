@@ -1,5 +1,5 @@
 import DITranquillity
-import RxSwift
+import Combine
 import UIKit
 
 final class CatalogPart: DIPart {
@@ -19,8 +19,7 @@ final class CatalogPresenter {
     private let feedService: FeedService
 
     private var activity: ActivityDisposable?
-    private var bag: DisposeBag = DisposeBag()
-    private var items: [Series] = []
+    private var bag = Set<AnyCancellable>()
     private var filter: SeriesFilter = SeriesFilter()
 
     private lazy var paginator: Paginator = Paginator<Series, IntPaging>(IntPaging()) { [unowned self] in
@@ -85,23 +84,23 @@ extension CatalogPresenter: CatalogEventHandler {
     func select(series: Series) {
         self.feedService.series(with: series.code)
             .manageActivity(self.view.showLoading(fullscreen: false))
-            .subscribe(onSuccess: { [weak self] item in
+            .sink(onNext: { [weak self] item in
                 self?.router.open(series: item)
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
     }
 
     func openFilter() {
         self.feedService.fetchFiltedData()
             .manageActivity(self.view.showLoading(fullscreen: false))
-            .subscribe(onSuccess: { [weak self] data in
+            .sink(onNext: { [weak self] data in
                 self?.router.open(filter: self!.filter, data: data)
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
     }
 
     func search() {
@@ -121,12 +120,11 @@ extension CatalogPresenter: CatalogEventHandler {
             .showData { [weak self] value in
                 switch value.data {
                 case let .first(items):
-                    self?.items = items
+                    self?.view.set(items: items)
                 case let .next(items):
-                    self?.items.append(contentsOf: items)
+                    self?.view.append(items: items)
                 }
                 self?.activity?.dispose()
-                self?.view.set(items: self!.items)
             }
             .showEmptyError { [weak self] value in
                 if let error = value.error {

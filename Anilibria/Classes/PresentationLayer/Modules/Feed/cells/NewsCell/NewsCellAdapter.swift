@@ -1,48 +1,46 @@
-import IGListKit
 import UIKit
 
-final class NewsCellAdapterCreator: BaseInteractiveAdapterCreator<News, NewsCellAdapter> {}
+final class NewsCellAdapter: BaseCellAdapter<News> {
+    private var size: CGSize?
+    private var width: CGFloat?
+    private var selectAction: ((News) -> Void)?
 
-struct NewsCellAdapterHandler {
-    let select: Action<News>?
-}
+    init(viewModel: News, seclect: ((News) -> Void)?) {
 
-public final class NewsCellAdapter: ListSectionController, Interactable {
-    typealias Handler = NewsCellAdapterHandler
-    var handler: Handler?
-
-    private var item: News!
-    private var size: CGSize = .zero
-
-    private static let template = NewsCell.loadFromNib(frame: UIScreen.main.bounds)!
-
-    public override func sizeForItem(at index: Int) -> CGSize {
-        return self.size
+        self.selectAction = seclect
+        super.init(viewModel: viewModel)
     }
 
-    public override func cellForItem(at index: Int) -> UICollectionViewCell {
-        let cell = self.dequeueReusableCell(of: NewsCell.self, at: index)
-        cell.configure(self.item)
+    override func sizeForItem(at index: IndexPath,
+                              collectionView: UICollectionView,
+                              layout collectionViewLayout: UICollectionViewLayout) -> CGSize {
+        if let size = size {
+            return size
+        }
+
+        var width: CGFloat = UIApplication.keyWindowSize.width
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            if UIDevice.current.orientation.isLandscape {
+                 width = width / 3
+            } else {
+                 width = width / 2
+            }
+        }
+
+        let height: CGFloat = NewsCell.height(for: viewModel, with: width)
+        let size = CGSize(width: width, height: height)
+        self.size = size
+        return size
+    }
+
+    override func cellForItem(at index: IndexPath, context: CollectionContext) -> UICollectionViewCell? {
+        let cell = context.dequeueReusableNibCell(type: NewsCell.self, for: index)
+        cell.configure(viewModel)
         return cell
     }
 
-    public override func didUpdate(to object: Any) {
-        self.item = object as? News
-		var width: CGFloat = UIApplication.keyWindowSize.width
-
-		if UIDevice.current.userInterfaceIdiom == .pad {
-			if UIDevice.current.orientation.isLandscape {
-				 width = width / 3
-			} else {
-				 width = width / 2
-			}
-		}
-
-        let height: CGFloat = NewsCell.height(for: self.item, with: width)
-        self.size = CGSize(width: width, height: height)
-    }
-
-    public override func didSelectItem(at index: Int) {
-        self.handler?.select?(self.item)
+    override func didSelect(at index: IndexPath) {
+        self.selectAction?(viewModel)
     }
 }

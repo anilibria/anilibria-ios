@@ -1,5 +1,5 @@
 import DITranquillity
-import RxSwift
+import Combine
 import UIKit
 
 final class NewsPart: DIPart {
@@ -18,9 +18,8 @@ final class NewsPresenter {
 
     private let feedService: FeedService
 
-    private var bag: DisposeBag! = DisposeBag()
+    private var bag = Set<AnyCancellable>()
     private var activity: ActivityDisposable?
-    private var items: [News] = []
 
     private lazy var paginator: Paginator = Paginator<News, IntPaging>(IntPaging()) { [unowned self] in
         return self.feedService.fetchNews(page: $0)
@@ -67,12 +66,11 @@ extension NewsPresenter: NewsEventHandler {
             .showData { [weak self] value in
                 switch value.data {
                 case let .first(items):
-                    self?.items = items
+                    self?.view.set(items: items)
                 case let .next(items):
-                    self?.items.append(contentsOf: items)
+                    self?.view.append(items: items)
                 }
                 self?.activity?.dispose()
-                self?.view.set(items: self!.items)
             }
             .showEmptyError { [weak self] value in
                 if let error = value.error {

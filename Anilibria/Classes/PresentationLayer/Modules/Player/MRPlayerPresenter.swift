@@ -1,5 +1,5 @@
 import DITranquillity
-import RxSwift
+import Combine
 import UIKit
 
 final class PlayerPart: DIPart {
@@ -17,7 +17,7 @@ final class PlayerPresenter {
     private var router: PlayerRoutable!
     private var series: Series!
     private var playlist: [PlaylistItem] = []
-    private var bag: DisposeBag = DisposeBag()
+    private var bag = Set<AnyCancellable>()
 
     private let playerService: PlayerService
 
@@ -57,25 +57,29 @@ extension PlayerPresenter: PlayerEventHandler {
     func didLoad() {
         self.playerService
             .fetchPlayerContext(for: self.series)
-            .subscribe(onSuccess: { [weak self] context in
+            .sink(onNext: { [weak self] context in
                 self?.run(with: context)
             })
-            .disposed(by: self.bag)
+            .store(in: &bag)
     }
 
     func select(playItemIndex: Int) {
+        let lastIndex = self.playlist.count - 1
         let items = self.playlist.enumerated().map { value in
             ChoiceItem(value.element,
                        title: value.element.title,
-                       isSelected: value.offset == playItemIndex)
+                       isSelected: value.offset == playItemIndex,
+                       isLast: value.offset == lastIndex)
         }
 
         self.router.openSheet(with: items)
     }
 
     func settings(quality: VideoQuality, for item: PlaylistItem) {
-        let items = item.supportedQualities().map {
-            ChoiceItem($0, title: $0.name, isSelected: quality == $0)
+        let qualities = item.supportedQualities()
+        let items = qualities.map {
+            ChoiceItem($0, title: $0.name, isSelected: quality == $0,
+                       isLast: qualities.last == $0)
         }
 
         self.router.openSheet(with: items)
@@ -91,8 +95,8 @@ extension PlayerPresenter: PlayerEventHandler {
                                     time: time)
         self.playerService
             .set(context: context, for: self.series)
-            .subscribe()
-            .disposed(by: self.bag)
+            .sink()
+            .store(in: &bag)
     }
 
     private func run(with context: PlayerContext?) {

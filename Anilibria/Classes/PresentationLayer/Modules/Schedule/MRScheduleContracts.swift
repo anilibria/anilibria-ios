@@ -1,10 +1,9 @@
-import IGListKit
 import UIKit
 
 // MARK: - Contracts
 
 protocol ScheduleViewBehavior: WaitingBehavior {
-    func set(items: [ListDiffable])
+    func set(items: [Schedule])
 }
 
 protocol ScheduleEventHandler: ViewControllerEventHandler {

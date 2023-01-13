@@ -12,5 +12,4 @@ protocol SettingsEventHandler: ViewControllerEventHandler {
     func bind(view: SettingsViewBehavior, router: SettingsRoutable)
 
     func selectQuality()
-    func change(global: Bool)
 }

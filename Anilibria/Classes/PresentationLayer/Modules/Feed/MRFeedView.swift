@@ -1,4 +1,3 @@
-import IGListKit
 import UIKit
 
 // MARK: - View Controller
@@ -54,29 +53,37 @@ final class FeedViewController: InfinityCollectionViewController {
         self.navigationItem.setRightBarButtonItems(items, animated: false)
     }
 
-    // MARK: - Adapter creators
-
-    override func adapterCreators() -> [AdapterCreator] {
-        return [
-            SeriesCellAdapterCreator(.init(select: { [weak self] item in
+    private func map(item: NSObject) -> (any CellAdapterProtocol)? {
+        switch item {
+        case let model as Series:
+            return SeriesCellAdapter(viewModel: model) { [weak self] item in
                 self?.handler.select(series: item)
-            })),
-            NewsCellAdapterCreator(.init(select: { [weak self] item in
+            }
+        case let model as News:
+            return NewsCellAdapter(viewModel: model) { [weak self] item in
                 self?.handler.select(news: item)
-            })),
-            SoonCellAdapterCreator(.init(select: { [weak self] item in
+            }
+        case let model as Schedule:
+            return SoonCellAdapter(viewModel: model) { [weak self] item in
                 self?.handler.select(series: item)
-            })),
-            TitleCellAdapterCreator(),
-            ActionCellAdapterCreator()
-        ]
+            }
+        case let model as TitleItem:
+            return TitleCellAdapter(viewModel: model)
+        case let model as ActionItem:
+            return ActionCellAdapter(viewModel: model)
+        default:
+            return nil
+        }
     }
 }
 
 extension FeedViewController: FeedViewBehavior {
-    func set(items: [ListDiffable]) {
-        self.items = items
-        self.update()
+    func set(items: [NSObject]) {
+        reload(sections: [SectionAdapter(items.compactMap(self.map(item:)))])
+    }
+
+    func append(items: [NSObject]) {
+        append(sections: [SectionAdapter(items.compactMap(self.map(item:)))])
     }
 
     func loadPageProgress() -> ActivityDisposable? {

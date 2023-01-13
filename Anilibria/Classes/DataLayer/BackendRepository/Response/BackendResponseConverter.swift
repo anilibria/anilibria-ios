@@ -11,7 +11,7 @@ protocol BackendResponseConverter: AnyObject {
     /// - parameter data: Response from NetworkService
     /// - returns: (ResponseData?, Error?)
     func convert<T: BackendAPIRequest>(_ type: T.Type,
-                                       response data: NetworkManager.NetworkResponse) -> (T.ResponseObject?, Error?)
+                                       response data: NetworkResponse) -> (T.ResponseObject?, Error?)
 }
 
 public class JsonResponseConverter: BackendResponseConverter, Loggable {
@@ -20,7 +20,7 @@ public class JsonResponseConverter: BackendResponseConverter, Loggable {
     }
 
     func convert<T: BackendAPIRequest>(_ type: T.Type,
-                                       response data: NetworkManager.NetworkResponse) -> (T.ResponseObject?, Error?) {
+                                       response data: NetworkResponse) -> (T.ResponseObject?, Error?) {
         if (data.0 as NSData).length == 0 {
             return (nil, AppError.responseError(code: MRKitErrorCode.emptyResponse))
         }
@@ -32,7 +32,7 @@ public class JsonResponseConverter: BackendResponseConverter, Loggable {
         } else if let error = model?.error {
             return (nil, AppError.api(error: error))
         } else {
-            self.log(.error, "Error parsing request: \(data.3!)")
+            self.log(.error, "Error parsing request: \(data.3)")
             let text = String(data: data.0, encoding: .utf8) ?? ""
             self.log(.error, text)
             return (nil, AppError.responseError(code: MRKitErrorCode.parsingError))
@@ -64,7 +64,7 @@ public class FullDataResponseConverter: BackendResponseConverter, Loggable {
     }
 
     func convert<T: BackendAPIRequest>(_ type: T.Type,
-                                       response data: NetworkManager.NetworkResponse) -> (T.ResponseObject?, Error?) {
+                                       response data: NetworkResponse) -> (T.ResponseObject?, Error?) {
         if (data.0 as NSData).length == 0 {
             return (nil, AppError.responseError(code: MRKitErrorCode.emptyResponse))
         }
@@ -85,7 +85,7 @@ public class FullDataResponseConverter: BackendResponseConverter, Loggable {
             let result = type.init(nilLiteral: ()) as? T.ResponseObject {
             return (result, nil)
         } else {
-            self.log(.error, "Error parsing request: \(data.3!)")
+            self.log(.error, "Error parsing request: \(data.3)")
             let text = String(data: data.0, encoding: .utf8) ?? ""
             self.log(.error, text)
             return (nil, AppError.responseError(code: MRKitErrorCode.parsingError))

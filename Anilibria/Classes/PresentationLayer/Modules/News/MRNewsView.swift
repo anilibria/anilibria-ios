@@ -1,4 +1,3 @@
-import IGListKit
 import UIKit
 
 // MARK: - View Controller
@@ -13,6 +12,8 @@ final class NewsViewController: InfinityCollectionViewController {
         self?.handler.refresh()
     }
     #endif
+
+    private let sectionAdapter = SectionAdapter([])
 
     // MARK: - Life cycle
 
@@ -49,12 +50,10 @@ final class NewsViewController: InfinityCollectionViewController {
 
     // MARK: - Adapter creators
 
-    override func adapterCreators() -> [AdapterCreator] {
-        return [
-            NewsCellAdapterCreator(.init(select: { [weak self] item in
-                self?.handler.select(news: item)
-            }))
-        ]
+    private func createAdapter(for item: News) -> any CellAdapterProtocol {
+        NewsCellAdapter(viewModel: item, seclect: { [weak self] item in
+            self?.handler.select(news: item)
+        })
     }
 }
 
@@ -63,8 +62,13 @@ extension NewsViewController: NewsViewBehavior {
         return nil
     }
 
-    func set(items: [ListDiffable]) {
-        self.items = items
-        self.update()
+    func set(items: [News]) {
+        sectionAdapter.set(items.map(createAdapter))
+        reload(sections: [sectionAdapter])
+    }
+
+    func append(items: [News]) {
+        sectionAdapter.set(items.map(createAdapter))
+        append(sections: [sectionAdapter])
     }
 }

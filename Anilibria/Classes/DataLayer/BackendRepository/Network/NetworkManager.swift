@@ -1,35 +1,31 @@
-import Alamofire
 import Foundation
-import RxSwift
+import Combine
 
+public typealias NetworkResponse = (Data, Int, HTTPURLResponse?, URLRequest)
 open class NetworkManager: Loggable {
-    public typealias MultiPartData = (item: Data, fileName: String, mimeType: String)
-    public typealias NetworkResponse = (Data, Int, HTTPURLResponse?, URLRequest?)
 
     public var defaultLoggingTag: LogTag {
         return .unnamed
     }
 
     private static let requestTimeout: Double = 10
-    private var task: URLSessionTask?
-    private var manager: SessionManager!
+    private var session: URLSession!
+    private let adapter: RequestModifier?
+    private let retrier: LoadRetrier?
 
     public enum Method: String {
         case OPTIONS, GET, HEAD, POST, PUT, PATCH, DELETE, TRACE, CONNECT
     }
 
-    init(adapter: RequestAdapter?,
-         retrier: RequestRetrier?) {
-        self.manager = SessionManager(configuration: self.configuration())
-        self.manager.adapter = adapter
-        self.manager.retrier = retrier
+    init(adapter: RequestModifier?,
+         retrier: LoadRetrier?) {
+        self.adapter = adapter
+        self.retrier = retrier
+        self.session = URLSession(configuration: self.configuration())
     }
 
     func restartWith(proxy: AniProxy?) {
-        let old = self.manager
-        self.manager = SessionManager(configuration: self.configuration(proxy: proxy))
-        self.manager.adapter = old!.adapter
-        self.manager.retrier = old!.retrier
+        self.session = URLSession(configuration: self.configuration(proxy: proxy))
     }
 
     fileprivate func configuration(proxy: AniProxy? = nil) -> URLSessionConfiguration {
@@ -53,41 +49,56 @@ open class NetworkManager: Loggable {
     func request(url: URL,
                  method: Method,
                  params: [String: Any]? = nil,
-                 headers: [String: String]? = nil) -> Single<NetworkResponse> {
-        return Single.deferred({ [unowned self] () -> Single<NetworkResponse> in
-            let request = self.createRequest(url: url,
-                                             method: method,
-                                             params: params,
-                                             headers: headers)
+                 headers: [String: String]? = nil) -> AnyPublisher<NetworkResponse, Error> {
 
-            return Single.create(subscribe: { [unowned self] (observer) -> Disposable in
-                let request = self.manager.request(request)
-                self.task = request.task
+        let request = self.createRequest(url: url, method: method, params: params, headers: headers)
+        self.log(.debug, request.curl)
 
-                request
-                    .validate()
-                    .response(completionHandler: { response in
-                        if let error = response.error {
-                            observer(.error(AppError.network(error: error)))
-                        } else if response.response != nil {
-                            observer(.success((response.data!,
-                                               response.response!.statusCode,
-                                               response.response,
-                                               response.request)))
-                        } else {
-                            observer(.error(AppError.responseError(code: MRKitErrorCode.unknownNetworkError)))
-                        }
-                    })
-                self.log(.debug, request.debugDescription)
-                return Disposables.create()
-            }).retry(1)
-        })
+        var retryNumber = 0
+        return send(request: request)
+            .catch { [unowned self] error -> AnyPublisher<NetworkResponse, Error> in
+                guard let retrier = self.retrier else { return .fail(error) }
+                defer { retryNumber += 1 }
+                return self.retry(with: retrier, request: request, error: error, retryNumber: retryNumber)
+            }.eraseToAnyPublisher()
     }
 
-    func createRequest(url: URL,
-                       method: Method,
-                       params: [String: Any]?,
-                       headers: [String: String]?) -> URLRequest {
+    private func send(request: URLRequest) -> AnyPublisher<NetworkResponse, Error> {
+        return session.dataTaskPublisher(for: request).tryMap { (data, response) in
+            let httpResponse = response as? HTTPURLResponse
+            let code = httpResponse?.statusCode ?? -1
+            if code != 200 {
+                throw AppError.network(statusCode: code)
+            }
+            return NetworkResponse(data, code, httpResponse, request)
+        }.eraseToAnyPublisher()
+    }
+
+    private func retry(with retrier: LoadRetrier,
+                       request: URLRequest,
+                       error: Error,
+                       retryNumber: Int) -> AnyPublisher<NetworkResponse, Error> {
+        Deferred<Future<Void, Error>> {
+            Future<Void, Error> { promise in
+                retrier.need(retry: request, error: error, retryNumber: retryNumber) { needToRetry in
+                    if needToRetry {
+                        promise(.success(()))
+                    } else {
+                        promise(.failure(error))
+                    }
+                }
+            }
+        }
+        .flatMap { [unowned self] in
+            self.send(request: request)
+        }
+        .eraseToAnyPublisher()
+    }
+
+    private func createRequest(url: URL,
+                               method: Method,
+                               params: [String: Any]?,
+                               headers: [String: String]?) -> URLRequest {
         var requestURL: URL = url
         let parameterString = params?.stringFromHttpParameters()
         var bodyData: Data?
@@ -116,10 +127,33 @@ open class NetworkManager: Loggable {
         if let data = bodyData {
             request.httpBody = data
         }
+
+        if let modifier = self.adapter {
+            request = modifier.modify(request)
+        }
+
         return request
     }
+}
 
-    func cancel() {
-        self.task?.cancel()
+extension URLRequest {
+    public var curl: String {
+        var data : String = ""
+        let complement = "\\\n"
+        let method = "-X \(self.httpMethod ?? "GET") \(complement)"
+        let urlAbsoluteString: String = url?.absoluteString ?? ""
+        let url = "\"\(urlAbsoluteString)\""
+
+        let header = self.allHTTPHeaderFields?.reduce("", { (result, data) -> String in
+            return result + "-H \"\(data.key): \(data.value)\" \(complement)"
+        }) ?? ""
+
+        if let bodyData = self.httpBody, let bodyString = String(data:bodyData, encoding:.utf8) {
+            data = "-d \"\(bodyString)\" \(complement)"
+        }
+
+        let command = "curl -i " + complement + method + header + data + url
+
+        return command
     }
 }

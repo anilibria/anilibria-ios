@@ -1,59 +1,78 @@
-import IGListKit
 import UIKit
 
 public final class FilterTagsItem: NSObject {
     let title: String
     let items: [Selectable<String>]
 
-    fileprivate let changed: Action<Selectable<String>>
+    fileprivate let changed: ((Selectable<String>) -> Void)?
 
     init(title: String,
          items: [Selectable<String>],
-         changed: @escaping Action<Selectable<String>>) {
+         changed: @escaping (Selectable<String>) -> Void) {
         self.title = title
         self.items = items
         self.changed = changed
     }
 }
 
-final class FilterTagsAdapterCreator: BaseAdapterCreator<FilterTagsItem, FilterTagsAdapter> {}
+final class FilterTagsTitleAdapter: BaseCellAdapter<FilterTagsItem> {
 
-public final class FilterTagsAdapter: ListSectionController {
-    private var item: FilterTagsItem!
-    private var sizes: [CGSize] = []
-
-    public override func sizeForItem(at index: Int) -> CGSize {
-        return self.sizes[index]
+    override func sizeForItem(at index: IndexPath,
+                              collectionView: UICollectionView,
+                              layout collectionViewLayout: UICollectionViewLayout) -> CGSize {
+        var width: CGFloat = UIApplication.keyWindowSize.width
+        width = min(width, 414)
+        return CGSize(width: width, height: 40)
     }
 
-    public override func numberOfItems() -> Int {
-        return self.item.items.count + 1
+    override func cellForItem(at index: IndexPath, context: CollectionContext) -> UICollectionViewCell? {
+        let cell = context.dequeueReusableNibCell(type: FilterTagTitleCell.self, for: index)
+        cell.configure(viewModel.title)
+        return cell
+    }
+}
+
+final class FilterTagAdapter: BaseCellAdapter<Selectable<String>> {
+    private let size: CGSize
+    private var selectAction: ((Selectable<String>) -> Void)?
+
+    init(viewModel: Selectable<String>, seclect: ((Selectable<String>) -> Void)?) {
+        self.selectAction = seclect
+        self.size = FilterTagCell.size(for: viewModel)
+        super.init(viewModel: viewModel)
     }
 
-    public override func cellForItem(at index: Int) -> UICollectionViewCell {
-        if index == 0 {
-            let cell = self.dequeueReusableCell(of: FilterTagTitleCell.self, at: index)
-            cell.configure(self.item.title)
-            return cell
-        }
-        let cell = self.dequeueReusableCell(of: FilterTagCell.self, at: index)
-        cell.configure(self.item.items[index - 1])
+    override func sizeForItem(at index: IndexPath,
+                              collectionView: UICollectionView,
+                              layout collectionViewLayout: UICollectionViewLayout) -> CGSize {
+        return size
+    }
+
+    override func cellForItem(at index: IndexPath, context: CollectionContext) -> UICollectionViewCell? {
+        let cell = context.dequeueReusableNibCell(type: FilterTagCell.self, for: index)
+        cell.configure(viewModel)
         return cell
     }
 
-    public override func didUpdate(to object: Any) {
-        self.item = object as? FilterTagsItem
-        var width: CGFloat = UIApplication.getWindow()?.frame.width ?? 0
-		width = min(width, 414)
-        self.sizes = [CGSize(width: width, height: 40)]
-        self.sizes = self.sizes + self.item.items.map(FilterTagCell.size)
+    override func didSelect(at index: IndexPath) {
+        self.selectAction?(viewModel)
+    }
+}
+
+class FilterTagsSectionAdapter: SectionAdapter {
+    init(item: FilterTagsItem) {
+        super.init(
+            [FilterTagsTitleAdapter(viewModel: item)] +
+            item.items.map { FilterTagAdapter(viewModel: $0, seclect: item.changed) }
+        )
+        self.insets = .init(top: 0, left: 11, bottom: 0, right: 12)
+        self.minimumInteritemSpacing = 1
+        self.minimumLineSpacing = 1
     }
 
-    public override func didSelectItem(at index: Int) {
-        if index == 0 {
-            return
-        }
-
-        self.item.changed(self.item.items[index - 1])
+    override func collectionView(_ collectionView: UICollectionView,
+                                 layout collectionViewLayout: UICollectionViewLayout,
+                                 insetForSectionAt section: Int) -> UIEdgeInsets {
+        self.insets
     }
 }

@@ -27,7 +27,12 @@ extension ChoiceSheetPresenter: ChoiceSheetEventHandler {
     }
 
     func didLoad() {
-        self.view.set(items: self.items)
+        self.view.set(items: self.items.map {
+            $0.didSelect = { [weak self] item in
+                self?.select(item: item)
+            }
+            return $0
+        })
     }
 
     func back() {

@@ -10,7 +10,7 @@ public final class FilterHeaderCell: UICollectionViewCell {
     private var changeHandler: Action<SeriesFilter>?
     private var item: FilterHeaderItem?
 
-    public func configure(_ item: FilterHeaderItem, handler: Action<SeriesFilter>?) {
+    public func configure(_ item: FilterHeaderItem, handler: ((SeriesFilter) -> Void)?) {
         self.segmentControl.selectedSegmentIndex = item.filter.sorting == .mostPopularity ? 0 : 1
         self.changeHandler = handler
         self.releaseSwitchView.setOn(item.filter.isCompleted, animated: false)

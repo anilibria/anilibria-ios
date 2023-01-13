@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MainContainerViewController" customModule="Anilibria" customModuleProvider="target">
             <connections>
-                <outlet property="childContainerView" destination="Hng-aB-oz2" id="rVe-gn-a9B"/>
                 <outlet property="menuTabBar" destination="lbm-cD-8Dy" id="ZT7-L1-PEH"/>
+                <outlet property="pagerView" destination="Hng-aB-oz2" id="lC1-r2-Xqh"/>
                 <outlet property="view" destination="iN0-l3-epB" id="snn-wb-n3o"/>
             </connections>
         </placeholder>
@@ -22,10 +20,13 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hng-aB-oz2">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hng-aB-oz2" customClass="PagerView" customModule="Anilibria" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="818"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <viewLayoutGuide key="safeArea" id="p8R-MG-EL7"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <connections>
+                        <outlet property="rootController" destination="-1" id="Pp1-Gj-x8L"/>
+                    </connections>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gi0-Ok-EvC" customClass="ShadowView" customModule="Anilibria" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="818" width="414" height="78"/>
@@ -74,6 +75,7 @@
                     </userDefinedRuntimeAttributes>
                 </view>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="gi0-Ok-EvC" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="JMd-bh-dJ4"/>
@@ -85,7 +87,6 @@
                 <constraint firstItem="Hng-aB-oz2" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="vNP-9C-KR2"/>
                 <constraint firstItem="Hng-aB-oz2" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="wAY-ao-deN"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <point key="canvasLocation" x="47.826086956521742" y="35.491071428571423"/>
         </view>
     </objects>

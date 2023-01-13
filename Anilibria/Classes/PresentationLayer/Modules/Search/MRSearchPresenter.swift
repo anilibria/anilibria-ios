@@ -1,5 +1,5 @@
 import DITranquillity
-import RxSwift
+import Combine
 import UIKit
 
 final class SearchPart: DIPart {
@@ -17,7 +17,7 @@ final class SearchPresenter {
     private var router: SearchRoutable!
 
     private let feedService: FeedService
-    private var bag: DisposeBag!
+    private var cancellable: AnyCancellable?
     private var currentQuery: String = ""
 
     init(feedService: FeedService) {
@@ -39,14 +39,12 @@ extension SearchPresenter: SearchEventHandler {
 
     func search(query: String) {
         self.currentQuery = query
-        self.bag = DisposeBag()
-        self.feedService.search(query: query)
-            .subscribe(onSuccess: { [weak self] items in
+        self.cancellable = feedService.search(query: query)
+            .sink(onNext: { [weak self] items in
                 self?.handle(items)
             }, onError: { [weak self] error in
                 self?.log(.error, error.message)
             })
-            .disposed(by: self.bag)
     }
 
     func select(item: SearchValue) {
@@ -59,15 +57,13 @@ extension SearchPresenter: SearchEventHandler {
     }
 
     private func handle(_ items: [Series]) {
-        var values = items.map {
-            SearchItem(.series($0))
-        }
+        var values: [SearchValue] = items.map {.series($0) }
 
         if values.isEmpty && self.currentQuery.isEmpty == false {
             if (self.router.parentRouter is CatalogRoutable) == false {
-                values.append(SearchItem(.filter))
+                values.append(.filter)
             }
-            values.append(SearchItem(.google(self.currentQuery)))
+            values.append(.google(self.currentQuery))
         }
 
         self.view.set(items: values)

@@ -1,6 +1,6 @@
 import DITranquillity
 import Kingfisher
-import RxSwift
+import Combine
 
 final class AppConfigurationServicePart: DIPart {
     static func load(container: DIContainer) {
@@ -11,8 +11,8 @@ final class AppConfigurationServicePart: DIPart {
 }
 
 protocol AppConfigurationService: AnyObject {
-    func fetchState() -> Observable<ConfigurationState>
-    func startConfiguration() -> Single<ConfigurationState>
+    func fetchState() -> AnyPublisher<ConfigurationState, Never>
+    func startConfiguration() -> AnyPublisher<ConfigurationState, Error>
     func manualComplete()
 }
 
@@ -22,27 +22,25 @@ enum ConfigurationState {
 }
 
 final class AppConfigurationServiceImp: AppConfigurationService {
-    let schedulers: SchedulerProvider
     let backendRepository: BackendRepository
     let configRepository: ConfigRepository
 
     var currentProxy: AniProxy?
-    private let statusRelay: BehaviorSubject<ConfigurationState> = BehaviorSubject(value: .started)
+    private let statusRelay: CurrentValueSubject<ConfigurationState, Never> = CurrentValueSubject(.started)
 
-    init(schedulers: SchedulerProvider,
-         backendRepository: BackendRepository,
+    init(backendRepository: BackendRepository,
          configRepository: ConfigRepository) {
-        self.schedulers = schedulers
         self.backendRepository = backendRepository
         self.configRepository = configRepository
         ImageDownloader.default.delegate = self
+
     }
 
-    func fetchState() -> Observable<ConfigurationState> {
-        return self.statusRelay
+    func fetchState() -> AnyPublisher<ConfigurationState, Never> {
+        return self.statusRelay.eraseToAnyPublisher()
     }
 
-    func startConfiguration() -> Single<ConfigurationState> {
+    func startConfiguration() -> AnyPublisher<ConfigurationState, Error> {
         return self.loadConfig()
             .flatMap { [unowned self] in
                 if let old = self.configRepository.getCurrentSettings() {
@@ -51,24 +49,25 @@ final class AppConfigurationServiceImp: AppConfigurationService {
                 }
                 return self.applySettingsAndCheck($0)
             }
-            .do(onSuccess: { [unowned self] settings in
+            .do(onNext: { [unowned self] settings in
                 self.configRepository.setCurrent(settings: settings)
             })
             .map { _ in ConfigurationState.completed }
-            .observeOn(self.schedulers.main)
-            .do(onSuccess: { [weak self] state in
-                self?.statusRelay.onNext(state)
+            .receive(on: DispatchQueue.main)
+            .do(onNext: { [weak self] state in
+                self?.statusRelay.send(state)
             })
+            .eraseToAnyPublisher()
     }
 
     func manualComplete() {
         self.backendRepository.apply(.default)
         self.currentProxy = nil
         self.updateProxy()
-        self.statusRelay.onNext(.completed)
+        self.statusRelay.send(.completed)
     }
 
-    private func applySettingsAndCheck(_ settings: AniSettings) -> Single<AniSettings> {
+    private func applySettingsAndCheck(_ settings: AniSettings) -> AnyPublisher<AniSettings, Error> {
         self.backendRepository.apply(settings)
         self.currentProxy = settings.proxy
         self.updateProxy()
@@ -76,16 +75,17 @@ final class AppConfigurationServiceImp: AppConfigurationService {
         return self.backendRepository
             .request(CheckRequest())
             .map { _ in settings }
-            .catchError({ [unowned self] _ in
+            .catch({ [unowned self] _ in
                 if let next = settings.next {
                     return self.applySettingsAndCheck(next)
                 }
-                return .error(AppConfigError.notFound)
+                return .fail(AppConfigError.notFound)
             })
+            .eraseToAnyPublisher()
     }
 
-    func loadConfig() -> Single<AniSettings> {
-        return Single.deferred { [unowned self] in
+    func loadConfig() -> AnyPublisher<AniSettings, Error> {
+        return Deferred { [unowned self] in
             let request = JustURLRequest<AniConfig>(url: URLS.config)
             return self.backendRepository
                 .request(request)
@@ -93,21 +93,22 @@ final class AppConfigurationServiceImp: AppConfigurationService {
                     self.configRepository.set(config: config)
                     return config
                 }
-                .catchError { [unowned self] _ in
+                .catch { [unowned self] _ in
                     if let config = self.configRepository.getConfig() {
-                        return .just(config)
+                        return AnyPublisher<AniConfig, Error>.just(config)
                     }
-                    return .error(AppConfigError.empty)
+                    return AnyPublisher<AniConfig, Error>.fail(AppConfigError.empty)
                 }
                 .map(AniSettings.create(from:))
-                .flatMap { item -> Single<AniSettings> in
+                .tryMap { item -> AniSettings in
                     if let value = item {
-                        return .just(value)
+                        return value
                     }
-                    return .error(AppConfigError.broken)
+                    throw AppConfigError.broken
                 }
         }
-        .subscribeOn(self.schedulers.background)
+        .subscribe(on: DispatchQueue.global())
+        .eraseToAnyPublisher()
     }
 }
 

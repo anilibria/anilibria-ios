@@ -1,42 +1,34 @@
-import IGListKit
 import UIKit
 
-final class RemovableSeriesCellAdapterCreator: BaseInteractiveAdapterCreator<Series, RemovableSeriesCellAdapter> {}
-
 struct RemovableSeriesCellAdapterHandler {
-    let select: Action<Series>?
-    let delete: Action<Series>?
+    let select: ((Series) -> Void)?
+    let delete: ((Series) -> Void)?
 }
 
-public final class RemovableSeriesCellAdapter: ListSectionController, Interactable {
-    typealias Handler = RemovableSeriesCellAdapterHandler
-    var handler: Handler?
+final class RemovableSeriesCellAdapter: BaseCellAdapter<Series> {
+    private let handler: RemovableSeriesCellAdapterHandler
 
-    private var item: Series!
-    private var size: CGSize = .zero
-
-    private static let template = NewsCell.loadFromNib(frame: UIScreen.main.bounds)!
-
-    public override func sizeForItem(at index: Int) -> CGSize {
-        return self.size
+    init(viewModel: Series, handler: RemovableSeriesCellAdapterHandler) {
+        self.handler = handler
+        super.init(viewModel: viewModel)
     }
 
-    public override func cellForItem(at index: Int) -> UICollectionViewCell {
-        let cell = self.dequeueReusableCell(of: RemovableSeriesCell.self, at: index)
-        cell.configure(self.item)
-        cell.setDelete { [weak self] in
-            self?.handler?.delete?(self!.item)
+    override func sizeForItem(at index: IndexPath,
+                              collectionView: UICollectionView,
+                              layout collectionViewLayout: UICollectionViewLayout) -> CGSize {
+        return CGSize(width: collectionView.frame.width, height: 140)
+    }
+
+    override func cellForItem(at index: IndexPath, context: CollectionContext) -> UICollectionViewCell? {
+        let cell = context.dequeueReusableNibCell(type: RemovableSeriesCell.self, for: index)
+        cell.configure(viewModel)
+        cell.setDelete { [handler, viewModel] in
+            handler.delete?(viewModel)
         }
         return cell
     }
 
-    public override func didUpdate(to object: Any) {
-        self.item = object as? Series
-        let width: CGFloat = self.collectionContext!.containerSize.width
-        self.size = CGSize(width: width, height: 140)
-    }
-
-    public override func didSelectItem(at index: Int) {
-        self.handler?.select?(self.item)
+    override func didSelect(at index: IndexPath) {
+        self.handler.select?(viewModel)
     }
 }

@@ -1,5 +1,5 @@
 import DITranquillity
-import RxSwift
+import Combine
 
 final class LinksServicePart: DIPart {
     static func load(container: DIContainer) {
@@ -10,40 +10,39 @@ final class LinksServicePart: DIPart {
 }
 
 protocol LinksService: AnyObject {
-    func fetchLinks() -> Single<[LinkData]>
+    func fetchLinks() -> AnyPublisher<[LinkData], Error>
 }
 
 final class LinksServiceImp: LinksService {
-    private let schedulers: SchedulerProvider
     private let backendRepository: BackendRepository
     private let linksRepository: LinksRepository
 
-    private var bag: DisposeBag = DisposeBag()
+    private var bag = Set<AnyCancellable>()
 
-    init(schedulers: SchedulerProvider,
-         backendRepository: BackendRepository,
+    init(backendRepository: BackendRepository,
          linksRepository: LinksRepository) {
-        self.schedulers = schedulers
         self.backendRepository = backendRepository
         self.linksRepository = linksRepository
     }
 
-    func fetchLinks() -> Single<[LinkData]> {
-        return Single.deferred { [unowned self] in
+    func fetchLinks() -> AnyPublisher<[LinkData], Error> {
+        return Deferred { [unowned self] in
             let items = self.linksRepository.getItems()
 
             if !items.isEmpty {
-                return Single.just(items)
+                return AnyPublisher<[LinkData], Error>.just(items)
             }
 
             let request = LinksRequest()
             return self.backendRepository
                 .request(request)
-                .do(onSuccess: { [weak self] (items) in
+                .do(onNext: { [weak self] (items) in
                     self?.linksRepository.set(items: items)
                 })
+                .eraseToAnyPublisher()
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 }

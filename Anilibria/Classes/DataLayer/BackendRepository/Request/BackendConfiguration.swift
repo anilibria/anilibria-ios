@@ -1,4 +1,3 @@
-import Alamofire
 import Foundation
 
 /// Configuration of BackendService
@@ -8,10 +7,10 @@ final class BackendConfiguration {
 
     /// It intercept all requests before execute
     /// Example, you can pass token here
-    var interceptor: RequestAdapter?
+    var interceptor: RequestModifier?
 
     /// It intercept error for retry request
-    var retrier: RequestRetrier?
+    var retrier: LoadRetrier?
 
     /// Initialisation of BackendConfiguration
     /// - parameter holder: API Server Url holder
@@ -19,8 +18,8 @@ final class BackendConfiguration {
     /// - parameter interceptor: It intercept all requests before execute
     /// - parameter retrier: It intercept error for retry request
     public init(converter: BackendResponseConverter,
-                interceptor: RequestAdapter? = nil,
-                retrier: RequestRetrier? = nil) {
+                interceptor: RequestModifier? = nil,
+                retrier: LoadRetrier? = nil) {
         self.converter = converter
         self.interceptor = interceptor
         self.retrier = retrier

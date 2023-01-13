@@ -5,6 +5,7 @@ disabled_rules: # rule identifiers to exclude from running
   - identifier_name
   - large_tuple
   - shorthand_operator
+  - nesting
 opt_in_rules: # some rules are only opt-in
   # Find all the available rules by running:
   - empty_count

@@ -1,7 +1,6 @@
 import DITranquillity
 import Foundation
-import RxCocoa
-import RxSwift
+import Combine
 
 final class FeedServicePart: DIPart {
     static func load(container: DIContainer) {
@@ -12,31 +11,28 @@ final class FeedServicePart: DIPart {
 }
 
 protocol FeedService {
-    func fetchRandom() -> Single<Series>
-    func fetchFiltedData() -> Single<FilterData>
-    func fetchSchedule() -> Single<[Schedule]>
-    func fetchFeed(page: Int) -> Single<[Feed]>
-    func fetchNews(page: Int) -> Single<[News]>
-    func fetchCatalog(page: Int, filter: SeriesFilter) -> Single<[Series]>
-    func search(query: String) -> Single<[Series]>
-    func series(with code: String) -> Single<Series>
+    func fetchRandom() -> AnyPublisher<Series, Error>
+    func fetchFiltedData() -> AnyPublisher<FilterData, Error>
+    func fetchSchedule() -> AnyPublisher<[Schedule], Error>
+    func fetchFeed(page: Int) -> AnyPublisher<[Feed], Error>
+    func fetchNews(page: Int) -> AnyPublisher<[News], Error>
+    func fetchCatalog(page: Int, filter: SeriesFilter) -> AnyPublisher<[Series], Error>
+    func search(query: String) -> AnyPublisher<[Series], Error>
+    func series(with code: String) -> AnyPublisher<Series, Error>
 }
 
 final class FeedServiceImp: FeedService {
-    let schedulers: SchedulerProvider
     let backendRepository: BackendRepository
 
     private var filterData: FilterData?
     private var comments: VKComments?
 
-    init(schedulers: SchedulerProvider,
-         backendRepository: BackendRepository) {
-        self.schedulers = schedulers
+    init(backendRepository: BackendRepository) {
         self.backendRepository = backendRepository
     }
 
-    func fetchSchedule() -> Single<[Schedule]> {
-        return Single.deferred { [unowned self] in
+    func fetchSchedule() -> AnyPublisher<[Schedule], Error> {
+        return Deferred { [unowned self] in
             let request = ScheduleRequest()
             return self.backendRepository
                 .request(request)
@@ -53,54 +49,59 @@ final class FeedServiceImp: FeedService {
                     return $0
                 }
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
-    func fetchFeed(page: Int) -> Single<[Feed]> {
-        return Single.deferred { [unowned self] in
+    func fetchFeed(page: Int) -> AnyPublisher<[Feed], Error> {
+        return Deferred { [unowned self] in
             let request = FeedRequest(page: page)
             return self.backendRepository
                 .request(request)
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
-    func fetchNews(page: Int) -> Single<[News]> {
-        return Single.deferred { [unowned self] in
+    func fetchNews(page: Int) -> AnyPublisher<[News], Error> {
+        return Deferred { [unowned self] in
             let request = NewsRequest(page: page)
             return self.backendRepository
                 .request(request)
                 .map { $0.items }
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
-    func fetchCatalog(page: Int, filter: SeriesFilter) -> Single<[Series]> {
-        return Single.deferred { [unowned self] in
+    func fetchCatalog(page: Int, filter: SeriesFilter) -> AnyPublisher<[Series], Error> {
+        return Deferred { [unowned self] in
             let request = CatalogRequest(filter: filter, page: page)
             return self.backendRepository
                 .request(request)
                 .map { $0.items }
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
-    func search(query: String) -> Single<[Series]> {
-        return Single.deferred { [unowned self] in
+    func search(query: String) -> AnyPublisher<[Series], Error> {
+        return Deferred { [unowned self] in
             let request = SearchRequest(query: query)
             return self.backendRepository
                 .request(request)
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
-    func fetchRandom() -> Single<Series> {
-        return Single.deferred { [unowned self] in
+    func fetchRandom() -> AnyPublisher<Series, Error> {
+        return Deferred { [unowned self] in
             let request = RandomSeriesRequest()
             return self.backendRepository
                 .request(request)
@@ -108,84 +109,93 @@ final class FeedServiceImp: FeedService {
                     self.series(with: $0.code)
                 }
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
-    func series(with code: String) -> Single<Series> {
-        return Single.deferred { [unowned self] in
-            Single.zip(self.fetchComments(code: code),
-                       self.fetchSeries(code: code)) {
-                $1.comments = $0
-                return $1
-            }
+    func series(with code: String) -> AnyPublisher<Series, Error> {
+        return Deferred { [unowned self] in
+            Publishers.Zip(self.fetchComments(code: code),self.fetchSeries(code: code))
+                .map {
+                    $1.comments = $0
+                    return $1
+                }
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
-    private func fetchComments(code: String) -> Single<VKComments> {
-        return Single.deferred { [unowned self] in
+    private func fetchComments(code: String) -> AnyPublisher<VKComments, Error> {
+        return Deferred { [unowned self] in
             if let comments = self.comments {
-                return .just(comments.generateUrl(for: code))
+                return  AnyPublisher<VKComments, Error>.just(comments.generateUrl(for: code))
             }
             let request = CommentsRequest()
             return self.backendRepository
                 .request(request)
-                .do(onSuccess: { [unowned self] item in
+                .do(onNext: { [unowned self] item in
                     self.comments = item
                 })
                 .map { $0.generateUrl(for: code) }
+                .eraseToAnyPublisher()
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
-    private func fetchSeries(code: String) -> Single<Series> {
-        return Single.deferred { [unowned self] in
+    private func fetchSeries(code: String) -> AnyPublisher<Series, Error> {
+        return Deferred { [unowned self] in
             let request = SeriesRequest(code: code)
             return self.backendRepository
                 .request(request)
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
-    func fetchFiltedData() -> Single<FilterData> {
-        return Single.deferred { [unowned self] in
+    func fetchFiltedData() -> AnyPublisher<FilterData, Error> {
+        return Deferred { [unowned self] in
             if let data = self.filterData {
-                return .just(data)
+                return AnyPublisher<FilterData, Error>.just(data)
             }
-            return Single.zip(self.fetchGenres(), self.fetchYears()) {
+            return Publishers.Zip(self.fetchGenres(), self.fetchYears()).map {
                 let data = FilterData()
                 data.genres = $0
                 data.years = $1
                 return data
-            }.do(onSuccess: { [weak self] in
+            }.do(onNext: { [weak self] in
                 self?.filterData = $0
             })
+            .eraseToAnyPublisher()
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
-    private func fetchGenres() -> Single<[String]> {
-        return Single.deferred { [unowned self] in
+    private func fetchGenres() -> AnyPublisher<[String], Error> {
+        return Deferred { [unowned self] in
             let request = GenresRequest()
             return self.backendRepository
                 .request(request)
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
-    private func fetchYears() -> Single<[String]> {
-        return Single.deferred { [unowned self] in
+    private func fetchYears() -> AnyPublisher<[String], Error> {
+        return Deferred { [unowned self] in
             let request = YearsRequest()
             return self.backendRepository
                 .request(request)
         }
-        .subscribeOn(self.schedulers.background)
-        .observeOn(self.schedulers.main)
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 }

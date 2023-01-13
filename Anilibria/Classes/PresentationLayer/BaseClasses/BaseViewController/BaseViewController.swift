@@ -1,8 +1,8 @@
-import RxSwift
+import Combine
 import UIKit
 
 class BaseViewController: UIViewController, WaitingBehavior, LanguageBehavior {
-    let disposeBag = DisposeBag()
+    var subscribers = Set<AnyCancellable>()
 
     public var statusBarStyle: UIStatusBarStyle = .default
 

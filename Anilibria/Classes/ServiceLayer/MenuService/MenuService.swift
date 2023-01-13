@@ -1,7 +1,6 @@
 import DITranquillity
 import Foundation
-import RxCocoa
-import RxSwift
+import Combine
 
 final class MenuServicePart: DIPart {
     static func load(container: DIContainer) {
@@ -12,28 +11,24 @@ final class MenuServicePart: DIPart {
 }
 
 protocol MenuService {
-    func fetchCurrentItem() -> Observable<MenuItemType>
+    func fetchCurrentItem() -> AnyPublisher<MenuItemType, Never>
     func getSelected() -> MenuItemType?
     func setMenuItem(type: MenuItemType)
     func fetchItems() -> [MenuItem]
 }
 
 final class MenuServiceImp: MenuService {
-    private let currentItem: BehaviorRelay<MenuItemType?> = BehaviorRelay(value: nil)
-    private let schedulers: SchedulerProvider
-
-    init(schedulers: SchedulerProvider) {
-        self.schedulers = schedulers
-    }
+    private let currentItem: CurrentValueSubject<MenuItemType?, Never> = CurrentValueSubject(nil)
 
     func getSelected() -> MenuItemType? {
         return self.currentItem.value
     }
 
-    func fetchCurrentItem() -> Observable<MenuItemType> {
-        return self.currentItem.asObservable()
+    func fetchCurrentItem() -> AnyPublisher<MenuItemType, Never> {
+        return self.currentItem
             .compactMap { $0 }
-            .distinctUntilChanged()
+            .removeDuplicates()
+            .eraseToAnyPublisher()
     }
 
     func setMenuItem(type: MenuItemType) {
@@ -41,7 +36,7 @@ final class MenuServiceImp: MenuService {
     }
 
     func setMenuItem(type: MenuItemType, animated: Bool) {
-        self.currentItem.accept(type)
+        self.currentItem.send(type)
     }
 
     func fetchItems() -> [MenuItem] {

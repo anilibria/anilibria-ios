@@ -41,27 +41,22 @@ final class SeriesContainerViewController: BaseViewController {
     }
 
     func setupPager() {
-        self.pagerView.set(controllers: self.pages)
-        self.pagerView.scrollTo(index: 0, direction: .forward, animated: false)
+        self.pagerView.delegate = self
+        self.pagerView.scrollTo(index: 0, animated: false)
 
         self.updateState()
         self.pagerView.didIndexChanged { [weak self] _ in
             self?.updateState()
         }
-
-        let gesture = self.navigationController?.view
-            .gestureRecognizers?
-            .first { $0 is UIScreenEdgePanGestureRecognizer } as? UIScreenEdgePanGestureRecognizer
-        self.pagerView.require(gesture: gesture)
     }
 
     private func updateState() {
-        if let index = self.pagerView.currentIndex {
+        if self.pagerView.currentIndex >= 0 {
             let fadeTextAnimation = CATransition()
             fadeTextAnimation.duration = 0.2
             fadeTextAnimation.type = .fade
             self.titleControl.layer.add(fadeTextAnimation, forKey: "titleView")
-            self.titleControl.selectedSegmentIndex = index
+            self.titleControl.selectedSegmentIndex = pagerView.currentIndex
         }
     }
 
@@ -69,11 +64,17 @@ final class SeriesContainerViewController: BaseViewController {
 
     @objc func valueChanged(_ sender: Any) {
         let index = self.titleControl.selectedSegmentIndex
+        self.pagerView.scrollTo(index: index, animated: true)
+    }
+}
 
-        let direction: UIPageViewController.NavigationDirection
-        direction = index == 1 ? .forward : .reverse
+extension SeriesContainerViewController: PagerViewDelegate {
+    func numberOfPages(for pagerView: PagerView) -> Int {
+        pages.count
+    }
 
-        self.pagerView.scrollTo(index: index, direction: direction, animated: true)
+    func pagerView(_ pagerView: PagerView, pageFor index: Int) -> UIViewController? {
+        pages[safe: index]
     }
 }
 

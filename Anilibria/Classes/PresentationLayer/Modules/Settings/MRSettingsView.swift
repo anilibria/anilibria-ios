@@ -25,10 +25,6 @@ final class SettingsViewController: BaseViewController {
     @IBAction func qualityAction(_ sender: Any) {
         self.handler.selectQuality()
     }
-
-    @IBAction func globalSwitchAction(_ sender: Any) {
-        self.handler.change(global: self.globalNotifySwitch.isOn)
-    }
 }
 
 extension SettingsViewController: SettingsViewBehavior {

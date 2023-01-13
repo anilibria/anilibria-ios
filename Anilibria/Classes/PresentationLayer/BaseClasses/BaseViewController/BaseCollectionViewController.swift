@@ -1,11 +1,18 @@
-import Foundation
-import IGListKit
+//
+//  BaseCollectionViewController.swift
+//  Anilibria
+//
+//  Created by Ivan Morozov on 06.11.2022.
+//  Copyright © 2022 Иван Морозов. All rights reserved.
+//
 
-class BaseCollectionViewController: BaseViewController, ListAdapterDataSource {
+import Foundation
+import UIKit
+
+class BaseCollectionViewController: BaseViewController {
     // MARK: - Outlets
 
     @IBOutlet var collectionView: UICollectionView!
-    var items: [ListDiffable] = []
 
     private weak var refreshActivity: ActivityDisposable?
 
@@ -15,9 +22,7 @@ class BaseCollectionViewController: BaseViewController, ListAdapterDataSource {
 
     var defaultBottomInset: CGFloat = 40
 
-    public lazy var adapter: ListAdapter = {
-        ListAdapter(updater: ListAdapterUpdater(), viewController: self)
-    }()
+    public lazy var adapter = CollectionViewAdapter(collectionView: collectionView)
 
     public var scrollViewDelegate: UIScrollViewDelegate? {
         get {
@@ -27,25 +32,16 @@ class BaseCollectionViewController: BaseViewController, ListAdapterDataSource {
             self.adapter.scrollViewDelegate = newValue
         }
     }
-
-    private lazy var manager: AdapterManager = { [unowned self] in
-        AdapterManager(items: self.adapterCreators())
-    }()
-
     // MARK: - Setup
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.adapter.collectionView = self.collectionView
-        self.collectionView.contentInset.bottom = self.defaultBottomInset
-        self.adapter.dataSource = self
-
-		NotificationCenter.default.addObserver(
-			self,
-			selector: #selector(rotated),
-			name: UIDevice.orientationDidChangeNotification,
-			object: nil
-		)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(rotated),
+            name: UIDevice.orientationDidChangeNotification,
+            object: nil
+        )
     }
 
     public override func viewWillLayoutSubviews() {
@@ -86,39 +82,21 @@ class BaseCollectionViewController: BaseViewController, ListAdapterDataSource {
         // override me
     }
 
-	@objc
-	private func rotated() {
-		self.reload()
-	}
+    @objc
+    private func rotated() {
+        self.collectionView.reloadData()
+    }
 
     // MARK: - Methods
 
-    public func adapterCreators() -> [AdapterCreator] {
-        fatalError("Override me")
+    public func reload(sections: [any SectionAdapterProtocol], animated: Bool = true, completion: (() -> Void)? = nil) {
+        self.adapter.reload(content: .init(sections), animated: animated, completion: completion)
     }
 
-    public func update(animated: Bool = true,
-                       completion: ListUpdaterCompletion? = nil) {
-        self.adapter.performUpdates(animated: animated, completion: completion)
+    public func append(sections: [any SectionAdapterProtocol], animated: Bool = true, completion: (() -> Void)? = nil) {
+        self.adapter.append(content: .init(sections), animated: animated, completion: completion)
     }
 
-    public func reload(completion: ListUpdaterCompletion? = nil) {
-        self.adapter.reloadData(completion: completion)
-    }
-
-    // MARK: - IGListAdapterDataSource
-
-    public func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        return self.items
-    }
-
-    public func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
-        return self.manager.adapter(from: object)
-    }
-
-    public func emptyView(for listAdapter: ListAdapter) -> UIView? {
-        return nil
-    }
 }
 
 extension BaseCollectionViewController: RefreshBehavior {

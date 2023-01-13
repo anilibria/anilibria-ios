@@ -1,6 +1,5 @@
 import AVKit
-import RxCocoa
-import RxSwift
+import Combine
 import UIKit
 
 public final class PlayerView: UIView {
@@ -37,10 +36,10 @@ public final class PlayerView: UIView {
         }
     }
 
-    private var secondsRelay: BehaviorSubject<Double> = BehaviorSubject(value: 0)
-    private var playRelay: BehaviorSubject<Bool> = BehaviorSubject(value: false)
-    private var statusRelay: PublishSubject<Status> = PublishSubject()
-    private var bag: DisposeBag = DisposeBag()
+    private var secondsRelay: CurrentValueSubject<Double, Never> = CurrentValueSubject(0)
+    private var playRelay: CurrentValueSubject<Bool, Never> = CurrentValueSubject(false)
+    private var statusRelay: PassthroughSubject<Status, Never> = PassthroughSubject()
+    private var bag = Set<AnyCancellable>()
     private var observer: Any?
     private var keyBag: Any?
 
@@ -48,7 +47,7 @@ public final class PlayerView: UIView {
 
     public private(set) var isPlaying: Bool = false {
         didSet {
-            self.playRelay.onNext(self.isPlaying)
+            self.playRelay.send(self.isPlaying)
         }
     }
 
@@ -81,30 +80,30 @@ public final class PlayerView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func getCurrentTime() -> Observable<Double> {
+    func getCurrentTime() -> AnyPublisher<Double, Never> {
         return self.secondsRelay
-            .asObservable()
-            .distinctUntilChanged()
+            .removeDuplicates()
+            .eraseToAnyPublisher()
     }
 
-    func getPlayChanges() -> Observable<Bool> {
+    func getPlayChanges() -> AnyPublisher<Bool, Never> {
         return self.playRelay
-            .asObservable()
-            .distinctUntilChanged()
+            .removeDuplicates()
+            .eraseToAnyPublisher()
     }
 
-    func getStatusSequence() -> Observable<Status> {
+    func getStatusSequence() -> AnyPublisher<Status, Never> {
         return self.statusRelay
-            .asObservable()
-            .distinctUntilChanged()
+            .removeDuplicates()
+            .eraseToAnyPublisher()
     }
 
-    func setVideo(url: URL) -> Single<Double?> {
+    func setVideo(url: URL) -> AnyPublisher<Double?, Error> {
         self.isPlaying = false
         self.duration = nil
         self.player?.pause()
         self.keyBag = nil
-        self.statusRelay.onNext(.unknown)
+        self.statusRelay.send(.unknown)
 
         if let observer = self.observer {
             self.player?.removeTimeObserver(observer)
@@ -116,13 +115,13 @@ public final class PlayerView: UIView {
 
         let statusBag = self.player?.observe(\AVPlayer.status) { [weak self] _, _ in
             if let status = self?.player?.status {
-                self?.statusRelay.onNext(Status.convert(status))
+                self?.statusRelay.send(Status.convert(status))
             }
         }
 
         let timeBag = self.player?.observe(\AVPlayer.timeControlStatus) { [weak self] _, _ in
             if let status = self?.player?.timeControlStatus {
-                self?.statusRelay.onNext(Status.convert(status))
+                self?.statusRelay.send(Status.convert(status))
             }
         }
 
@@ -130,15 +129,16 @@ public final class PlayerView: UIView {
 
         let interval = CMTime(seconds: 1, preferredTimescale: 1)
         self.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] in
-            self?.secondsRelay.onNext($0.seconds)
+            self?.secondsRelay.send($0.seconds)
         }
 
-        return Single.deferred {
-            .just(asset.duration.seconds)
+        return Deferred {
+            AnyPublisher<Double?, Error>.just(asset.duration.seconds)
         }
-        .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-        .observeOn(MainScheduler.instance)
-        .do(onSuccess: { [weak self] duration in self?.duration = duration })
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .do(onNext: { [weak self] duration in self?.duration = duration })
+        .eraseToAnyPublisher()
     }
 
     func set(time: Double) {

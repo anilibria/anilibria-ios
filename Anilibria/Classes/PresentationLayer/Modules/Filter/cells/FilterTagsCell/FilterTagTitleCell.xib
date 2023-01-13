@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,18 +18,18 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Фильтр" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WsI-vw-PHF">
-                        <rect key="frame" x="16" y="16" width="53" height="18"/>
+                        <rect key="frame" x="5" y="16" width="53" height="18"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
             </view>
+            <viewLayoutGuide key="safeArea" id="oND-bn-kCH"/>
             <constraints>
-                <constraint firstItem="WsI-vw-PHF" firstAttribute="leading" secondItem="trN-CK-qmV" secondAttribute="leading" constant="16" id="1sB-OS-SAh"/>
+                <constraint firstItem="WsI-vw-PHF" firstAttribute="leading" secondItem="trN-CK-qmV" secondAttribute="leading" constant="5" id="1sB-OS-SAh"/>
                 <constraint firstItem="WsI-vw-PHF" firstAttribute="top" secondItem="trN-CK-qmV" secondAttribute="top" constant="16" id="gO9-AI-Mm3"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="oND-bn-kCH"/>
             <size key="customSize" width="154" height="38"/>
             <connections>
                 <outlet property="titleLabel" destination="WsI-vw-PHF" id="0qK-7J-eMS"/>

@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -23,14 +21,14 @@
                         <rect key="frame" x="5" y="4" width="88" height="30"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2010" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JlY-mt-fQ4">
-                                <rect key="frame" x="11" y="5" width="66" height="18"/>
+                                <rect key="frame" x="11" y="6" width="66" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="JlY-mt-fQ4" firstAttribute="centerY" secondItem="L1h-th-x3c" secondAttribute="centerY" constant="-1" id="LQf-bT-3dG"/>
+                            <constraint firstItem="JlY-mt-fQ4" firstAttribute="centerY" secondItem="L1h-th-x3c" secondAttribute="centerY" id="LQf-bT-3dG"/>
                             <constraint firstItem="JlY-mt-fQ4" firstAttribute="leading" secondItem="L1h-th-x3c" secondAttribute="leading" constant="11" id="Ryt-ja-dFL"/>
                             <constraint firstAttribute="trailing" secondItem="JlY-mt-fQ4" secondAttribute="trailing" constant="11" id="op4-sA-IzM"/>
                         </constraints>
@@ -42,13 +40,13 @@
                     </view>
                 </subviews>
             </view>
+            <viewLayoutGuide key="safeArea" id="fd3-MM-hGs"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="L1h-th-x3c" secondAttribute="bottom" constant="4" id="124-1n-vyX"/>
                 <constraint firstAttribute="trailing" secondItem="L1h-th-x3c" secondAttribute="trailing" constant="3" id="4tl-0G-oQi"/>
                 <constraint firstItem="L1h-th-x3c" firstAttribute="leading" secondItem="3kf-62-BcA" secondAttribute="leading" constant="5" id="8KB-fG-MbW"/>
                 <constraint firstItem="L1h-th-x3c" firstAttribute="top" secondItem="3kf-62-BcA" secondAttribute="top" constant="4" id="TMK-mf-6X3"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="fd3-MM-hGs"/>
             <size key="customSize" width="96" height="98"/>
             <userDefinedRuntimeAttributes>
                 <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">

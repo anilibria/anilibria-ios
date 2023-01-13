@@ -1,12 +1,12 @@
-import Alamofire
+import Foundation
 
-public final class MainRetrier: RequestRetrier {
+final class MainRetrier: LoadRetrier {
     weak var sessionService: SessionService?
 
-    public func should(_ manager: SessionManager, retry request: Request, with error: Error, completion: @escaping RequestRetryCompletion) {
-        if let afError = error as? AFError, afError.responseCode == 401 {
+    func need(retry request: URLRequest, error: Error, retryNumber: Int, completion: @escaping RetryCompletion) {
+        if case let .network(code) = error as? AppError, code == 401 {
             self.sessionService?.forceLogout()
         }
-        completion(false, 0.0) // don't retry
+        completion(false) // don't retry
     }
 }

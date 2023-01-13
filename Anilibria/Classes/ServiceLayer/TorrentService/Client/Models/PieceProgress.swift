@@ -71,7 +71,7 @@ class PieceProgress {
         piece.downloaded += size
         let speed = Int64(Double(size) / abs(startTime.timeIntervalSinceNow)) // bytes per second
 
-        if speed / 1024 < 100 {
+        if speed / 1024 < 10 {
             strike += 1
         }
 

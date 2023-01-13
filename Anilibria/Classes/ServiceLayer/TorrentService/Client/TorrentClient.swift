@@ -26,7 +26,7 @@ class TorrentClient {
 
     var clientsCount = 0
 
-    func download(){
+    func download() {
         var writer = try? TorrentFileWriter(series: series)
         let work = workRepository.getWork(for: series)
 

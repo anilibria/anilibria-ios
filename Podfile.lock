@@ -4,24 +4,13 @@ PODS:
   - Kingfisher (7.4.1)
   - Localize-Swift (3.1.0)
   - lottie-ios (3.5.0)
-  - MobileVLCKit (3.5.0)
   - SwiftLazy (1.1.9)
-  - YandexMobileMetrica (4.4.0):
-    - YandexMobileMetrica/Static (= 4.4.0)
-  - YandexMobileMetrica/Static (4.4.0):
-    - YandexMobileMetrica/Static/Core (= 4.4.0)
-    - YandexMobileMetrica/Static/Crashes (= 4.4.0)
-  - YandexMobileMetrica/Static/Core (4.4.0)
-  - YandexMobileMetrica/Static/Crashes (4.4.0):
-    - YandexMobileMetrica/Static/Core
 
 DEPENDENCIES:
   - DITranquillity (= 4.3.5)
   - Kingfisher (= 7.4.1)
   - Localize-Swift (= 3.1.0)
   - lottie-ios (= 3.5.0)
-  - MobileVLCKit (= 3.5.0)
-  - YandexMobileMetrica (= 4.4.0)
 
 SPEC REPOS:
   trunk:
@@ -29,19 +18,15 @@ SPEC REPOS:
     - Kingfisher
     - Localize-Swift
     - lottie-ios
-    - MobileVLCKit
     - SwiftLazy
-    - YandexMobileMetrica
 
 SPEC CHECKSUMS:
   DITranquillity: 6a80e6a1009b6149071817f28a586b1f6eed607b
   Kingfisher: cd762a593a61b2fbecf7645c00f9a801a3ebfc9c
   Localize-Swift: 4bed4f0ccac8be2ec3517ee359da80ba2adb0fae
   lottie-ios: c55158d67d0629a260625cc2ded2052b829e3c3e
-  MobileVLCKit: f7a39ede91e47e227f8142343b311eb8c634f057
   SwiftLazy: 1657354f43dbd6a0a79e00ad67558d655c77bdc9
-  YandexMobileMetrica: baf7cea47cb87fc9af963c4f747ce8dd7df3d7c0
 
-PODFILE CHECKSUM: 6c5dd0bf8c23b2d3a663ced545ef2ea7370dbe6e
+PODFILE CHECKSUM: 1625b53c91a7397eaa1b1e9df2e01695b1ee63c4
 
 COCOAPODS: 1.11.3

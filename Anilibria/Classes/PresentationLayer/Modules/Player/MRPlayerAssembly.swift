@@ -7,7 +7,7 @@ final class PlayerAssembly {
         if playlist == nil {
             module.playerView = PlayerView()
         } else {
-            module.playerView = VLCPlayerView()
+            module.playerView = MPVPlayerView()
         }
         module.handler = MainAppCoordinator.shared.container.resolve()
         module.handler.bind(view: module, router: router, series: series, playlist: playlist)

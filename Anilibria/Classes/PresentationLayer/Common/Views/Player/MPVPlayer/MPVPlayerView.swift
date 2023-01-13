@@ -10,7 +10,6 @@ import Foundation
 import Combine
 import AVKit
 import libmpv
-import GLKit
 
 public final class MPVPlayerView: UIView, Player {
     private var secondsRelay: CurrentValueSubject<Double, Never> = CurrentValueSubject(0)
@@ -38,7 +37,7 @@ public final class MPVPlayerView: UIView, Player {
     public var isAirplaySupported: Bool { false }
     public var playerLayer: AVPlayerLayer? { nil }
 
-    private let renderView = MPVRenderView(frame: UIScreen.main.bounds)
+    private let renderView = MPVRenderView(frame: .init(origin: .zero, size: UIApplication.keyWindowSize))
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -69,12 +68,13 @@ public final class MPVPlayerView: UIView, Player {
         }
 
         // logging
-        checkError(mpv_request_log_messages(mpvContext, "warn"))
+        // checkError(mpv_request_log_messages(mpvContext, "warn"))
+        checkError(mpv_request_log_messages(mpvContext, "v"))
 
         // initializing
-        checkError(mpv_set_option_string(mpvContext, "hwdec", "auto"))
+        checkError(mpv_set_option_string(mpvContext, "hwdec", "no"))
         checkError(mpv_initialize(mpvContext))
-//        checkError(mpv_set_option_string(mpvContext, "vo", "libmpv"))
+        checkError(mpv_set_option_string(mpvContext, "vo", "libmpv"))
         checkError(mpv_set_option_string(mpvContext, "vd-lavc-dr", "no"))
         checkError(mpv_set_option_string(mpvContext, "save-position-on-quit", "no"))
         checkError(mpv_set_option_string(mpvContext, "force-window", "no"))
@@ -100,7 +100,17 @@ public final class MPVPlayerView: UIView, Player {
 
         var initOpenGL = mpv_opengl_init_params(get_proc_address: { _, name in
             let symbolName = CFStringCreateWithCString(kCFAllocatorDefault, name, kCFStringEncodingASCII)
-            return CFBundleGetFunctionPointerForName(CFBundleGetBundleWithIdentifier("com.apple.opengles" as CFString), symbolName)
+            #if targetEnvironment(macCatalyst)
+            return CFBundleGetFunctionPointerForName(
+                CFBundleGetBundleWithIdentifier(CFStringCreateCopy(kCFAllocatorDefault, "com.apple.opengl" as CFString)),
+                symbolName
+            )
+            #else
+            return CFBundleGetFunctionPointerForName(
+                CFBundleGetBundleWithIdentifier(CFStringCreateCopy(kCFAllocatorDefault, "com.apple.opengles" as CFString)),
+                symbolName
+            )
+            #endif
         }, get_proc_address_ctx: nil)
 
         let initOpenGLPoniter = UnsafeMutableRawPointer(mutating: withUnsafePointer(to: &initOpenGL) { $0 })
@@ -205,10 +215,10 @@ public final class MPVPlayerView: UIView, Player {
     }
 
     private func makeCommand(_ name: String, args: String...) -> UnsafeMutablePointer<UnsafePointer<CChar>?> {
-        let values = [name] + args
-        let cs = UnsafeMutablePointer<UnsafePointer<CChar>?>.allocate(capacity: values.count + 1)
+        let values = [name] + args + [nil]
+        let cs = UnsafeMutablePointer<UnsafePointer<CChar>?>.allocate(capacity: values.count)
         values.enumerated().forEach {
-            cs[$0.offset] = UnsafePointer<CChar>(($0.element as NSString).utf8String)
+            cs[$0.offset] = UnsafePointer<CChar>(($0.element as? NSString)?.utf8String)
         }
         return cs
     }
@@ -252,171 +262,5 @@ private class MpvGLUpdatesInterceptor: NSObject {
 
     func needsUpdate() {
         DispatchQueue.main.async { [weak self] in self?.actionHandler() }
-    }
-}
-
-extension UnsafePointer<CChar> {
-    var asString: String {
-        String(cString: self)
-    }
-}
-
-extension String {
-    var asUnsafeCString: UnsafePointer<CChar>? {
-        let count = self.utf8CString.count
-        let result: UnsafeMutableBufferPointer<Int8> = UnsafeMutableBufferPointer<CChar>.allocate(capacity: count)
-        _ = result.initialize(from: self.utf8CString)
-        return UnsafePointer(result.baseAddress)
-    }
-}
-
-class MPVRenderView: UIView {
-    private let mpvRenderQueue = DispatchQueue(label: "mpv.render.queue", qos: .userInitiated)
-    private var context: EAGLContext?
-    private var backContext: EAGLContext?
-
-    private var fboName: GLuint = 0
-    private var colorRenderbuffer: GLuint = 0
-    private var depthRenderbuffer: GLuint = 0
-
-    public override static var layerClass: AnyClass {
-        return CAEAGLLayer.self
-    }
-
-    public var mpvGLContext: OpaquePointer?
-
-    public var glLayer: CAEAGLLayer? {
-        if let value = layer as? CAEAGLLayer {
-            return value
-        }
-        return nil
-    }
-
-    func create(completion: @escaping () -> Void) {
-        self.setup()
-        mpvRenderQueue.async { [weak self] in
-            guard let context = self?.context else { return }
-            self?.backContext = EAGLContext(api: .openGLES3, sharegroup: context.sharegroup)
-            EAGLContext.setCurrent(self?.backContext)
-            completion()
-        }
-//        guard let context = self.context else { return }
-//        self.backContext = EAGLContext(api: .openGLES3, sharegroup: context.sharegroup)
-//        EAGLContext.setCurrent(self.backContext)
-//        completion()
-    }
-
-    private func setup() {
-        guard let context = EAGLContext(api: .openGLES3) else { return }
-        self.context = context
-
-        glLayer?.isOpaque = true
-//        glLayer?.contentsScale = UIScreen.main.scale
-        glLayer?.drawableProperties = [
-            kEAGLDrawablePropertyRetainedBacking: NSNumber(false),
-            kEAGLDrawablePropertyColorFormat: kEAGLColorFormatRGBA8
-        ]
-
-        EAGLContext.setCurrent(context)
-
-        glGenFramebuffers(1, &fboName)
-        glGenRenderbuffers(1, &colorRenderbuffer)
-
-        glBindFramebuffer(GLenum(GL_FRAMEBUFFER), fboName)
-        glBindRenderbuffer(GLenum(GL_RENDERBUFFER), colorRenderbuffer)
-
-        context.renderbufferStorage(Int(GL_RENDERBUFFER), from: self.glLayer)
-
-        glFramebufferRenderbuffer(GLenum(GL_FRAMEBUFFER), GLenum(GL_COLOR_ATTACHMENT0), GLenum(GL_RENDERBUFFER), colorRenderbuffer)
-
-        // Get the drawable buffer's width and height so we can create a depth buffer for the FBO
-//        var backingWidth: GLint = 0
-//        var backingHeight: GLint = 0
-//        glGetRenderbufferParameteriv(GLenum(GL_RENDERBUFFER), GLenum(GL_RENDERBUFFER_WIDTH), &backingWidth)
-//        glGetRenderbufferParameteriv(GLenum(GL_RENDERBUFFER), GLenum(GL_RENDERBUFFER_HEIGHT), &backingHeight)
-//
-//        glGenRenderbuffers(1, &depthRenderbuffer)
-//        glBindRenderbuffer(GLenum(GL_RENDERBUFFER), depthRenderbuffer)
-//        glRenderbufferStorage(GLenum(GL_RENDERBUFFER), GLenum(GL_DEPTH_COMPONENT16), backingWidth, backingHeight)
-//        glFramebufferRenderbuffer(GLenum(GL_FRAMEBUFFER), GLenum(GL_DEPTH_ATTACHMENT), GLenum(GL_RENDERBUFFER), depthRenderbuffer)
-
-        let status = glCheckFramebufferStatus(GLenum(GL_FRAMEBUFFER))
-        if status != GL_FRAMEBUFFER_COMPLETE {
-            preconditionFailure("failed to make complete framebuffer object \(status)")
-        }
-    }
-
-//    private func setupBuffers() {
-//        glDisable(GLenum(GL_DEPTH_TEST))
-//
-//        glEnableVertexAttribArray()
-//        glVertexAttribPointer(ATTRIB_VERTEX, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);
-//
-//        glEnableVertexAttribArray(ATTRIB_TEXCOORD);
-//        glVertexAttribPointer(ATTRIB_TEXCOORD, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);
-//
-//        glGenFramebuffers(1, &_frameBufferHandle);
-//        glBindFramebuffer(GL_FRAMEBUFFER, _frameBufferHandle);
-//
-//        glGenRenderbuffers(1, &_colorBufferHandle);
-//        glBindRenderbuffer(GL_RENDERBUFFER, _colorBufferHandle);
-//
-//        [_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer *)self.layer];
-//        glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_backingWidth);
-//        glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_backingHeight);
-//
-//        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorBufferHandle);
-//        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-//            NSLog(@"Failed to make complete framebuffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
-//        }
-//    }
-
-    func draw() {
-        let w =  Int32(self.frame.width * self.contentScaleFactor)
-        let h = Int32(self.frame.height * self.contentScaleFactor)
-        mpvRenderQueue.async { [weak self] in
-            if let self = self {
-                self.render(w: w, h: h)
-            }
-        }
-//        self.render(w: w, h: h)
-    }
-
-    private func render(w: Int32, h: Int32) {
-        EAGLContext.setCurrent(self.backContext)
-        glBindFramebuffer(GLenum(GL_FRAMEBUFFER), fboName)
-
-        if let mpvGLContext = self.mpvGLContext {
-
-            var openglFbo = mpv_opengl_fbo(fbo: Int32(fboName), w: w, h: h, internal_format: 0)
-            let openglFboPoniter = UnsafeMutableRawPointer(mutating: withUnsafePointer(to: &openglFbo) { $0 })
-            let flipYponiter = UnsafeMutableRawPointer(mutating: withUnsafePointer(to: 1) { $0 })
-
-            var params = [
-                mpv_render_param(type: MPV_RENDER_PARAM_OPENGL_FBO, data: openglFboPoniter),
-                mpv_render_param(type: MPV_RENDER_PARAM_FLIP_Y, data: flipYponiter),
-                mpv_render_param()
-            ]
-            mpv_render_context_render(mpvGLContext, &params)
-            glFlush()
-        } else {
-            fillBlack()
-        }
-
-        glBindRenderbuffer(GLenum(GL_RENDERBUFFER), colorRenderbuffer)
-        backContext?.presentRenderbuffer(Int(GL_RENDERBUFFER))
-    }
-
-    private func fillBlack() {
-        let random: GLfloat = [0.1, 0.3 ,0.5 ,0.7, 1].randomElement()!
-        glClearColor(0, random, 0, 0)
-        glClear(UInt32(GL_COLOR_BUFFER_BIT))
-    }
-
-    deinit {
-        glDeleteFramebuffers(1, &fboName)
-        glDeleteRenderbuffers(1, &colorRenderbuffer)
-        glDeleteRenderbuffers(1, &depthRenderbuffer)
-        EAGLContext.setCurrent(nil)
     }
 }

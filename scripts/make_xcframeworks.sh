@@ -1,9 +1,9 @@
 #!/bin/bash -e
 set -e
 
-LIB_FOLDERS=(expat libpng libass fontconfig harfbuzz fribidi freetype gmp nettle nettle gnutls gnutls opus)
-LIBS=(libexpat libpng16 libass libfontconfig libharfbuzz libfribidi libfreetype libgmp libnettle libhogweed libgnutls libgnutlsxx libopus)
-LIBHEADERS=('' libpng16 ass fontconfig harfbuzz fribidi freetype2 '' nettle 'NONE' gnutls 'NONE' opus)
+LIB_FOLDERS=(expat libpng libass fontconfig harfbuzz fribidi freetype opus)
+LIBS=(libexpat libpng16 libass libfontconfig libharfbuzz libfribidi libfreetype libopus)
+LIBHEADERS=('' libpng16 ass fontconfig harfbuzz fribidi freetype2 opus)
 
 SOURCES=$ROOT/ffmpeg-kit/prebuilt
 TMP=$ROOT/tmp

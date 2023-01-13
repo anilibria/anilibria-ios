@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-FFMPEG_KIT_TAG=v4.5.1
-# MPV_TAG=v0.35.0
+FFMPEG_KIT_TAG=v5.1
+MPV_TAG=v0.35.0
 
 export BUILD_ROOT=$PWD
 mkdir -p mpv_build
@@ -28,15 +28,7 @@ echo "--"
 echo "fetching resources"
 echo "--"
 [[ -d ffmpeg-kit ]] || git clone --depth 1 --branch $FFMPEG_KIT_TAG https://github.com/arthenica/ffmpeg-kit.git
-# [[ -d mpv ]] || git clone --depth 1 --branch $MPV_TAG https://github.com/mpv-player/mpv.git
-[[ -d mpv ]] || git clone https://github.com/mpv-player/mpv.git
-cd ffmpeg-kit/src
-# [[ -d ffmpeg ]] || git clone --depth 1 --branch n4.4.3 https://github.com/arthenica/FFmpeg
-[[ -d gmp ]] || git clone --depth 1 --branch v6.2.0 https://github.com/tanersener/gmp
-[[ -d gnutls ]] || git clone --depth 1 --branch 3.6.15.1 https://github.com/tanersener/gnutls && cd gnutls && git submodule update --init && cd ..
-# MASKING THE -march=all OPTION WHICH BREAKS THE BUILD ON NEWER XCODE VERSIONS
-perl -i -p0e "s|AM_CCASFLAGS =|#AM_CCASFLAGS=|g" ./gnutls/lib/accelerated/aarch64/Makefile.am
-cd ../..
+[[ -d mpv ]] || git clone --depth 1 --branch $MPV_TAG https://github.com/mpv-player/mpv.git
 echo "--"
 echo "fetching completed"
 echo "--"
@@ -63,7 +55,20 @@ perl -i -p0e "s/${BITCODE_1}/${SKIP}/g" ./scripts/function-ios.sh
 perl -i -p0e "s/${BITCODE_2}/${SKIP}/g" ./scripts/function-ios.sh
 perl -i -p0e "s/${BITCODE_3}/${SKIP}/g" ./scripts/function-ios.sh
 
-sh ./ios.sh --xcframework --disable-armv7 --disable-armv7s --disable-arm64e --enable-dav1d --enable-opus --enable-gnutls --enable-libass --enable-ios-zlib --enable-ios-libiconv --enable-ios-avfoundation --enable-ios-audiotoolbox --enable-ios-videotoolbox 
+sh ./ios.sh --xcframework \
+            --disable-armv7 \
+            --disable-armv7s \
+            --disable-arm64e \
+            --enable-dav1d \
+            --enable-opus \
+            --enable-libass \
+            --enable-ios-zlib \
+            --enable-ios-libiconv \
+            --enable-ios-avfoundation \
+            --enable-ios-audiotoolbox \
+            --enable-ios-videotoolbox \
+            --target=13.0 \
+            --mac-catalyst-target=13.0
 cd ..
 echo "--"
 echo "ffmpeg build completed"

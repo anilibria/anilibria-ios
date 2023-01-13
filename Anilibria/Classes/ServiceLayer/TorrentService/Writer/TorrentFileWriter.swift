@@ -22,7 +22,7 @@ class SeriesFile: Hashable {
     }
 
     private(set) var status: Status = .notExists
-    
+
     var fileSize: Int = 0 {
         didSet {
             updateStatus()

@@ -115,7 +115,7 @@
 		46B82A8B2971373A003E450B /* YandexMobileMetricaCrashes.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B82A8529713721003E450B /* YandexMobileMetricaCrashes.xcframework */; platformFilter = ios; };
 		46B82A8C2971373A003E450B /* YandexMobileMetricaCrashes.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 46B82A8529713721003E450B /* YandexMobileMetricaCrashes.xcframework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		46B82A8E29713A73003E450B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B82A8D29713A73003E450B /* OpenGL.framework */; platformFilter = maccatalyst; };
-		46B82A9229716536003E450B /* MPVRenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B82A9129716536003E450B /* MPVRenderView.swift */; settings = {COMPILER_FLAGS = "-w"; }; };
+		46B82A9229716536003E450B /* MPVRenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B82A9129716536003E450B /* MPVRenderView.swift */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		46B82A942971657C003E450B /* MPVExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B82A932971657C003E450B /* MPVExtensions.swift */; };
 		46B90330297083230006D60C /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B9032F297083230006D60C /* VideoToolbox.framework */; };
 		478A6478D7BA4AB1DDDE943D972AF32F /* MRCommentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E02207B1DF4B17181B8FAA6CB086229E /* MRCommentsView.swift */; };
@@ -3118,14 +3118,18 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Anilibria;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = tv.anilibria.anilibria;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -3149,15 +3153,19 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Anilibria;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.1.4;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = tv.anilibria.anilibria;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

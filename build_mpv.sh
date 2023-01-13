@@ -68,7 +68,8 @@ sh ./ios.sh --xcframework \
             --enable-ios-audiotoolbox \
             --enable-ios-videotoolbox \
             --target=13.0 \
-            --mac-catalyst-target=13.0
+            --mac-catalyst-target=14.0
+
 cd ..
 echo "--"
 echo "ffmpeg build completed"

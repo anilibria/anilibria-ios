@@ -216,7 +216,7 @@ public final class PresentRouter<T: UIPresentationController>: ModalRouter, UIVi
 
 // MARK: - Support classes
 
-fileprivate final class MRWindow: UIWindow {
+private final class MRWindow: UIWindow {
     class func create(level: UIWindow.Level? = nil,
                       frame: CGRect = UIScreen.main.bounds,
                       statusBarStyle: UIStatusBarStyle? = nil) -> UIWindow {

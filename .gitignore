@@ -111,3 +111,5 @@ linphone/x86/*
 
 funimp\.sh
 *.dmg
+xcframeworks
+mpv_build

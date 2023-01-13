@@ -48,8 +48,10 @@
 		46A4DAB029179EDA003944FD /* CollectionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A4DAAF29179EDA003944FD /* CollectionContext.swift */; };
 		46A4DAB22917A0D5003944FD /* BaseCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A4DAB12917A0D5003944FD /* BaseCollectionViewController.swift */; };
 		46A4DAB72917DF82003944FD /* LeftAlignedCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A4DAB62917DF82003944FD /* LeftAlignedCollectionViewFlowLayout.swift */; };
-		46B82AAB29718FB9003E450B /* YandexMobileMetrica.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B82AA929718FB9003E450B /* YandexMobileMetrica.xcframework */; platformFilter = ios; };
-		46B82AAC29718FB9003E450B /* YandexMobileMetricaCrashes.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B82AAA29718FB9003E450B /* YandexMobileMetricaCrashes.xcframework */; platformFilter = ios; };
+		46B82AAE2971A2DE003E450B /* YandexMobileMetrica.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B82AA929718FB9003E450B /* YandexMobileMetrica.xcframework */; platformFilter = ios; };
+		46B82AAF2971A2DE003E450B /* YandexMobileMetrica.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 46B82AA929718FB9003E450B /* YandexMobileMetrica.xcframework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		46B82AB12971A2E0003E450B /* YandexMobileMetricaCrashes.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B82AAA29718FB9003E450B /* YandexMobileMetricaCrashes.xcframework */; platformFilter = ios; };
+		46B82AB22971A2E0003E450B /* YandexMobileMetricaCrashes.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 46B82AAA29718FB9003E450B /* YandexMobileMetricaCrashes.xcframework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		478A6478D7BA4AB1DDDE943D972AF32F /* MRCommentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E02207B1DF4B17181B8FAA6CB086229E /* MRCommentsView.swift */; };
 		4880C22723DACE23006FABE1 /* MacApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 4880C22623DACE23006FABE1 /* MacApp.m */; };
 		4880C22C23DAD192006FABE1 /* MacBundle.bundle in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 4880C21F23DACDCD006FABE1 /* MacBundle.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -365,6 +367,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		46B82AB02971A2DE003E450B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				46B82AB22971A2E0003E450B /* YandexMobileMetricaCrashes.xcframework in Embed Frameworks */,
+				46B82AAF2971A2DE003E450B /* YandexMobileMetrica.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4880C22F23DAD192006FABE1 /* Embed PlugIns */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -748,9 +762,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				46B82AAC29718FB9003E450B /* YandexMobileMetricaCrashes.xcframework in Frameworks */,
+				46B82AB12971A2E0003E450B /* YandexMobileMetricaCrashes.xcframework in Frameworks */,
+				46B82AAE2971A2DE003E450B /* YandexMobileMetrica.xcframework in Frameworks */,
 				C7B0F2CC22D6F0B100540CA9 /* WebKit.framework in Frameworks */,
-				46B82AAB29718FB9003E450B /* YandexMobileMetrica.xcframework in Frameworks */,
 				F9734546F0F72F2E42920767 /* Pods_Anilibria.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2040,6 +2054,7 @@
 				4880C22F23DAD192006FABE1 /* Embed PlugIns */,
 				F0D43917EF804CB5A3F71795 /* [CP] Embed Pods Frameworks */,
 				46B82AAD2971956B003E450B /* Strip Script */,
+				46B82AB02971A2DE003E450B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -2765,7 +2780,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Anilibria/Anilibria.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 43;
+				CURRENT_PROJECT_VERSION = 45;
 				DEVELOPMENT_TEAM = 9P3CNK2626;
 				INFOPLIST_FILE = "$(SRCROOT)/Anilibria/Resources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Anilibria;
@@ -2791,7 +2806,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Anilibria/Anilibria.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 43;
+				CURRENT_PROJECT_VERSION = 45;
 				DEVELOPMENT_TEAM = 9P3CNK2626;
 				INFOPLIST_FILE = "$(SRCROOT)/Anilibria/Resources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Anilibria;

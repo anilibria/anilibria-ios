@@ -52,6 +52,7 @@
 		46B82AAF2971A2DE003E450B /* YandexMobileMetrica.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 46B82AA929718FB9003E450B /* YandexMobileMetrica.xcframework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		46B82AB12971A2E0003E450B /* YandexMobileMetricaCrashes.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B82AAA29718FB9003E450B /* YandexMobileMetricaCrashes.xcframework */; platformFilter = ios; };
 		46B82AB22971A2E0003E450B /* YandexMobileMetricaCrashes.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 46B82AAA29718FB9003E450B /* YandexMobileMetricaCrashes.xcframework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		46F8FA9029731B49002B792B /* UIInterfaceOrientationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46F8FA8F29731B49002B792B /* UIInterfaceOrientationExtension.swift */; };
 		478A6478D7BA4AB1DDDE943D972AF32F /* MRCommentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E02207B1DF4B17181B8FAA6CB086229E /* MRCommentsView.swift */; };
 		4880C22723DACE23006FABE1 /* MacApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 4880C22623DACE23006FABE1 /* MacApp.m */; };
 		4880C22C23DAD192006FABE1 /* MacBundle.bundle in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 4880C21F23DACDCD006FABE1 /* MacBundle.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -425,6 +426,7 @@
 		46A4DAB62917DF82003944FD /* LeftAlignedCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftAlignedCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		46B82AA929718FB9003E450B /* YandexMobileMetrica.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = YandexMobileMetrica.xcframework; sourceTree = "<group>"; };
 		46B82AAA29718FB9003E450B /* YandexMobileMetricaCrashes.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = YandexMobileMetricaCrashes.xcframework; sourceTree = "<group>"; };
+		46F8FA8F29731B49002B792B /* UIInterfaceOrientationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIInterfaceOrientationExtension.swift; sourceTree = "<group>"; };
 		4880C21F23DACDCD006FABE1 /* MacBundle.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacBundle.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		4880C22123DACDCD006FABE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4880C22523DACE23006FABE1 /* MacApp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacApp.h; sourceTree = "<group>"; };
@@ -1423,6 +1425,7 @@
 				C799EBDB22DECA0A00C6BD9B /* UserDefaultsExtension.swift */,
 				46945633291680EC00145F48 /* ArrayExtension.swift */,
 				469456392916B50600145F48 /* UIControlExtension.swift */,
+				46F8FA8F29731B49002B792B /* UIInterfaceOrientationExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2053,8 +2056,8 @@
 				C7D4634222CC790900E763DF /* Lint */,
 				4880C22F23DAD192006FABE1 /* Embed PlugIns */,
 				F0D43917EF804CB5A3F71795 /* [CP] Embed Pods Frameworks */,
-				46B82AAD2971956B003E450B /* Strip Script */,
 				46B82AB02971A2DE003E450B /* Embed Frameworks */,
+				46B82AAD2971956B003E450B /* Strip Script */,
 			);
 			buildRules = (
 			);
@@ -2177,6 +2180,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		46B82AAD2971956B003E450B /* Strip Script */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -2396,6 +2400,7 @@
 				C78394E322CFA8F800ACC353 /* ScheduleRequest.swift in Sources */,
 				C7D462E922CC74EF00E763DF /* AttributeStringBuilder.swift in Sources */,
 				C7326BBB234CE70D00E194C1 /* CheckRequest.swift in Sources */,
+				46F8FA9029731B49002B792B /* UIInterfaceOrientationExtension.swift in Sources */,
 				C7D462FC22CC74EF00E763DF /* BackendRepository.swift in Sources */,
 				C7D462E222CC74EF00E763DF /* CAPropertyAnimation+Key.swift in Sources */,
 				C7D462E722CC74EF00E763DF /* Logger.swift in Sources */,
@@ -2780,7 +2785,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Anilibria/Anilibria.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 45;
+				CURRENT_PROJECT_VERSION = 46;
 				DEVELOPMENT_TEAM = 9P3CNK2626;
 				INFOPLIST_FILE = "$(SRCROOT)/Anilibria/Resources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Anilibria;
@@ -2790,10 +2795,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = tv.anilibria.anilibria;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2806,7 +2813,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Anilibria/Anilibria.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 45;
+				CURRENT_PROJECT_VERSION = 46;
 				DEVELOPMENT_TEAM = 9P3CNK2626;
 				INFOPLIST_FILE = "$(SRCROOT)/Anilibria/Resources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Anilibria;
@@ -2816,11 +2823,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.2.1;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = tv.anilibria.anilibria;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

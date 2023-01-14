@@ -2053,8 +2053,8 @@
 				C7D4634222CC790900E763DF /* Lint */,
 				4880C22F23DAD192006FABE1 /* Embed PlugIns */,
 				F0D43917EF804CB5A3F71795 /* [CP] Embed Pods Frameworks */,
-				46B82AAD2971956B003E450B /* Strip Script */,
 				46B82AB02971A2DE003E450B /* Embed Frameworks */,
+				46B82AAD2971956B003E450B /* Strip Script */,
 			);
 			buildRules = (
 			);
@@ -2177,6 +2177,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		46B82AAD2971956B003E450B /* Strip Script */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -2793,7 +2794,9 @@
 				MARKETING_VERSION = 1.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = tv.anilibria.anilibria;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2820,7 +2823,9 @@
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = tv.anilibria.anilibria;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

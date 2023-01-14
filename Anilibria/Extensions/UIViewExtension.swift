@@ -32,13 +32,6 @@ extension UIView {
     }
 }
 
-extension UIDevice {
-    func set(orientation: UIInterfaceOrientation) {
-        let value = orientation.rawValue
-        UIDevice.current.setValue(value, forKey: "orientation")
-    }
-}
-
 extension UIApplication {
 	static var keyWindowSize: CGSize {
 		guard let window = getWindow() else {

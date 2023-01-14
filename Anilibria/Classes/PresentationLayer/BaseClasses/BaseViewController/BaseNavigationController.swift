@@ -11,6 +11,20 @@ open class BaseNavigationController: UINavigationController {
     open override var preferredStatusBarStyle: UIStatusBarStyle {
         return self.viewControllers.last?.preferredStatusBarStyle ?? .default
     }
+
+    // MARK: - Orientation
+
+    open override var shouldAutorotate: Bool {
+        return false
+    }
+
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+
+    open override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return .portrait
+    }
 }
 
 extension BaseNavigationController: UIGestureRecognizerDelegate {

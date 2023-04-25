@@ -217,7 +217,7 @@ class MPVRenderView: UIView {
 
         glBindFramebuffer(GLenum(GL_FRAMEBUFFER), fboName)
 
-        glGetIntegerv(GLenum(GL_DRAW_FRAMEBUFFER_BINDING), &i)
+        glGetIntegerv(GLenum(GL_DRAW_FRAMEBUFFER_BINDING), &fboName)
 
         glBindRenderbuffer(GLenum(GL_RENDERBUFFER), colorRenderbuffer)
         context?.renderbufferStorage(Int(GL_RENDERBUFFER), from: self.glLayer)

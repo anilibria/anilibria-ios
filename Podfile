@@ -2,8 +2,6 @@ use_frameworks!
 inhibit_all_warnings!
 platform :ios, '13.0'
 
-load 'remove_unsupported_libraries.rb'
-
 target 'Anilibria' do
     #Network
     pod 'Kingfisher', '7.4.1'

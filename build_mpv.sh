@@ -1,8 +1,39 @@
 #!/bin/bash
 set -e
 
+TOOLS=(autoconf
+ automake
+ libtool
+ pkg-config
+ curl
+ cmake
+ gcc
+ gperf
+ yasm
+ nasm
+ bison
+ autogen
+ git
+ wget
+ gettext
+ meson
+ ninja)
+
+TOOLS_MISSING=false
+
+for tool in ${TOOLS[*]}; do
+    if ! which $tool > /dev/null; then
+        TOOLS_MISSING=true
+        echo "error: ${tool} is not installed"
+    fi
+done
+
+if $TOOLS_MISSING; then
+    exit 0
+fi
+
 FFMPEG_KIT_TAG=v5.1
-MPV_TAG=v0.35.0
+MPV_TAG=v0.35.1
 
 export BUILD_ROOT=$PWD
 mkdir -p mpv_build

@@ -32,34 +32,6 @@ extension UIView {
     }
 }
 
-extension UIDevice {
-    func set(orientation: UIInterfaceOrientation) {
-        if #available(iOS 16.0, *) {
-
-        } else {
-            let value = orientation.rawValue
-            UIDevice.current.setValue(value, forKey: "orientation")
-        }
-    }
-}
-
-extension UIInterfaceOrientationMask {
-    init(_ orientation: UIInterfaceOrientation) {
-        switch orientation {
-        case .portrait:
-            self = .portrait
-        case .portraitUpsideDown:
-            self = .portraitUpsideDown
-        case .landscapeLeft:
-            self = .landscapeLeft
-        case .landscapeRight:
-            self = .landscapeRight
-        default:
-            self = .all
-        }
-    }
-}
-
 extension UIApplication {
 	static var keyWindowSize: CGSize {
 		guard let window = getWindow() else {

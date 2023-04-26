@@ -24,11 +24,13 @@ final class PlayerViewController: BaseViewController {
     private let timeFormatter = FormatterFactory.time.create()
     private var canUpdateTime: Bool = true
     private var playlist: [PlaylistItem] = []
-    private var currentQuality: VideoQuality = .fullHd
     private var currentIndex: Int = 0
     private var currentTime: Double = 0
     private var bag: AnyCancellable?
     private var pipObservation: Any?
+
+    private var currentQuality: VideoQuality = .fullHd
+    private var orientation: UIInterfaceOrientationMask = .all
 
     private let rewindTimes: [Double] = [-15, -5, 5, 15]
 
@@ -69,7 +71,7 @@ final class PlayerViewController: BaseViewController {
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        super.viewWillDisappear(animated)
         self.saveState()
         #if targetEnvironment(macCatalyst)
         let window = UIApplication.getWindow()
@@ -245,11 +247,11 @@ final class PlayerViewController: BaseViewController {
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .all
+        return orientation
     }
 
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        return.portrait
+        return .from(mask: orientation)
     }
 
     override var prefersHomeIndicatorAutoHidden: Bool {
@@ -269,7 +271,12 @@ final class PlayerViewController: BaseViewController {
     }
 
     @IBAction func closeAction(_ sender: Any) {
-        UIDevice.current.set(orientation: .portrait)
+        self.orientation = .portrait
+        if #available(iOS 16.0, *) {
+            self.setNeedsUpdateOfSupportedInterfaceOrientations()
+        } else {
+            UIViewController.attemptRotationToDeviceOrientation()
+        }
         self.handler.back()
     }
 

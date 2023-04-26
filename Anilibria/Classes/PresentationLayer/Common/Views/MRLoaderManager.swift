@@ -161,7 +161,7 @@ public extension Array where Element == ActivityDisposable {
     }
 }
 
-fileprivate final class ActivityItem: Hashable, Activity {
+private final class ActivityItem: Hashable, Activity {
     public private(set) var uuid: UUID = UUID()
     private var disposeHandlers: [() -> Void] = []
     private var rotateHandler: (() -> Void)?

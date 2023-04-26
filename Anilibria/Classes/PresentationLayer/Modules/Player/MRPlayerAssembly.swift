@@ -25,8 +25,8 @@ protocol PlayerRoute {
 extension PlayerRoute where Self: RouterProtocol {
     func openPlayer(series: Series) {
         let module = PlayerAssembly.createModule(series: series, parent: self)
-        ModalRouter(target: module, parent: nil)
-            .set(level: .statusBar)
+        module.modalPresentationStyle = .fullScreen
+        ModalRouter(target: module, parent: self.controller)
             .move()
     }
 

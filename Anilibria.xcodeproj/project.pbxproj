@@ -118,6 +118,7 @@
 		46B82A9229716536003E450B /* MPVRenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B82A9129716536003E450B /* MPVRenderView.swift */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		46B82A942971657C003E450B /* MPVExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B82A932971657C003E450B /* MPVExtensions.swift */; };
 		46B90330297083230006D60C /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B9032F297083230006D60C /* VideoToolbox.framework */; };
+		46F8FA9029731B49002B792B /* (null) in Sources */ = {isa = PBXBuildFile; };
 		478A6478D7BA4AB1DDDE943D972AF32F /* MRCommentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E02207B1DF4B17181B8FAA6CB086229E /* MRCommentsView.swift */; };
 		4880C22723DACE23006FABE1 /* MacApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 4880C22623DACE23006FABE1 /* MacApp.m */; };
 		4880C22C23DAD192006FABE1 /* MacBundle.bundle in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 4880C21F23DACDCD006FABE1 /* MacBundle.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -170,6 +171,7 @@
 		C1C6C99D53ABC53126D236C2EA3166F6 /* MRScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C652996B961D8B40A36219E3FB961563 /* MRScheduleView.swift */; };
 		C222CCA4B542189047E207D1D9005E22 /* MRMainContainerContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9F9382E083C3CB4CA7B6CFEBF62127 /* MRMainContainerContracts.swift */; };
 		C45B00C4E2A5DBC8056C9336B2A590E1 /* MRFilterContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC7763A360B2D5D3F23D9A67ECC5C23 /* MRFilterContracts.swift */; };
+		C7036FFC29F8ED4A00965D66 /* UIInterfaceOrientationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7036FFB29F8ED4A00965D66 /* UIInterfaceOrientationExtension.swift */; };
 		C7182F3F244ED35F0046B9ED /* LinksRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7182F3E244ED35F0046B9ED /* LinksRequest.swift */; };
 		C7182F41244ED39F0046B9ED /* LinkData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7182F40244ED39F0046B9ED /* LinkData.swift */; };
 		C7182F44244ED5FA0046B9ED /* LinksRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7182F43244ED5FA0046B9ED /* LinksRepository.swift */; };
@@ -614,6 +616,7 @@
 		C5F562CFE34C3CEF6CD2C89799F85FCB /* MRMainContainerPresenter.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRMainContainerPresenter.swift; sourceTree = "<group>"; };
 		C652996B961D8B40A36219E3FB961563 /* MRScheduleView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRScheduleView.swift; sourceTree = "<group>"; };
 		C6A50D128F53A1A5DF662B14146C64BB /* MRSearchAssembly.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRSearchAssembly.swift; sourceTree = "<group>"; };
+		C7036FFB29F8ED4A00965D66 /* UIInterfaceOrientationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIInterfaceOrientationExtension.swift; sourceTree = "<group>"; };
 		C7182F3E244ED35F0046B9ED /* LinksRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinksRequest.swift; sourceTree = "<group>"; };
 		C7182F40244ED39F0046B9ED /* LinkData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkData.swift; sourceTree = "<group>"; };
 		C7182F43244ED5FA0046B9ED /* LinksRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinksRepository.swift; sourceTree = "<group>"; };
@@ -1732,6 +1735,7 @@
 				C7B0F2BD22D59C0F00540CA9 /* UIViewExtension.swift */,
 				C799EBDB22DECA0A00C6BD9B /* UserDefaultsExtension.swift */,
 				46945633291680EC00145F48 /* ArrayExtension.swift */,
+				C7036FFB29F8ED4A00965D66 /* UIInterfaceOrientationExtension.swift */,
 				469456392916B50600145F48 /* UIControlExtension.swift */,
 			);
 			path = Extensions;
@@ -2386,7 +2390,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1020;
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1410;
 				ORGANIZATIONNAME = "Иван Морозов";
 				TargetAttributes = {
 					4880C21E23DACDCD006FABE1 = {
@@ -2709,6 +2713,7 @@
 				C78394E322CFA8F800ACC353 /* ScheduleRequest.swift in Sources */,
 				C7D462E922CC74EF00E763DF /* AttributeStringBuilder.swift in Sources */,
 				C7326BBB234CE70D00E194C1 /* CheckRequest.swift in Sources */,
+				46F8FA9029731B49002B792B /* (null) in Sources */,
 				C7D462FC22CC74EF00E763DF /* BackendRepository.swift in Sources */,
 				C7D462E222CC74EF00E763DF /* CAPropertyAnimation+Key.swift in Sources */,
 				C7D462E722CC74EF00E763DF /* Logger.swift in Sources */,
@@ -2897,6 +2902,7 @@
 				46A15F7C2920E833002756AD /* TorrentFileCellAdapter.swift in Sources */,
 				0996705DF4736BF3D1F96976336B335C /* MRFavoriteRouter.swift in Sources */,
 				363609F526A03F74B2FD720E6D467BD1 /* MRSettingsAssembly.swift in Sources */,
+				C7036FFC29F8ED4A00965D66 /* UIInterfaceOrientationExtension.swift in Sources */,
 				46A15F522920DCD9002756AD /* TorrentContent.swift in Sources */,
 				7570990B07C50BF2E2B95F483BB2C8E7 /* MRSettingsContracts.swift in Sources */,
 				46A15F5E2920DDCB002756AD /* PeerMessage.swift in Sources */,
@@ -2949,6 +2955,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO;
 				DEVELOPMENT_TEAM = 9P3CNK2626;
 				INFOPLIST_FILE = MacBundle/Info.plist;
@@ -2968,6 +2975,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO;
 				DEVELOPMENT_TEAM = 9P3CNK2626;
 				INFOPLIST_FILE = MacBundle/Info.plist;
@@ -3009,6 +3017,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -3034,7 +3043,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -3071,6 +3080,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -3090,7 +3100,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -3107,7 +3117,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Anilibria/Anilibria.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 43;
+				CURRENT_PROJECT_VERSION = 46;
 				DEVELOPMENT_TEAM = 9P3CNK2626;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -3142,7 +3152,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Anilibria/Anilibria.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 43;
+				CURRENT_PROJECT_VERSION = 46;
 				DEVELOPMENT_TEAM = 9P3CNK2626;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",

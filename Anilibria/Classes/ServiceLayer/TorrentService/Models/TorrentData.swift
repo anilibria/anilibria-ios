@@ -19,16 +19,26 @@ struct TorrentData {
         let fileBounds = file.position.hashesBounds
         let updatedIndex = index - fileBounds.begin
 
-        let begin = updatedIndex * pieceLength
+        var begin = updatedIndex * pieceLength
         var end = begin + pieceLength
-        if end > file.length && index == pieceHashes.count - 1 {
-            end = file.length
+        if index == pieceHashes.count - 1 {
+            if end > file.length {
+                end = file.length
+            }
+            if begin > file.length {
+                begin = file.length
+            }
         }
+        
+        assert(begin <= end, "Wrong bounds For piece")
         return (begin, end)
     }
 
     func calculatePieceSize(index: Int, file: TorrentFile) -> Int {
         let (begin, end) = calculateBoundsForPiece(index: index, file: file)
+        if begin == end {
+            return pieceLength - file.position.dataInsets.end
+        }
         return end - begin
     }
 }

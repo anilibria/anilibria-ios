@@ -168,7 +168,6 @@ class PeerClient: NSObject, StreamDelegate {
 
     private func handle(_ msg: PeerMessage, leftBytes: [UInt8]?) throws {
         if msg.lackOfData {
-            if let piece = piceProgress?.piece { print("-- \(self.peer.ip) - Message: \(msg.id) + lackOfData [\(piece)]") }
             msgBuffer = msg
             return
         }

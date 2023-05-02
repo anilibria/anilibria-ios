@@ -63,11 +63,11 @@ class TorrentClient {
 
         self.clients = peers.compactMap {
             let client = PeerClient(torrent: series.torrent, peer: $0, workQueue: work)
-            client?.$state.sink(receiveValue: { [weak self] state in
-                switch state {
-                case .initial:
+            client?.$state.withPrevious(startWith: .initial).sink(receiveValue: { [weak self] state in
+                switch state.current {
+                case .ready where state.previous == .initial:
                     self?.clientsCount += 1
-                case .stopped:
+                case .stopped where state.previous == .ready:
                     self?.clientsCount -= 1
                 default:
                     break

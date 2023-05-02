@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 class PieceProgress {
     let formatter = ByteCountFormatter()
@@ -23,6 +24,7 @@ class PieceProgress {
     private var sendHandler: ((PeerMessage) -> Void)?
     private var downloadingCompleted: ((PieceWork) -> Void)?
     private var timeoutHandler: (() -> Void)?
+    private var timerSubscriber: AnyCancellable?
 
     var isCompleted: Bool {
         piece.downloaded >= piece.length
@@ -40,6 +42,13 @@ class PieceProgress {
     func run(_ isChocked: Bool) {
         if isChocked { return }
         startTime = Date()
+        timerSubscriber = Timer.publish(every: 10, on: .current, in: .common)
+            .autoconnect()
+            .first()
+            .sink(receiveValue: { [weak self] _ in
+                self?.timeoutHandler?()
+            })
+        
         while backlog < maxBacklog && requested < piece.length {
             var blockSize = maxBlockSize
 

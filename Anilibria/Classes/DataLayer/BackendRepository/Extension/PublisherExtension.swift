@@ -27,3 +27,10 @@ public extension Publisher where Failure == Error {
         sink(receiveCompletion: { _ in }, receiveValue: receiveValue)
     }
 }
+
+public extension Publisher {
+    func withPrevious(startWith first: Output) -> AnyPublisher<(previous: Output, current: Output), Failure> {
+        return scan((first, first)) { ($0.1, $1) }
+            .eraseToAnyPublisher()
+    }
+}

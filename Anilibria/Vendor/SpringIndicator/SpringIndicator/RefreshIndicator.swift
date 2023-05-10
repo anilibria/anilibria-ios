@@ -55,7 +55,7 @@ public class RefreshIndicator: UIControl {
         indicator.center = center
         indicator.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin, .flexibleTopMargin, .flexibleBottomMargin]
         addSubview(indicator)
-        self.layer.zPosition = CGFloat.greatestFiniteMagnitude
+        self.layer.zPosition = CGFloat(Float.greatestFiniteMagnitude)
     }
     
     private func setupBlurBack(style: UIBlurEffect.Style) {

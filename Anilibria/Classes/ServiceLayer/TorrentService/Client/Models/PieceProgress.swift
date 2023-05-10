@@ -40,15 +40,15 @@ class PieceProgress {
     }
 
     func run(_ isChocked: Bool) {
-        if isChocked { return }
-        startTime = Date()
-        timerSubscriber = Timer.publish(every: 10, on: .current, in: .common)
-            .autoconnect()
-            .first()
-            .sink(receiveValue: { [weak self] _ in
-                self?.timeoutHandler?()
-            })
+        if isChocked {
+            if timerSubscriber == nil {
+                setTimeout()
+            }
+            return
+        }
         
+        setTimeout()
+        startTime = Date()
         while backlog < maxBacklog && requested < piece.length {
             var blockSize = maxBlockSize
 
@@ -79,6 +79,9 @@ class PieceProgress {
         backlog -= 1
         piece.downloaded += size
         let speed = Int64(Double(size) / abs(startTime.timeIntervalSinceNow)) // bytes per second
+        let formattedSpeed = formatter.string(fromByteCount: speed)
+        let progress = round(Double(piece.downloaded) / Double(piece.length) * 10000) / 100
+        print("=@= [\(self.piece)] - progress: \(progress)% speed: \(formattedSpeed)")
 
         if speed / 1024 < 10 {
             strike += 1
@@ -87,9 +90,21 @@ class PieceProgress {
         if isCompleted {
             downloadingCompleted?(piece)
         } else if strike > maxStrikeCount {
+            print("== [\(self.piece)] - strike: receive timeout")
             self.timeoutHandler?()
         } else {
             run(isChocked)
         }
+    }
+    
+    private func setTimeout() {
+        timerSubscriber = Timer.publish(every: 10, on: .current, in: .common)
+            .autoconnect()
+            .first()
+            .sink(receiveValue: { [weak self] _ in
+                guard let self = self else { return }
+                print("== [\(self.piece)] - timer: receive timeout")
+                self.timeoutHandler?()
+            })
     }
 }

@@ -14,11 +14,12 @@ enum PeerClientState {
     case initial
     case ready
     case stopped
+    case broken
 }
 
 class PeerClient: NSObject, StreamDelegate {
     private let torrent: TorrentData
-    private let connection: NWConnection
+    private var connection: NWConnection?
     private let queue: DispatchQueue
     private var piceProgress: PieceProgress?
     private let workQueue: WorkQueue
@@ -32,10 +33,10 @@ class PeerClient: NSObject, StreamDelegate {
 
     @Published private(set) var state: PeerClientState = .initial {
         didSet {
-            if state == .stopped {
+            if state == .stopped || state == .broken {
                 if let piece = self.piceProgress?.piece, self.piceProgress?.isCompleted == false {
-                    if connection.state == .ready {
-                        connection.cancel()
+                    if connection?.state == .ready {
+                        connection?.cancel()
                     }
                     self.piceProgress = nil
                     self.waitForPiece = nil
@@ -50,27 +51,28 @@ class PeerClient: NSObject, StreamDelegate {
         self.torrent = torrent
         self.peer = peer
         self.workQueue = workQueue
-
-        guard let ip = IPv4Address(peer.ip), let port = NWEndpoint.Port(rawValue: peer.port) else {
-            return nil
-        }
-
         self.queue = DispatchQueue(label: "peer.queue.\(peer.ip.hashValue)")
-
+        super.init()
+        self.start()
+    }
+    
+    private func start() {
+        guard let ip = IPv4Address(peer.ip), let port = NWEndpoint.Port(rawValue: peer.port) else {
+            self.state = .broken
+            return
+        }
+        
         print("Connecting to: \(peer.ip)")
-
         let tcp = NWProtocolTCP.Options()
         tcp.noDelay = true
         let params = NWParameters(tls: nil, tcp: tcp)
         self.connection = NWConnection(host: .ipv4(ip), port: port, using: params)
-
-        super.init()
         self.run()
     }
 
     private func run() {
         self.receive()
-        connection.stateUpdateHandler = { [weak self] (newState) in
+        connection?.stateUpdateHandler = { [weak self] (newState) in
             guard let self = self else { return }
             switch newState {
             case .ready:
@@ -81,7 +83,7 @@ class PeerClient: NSObject, StreamDelegate {
                 break
             }
         }
-        connection.start(queue: queue)
+        connection?.start(queue: queue)
     }
 
     private func processedMessage(_ data: Data) {
@@ -99,16 +101,18 @@ class PeerClient: NSObject, StreamDelegate {
             }
         case .ready:
             try? readMessage([UInt8](data))
-        case .stopped:
+        case .stopped, .broken:
             break
         }
     }
 
     private func receive() {
         timeoutHolder = DelayedAction(delay: 10) { [weak self] in
-            self?.state = .stopped
+            guard let self = self else { return }
+            print("== \(self.peer.ip) - receive timeout")
+            self.state = .stopped
         }
-        connection.receive(minimumIncompleteLength: 1, maximumLength: 65536) { [weak self] (data, _, isComplete, error) in
+        connection?.receive(minimumIncompleteLength: 1, maximumLength: 65536) { [weak self] (data, _, isComplete, error) in
             if let data = data, !data.isEmpty {
                 self?.processedMessage(data)
             }
@@ -121,13 +125,13 @@ class PeerClient: NSObject, StreamDelegate {
     }
 
     private func sendHandshake() {
-        connection.send(content: Handshake(torrent).makeData(), completion: .contentProcessed({ [weak self] error in
+        connection?.send(content: Handshake(torrent).makeData(), completion: .contentProcessed({ [weak self] error in
             if error != nil { self?.state = .stopped }
         }))
     }
 
     private func send(message: PeerMessage) {
-        connection.send(content: message.makeData(), completion: .contentProcessed({ [weak self] error in
+        connection?.send(content: message.makeData(), completion: .contentProcessed({ [weak self] error in
             if error != nil { self?.state = .stopped }
         }))
     }

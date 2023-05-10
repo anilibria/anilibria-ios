@@ -28,10 +28,12 @@ class WorkQueue: Codable {
     private(set) lazy var progress: Progress = Progress(totalUnitCount: Int64(workCount))
 
     let workCount: Int
+    private(set) var bitfield = Bitfield()
 
     init(pieces: [PieceWork]) {
         self.pieces = pieces
         self.workCount = pieces.count
+        fillBitfield()
     }
 
     required init(from decoder: Decoder) throws {
@@ -41,6 +43,13 @@ class WorkQueue: Codable {
             self.pieces.insert(contentsOf: inProgress, at: 0)
         }
         progress.completedUnitCount = Int64(workCount - pieces.count)
+        fillBitfield()
+    }
+    
+    private func fillBitfield() {
+        pieces.forEach {
+            bitfield.setPiece(index: UInt32($0.index))
+        }
     }
 
     func encode(to encoder: Encoder) throws {
@@ -55,6 +64,7 @@ class WorkQueue: Codable {
         lock.sync {
             if pieces.isEmpty { return nil }
             let item = pieces.removeFirst()
+            bitfield.removePiece(index: item.index)
             inProgressPieces.insert(item)
             return item
         }
@@ -64,11 +74,14 @@ class WorkQueue: Codable {
         lock.sync {
             if pieces.isEmpty {
                 pieces.insert(item, at: 0)
+                bitfield.setPiece(index: item.index)
                 pieceReturnedSubject.send()
                 return nil
             }
             let nextItem = pieces.removeFirst()
             pieces.insert(item, at: 0)
+            bitfield.setPiece(index: item.index)
+            bitfield.removePiece(index: nextItem.index)
             pieceReturnedSubject.send()
             return nextItem
         }
@@ -78,6 +91,7 @@ class WorkQueue: Codable {
         lock.sync {
             inProgressPieces.remove(item)
             pieces.insert(item, at: 0)
+            bitfield.setPiece(index: item.index)
             pieceReturnedSubject.send()
         }
     }

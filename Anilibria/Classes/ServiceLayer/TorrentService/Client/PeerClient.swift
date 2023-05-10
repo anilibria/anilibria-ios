@@ -29,6 +29,7 @@ class PeerClient: NSObject, StreamDelegate {
     private(set) var isChocked = true
     private(set) var isDownloading = false
     private(set) var bitfield = Bitfield()
+    private var failedPieces = Set<Int>()
     let peer: Peer
 
     @Published private(set) var state: PeerClientState = .initial {
@@ -41,7 +42,7 @@ class PeerClient: NSObject, StreamDelegate {
                     self.piceProgress = nil
                     self.waitForPiece = nil
                     workQueue.insert(piece)
-                    print("== Client \(self.peer.ip): return -- Piece [\(piece)]")
+                    print("==> Client \(self.peer.ip): return -- Piece [\(piece)]")
                 }
             }
         }
@@ -195,6 +196,7 @@ class PeerClient: NSObject, StreamDelegate {
             self.download()
         case .choke:
             self.isChocked = true
+            self.piceProgress?.run(isChocked)
         case .have:
             if let index = UInt32(msg.payload)?.byteSwapped {
                 self.bitfield.setPiece(index: index)
@@ -212,6 +214,10 @@ class PeerClient: NSObject, StreamDelegate {
         }
         waitForPiece = nil
         isDownloading = true
+        
+        if !bitfield.intersects(workQueue.bitfield) {
+            return
+        }
 
         if let piece = workQueue.next() {
             download(piece: piece)
@@ -225,7 +231,7 @@ class PeerClient: NSObject, StreamDelegate {
 
     private func download(piece: PieceWork) {
         var piece = piece
-        while !bitfield.hasPiece(index: piece.index) {
+        while !bitfield.hasPiece(index: piece.index) || failedPieces.contains(piece.index) {
             if let pw = workQueue.exchange(piece) {
                 piece = pw
             } else {
@@ -240,7 +246,12 @@ class PeerClient: NSObject, StreamDelegate {
     private func attemptDownload(piece: PieceWork) {
         piceProgress = PieceProgress(piece: piece)
         piceProgress?.setSender({ [weak self] in self?.send(message: $0)  })
-        piceProgress?.setTimeout({ [weak self] in self?.state = .stopped })
+        piceProgress?.setTimeout({ [weak self] in
+            guard let self = self else { return }
+            failedPieces.insert(piece.index)
+            self.download(piece: piece)
+            print("== Client \(self.peer.ip): return -- Piece [\(piece)]")
+        })
         piceProgress?.didComplete({ [weak self] (result) in
             if result.checkIntegrity() {
                 self?.workQueue.set(result: result)

@@ -40,13 +40,6 @@ class PieceProgress {
     }
 
     func run(_ isChocked: Bool) {
-        if isChocked {
-            if timerSubscriber == nil {
-                setTimeout()
-            }
-            return
-        }
-        
         setTimeout()
         startTime = Date()
         while backlog < maxBacklog && requested < piece.length {
@@ -76,6 +69,7 @@ class PieceProgress {
 
     func update(with message: PeerMessage, isChocked: Bool) {
         guard let size = try? message.parsePiece(index: piece.index, buffer: &piece.buffer) else { return }
+        timerSubscriber = nil
         backlog -= 1
         piece.downloaded += size
         let speed = Int64(Double(size) / abs(startTime.timeIntervalSinceNow)) // bytes per second
@@ -98,13 +92,15 @@ class PieceProgress {
     }
     
     private func setTimeout() {
-        timerSubscriber = Timer.publish(every: 10, on: .current, in: .common)
-            .autoconnect()
-            .first()
-            .sink(receiveValue: { [weak self] _ in
-                guard let self = self else { return }
-                print("== [\(self.piece)] - timer: receive timeout")
-                self.timeoutHandler?()
-            })
+        if timerSubscriber == nil {
+            timerSubscriber = Timer.publish(every: 10, on: .current, in: .common)
+                .autoconnect()
+                .first()
+                .sink(receiveValue: { [weak self] _ in
+                    guard let self = self else { return }
+                    print("== [\(self.piece)] - timer: receive timeout")
+                    self.timeoutHandler?()
+                })
+        }
     }
 }

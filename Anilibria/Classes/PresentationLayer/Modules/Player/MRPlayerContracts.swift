@@ -18,8 +18,8 @@ protocol PlayerEventHandler: ViewControllerEventHandler {
               series: Series,
               playlist: [PlaylistItem]?)
 
-    func settings(quality: VideoQuality, for item: PlaylistItem)
+    func settings(quality: VideoQuality?, for item: PlaylistItem)
     func select(playItemIndex: Int)
-    func save(quality: VideoQuality, number: Int, time: Double)
+    func save(quality: VideoQuality?, number: Int, time: Double)
     func back()
 }

@@ -83,6 +83,10 @@ internal enum L10n {
     internal static var mskTimeZone: String {
         return L10n.tr("Localizable", "common.msk_time_zone")
     }
+    /// Качество видео
+    internal static var quality: String {
+        return L10n.tr("Localizable", "common.quality")
+    }
     /// Сегодня
     internal static var today: String {
         return L10n.tr("Localizable", "common.today")
@@ -323,6 +327,14 @@ internal enum L10n {
     }
 
     internal enum Settings {
+      /// О приложении
+      internal static var aboutApp: String {
+          return L10n.tr("Localizable", "screen.settings.about_app")
+      }
+      /// Общие
+      internal static var common: String {
+          return L10n.tr("Localizable", "screen.settings.common")
+      }
       /// Настройки
       internal static var title: String {
           return L10n.tr("Localizable", "screen.settings.title")

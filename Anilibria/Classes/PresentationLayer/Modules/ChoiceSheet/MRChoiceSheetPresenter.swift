@@ -14,24 +14,26 @@ final class ChoiceSheetPart: DIPart {
 final class ChoiceSheetPresenter {
     private weak var view: ChoiceSheetViewBehavior!
     private var router: ChoiceSheetRoutable!
-    private var items: [ChoiceItem] = []
+    private var items: [ChoiceGroup] = []
 }
 
 extension ChoiceSheetPresenter: ChoiceSheetEventHandler {
     func bind(view: ChoiceSheetViewBehavior,
               router: ChoiceSheetRoutable,
-              items: [ChoiceItem]) {
+              items: [ChoiceGroup]) {
         self.view = view
         self.router = router
         self.items = items
     }
 
     func didLoad() {
-        self.view.set(items: self.items.map {
-            $0.didSelect = { [weak self] item in
-                self?.select(item: item)
+        self.view.set(items: self.items.map { group in
+            group.items.forEach {
+                $0.didSelect = { [weak self] item in
+                    self?.select(item: item)
+                }
             }
-            return $0
+            return group
         })
     }
 

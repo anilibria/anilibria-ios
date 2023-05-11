@@ -58,10 +58,19 @@ class CollectionViewAdapter: NSObject {
     }
 
     private func makeDataSource() -> DataSource {
-        DataSource(collectionView: collectionView) { [weak self] _, indexPath, wrapper in
+        let source = DataSource(collectionView: collectionView) { [weak self] _, indexPath, wrapper in
             guard let self = self else { return nil }
             return wrapper.item.cellForItem(at: indexPath, context: self.context)
         }
+        
+        source.supplementaryViewProvider = { [weak self] (_, kind, indexPath) -> UICollectionReusableView? in
+            return self?.supplementary(kind: kind, indexPath: indexPath)
+        }
+        return source
+    }
+    
+    private func supplementary(kind: String, indexPath: IndexPath) -> UICollectionReusableView? {
+        item(for: indexPath)?.section?.supplementaryForItem(at: indexPath, kind: kind, context: context)
     }
 
     private func item(for index: IndexPath) -> (any CellAdapterProtocol)? {
@@ -116,13 +125,17 @@ extension CollectionViewAdapter: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int) -> CGSize {
-        .zero
+        item(for: section)?
+            .section?
+            .collectionView(collectionView, layout: collectionViewLayout, referenceSizeForHeaderInSection: section) ?? .zero
     }
 
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForFooterInSection section: Int) -> CGSize {
-        .zero
+        item(for: section)?
+            .section?
+            .collectionView(collectionView, layout: collectionViewLayout, referenceSizeForFooterInSection: section) ?? .zero
     }
 
 }

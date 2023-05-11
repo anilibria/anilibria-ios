@@ -11,6 +11,10 @@ public final class PlayerView: UIView, Player {
     private var keyBag: Any?
 
     public private(set) var duration: Double?
+    public private(set) var audioTracks: [AudioTrack] = []
+    public private(set) var currentTrack: AudioTrack?
+    public private(set) var subtitles: [Subtitles] = []
+    public private(set) var currentSubtitles: Subtitles?
 
     public private(set) var isPlaying: Bool = false {
         didSet {
@@ -114,6 +118,10 @@ public final class PlayerView: UIView, Player {
         let cmtime = CMTime(seconds: time, preferredTimescale: 1)
         self.player?.seek(to: cmtime, toleranceBefore: .zero, toleranceAfter: .zero)
     }
+    
+    public func set(subtitles: Subtitles) {}
+    
+    public func set(audio: AudioTrack) {}
 
     public func togglePlay() {
         self.isPlaying.toggle()

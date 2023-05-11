@@ -15,6 +15,7 @@ public final class MPVPlayerView: UIView, Player {
     private var secondsRelay: CurrentValueSubject<Double, Never> = CurrentValueSubject(0)
     private var playRelay: CurrentValueSubject<Bool, Never> = CurrentValueSubject(false)
     private var statusRelay: PassthroughSubject<PlayerStatus, Never> = PassthroughSubject()
+    private var durationRelay: PassthroughSubject<Double?, Error> = PassthroughSubject()
     private var bag = Set<AnyCancellable>()
     private var observer: Any?
     private let mpvQueue = DispatchQueue(label: "mpv.queue")
@@ -25,6 +26,10 @@ public final class MPVPlayerView: UIView, Player {
     private var mpvGLUpdatesInterceptor: MpvGLUpdatesInterceptor?
 
     public private(set) var duration: Double?
+    public private(set) var audioTracks: [AudioTrack] = []
+    public private(set) var currentTrack: AudioTrack?
+    public private(set) var subtitles: [Subtitles] = []
+    public private(set) var currentSubtitles: Subtitles?
 
     public private(set) var isPlaying: Bool = false {
         didSet {
@@ -78,6 +83,7 @@ public final class MPVPlayerView: UIView, Player {
         checkError(mpv_set_option_string(mpvContext, "vd-lavc-dr", "no"))
         checkError(mpv_set_option_string(mpvContext, "save-position-on-quit", "no"))
         checkError(mpv_set_option_string(mpvContext, "force-window", "no"))
+        checkError(mpv_set_option_string(mpvContext, "pause", "yes"))
 
         // configure
         renderView.create { [weak self] in
@@ -101,16 +107,15 @@ public final class MPVPlayerView: UIView, Player {
         var initOpenGL = mpv_opengl_init_params(get_proc_address: { _, name in
             let symbolName = CFStringCreateWithCString(kCFAllocatorDefault, name, kCFStringEncodingASCII)
             #if targetEnvironment(macCatalyst)
-            return CFBundleGetFunctionPointerForName(
-                CFBundleGetBundleWithIdentifier(CFStringCreateCopy(kCFAllocatorDefault, "com.apple.opengl" as CFString)),
-                symbolName
-            )
+            let renderID = "com.apple.opengl" as CFString
             #else
+            let renderID = "com.apple.opengles" as CFString
+            #endif
+            
             return CFBundleGetFunctionPointerForName(
-                CFBundleGetBundleWithIdentifier(CFStringCreateCopy(kCFAllocatorDefault, "com.apple.opengles" as CFString)),
+                CFBundleGetBundleWithIdentifier(CFStringCreateCopy(kCFAllocatorDefault, renderID)),
                 symbolName
             )
-            #endif
         }, get_proc_address_ctx: nil)
 
         let initOpenGLPoniter = UnsafeMutableRawPointer(mutating: withUnsafePointer(to: &initOpenGL) { $0 })
@@ -159,7 +164,7 @@ public final class MPVPlayerView: UIView, Player {
         return Deferred { [weak self] () -> AnyPublisher<Double?, Error> in
             guard let self = self else { return AnyPublisher<Double?, Error>.just(nil) }
             self.checkError(mpv_command(self.mpvContext, self.makeCommand("loadfile", args: url.absoluteString)))
-            return AnyPublisher<Double?, Error>.just(nil)
+            return self.durationRelay.eraseToAnyPublisher()
         }
         .subscribe(on: mpvQueue)
         .receive(on: DispatchQueue.main)
@@ -167,11 +172,36 @@ public final class MPVPlayerView: UIView, Player {
     }
 
     public func set(time: Double) {
-
+        print("\(time)")
+        
+        statusRelay.send(.waitingToPlay)
+        checkError(mpv_command(mpvContext, makeCommand("seek", args: "\(Int(time))", "absolute")))
+        if isPlaying {
+            statusRelay.send(.playing)
+        } else {
+            statusRelay.send(.radyToPlay)
+        }
+    }
+    
+    public func set(subtitles: Subtitles) {
+        checkError(mpv_set_option_string(mpvContext, "sid", subtitles.id))
+        currentSubtitles = subtitles
+    }
+    
+    public func set(audio: AudioTrack) {
+        checkError(mpv_set_option_string(mpvContext, "aid", audio.id))
+        currentTrack = audio
     }
 
     public func togglePlay() {
-
+        isPlaying.toggle()
+        if isPlaying {
+            checkError(mpv_set_option_string(mpvContext, "pause", "no"))
+            statusRelay.send(.playing)
+        } else {
+            checkError(mpv_set_option_string(mpvContext, "pause", "yes"))
+            statusRelay.send(.pause)
+        }
     }
 
     deinit {
@@ -183,10 +213,6 @@ public final class MPVPlayerView: UIView, Player {
         mpv_destroy(mpvContext)
     }
 
-    private func updateStatus() {
-
-    }
-
     private func handle(event: mpv_event) {
         switch event.event_id {
         case MPV_EVENT_SHUTDOWN:
@@ -196,11 +222,69 @@ public final class MPVPlayerView: UIView, Player {
         case MPV_EVENT_LOG_MESSAGE:
             let msg = event.data.load(as: mpv_event_log_message.self)
             print("MPV event: [\(msg.prefix.asString)] \(msg.level.asString): \(msg.text.asString)")
+        case MPV_EVENT_PROPERTY_CHANGE:
+            let property = event.data.load(as: mpv_event_property.self)
+            
+            if property.name.asString == "time-pos", let time = property.data?.load(as: Int64.self) {
+                DispatchQueue.main.async { [weak self] in
+                    self?.secondsRelay.send(Double(time))
+                }
+            }
+            
+        case MPV_EVENT_FILE_LOADED:
+            let duration = getPropertyNumber("duration")
+            checkError(mpv_observe_property(self.mpvContext, 0, "time-pos", MPV_FORMAT_INT64))
+            makeTracks()
+            self.duration = Double(duration)
+            
+            DispatchQueue.main.async { [weak self] in
+                self?.durationRelay.send(self?.duration)
+                self?.statusRelay.send(.radyToPlay)
+            }
         default:
             if let name = mpv_event_name(event.event_id)?.asString {
                 print("MPV event: \(name)")
             }
         }
+    }
+    
+    func makeTracks() {
+        let count = getPropertyNumber("track-list/count")
+        
+        for i in 0..<count {
+            let id = getPropertyNumber("track-list/\(i)/id")
+            let type = String(cString: getPropertyNode("track-list/\(i)/type").u.string)
+            let title = String(cString: getPropertyNode("track-list/\(i)/title").u.string)
+            
+            switch type {
+            case "audio":
+                audioTracks.append(AudioTrack(id: "\(id)", title: title))
+            case "sub":
+                subtitles.append(Subtitles(id: "\(id)", title: title))
+            default:
+                break
+            }
+            
+            print("type: \(type) id: \(id) title: \(title)")
+        }
+    }
+    
+    private func getPropertyNumber(_ name: String) -> Int64 {
+        var value = Int64()
+        checkError(mpv_get_property(mpvContext, name, MPV_FORMAT_INT64, &value))
+        return value
+    }
+    
+    private func getPropertyString(_ name: String) -> String {
+        var value = String()
+        checkError(mpv_get_property(mpvContext, name, MPV_FORMAT_STRING, &value))
+        return value
+    }
+    
+    private func getPropertyNode(_ name: String) -> mpv_node {
+        var value = mpv_node()
+        checkError(mpv_get_property(mpvContext, name, MPV_FORMAT_NODE, &value))
+        return value
     }
 
     private func checkError(_ status: Int32) {
@@ -213,14 +297,18 @@ public final class MPVPlayerView: UIView, Player {
             preconditionFailure(message)
         }
     }
-
-    private func makeCommand(_ name: String, args: String...) -> UnsafeMutablePointer<UnsafePointer<CChar>?> {
+    
+    private func makeCommand(_ name: String, args: [String] = []) -> UnsafeMutablePointer<UnsafePointer<CChar>?> {
         let values = [name] + args + [nil]
         let cs = UnsafeMutablePointer<UnsafePointer<CChar>?>.allocate(capacity: values.count)
         values.enumerated().forEach {
             cs[$0.offset] = UnsafePointer<CChar>(($0.element as? NSString)?.utf8String)
         }
         return cs
+    }
+
+    private func makeCommand(_ name: String, args: String...) -> UnsafeMutablePointer<UnsafePointer<CChar>?> {
+       makeCommand(name, args: args)
     }
 }
 

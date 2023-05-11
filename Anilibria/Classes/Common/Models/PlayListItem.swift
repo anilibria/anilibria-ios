@@ -4,6 +4,7 @@ public enum VideoQuality: Int, CaseIterable, Codable {
     case fullHd
     case hd
     case sd
+    case unknown
 
     func next() -> VideoQuality? {
         switch self {
@@ -16,7 +17,7 @@ public enum VideoQuality: Int, CaseIterable, Codable {
         }
     }
 
-    var name: String {
+    var name: String? {
         switch self {
         case .fullHd:
             return L10n.Common.Quality.fullHd
@@ -24,6 +25,8 @@ public enum VideoQuality: Int, CaseIterable, Codable {
             return L10n.Common.Quality.hd
         case .sd:
             return L10n.Common.Quality.sd
+        case .unknown:
+            return nil
         }
     }
 }
@@ -39,7 +42,7 @@ public final class PlaylistItem: NSObject, Decodable {
 
     public init(title: String, url: URL) {
         self.title = title
-        self.video[.hd] = url
+        self.video[.unknown] = url
     }
 
     public init(from decoder: Decoder) throws {

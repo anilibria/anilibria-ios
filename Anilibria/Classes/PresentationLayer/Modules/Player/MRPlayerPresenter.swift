@@ -72,25 +72,28 @@ extension PlayerPresenter: PlayerEventHandler {
                        isSelected: value.offset == playItemIndex,
                        isLast: value.offset == lastIndex)
         }
-
-        self.router.openSheet(with: items)
+        
+        self.router.openSheet(with: [ChoiceGroup(items: items)])
     }
 
-    func settings(quality: VideoQuality, for item: PlaylistItem) {
+    func settings(quality: VideoQuality?, for item: PlaylistItem) {
         let qualities = item.supportedQualities()
-        let items = qualities.map {
-            ChoiceItem($0, title: $0.name, isSelected: quality == $0,
-                       isLast: qualities.last == $0)
+        let items = qualities.compactMap { value -> ChoiceItem? in
+            guard let name = value.name else { return nil }
+            return ChoiceItem(value, title: name, isSelected: quality == value,
+                              isLast: qualities.last == value)
         }
 
-        self.router.openSheet(with: items)
+        if !items.isEmpty {
+            self.router.openSheet(with: [ChoiceGroup(title: L10n.Common.quality, items: items)])
+        }
     }
 
     func back() {
         self.router.back()
     }
 
-    func save(quality: VideoQuality, number: Int, time: Double) {
+    func save(quality: VideoQuality?, number: Int, time: Double) {
         let context = PlayerContext(quality: quality,
                                     number: number,
                                     time: time)

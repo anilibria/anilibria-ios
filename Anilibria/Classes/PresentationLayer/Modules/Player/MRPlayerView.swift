@@ -29,7 +29,7 @@ final class PlayerViewController: BaseViewController {
     private var bag: AnyCancellable?
     private var pipObservation: Any?
 
-    private var currentQuality: VideoQuality = .fullHd
+    private var currentQuality: VideoQuality?
     private var orientation: UIInterfaceOrientationMask = .all
 
     private let rewindTimes: [Double] = [-15, -5, 5, 15]
@@ -208,10 +208,13 @@ final class PlayerViewController: BaseViewController {
         guard let bestQuality = qualities.first else {
             return
         }
-        if qualities.contains(self.currentQuality) == false {
+        
+        var quality = self.currentQuality ?? bestQuality
+        if qualities.contains(quality) == false {
             self.currentQuality = bestQuality
+            quality = bestQuality
         }
-        if let url = item.video[self.currentQuality] {
+        if let url = item.video[quality] {
             self.bag = self.playerView.setVideo(url: url)
                 .filter { $0 != nil }
                 .map { $0! }

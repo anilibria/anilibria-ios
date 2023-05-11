@@ -1,5 +1,15 @@
 import UIKit
 
+public final class ChoiceGroup: NSObject {
+    let title: String?
+    let items: [ChoiceItem]
+    
+    init(title: String? = nil, items: [ChoiceItem]) {
+        self.title = title
+        self.items = items
+    }
+}
+
 public final class ChoiceItem: NSObject {
     let value: Any
     let title: String
@@ -34,10 +44,39 @@ final class ChoiceCellAdapter: BaseCellAdapter<ChoiceItem> {
     }
 }
 
-class ChoiceCellAdapterSectionFactory {
-    class func create(for items: [ChoiceItem]) -> any SectionAdapterProtocol {
-        SectionAdapter(items.map {
+final class ChoiceSectionAdapter: SectionAdapter {
+    private let title: String?
+    
+    init(_ group: ChoiceGroup) {
+        self.title = group.title
+        super.init(group.items.map {
             ChoiceCellAdapter(viewModel: $0)
         })
+    }
+    
+    override func supplementaryForItem(at indexPath: IndexPath, kind: String, context: CollectionContext) -> UICollectionReusableView? {
+        if kind == UICollectionView.elementKindSectionHeader {
+            let view = context.dequeueReusableSupplementaryView(type: ChoiceHaderView.self, ofKind: kind, for: indexPath)
+            view.titleLabel.text = title
+            return view
+        }
+        return nil
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView,
+                                 layout collectionViewLayout: UICollectionViewLayout,
+                                 referenceSizeForHeaderInSection section: Int) -> CGSize {
+        if title != nil {
+            return CGSize(width: collectionView.frame.width, height: 50)
+        }
+        return .zero
+    }
+}
+
+class ChoiceCellAdapterSectionFactory {
+    class func create(for items: [ChoiceGroup]) -> [any SectionAdapterProtocol] {
+        items.map {
+            ChoiceSectionAdapter($0)
+        }
     }
 }

@@ -4,6 +4,7 @@ import UIKit
 
 final class ChoiceSheetViewController: BaseCollectionViewController {
     @IBOutlet var collectionHeightConstraint: NSLayoutConstraint!
+    @IBOutlet var backButton: UIButton!
 
     var handler: ChoiceSheetEventHandler!
     private var bag: Any?
@@ -20,6 +21,11 @@ final class ChoiceSheetViewController: BaseCollectionViewController {
                 self?.collectionHeightConstraint.constant = height
             }
         }
+    }
+    
+    override func setupStrings() {
+        super.setupStrings()
+        backButton.setTitle(L10n.Buttons.done, for: .normal)
     }
 
     override var shouldAutorotate: Bool {
@@ -49,8 +55,8 @@ final class ChoiceSheetViewController: BaseCollectionViewController {
 }
 
 extension ChoiceSheetViewController: ChoiceSheetViewBehavior {
-    func set(items: [ChoiceItem]) {
-        let section = ChoiceCellAdapterSectionFactory.create(for: items)
-        self.reload(sections: [section])
+    func set(items: [ChoiceGroup]) {
+        let sections = ChoiceCellAdapterSectionFactory.create(for: items)
+        self.reload(sections: sections)
     }
 }

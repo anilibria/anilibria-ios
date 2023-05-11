@@ -209,6 +209,9 @@
 		C737926422E169C000DDF2B2 /* HistoryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C737926322E169C000DDF2B2 /* HistoryData.swift */; };
 		C737926622E16D9600DDF2B2 /* PlayerContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = C737926522E16D9600DDF2B2 /* PlayerContext.swift */; };
 		C737926922E16E0200DDF2B2 /* HistoryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = C737926822E16E0200DDF2B2 /* HistoryRepository.swift */; };
+		C74174F52A0D3C4300E3D75B /* ChoiceHaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74174F42A0D3C4300E3D75B /* ChoiceHaderView.swift */; };
+		C74174F72A0D50E800E3D75B /* AudioTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74174F62A0D50E800E3D75B /* AudioTrack.swift */; };
+		C74174F92A0D514A00E3D75B /* Subtitles.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74174F82A0D514A00E3D75B /* Subtitles.swift */; };
 		C759F5AA234F6A9300F8736A /* ConfigurationAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = C759F5A4234F6A9300F8736A /* ConfigurationAssembly.swift */; };
 		C759F5AB234F6A9300F8736A /* ConfigurationContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C759F5A5234F6A9300F8736A /* ConfigurationContracts.swift */; };
 		C759F5AC234F6A9300F8736A /* ConfigurationPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C759F5A6234F6A9300F8736A /* ConfigurationPresenter.swift */; };
@@ -654,6 +657,9 @@
 		C737926322E169C000DDF2B2 /* HistoryData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryData.swift; sourceTree = "<group>"; };
 		C737926522E16D9600DDF2B2 /* PlayerContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerContext.swift; sourceTree = "<group>"; };
 		C737926822E16E0200DDF2B2 /* HistoryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryRepository.swift; sourceTree = "<group>"; };
+		C74174F42A0D3C4300E3D75B /* ChoiceHaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoiceHaderView.swift; sourceTree = "<group>"; };
+		C74174F62A0D50E800E3D75B /* AudioTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioTrack.swift; sourceTree = "<group>"; };
+		C74174F82A0D514A00E3D75B /* Subtitles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subtitles.swift; sourceTree = "<group>"; };
 		C759F5A4234F6A9300F8736A /* ConfigurationAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationAssembly.swift; sourceTree = "<group>"; };
 		C759F5A5234F6A9300F8736A /* ConfigurationContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationContracts.swift; sourceTree = "<group>"; };
 		C759F5A6234F6A9300F8736A /* ConfigurationPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationPresenter.swift; sourceTree = "<group>"; };
@@ -1874,6 +1880,8 @@
 				C7FD9DCF230BD3F100C56FB5 /* PushData.swift */,
 				C7326BB7234CDF1600E194C1 /* AniConfig.swift */,
 				C7182F40244ED39F0046B9ED /* LinkData.swift */,
+				C74174F62A0D50E800E3D75B /* AudioTrack.swift */,
+				C74174F82A0D514A00E3D75B /* Subtitles.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2279,6 +2287,7 @@
 			children = (
 				C7D686B422DA44D100CF4190 /* ChoiceCell.xib */,
 				C7D686B622DA44E200CF4190 /* ChoiceCell.swift */,
+				C74174F42A0D3C4300E3D75B /* ChoiceHaderView.swift */,
 				C7D686B822DA452300CF4190 /* ChoiceCellAdaper.swift */,
 			);
 			path = cells;
@@ -2612,6 +2621,7 @@
 				C7D4633C22CC772800E763DF /* Language.swift in Sources */,
 				C737923222E0157F00DDF2B2 /* DraggableView.swift in Sources */,
 				C783950F22D0DC8400ACC353 /* FilterData.swift in Sources */,
+				C74174F72A0D50E800E3D75B /* AudioTrack.swift in Sources */,
 				468E768F296C28F5000852FC /* MPVPlayerView.swift in Sources */,
 				46A4DAB72917DF82003944FD /* LeftAlignedCollectionViewFlowLayout.swift in Sources */,
 				C78394AF22CF669500ACC353 /* Favorite.swift in Sources */,
@@ -2753,6 +2763,7 @@
 				C7D462FD22CC74EF00E763DF /* BackendAPIRequest.swift in Sources */,
 				C7FD9DD0230BD3F100C56FB5 /* PushData.swift in Sources */,
 				C7D462ED22CC74EF00E763DF /* Paginator.swift in Sources */,
+				C74174F52A0D3C4300E3D75B /* ChoiceHaderView.swift in Sources */,
 				C7D4630722CC74EF00E763DF /* ViewControllerEventHandler.swift in Sources */,
 				C7182F41244ED39F0046B9ED /* LinkData.swift in Sources */,
 				46A4DAB22917A0D5003944FD /* BaseCollectionViewController.swift in Sources */,
@@ -2791,6 +2802,7 @@
 				4880C23123DAD4F9006FABE1 /* MacOSHalper.swift in Sources */,
 				C7D686A822D8DF9500CF4190 /* SwitcherView.swift in Sources */,
 				C781CA6622D39CCD0046B0F2 /* SearchRequest.swift in Sources */,
+				C74174F92A0D514A00E3D75B /* Subtitles.swift in Sources */,
 				C737923F22E01C2B00DDF2B2 /* FavoriteService.swift in Sources */,
 				C7326BB8234CDF1600E194C1 /* AniConfig.swift in Sources */,
 				2ECEEEC613CEEFA50A768C59306537CF /* MRFeedPresenter.swift in Sources */,

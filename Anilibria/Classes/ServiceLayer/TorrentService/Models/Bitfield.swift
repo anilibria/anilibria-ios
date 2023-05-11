@@ -54,8 +54,11 @@ struct Bitfield {
 
 extension Bitfield {
     func intersects(_ bitfield: Bitfield) -> Bool {
-        return data.enumerated().contains(where: { item in
-            bitfield.data[item.offset] & item.element > 0
-        })
+        if data.count <= bitfield.data.count {
+            return data.enumerated().contains(where: { item in
+                bitfield.data[item.offset] & item.element > 0
+            })
+        }
+        return bitfield.intersects(self)
     }
 }

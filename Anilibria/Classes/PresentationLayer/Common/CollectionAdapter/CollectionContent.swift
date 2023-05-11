@@ -80,8 +80,15 @@ class CompositeSectionAdapter: SectionAdapterProtocol {
     }
 }
 
-class SectionAdapter: SectionAdapterProtocol {
+class SectionAdapter: BaseSectionAdapter {
     let uid = UUID()
+    
+    override func getIdentifier() -> AnyHashable {
+        uid
+    }
+}
+
+class BaseSectionAdapter: SectionAdapterProtocol {
     var insets: UIEdgeInsets = .zero
     var minimumLineSpacing: CGFloat = 0
     var minimumInteritemSpacing: CGFloat = 0
@@ -99,11 +106,15 @@ class SectionAdapter: SectionAdapterProtocol {
     }
 
     func getIdentifier() -> AnyHashable {
-        uid
+        fatalError("override")
     }
 
     func getItems() -> [any CellAdapterProtocol] {
         items
+    }
+    
+    func supplementaryForItem(at indexPath: IndexPath, kind: String, context: CollectionContext) -> UICollectionReusableView? {
+        nil
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -123,6 +134,18 @@ class SectionAdapter: SectionAdapterProtocol {
                         minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         minimumInteritemSpacing
     }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForHeaderInSection section: Int) -> CGSize {
+        .zero
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForFooterInSection section: Int) -> CGSize {
+        .zero
+    }
 }
 
 protocol CellAdaptersProvider {
@@ -131,6 +154,8 @@ protocol CellAdaptersProvider {
 
 protocol SectionAdapterProtocol: AnyObject, CellAdaptersProvider {
     func getIdentifier() -> AnyHashable
+    
+    func supplementaryForItem(at indexPath: IndexPath, kind: String, context: CollectionContext) -> UICollectionReusableView?
 
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
@@ -143,9 +168,21 @@ protocol SectionAdapterProtocol: AnyObject, CellAdaptersProvider {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumInteritemSpacingForSectionAt section: Int) -> CGFloat
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForHeaderInSection section: Int) -> CGSize
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForFooterInSection section: Int) -> CGSize
 }
 
 extension SectionAdapterProtocol {
+    func supplementaryForItem(at indexPath: IndexPath, kind: String, context: CollectionContext) -> UICollectionReusableView? {
+        nil
+    }
+    
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -162,6 +199,18 @@ extension SectionAdapterProtocol {
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForHeaderInSection section: Int) -> CGSize {
+        .zero
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForFooterInSection section: Int) -> CGSize {
+        .zero
     }
 }
 

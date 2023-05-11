@@ -56,12 +56,14 @@ extension SettingsPresenter: SettingsEventHandler {
 
     func selectQuality() {
         let qualities = VideoQuality.allCases
-
-        let items = qualities.map {
-            ChoiceItem($0, title: $0.name, isSelected: playerSettings.quality == $0, isLast: qualities.last == $0)
+        
+        let items = qualities.compactMap { value -> ChoiceItem? in
+            guard let name = value.name else { return nil }
+            return ChoiceItem(value, title: name, isSelected: playerSettings.quality == value,
+                              isLast: qualities.last == value)
         }
-
-        self.router.openSheet(with: items)
+        
+        self.router.openSheet(with: [ChoiceGroup(title: L10n.Common.quality, items: items)])
     }
 
     private func update(_ quality: VideoQuality) {

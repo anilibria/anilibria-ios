@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ChoiceSheetViewController" customModule="Anilibria" customModuleProvider="target">
             <connections>
+                <outlet property="backButton" destination="Apj-zN-056" id="gE4-Es-xtR"/>
                 <outlet property="collectionHeightConstraint" destination="0NC-wK-Lml" id="v0q-Nu-gtO"/>
                 <outlet property="collectionView" destination="L4Q-ad-4vg" id="BHH-IC-9ZM"/>
                 <outlet property="view" destination="iN0-l3-epB" id="ffI-bp-H71"/>
@@ -20,8 +21,8 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GYS-DH-ZR0">
-                    <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GYS-DH-ZR0">
+                    <rect key="frame" x="0.0" y="48" width="414" height="814"/>
                     <connections>
                         <action selector="backAction:" destination="-1" eventType="touchUpInside" id="mIZ-Mu-Khd"/>
                     </connections>
@@ -38,14 +39,14 @@
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Apj-zN-056">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Apj-zN-056">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                                                <state key="normal" title="Отмена">
+                                                <state key="normal">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="backAction:" destination="-1" eventType="touchUpInside" id="I33-bu-IZp"/>
+                                                    <action selector="backAction:" destination="-1" eventType="touchUpInside" id="jRQ-GO-fQX"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -121,6 +122,7 @@
                     </constraints>
                 </view>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="GYS-DH-ZR0" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="0tw-Km-opq"/>
@@ -133,7 +135,6 @@
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="ljo-Y6-ScU" secondAttribute="bottom" constant="10" id="jcR-nP-zJe"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="GYS-DH-ZR0" secondAttribute="bottom" id="xLk-SL-XHw"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <point key="canvasLocation" x="139" y="107"/>
         </view>
     </objects>

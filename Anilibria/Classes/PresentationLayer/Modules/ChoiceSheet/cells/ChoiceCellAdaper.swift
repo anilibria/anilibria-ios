@@ -1,28 +1,50 @@
 import UIKit
+import Combine
 
 public final class ChoiceGroup: NSObject {
     let title: String?
     let items: [ChoiceItem]
+    private(set) var selectedItem: ChoiceItem?
+    
+    var choiceCompleted: ((Any?) -> Void)?
+    var selectedItemChanged: (() -> Void)?
     
     init(title: String? = nil, items: [ChoiceItem]) {
         self.title = title
         self.items = items
+        super.init()
+        self.items.forEach { item in
+            if item.isSelected { didSelect(item: item) }
+            item.group = self
+        }
+    }
+    
+    func completeChoice() {
+        choiceCompleted?(selectedItem?.value)
+    }
+    
+    fileprivate func didSelect(item: ChoiceItem?) {
+        selectedItem?.isSelected = false
+        selectedItem = item
+        item?.isSelected = true
+        selectedItemChanged?()
     }
 }
 
 public final class ChoiceItem: NSObject {
     let value: Any
     let title: String
-    let isSelected: Bool
-    let isLast: Bool
+    @Published var isSelected: Bool
+    fileprivate weak var group: ChoiceGroup?
+    
+    var isLast: Bool {
+        group?.items.last === self
+    }
 
-    var didSelect: ((ChoiceItem) -> Void)?
-
-    init(_ value: Any, title: String, isSelected: Bool, isLast: Bool) {
+    init(_ value: Any, title: String, isSelected: Bool) {
         self.value = value
         self.title = title
         self.isSelected = isSelected
-        self.isLast = isLast
     }
 }
 
@@ -34,7 +56,7 @@ final class ChoiceCellAdapter: BaseCellAdapter<ChoiceItem> {
     }
 
     override func didSelect(at index: IndexPath) {
-        viewModel.didSelect?(viewModel)
+        viewModel.group?.didSelect(item: viewModel)
     }
 
     override func sizeForItem(at index: IndexPath,

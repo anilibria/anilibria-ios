@@ -27,7 +27,7 @@ public final class MPVPlayerView: UIView, Player {
 
     public private(set) var duration: Double?
     public private(set) var audioTracks: [AudioTrack] = []
-    public private(set) var currentTrack: AudioTrack?
+    public private(set) var currentAudio: AudioTrack?
     public private(set) var subtitles: [Subtitles] = []
     public private(set) var currentSubtitles: Subtitles?
 
@@ -183,14 +183,18 @@ public final class MPVPlayerView: UIView, Player {
         }
     }
     
-    public func set(subtitles: Subtitles) {
-        checkError(mpv_set_option_string(mpvContext, "sid", subtitles.id))
-        currentSubtitles = subtitles
+    public func set(subtitle: Subtitles) {
+        if currentSubtitles != subtitle, subtitles.contains(where: { subtitle.id == $0.id }) {
+            checkError(mpv_set_option_string(mpvContext, "sid", subtitle.id))
+            currentSubtitles = subtitle
+        }
     }
     
     public func set(audio: AudioTrack) {
-        checkError(mpv_set_option_string(mpvContext, "aid", audio.id))
-        currentTrack = audio
+        if currentAudio != audio, audioTracks.contains(where: { audio.id == $0.id }) {
+            checkError(mpv_set_option_string(mpvContext, "aid", audio.id))
+            currentAudio = audio
+        }
     }
 
     public func togglePlay() {
@@ -255,12 +259,19 @@ public final class MPVPlayerView: UIView, Player {
             let id = getPropertyNumber("track-list/\(i)/id")
             let type = String(cString: getPropertyNode("track-list/\(i)/type").u.string)
             let title = String(cString: getPropertyNode("track-list/\(i)/title").u.string)
+            let selected = getPropertyNode("track-list/\(i)/selected").u.flag
             
             switch type {
             case "audio":
                 audioTracks.append(AudioTrack(id: "\(id)", title: title))
+                if selected == 1 {
+                    currentAudio = audioTracks.last
+                }
             case "sub":
                 subtitles.append(Subtitles(id: "\(id)", title: title))
+                if selected == 1 {
+                    currentSubtitles = subtitles.last
+                }
             default:
                 break
             }
@@ -272,12 +283,6 @@ public final class MPVPlayerView: UIView, Player {
     private func getPropertyNumber(_ name: String) -> Int64 {
         var value = Int64()
         checkError(mpv_get_property(mpvContext, name, MPV_FORMAT_INT64, &value))
-        return value
-    }
-    
-    private func getPropertyString(_ name: String) -> String {
-        var value = String()
-        checkError(mpv_get_property(mpvContext, name, MPV_FORMAT_STRING, &value))
         return value
     }
     

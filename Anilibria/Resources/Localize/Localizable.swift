@@ -71,6 +71,10 @@ internal enum L10n {
   }
 
   internal enum Common {
+    /// Аудио трек
+    internal static var audioTrack: String {
+        return L10n.tr("Localizable", "common.audio_track")
+    }
     /// Понравилась озвучка?\nПоддержи проект :3
     internal static var donatePls: String {
         return L10n.tr("Localizable", "common.donate_pls")
@@ -86,6 +90,10 @@ internal enum L10n {
     /// Качество видео
     internal static var quality: String {
         return L10n.tr("Localizable", "common.quality")
+    }
+    /// Трек субтитров
+    internal static var sublitleTrack: String {
+        return L10n.tr("Localizable", "common.sublitle_track")
     }
     /// Сегодня
     internal static var today: String {
@@ -334,6 +342,10 @@ internal enum L10n {
       /// Общие
       internal static var common: String {
           return L10n.tr("Localizable", "screen.settings.common")
+      }
+      /// Предпочтения
+      internal static var preffered: String {
+          return L10n.tr("Localizable", "screen.settings.preffered")
       }
       /// Настройки
       internal static var title: String {

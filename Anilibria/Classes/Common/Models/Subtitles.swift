@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Subtitles {
+public struct Subtitles: Codable, Hashable {
     let id: String
     let title: String
 }

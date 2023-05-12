@@ -27,27 +27,16 @@ extension ChoiceSheetPresenter: ChoiceSheetEventHandler {
     }
 
     func didLoad() {
-        self.view.set(items: self.items.map { group in
-            group.items.forEach {
-                $0.didSelect = { [weak self] item in
-                    self?.select(item: item)
-                }
+        if items.count == 1 {
+            items.first?.selectedItemChanged = { [weak self] in
+                self?.back()
             }
-            return group
-        })
+        }
+        self.view.set(items: self.items)
     }
 
     func back() {
+        items.forEach { $0.completeChoice() }
         self.router.back()
     }
-
-    func select(item: ChoiceItem) {
-        let command = ChoiceResult(value: item.value)
-        self.router.execute(command)
-        self.router.back()
-    }
-}
-
-public struct ChoiceResult: RouteCommand {
-    let value: Any
 }

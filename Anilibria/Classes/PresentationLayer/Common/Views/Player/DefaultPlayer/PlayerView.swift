@@ -12,7 +12,7 @@ public final class PlayerView: UIView, Player {
 
     public private(set) var duration: Double?
     public private(set) var audioTracks: [AudioTrack] = []
-    public private(set) var currentTrack: AudioTrack?
+    public private(set) var currentAudio: AudioTrack?
     public private(set) var subtitles: [Subtitles] = []
     public private(set) var currentSubtitles: Subtitles?
 
@@ -119,7 +119,7 @@ public final class PlayerView: UIView, Player {
         self.player?.seek(to: cmtime, toleranceBefore: .zero, toleranceAfter: .zero)
     }
     
-    public func set(subtitles: Subtitles) {}
+    public func set(subtitle: Subtitles) {}
     
     public func set(audio: AudioTrack) {}
 

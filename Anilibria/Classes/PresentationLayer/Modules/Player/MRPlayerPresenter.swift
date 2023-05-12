@@ -18,28 +18,17 @@ final class PlayerPresenter {
     private var series: Series!
     private var playlist: [PlaylistItem] = []
     private var bag = Set<AnyCancellable>()
-
+    
+    private var currentSubtitle: Subtitles?
+    private var availableSubtitles: [Subtitles] = []
+    
+    private var currentAudio: AudioTrack?
+    private var availableAudioTracks: [AudioTrack] = []
+    
     private let playerService: PlayerService
 
     init(playerService: PlayerService) {
         self.playerService = playerService
-    }
-}
-
-extension PlayerPresenter: RouterCommandResponder {
-    func respond(command: RouteCommand) -> Bool {
-        if let command = command as? ChoiceResult {
-            if let value = command.value as? PlaylistItem,
-                let index = self.playlist.firstIndex(of: value) {
-                self.view.set(playItemIndex: index)
-                return true
-            }
-            if let value = command.value as? VideoQuality {
-                self.view.set(quality: value)
-                return true
-            }
-        }
-        return false
     }
 }
 
@@ -50,7 +39,6 @@ extension PlayerPresenter: PlayerEventHandler {
               playlist: [PlaylistItem]?) {
         self.view = view
         self.router = router
-        self.router.responder = self
         self.series = series
         self.playlist = playlist ?? self.series.playlist.reversed()
     }
@@ -63,30 +51,87 @@ extension PlayerPresenter: PlayerEventHandler {
             })
             .store(in: &bag)
     }
+    
+    func set(currentSubtitle: Subtitles?, availableSubtitles: [Subtitles]) {
+        self.currentSubtitle = currentSubtitle
+        self.availableSubtitles = availableSubtitles
+    }
+    
+    func set(currentAudio: AudioTrack?, availableAudioTracks: [AudioTrack]) {
+        self.currentAudio = currentAudio
+        self.availableAudioTracks = availableAudioTracks
+    }
 
     func select(playItemIndex: Int) {
-        let lastIndex = self.playlist.count - 1
         let items = self.playlist.enumerated().map { value in
-            ChoiceItem(value.element,
+            ChoiceItem(value.offset,
                        title: value.element.title,
-                       isSelected: value.offset == playItemIndex,
-                       isLast: value.offset == lastIndex)
+                       isSelected: value.offset == playItemIndex)
         }
         
-        self.router.openSheet(with: [ChoiceGroup(items: items)])
+        let group = ChoiceGroup(items: items)
+        group.choiceCompleted = { [weak self] value in
+            if let index = value as? Int, index != playItemIndex {
+                self?.view.set(playItemIndex: index)
+            }
+        }
+        
+        self.router.openSheet(with: [group])
     }
 
     func settings(quality: VideoQuality?, for item: PlaylistItem) {
         let qualities = item.supportedQualities()
         let items = qualities.compactMap { value -> ChoiceItem? in
             guard let name = value.name else { return nil }
-            return ChoiceItem(value, title: name, isSelected: quality == value,
-                              isLast: qualities.last == value)
+            return ChoiceItem(value, title: name, isSelected: quality == value)
         }
+        
+        var groups: [ChoiceGroup] = []
 
         if !items.isEmpty {
-            self.router.openSheet(with: [ChoiceGroup(title: L10n.Common.quality, items: items)])
+            let group = ChoiceGroup(title: L10n.Common.quality, items: items)
+            group.choiceCompleted = { [weak self] value in
+                if let selectedQuality = value as? VideoQuality, selectedQuality != quality {
+                    self?.view.set(quality: selectedQuality)
+                }
+            }
+            
+            groups.append(group)
         }
+        
+        if !availableAudioTracks.isEmpty {
+            let items = availableAudioTracks.map { value -> ChoiceItem in
+                return ChoiceItem(value, title: value.title, isSelected: currentAudio == value)
+            }
+            
+            let group = ChoiceGroup(title: L10n.Common.audioTrack, items: items)
+            group.choiceCompleted = { [weak self] value in
+                if let selected = value as? AudioTrack, self?.currentAudio != selected {
+                    self?.currentAudio = selected
+                    self?.view.set(audio: selected)
+                }
+            }
+            
+            groups.append(group)
+        }
+        
+        if !availableSubtitles.isEmpty {
+            let items = availableSubtitles.map { value -> ChoiceItem in
+                return ChoiceItem(value, title: value.title, isSelected: currentSubtitle == value)
+            }
+            
+            let group = ChoiceGroup(title: L10n.Common.sublitleTrack, items: items)
+            group.choiceCompleted = { [weak self] value in
+                if let selected = value as? Subtitles, self?.currentSubtitle != selected {
+                    self?.currentSubtitle = selected
+                    self?.view.set(subtitle: selected)
+                }
+            }
+            
+            groups.append(group)
+        }
+        
+        self.router.openSheet(with: groups)
     }
 
     func back() {
@@ -95,6 +140,8 @@ extension PlayerPresenter: PlayerEventHandler {
 
     func save(quality: VideoQuality?, number: Int, time: Double) {
         let context = PlayerContext(quality: quality,
+                                    audioTrack: currentAudio,
+                                    subtitleTrack: currentSubtitle,
                                     number: number,
                                     time: time)
         self.playerService
@@ -105,13 +152,17 @@ extension PlayerPresenter: PlayerEventHandler {
 
     private func run(with context: PlayerContext?) {
         let index = context?.number ?? 0
-        let settingsQuality = self.playerService.fetchSettings().quality
-        let prefferedQualities: VideoQuality = context?.quality ?? settingsQuality
+        let settings = self.playerService.fetchSettings()
+        let preffered = PrefferedSettings(
+            quality: context?.quality ?? settings.quality,
+            audioTrack: context?.audioTrack ?? settings.audioTrack,
+            subtitleTrack: context?.subtitleTrack ?? settings.subtitleTrack
+        )
 
         self.view.set(name: self.series.names.first ?? "",
                       playlist: self.playlist,
                       playItemIndex: index,
                       time: Double(context?.time ?? 0),
-                      preffered: prefferedQualities)
+                      preffered: preffered)
     }
 }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct AudioTrack {
+public struct AudioTrack: Codable, Hashable {
     let id: String
     let title: String
 }

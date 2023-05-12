@@ -199,10 +199,15 @@ final class PlayerViewController: BaseViewController {
                           time: self.currentTime)
     }
 
-    private func set(playItem index: Int, seek time: Double) {
+    private func set(playItem index: Int, seek time: Double, preffered: PrefferedSettings? = nil) {
         self.clearLabels()
         self.currentIndex = index
         self.currentTime = time
+        
+        if preffered != nil {
+            self.currentQuality = preffered?.quality
+        }
+        
         let item = self.playlist[index]
         let qualities = item.supportedQualities()
         guard let bestQuality = qualities.first else {
@@ -219,14 +224,24 @@ final class PlayerViewController: BaseViewController {
                 .filter { $0 != nil }
                 .map { $0! }
                 .sink(onNext: { [weak self] duration in
-                    self?.videoSliderView.minimumValue = Float(0)
-                    self?.videoSliderView.maximumValue = Float(duration)
+                    guard let self = self else { return }
+                    self.videoSliderView.minimumValue = Float(0)
+                    self.videoSliderView.maximumValue = Float(duration)
                     if duration == 0 {
-                        self?.clearLabels()
+                        self.clearLabels()
                     } else {
-                        self?.updateLabels()
+                        self.updateLabels()
                     }
-                    self?.playerView.set(time: time)
+                    self.playerView.set(time: time)
+                    if let preffered = preffered {
+                        self.playerView.set(audio: preffered.audioTrack)
+                        self.playerView.set(subtitle: preffered.subtitleTrack)
+                    }
+                    
+                    self.handler.set(currentSubtitle: self.playerView.currentSubtitles,
+                                     availableSubtitles: self.playerView.subtitles)
+                    self.handler.set(currentAudio: self.playerView.currentAudio,
+                                     availableAudioTracks: self.playerView.audioTracks)
                 })
         }
     }
@@ -326,7 +341,7 @@ extension PlayerViewController: PlayerViewBehavior {
              playlist: [PlaylistItem],
              playItemIndex: Int,
              time: Double,
-             preffered quality: VideoQuality) {
+             preffered: PrefferedSettings) {
         self.titleLabel.text = name
         self.playlist = playlist
 
@@ -341,12 +356,11 @@ extension PlayerViewController: PlayerViewBehavior {
             })
             .debounce(for: .seconds(1), scheduler: RunLoop.main)
             .sink(onNext: { [weak self] index in
-                self?.currentQuality = quality
                 var seekTime = 0.0
                 if index == playItemIndex {
                     seekTime = time
                 }
-                self?.set(playItem: index, seek: seekTime)
+                self?.set(playItem: index, seek: seekTime, preffered: preffered)
             })
             .store(in: &subscribers)
     }
@@ -359,6 +373,14 @@ extension PlayerViewController: PlayerViewBehavior {
         let index = self.switcherView.currentIndex
         self.currentQuality = quality
         self.set(playItem: index, seek: self.currentTime)
+    }
+    
+    func set(audio: AudioTrack) {
+        playerView.set(audio: audio)
+    }
+    
+    func set(subtitle: Subtitles) {
+        playerView.set(subtitle: subtitle)
     }
 }
 

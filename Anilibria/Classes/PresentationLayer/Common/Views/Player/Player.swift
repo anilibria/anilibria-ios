@@ -15,13 +15,13 @@ public protocol Player: UIView {
     var isAirplaySupported: Bool { get }
     var duration: Double? { get }
     var audioTracks: [AudioTrack] { get }
-    var currentTrack: AudioTrack? { get }
+    var currentAudio: AudioTrack? { get }
     var subtitles: [Subtitles] { get }
     var currentSubtitles: Subtitles? { get }
     var isPlaying: Bool { get }
     func setVideo(url: URL) -> AnyPublisher<Double?, Error>
     func set(time: Double)
-    func set(subtitles: Subtitles)
+    func set(subtitle: Subtitles)
     func set(audio: AudioTrack)
     func togglePlay()
     func getCurrentTime() -> AnyPublisher<Double, Never>

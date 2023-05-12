@@ -49,6 +49,9 @@
 "common.quality.hd" = "720p";
 "common.quality.full_hd" = "1080p";
 
+"common.audio_track" = "Аудио трек";
+"common.sublitle_track" = "Трек субтитров";
+
 "common.google_search.query" = "Найти в гугле \"%@\"";
 "common.filter_search.title" = "Искать по жанрам и годам";
 
@@ -98,6 +101,7 @@
 "screen.settings.title" = "Настройки";
 "screen.settings.common" = "Общие";
 "screen.settings.about_app" = "О приложении";
+"screen.settings.preffered" = "Предпочтения";
 
 //STUB VIEW
 "stub.title" = "Нет данных";

@@ -13,7 +13,7 @@ class PieceProgress {
     let formatter = ByteCountFormatter()
     private let maxBacklog = 5
     let maxBlockSize = 16384
-    let maxStrikeCount = 10
+    let maxStrikeCount = 1
 
     let piece: PieceWork
     var requested: Int = 0

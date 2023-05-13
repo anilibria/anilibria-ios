@@ -41,6 +41,7 @@ public final class PlaylistItem: NSObject, Decodable {
     }
 
     public init(title: String, url: URL) {
+        self.id = url.absoluteString.djbHash
         self.title = title
         self.video[.unknown] = url
     }

@@ -112,3 +112,12 @@ extension String {
         return regex.firstMatch(in: lhs, options: [], range: range) != nil
     }
 }
+
+extension String {
+    var djbHash: Int {
+        unicodeScalars
+            .lazy
+            .map { $0.value }
+            .reduce(5381) { ($0 << 5) &+ $0 &+ Int($1) }
+    }
+}

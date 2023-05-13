@@ -11,13 +11,17 @@ import Combine
 import AVKit
 import libmpv
 
+public struct MPVPlayerError: Error {
+    let message: String
+}
+
 public final class MPVPlayerView: UIView, Player {
     private var secondsRelay: CurrentValueSubject<Double, Never> = CurrentValueSubject(0)
     private var playRelay: CurrentValueSubject<Bool, Never> = CurrentValueSubject(false)
     private var statusRelay: PassthroughSubject<PlayerStatus, Never> = PassthroughSubject()
-    private var durationRelay: PassthroughSubject<Double?, Error> = PassthroughSubject()
+    private var durationPromise: Future<Double?, Error>.Promise?
     private var bag = Set<AnyCancellable>()
-    private var observer: Any?
+    private var delayedAction: DelayedAction?
     private let mpvQueue = DispatchQueue(label: "mpv.queue")
     private var mpvContext: OpaquePointer?
     private var mpvGLContext: OpaquePointer?
@@ -74,16 +78,21 @@ public final class MPVPlayerView: UIView, Player {
 
         // logging
         // checkError(mpv_request_log_messages(mpvContext, "warn"))
-        checkError(mpv_request_log_messages(mpvContext, "v"))
-
-        // initializing
-        checkError(mpv_set_option_string(mpvContext, "hwdec", "no"))
-        checkError(mpv_initialize(mpvContext))
-        checkError(mpv_set_option_string(mpvContext, "vo", "libmpv"))
-        checkError(mpv_set_option_string(mpvContext, "vd-lavc-dr", "no"))
-        checkError(mpv_set_option_string(mpvContext, "save-position-on-quit", "no"))
-        checkError(mpv_set_option_string(mpvContext, "force-window", "no"))
-        checkError(mpv_set_option_string(mpvContext, "pause", "yes"))
+        do {
+            try checkError(mpv_request_log_messages(mpvContext, "v"))
+            
+            // initializing
+            try checkError(mpv_set_option_string(mpvContext, "hwdec", "no"))
+            try checkError(mpv_initialize(mpvContext))
+            try checkError(mpv_set_option_string(mpvContext, "vo", "libmpv"))
+            try checkError(mpv_set_option_string(mpvContext, "vd-lavc-dr", "no"))
+            try checkError(mpv_set_option_string(mpvContext, "save-position-on-quit", "no"))
+            try checkError(mpv_set_option_string(mpvContext, "force-window", "no"))
+            try checkError(mpv_set_option_string(mpvContext, "pause", "yes"))
+            try checkError(mpv_set_option_string(mpvContext, "keep-open", "always"))
+        } catch {
+            preconditionFailure(error.message)
+        }
 
         // configure
         renderView.create { [weak self] in
@@ -160,22 +169,34 @@ public final class MPVPlayerView: UIView, Player {
         self.isPlaying = false
         self.duration = nil
         self.statusRelay.send(.unknown)
-
-        return Deferred { [weak self] () -> AnyPublisher<Double?, Error> in
-            guard let self = self else { return AnyPublisher<Double?, Error>.just(nil) }
-            self.checkError(mpv_command(self.mpvContext, self.makeCommand("loadfile", args: url.absoluteString)))
-            return self.durationRelay.eraseToAnyPublisher()
+        
+        let future = Future<Double?, Error> { [weak self] promise in
+            self?.durationPromise = promise
         }
-        .subscribe(on: mpvQueue)
-        .receive(on: DispatchQueue.main)
-        .eraseToAnyPublisher()
+        
+        tryToLoad(url: url)
+        
+        return Deferred { future }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+    
+    private func tryToLoad(url: URL) {
+        do {
+            try checkError(mpv_command(mpvContext, makeCommand("loadfile", args: url.absoluteString)))
+            delayedAction = DelayedAction(delay: 5) { [weak self] in
+                self?.tryToLoad(url: url)
+            }
+        } catch {
+            delayedAction = DelayedAction(delay: 5) { [weak self] in
+                self?.tryToLoad(url: url)
+            }
+        }
     }
 
     public func set(time: Double) {
-        print("\(time)")
-        
         statusRelay.send(.waitingToPlay)
-        checkError(mpv_command(mpvContext, makeCommand("seek", args: "\(Int(time))", "absolute")))
+        mpv_command(mpvContext, makeCommand("seek", args: "\(Int(time))", "absolute"))
         if isPlaying {
             statusRelay.send(.playing)
         } else {
@@ -185,26 +206,34 @@ public final class MPVPlayerView: UIView, Player {
     
     public func set(subtitle: Subtitles) {
         if currentSubtitles != subtitle, subtitles.contains(where: { subtitle.id == $0.id }) {
-            checkError(mpv_set_option_string(mpvContext, "sid", subtitle.id))
+            mpv_set_option_string(mpvContext, "sid", subtitle.id)
             currentSubtitles = subtitle
         }
     }
     
     public func set(audio: AudioTrack) {
         if currentAudio != audio, audioTracks.contains(where: { audio.id == $0.id }) {
-            checkError(mpv_set_option_string(mpvContext, "aid", audio.id))
+            mpv_set_option_string(mpvContext, "aid", audio.id)
             currentAudio = audio
         }
     }
 
     public func togglePlay() {
-        isPlaying.toggle()
-        if isPlaying {
-            checkError(mpv_set_option_string(mpvContext, "pause", "no"))
-            statusRelay.send(.playing)
-        } else {
-            checkError(mpv_set_option_string(mpvContext, "pause", "yes"))
-            statusRelay.send(.pause)
+        do {
+            let time = Double(try getPropertyNumber("time-pos"))
+            if time == duration {
+                return
+            }
+            isPlaying.toggle()
+            if isPlaying {
+                try checkError(mpv_set_option_string(mpvContext, "pause", "no"))
+                statusRelay.send(.playing)
+            } else {
+                try checkError(mpv_set_option_string(mpvContext, "pause", "yes"))
+                statusRelay.send(.pause)
+            }
+        } catch {
+            preconditionFailure(error.message)
         }
     }
 
@@ -231,19 +260,19 @@ public final class MPVPlayerView: UIView, Player {
             
             if property.name.asString == "time-pos", let time = property.data?.load(as: Int64.self) {
                 DispatchQueue.main.async { [weak self] in
-                    self?.secondsRelay.send(Double(time))
+                    let currentTime = Double(time)
+                    self?.secondsRelay.send(currentTime)
+                    if currentTime == self?.duration {
+                        self?.isPlaying = false
+                        self?.statusRelay.send(.pause)
+                    }
                 }
             }
             
         case MPV_EVENT_FILE_LOADED:
-            let duration = getPropertyNumber("duration")
-            checkError(mpv_observe_property(self.mpvContext, 0, "time-pos", MPV_FORMAT_INT64))
-            makeTracks()
-            self.duration = Double(duration)
-            
+            delayedAction = nil
             DispatchQueue.main.async { [weak self] in
-                self?.durationRelay.send(self?.duration)
-                self?.statusRelay.send(.radyToPlay)
+                self?.tryHandleVideo()
             }
         default:
             if let name = mpv_event_name(event.event_id)?.asString {
@@ -252,14 +281,29 @@ public final class MPVPlayerView: UIView, Player {
         }
     }
     
-    func makeTracks() {
-        let count = getPropertyNumber("track-list/count")
+    private func tryHandleVideo() {
+        do {
+            let duration = try getPropertyNumber("duration")
+            try checkError(mpv_observe_property(self.mpvContext, 0, "time-pos", MPV_FORMAT_INT64))
+            try makeTracks()
+            self.duration = Double(duration)
+            self.durationPromise?(.success(self.duration))
+            self.statusRelay.send(.radyToPlay)
+        } catch {
+            delayedAction = DelayedAction(delay: 5) { [weak self] in
+                self?.tryHandleVideo()
+            }
+        }
+    }
+    
+    private func makeTracks() throws {
+        let count = try getPropertyNumber("track-list/count")
         
         for i in 0..<count {
-            let id = getPropertyNumber("track-list/\(i)/id")
-            let type = String(cString: getPropertyNode("track-list/\(i)/type").u.string)
-            let title = String(cString: getPropertyNode("track-list/\(i)/title").u.string)
-            let selected = getPropertyNode("track-list/\(i)/selected").u.flag
+            let id = try getPropertyNumber("track-list/\(i)/id")
+            let type = String(cString: try getPropertyNode("track-list/\(i)/type").u.string)
+            let title = String(cString: try getPropertyNode("track-list/\(i)/title").u.string)
+            let selected = try getPropertyNode("track-list/\(i)/selected").u.flag
             
             switch type {
             case "audio":
@@ -275,31 +319,29 @@ public final class MPVPlayerView: UIView, Player {
             default:
                 break
             }
-            
-            print("type: \(type) id: \(id) title: \(title)")
         }
     }
     
-    private func getPropertyNumber(_ name: String) -> Int64 {
+    private func getPropertyNumber(_ name: String) throws -> Int64 {
         var value = Int64()
-        checkError(mpv_get_property(mpvContext, name, MPV_FORMAT_INT64, &value))
+        try checkError(mpv_get_property(mpvContext, name, MPV_FORMAT_INT64, &value))
         return value
     }
     
-    private func getPropertyNode(_ name: String) -> mpv_node {
+    private func getPropertyNode(_ name: String) throws -> mpv_node {
         var value = mpv_node()
-        checkError(mpv_get_property(mpvContext, name, MPV_FORMAT_NODE, &value))
+        try checkError(mpv_get_property(mpvContext, name, MPV_FORMAT_NODE, &value))
         return value
     }
 
-    private func checkError(_ status: Int32) {
+    private func checkError(_ status: Int32) throws {
         if status < 0 {
             var message = "unknown"
             if let cString = mpv_error_string(status)?.asString {
                 message = cString
             }
 
-            preconditionFailure(message)
+            throw MPVPlayerError(message: message)
         }
     }
     

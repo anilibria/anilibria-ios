@@ -35,11 +35,10 @@ struct TorrentData {
     }
 
     func calculatePieceSize(index: Int, file: TorrentFile) -> Int {
-        let (begin, end) = calculateBoundsForPiece(index: index, file: file)
-        if begin == end {
+        if content.files.last == file && index == pieceHashes.count - 1 {
             return pieceLength - file.position.dataInsets.end
         }
-        return end - begin
+        return pieceLength
     }
 }
 

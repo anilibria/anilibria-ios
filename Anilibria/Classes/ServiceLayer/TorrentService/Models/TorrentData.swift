@@ -19,7 +19,7 @@ struct TorrentData {
         let fileBounds = file.position.hashesBounds
         let updatedIndex = index - fileBounds.begin
 
-        var begin = updatedIndex * pieceLength
+        var begin = updatedIndex * pieceLength - file.position.dataInsets.begin
         var end = begin + pieceLength
         if index == pieceHashes.count - 1 {
             if end > file.length {
@@ -35,7 +35,7 @@ struct TorrentData {
     }
 
     func calculatePieceSize(index: Int, file: TorrentFile) -> Int {
-        if content.files.last == file && index == pieceHashes.count - 1 {
+        if index == pieceHashes.count - 1 {
             return pieceLength - file.position.dataInsets.end
         }
         return pieceLength

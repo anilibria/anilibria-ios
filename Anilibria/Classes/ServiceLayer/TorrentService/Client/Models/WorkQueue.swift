@@ -28,7 +28,7 @@ class WorkQueue: Codable {
     private(set) lazy var progress: Progress = Progress(totalUnitCount: Int64(workCount))
 
     let workCount: Int
-    private(set) var bitfield = Bitfield()
+    private var bitfield = Bitfield()
 
     init(pieces: [PieceWork]) {
         self.pieces = pieces
@@ -48,7 +48,7 @@ class WorkQueue: Codable {
     
     private func fillBitfield() {
         pieces.forEach {
-            bitfield.setPiece(index: UInt32($0.index))
+            bitfield.setPiece(index: $0.index)
         }
     }
 
@@ -118,6 +118,12 @@ class WorkQueue: Codable {
     func getLeftCount() -> Int {
         lock.sync {
             pieces.count
+        }
+    }
+    
+    func getBitfield() -> Bitfield {
+        lock.sync {
+            bitfield
         }
     }
 }

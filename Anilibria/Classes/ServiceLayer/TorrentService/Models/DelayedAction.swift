@@ -15,7 +15,7 @@ public final class DelayedAction {
         self.timer = Timer(timeInterval: delay, repeats: false) { _ in
             action()
         }
-        RunLoop.current.add(self.timer, forMode: .common)
+        RunLoop.main.add(self.timer, forMode: .common)
     }
 
     deinit {

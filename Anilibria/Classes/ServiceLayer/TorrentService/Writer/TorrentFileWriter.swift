@@ -132,12 +132,12 @@ class TorrentFileWriter {
 
     private func prepare(piece: PieceWork) -> (offset: Int, buffer: [UInt8]) {
         let bounds = series.torrent.calculateBoundsForPiece(index: piece.index, file: series.torrentFile)
-        var offset = max(bounds.begin, 0)
+        let offset = max(bounds.begin, 0)
         if offset == 0 {
             return (offset, Array(piece.buffer.dropFirst(series.torrentFile.position.dataInsets.begin)))
         }
 
-        let end = bounds.end - series.torrentFile.position.dataInsets.begin - series.torrentFile.position.dataInsets.end
+        let end = bounds.end - series.torrentFile.position.dataInsets.end
         if end == series.torrentFile.length {
             return (offset, Array(piece.buffer.dropLast(series.torrentFile.position.dataInsets.end)))
         }

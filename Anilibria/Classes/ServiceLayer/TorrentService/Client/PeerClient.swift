@@ -215,11 +215,12 @@ class PeerClient: NSObject, StreamDelegate {
         waitForPiece = nil
         isDownloading = true
 
-        if bitfield.intersects(workQueue.bitfield), let piece = workQueue.next() {
+        let isIntersects = workQueue.getBitfield().intersects(bitfield)
+        if isIntersects, let piece = workQueue.next() {
             download(piece: piece)
         } else {
             isDownloading = false
-            print("== \(self.peer.ip) - waitForPiece")
+            print("== \(self.peer.ip) - waitForPiece intersects: \(isIntersects)")
             waitForPiece = workQueue.pieceReturned.first().sink(receiveValue: { [weak self] in
                 self?.download()
             })

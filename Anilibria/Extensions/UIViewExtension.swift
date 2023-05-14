@@ -55,3 +55,10 @@ public struct LayoutInsets {
         self.right = right
     }
 }
+
+extension NSLayoutConstraint {
+    func set(priority: UILayoutPriority) -> NSLayoutConstraint {
+        self.priority = priority
+        return self
+    }
+}

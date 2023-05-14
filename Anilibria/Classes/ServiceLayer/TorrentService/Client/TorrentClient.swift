@@ -47,13 +47,13 @@ class TorrentClient {
                     let peers = self?.clientsCount ?? 0
                     print("== COMPLETE: - Piece [\(data)] - left: \(left) - in progress: \(inProgress) : \(percentage)% peers: \(peers)")
                 }
-            }
-
-            if self?.work?.progress.isFinished == true {
-                writer = nil
-                print("== SUCCESS!!!")
-                self?.subscribers.removeAll()
-                self?.clients = []
+                
+                if self?.work?.progress.isFinished == true {
+                    writer = nil
+                    print("== SUCCESS!!!")
+                    self?.subscribers.removeAll()
+                    self?.clients = []
+                }
             }
 
         }.store(in: &self.subscribers)

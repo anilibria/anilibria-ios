@@ -61,7 +61,15 @@ public final class MPVPlayerView: UIView, Player {
     private func setupPlayer() {
         isUserInteractionEnabled = false
         addSubview(renderView)
-        renderView.constraintEdgesToSuperview()
+        renderView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            renderView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            renderView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            leadingAnchor.constraint(equalTo: renderView.leadingAnchor).set(priority: .defaultHigh),
+            topAnchor.constraint(equalTo: renderView.topAnchor).set(priority: .defaultHigh),
+            renderView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor),
+            renderView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor)
+        ])
         initializeMpv()
     }
 
@@ -90,6 +98,9 @@ public final class MPVPlayerView: UIView, Player {
             try checkError(mpv_set_option_string(mpvContext, "force-window", "no"))
             try checkError(mpv_set_option_string(mpvContext, "pause", "yes"))
             try checkError(mpv_set_option_string(mpvContext, "keep-open", "always"))
+            
+            try checkError(mpv_set_option_string(mpvContext, "sub-ass-override", "strip"))
+            try checkError(mpv_set_option_string(mpvContext, "sub-font", "Helvetica Neue"))
         } catch {
             preconditionFailure(error.message)
         }
@@ -284,6 +295,8 @@ public final class MPVPlayerView: UIView, Player {
     private func tryHandleVideo() {
         do {
             let duration = try getPropertyNumber("duration")
+            let aspect = try getPropertyNode("video-params/aspect").u.double_
+            renderView.widthAnchor.constraint(equalTo: renderView.heightAnchor, multiplier: CGFloat(aspect)).isActive = true
             try checkError(mpv_observe_property(self.mpvContext, 0, "time-pos", MPV_FORMAT_INT64))
             try makeTracks()
             self.duration = Double(duration)

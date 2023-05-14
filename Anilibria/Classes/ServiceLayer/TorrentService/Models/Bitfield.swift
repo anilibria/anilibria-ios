@@ -48,7 +48,7 @@ struct Bitfield {
     mutating func removePiece<T: FixedWidthInteger>(index: T) {
         let value = make(index: index)
         updateDataCapacityIfNeeded(value.byteIndex)
-        data[value.byteIndex] &= 0 << (7 - value.offset)
+        data[value.byteIndex] &= ~(1 << (7 - value.offset))
     }
 }
 

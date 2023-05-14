@@ -289,6 +289,7 @@
 		C783950F22D0DC8400ACC353 /* FilterData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C783950E22D0DC8400ACC353 /* FilterData.swift */; };
 		C783951122D0DD3400ACC353 /* GenresRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C783951022D0DD3400ACC353 /* GenresRequest.swift */; };
 		C783951322D0DD6A00ACC353 /* YearsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C783951222D0DD6A00ACC353 /* YearsRequest.swift */; };
+		C78649672A10B8E200C10268 /* IntExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78649662A10B8E200C10268 /* IntExtension.swift */; };
 		C78D920224CDD79600EB8EA0 /* PlaceholderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78D920124CDD79600EB8EA0 /* PlaceholderViewController.swift */; };
 		C78D920424CDD7AF00EB8EA0 /* PlaceholderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C78D920324CDD7AF00EB8EA0 /* PlaceholderViewController.xib */; };
 		C799EBB822DDA29100C6BD9B /* SignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C799EBB722DDA29100C6BD9B /* SignInViewController.xib */; };
@@ -737,6 +738,7 @@
 		C783950E22D0DC8400ACC353 /* FilterData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterData.swift; sourceTree = "<group>"; };
 		C783951022D0DD3400ACC353 /* GenresRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenresRequest.swift; sourceTree = "<group>"; };
 		C783951222D0DD6A00ACC353 /* YearsRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YearsRequest.swift; sourceTree = "<group>"; };
+		C78649662A10B8E200C10268 /* IntExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtension.swift; sourceTree = "<group>"; };
 		C78D920124CDD79600EB8EA0 /* PlaceholderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderViewController.swift; sourceTree = "<group>"; };
 		C78D920324CDD7AF00EB8EA0 /* PlaceholderViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlaceholderViewController.xib; sourceTree = "<group>"; };
 		C799EBB722DDA29100C6BD9B /* SignInViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SignInViewController.xib; sourceTree = "<group>"; };
@@ -1743,6 +1745,7 @@
 				46945633291680EC00145F48 /* ArrayExtension.swift */,
 				C7036FFB29F8ED4A00965D66 /* UIInterfaceOrientationExtension.swift */,
 				469456392916B50600145F48 /* UIControlExtension.swift */,
+				C78649662A10B8E200C10268 /* IntExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2714,6 +2717,7 @@
 				C737924622E01E6600DDF2B2 /* RemoveFavoriteRequest.swift in Sources */,
 				C759F5AE234F6A9400F8736A /* ConfigurationViewController.swift in Sources */,
 				46A15F8B2920FDE7002756AD /* WorkQueue.swift in Sources */,
+				C78649672A10B8E200C10268 /* IntExtension.swift in Sources */,
 				C783950B22D0C8E500ACC353 /* Selectable.swift in Sources */,
 				46A15F732920E0D9002756AD /* MRTorrentListRouter.swift in Sources */,
 				C7D462D722CC74EF00E763DF /* UIImageViewExtension.swift in Sources */,

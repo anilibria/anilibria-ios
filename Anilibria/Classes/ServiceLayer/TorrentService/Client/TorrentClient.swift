@@ -32,10 +32,9 @@ class TorrentClient {
 
         let startTime = Date()
         var downloaded: Double = 0
-        let formatter = ByteCountFormatter()
         work.results.receive(on: DispatchQueue.main).sink { [weak self] data in
             downloaded += Double(data.downloaded)
-            let speed = formatter.string(fromByteCount: Int64(downloaded / abs(startTime.timeIntervalSinceNow)))
+            let speed = Int64(downloaded / abs(startTime.timeIntervalSinceNow)).binaryCountFormatted
             print("=-= Speed: \(speed)/c")
 
             writer?.write(piece: data) { [weak self] succeeded in

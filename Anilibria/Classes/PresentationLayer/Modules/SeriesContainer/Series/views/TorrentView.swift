@@ -3,7 +3,6 @@ import UIKit
 public final class TorrentView: UIView {
     @IBOutlet private var mainLabel: UILabel!
     @IBOutlet private var infoLabel: UILabel!
-    private let formatter = ByteCountFormatter()
 
     private var handler: Action<TorrentMetaData>?
 
@@ -30,9 +29,8 @@ public final class TorrentView: UIView {
     }
 
     private func getInfo(from torrent: TorrentMetaData) -> String {
-        let size = formatter.string(for: torrent.size) ?? "None"
         return """
-               \(size)
+               \(torrent.size.binaryCountFormatted)
                ↑ \(torrent.seeders)
                ↓ \(torrent.leechers)
                ✓ \(torrent.completed)

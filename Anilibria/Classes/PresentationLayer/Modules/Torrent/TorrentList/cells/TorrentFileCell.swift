@@ -11,7 +11,6 @@ import UIKit
 public final class TorrentFileCell: RippleViewCell {
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var descLabel: UILabel!
-    private let formatter = ByteCountFormatter()
 
     public override func awakeFromNib() {
         super.awakeFromNib()
@@ -22,8 +21,8 @@ public final class TorrentFileCell: RippleViewCell {
 
     func configure(_ item: SeriesFile) {
         self.titleLabel.text = item.torrentFile.name
-        let current = formatter.string(for: item.fileSize) ?? ""
-        let expected = formatter.string(for: item.torrentFile.length) ?? ""
+        let current = item.fileSize.binaryCountFormatted
+        let expected = item.torrentFile.length.binaryCountFormatted
         self.descLabel.text = "\(current)/\(expected)"
     }
 

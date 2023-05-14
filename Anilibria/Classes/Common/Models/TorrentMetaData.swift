@@ -16,7 +16,7 @@ public final class TorrentMetaData: NSObject, Decodable {
     var completed: Int = 0
     var quality: String = ""
     var series: String = ""
-    var size: Double = 0
+    var size: Int64 = 0
     var url: URL?
     var ctime: Date?
 

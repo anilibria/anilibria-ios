@@ -10,7 +10,6 @@ import Foundation
 import Combine
 
 class PieceProgress {
-    let formatter = ByteCountFormatter()
     private let maxBacklog = 5
     let maxBlockSize = 16384
     let maxStrikeCount = 1
@@ -24,7 +23,7 @@ class PieceProgress {
     private var sendHandler: ((PeerMessage) -> Void)?
     private var downloadingCompleted: ((PieceWork) -> Void)?
     private var timeoutHandler: (() -> Void)?
-    private var timerSubscriber: AnyCancellable?
+    private var delayedAction: DelayedAction?
 
     var isCompleted: Bool {
         piece.downloaded >= piece.length
@@ -69,11 +68,11 @@ class PieceProgress {
 
     func update(with message: PeerMessage, isChocked: Bool) {
         guard let size = try? message.parsePiece(index: piece.index, buffer: &piece.buffer) else { return }
-        timerSubscriber = nil
+        delayedAction = nil
         backlog -= 1
         piece.downloaded += size
         let speed = Int64(Double(size) / abs(startTime.timeIntervalSinceNow)) // bytes per second
-        let formattedSpeed = formatter.string(fromByteCount: speed)
+        let formattedSpeed = speed.binaryCountFormatted
         let progress = round(Double(piece.downloaded) / Double(piece.length) * 10000) / 100
         print("=@= [\(self.piece)] - progress: \(progress)% speed: \(formattedSpeed)")
 
@@ -92,15 +91,12 @@ class PieceProgress {
     }
     
     private func setTimeout() {
-        if timerSubscriber == nil {
-            timerSubscriber = Timer.publish(every: 10, on: .current, in: .common)
-                .autoconnect()
-                .first()
-                .sink(receiveValue: { [weak self] _ in
-                    guard let self = self else { return }
-                    print("== [\(self.piece)] - timer: receive timeout")
-                    self.timeoutHandler?()
-                })
+        if delayedAction == nil {
+            delayedAction = DelayedAction(delay: 5) { [weak self] in
+                guard let self = self else { return }
+                print("== [\(self.piece)] - timer: receive timeout")
+                self.timeoutHandler?()
+            }
         }
     }
 }

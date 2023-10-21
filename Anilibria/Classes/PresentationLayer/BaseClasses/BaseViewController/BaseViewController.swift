@@ -1,13 +1,15 @@
 import Combine
 import UIKit
 
-class BaseViewController: UIViewController, WaitingBehavior, LanguageBehavior {
+class BaseViewController: UIViewController, WaitingBehavior, LanguageBehavior, Loggable {
+    var defaultLoggingTag: LogTag { .view }
+    
     var subscribers = Set<AnyCancellable>()
 
     public var statusBarStyle: UIStatusBarStyle = .default
 
     deinit {
-        print("[D] \(self) destroyed")
+        log(.info, "[D] \(self) destroyed")
         NotificationCenter.default.removeObserver(self)
     }
 

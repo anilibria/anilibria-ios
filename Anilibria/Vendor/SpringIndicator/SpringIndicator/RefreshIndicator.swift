@@ -151,7 +151,6 @@ public class RefreshIndicator: UIControl {
         
         if isRefreshing && scrollView.isDragging == false && scrollView.isScrollEnabled {
             beginRefreshing()
-            print("-----> beginRefreshing: \(Thread.current)")
             return
         }
         

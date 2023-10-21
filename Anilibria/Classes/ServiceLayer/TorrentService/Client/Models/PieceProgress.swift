@@ -9,7 +9,9 @@
 import Foundation
 import Combine
 
-class PieceProgress {
+class PieceProgress: Loggable {
+    var defaultLoggingTag: LogTag { .model }
+    
     private let maxBacklog = 5
     let maxBlockSize = 16384
     let maxStrikeCount = 1
@@ -74,7 +76,7 @@ class PieceProgress {
         let speed = Int64(Double(size) / abs(startTime.timeIntervalSinceNow)) // bytes per second
         let formattedSpeed = speed.binaryCountFormatted
         let progress = round(Double(piece.downloaded) / Double(piece.length) * 10000) / 100
-        print("=@= [\(self.piece)] - progress: \(progress)% speed: \(formattedSpeed)")
+        log(.verbose, "=@= [\(self.piece)] - progress: \(progress)% speed: \(formattedSpeed)")
 
         if speed / 1024 < 100 {
             strike += 1
@@ -83,7 +85,7 @@ class PieceProgress {
         if isCompleted {
             downloadingCompleted?(piece)
         } else if strike > maxStrikeCount {
-            print("== [\(self.piece)] - strike: receive timeout")
+            log(.verbose, "== [\(self.piece)] - strike: receive timeout")
             self.timeoutHandler?()
         } else {
             run(isChocked)
@@ -94,7 +96,7 @@ class PieceProgress {
         if delayedAction == nil {
             delayedAction = DelayedAction(delay: 5) { [weak self] in
                 guard let self = self else { return }
-                print("== [\(self.piece)] - timer: receive timeout")
+                log(.verbose, "== [\(self.piece)] - timer: receive timeout")
                 self.timeoutHandler?()
             }
         }

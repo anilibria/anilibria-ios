@@ -15,7 +15,9 @@ public struct MPVPlayerError: Error {
     let message: String
 }
 
-public final class MPVPlayerView: UIView, Player {
+public final class MPVPlayerView: UIView, Player, Loggable {
+    public var defaultLoggingTag: LogTag { .view }
+    
     private var secondsRelay: CurrentValueSubject<Double, Never> = CurrentValueSubject(0)
     private var playRelay: CurrentValueSubject<Bool, Never> = CurrentValueSubject(false)
     private var statusRelay: PassthroughSubject<PlayerStatus, Never> = PassthroughSubject()
@@ -261,10 +263,10 @@ public final class MPVPlayerView: UIView, Player {
         case MPV_EVENT_SHUTDOWN:
             mpv_destroy(mpvContext)
             mpvContext = nil
-            print("MPV event: shutdown")
+            log(.verbose, "MPV event: shutdown")
         case MPV_EVENT_LOG_MESSAGE:
             let msg = event.data.load(as: mpv_event_log_message.self)
-            print("MPV event: [\(msg.prefix.asString)] \(msg.level.asString): \(msg.text.asString)")
+            log(.verbose, "MPV event: [\(msg.prefix.asString)] \(msg.level.asString): \(msg.text.asString)")
         case MPV_EVENT_PROPERTY_CHANGE:
             let property = event.data.load(as: mpv_event_property.self)
             
@@ -286,7 +288,7 @@ public final class MPVPlayerView: UIView, Player {
             }
         default:
             if let name = mpv_event_name(event.event_id)?.asString {
-                print("MPV event: \(name)")
+                log(.verbose, "MPV event: \(name)")
             }
         }
     }

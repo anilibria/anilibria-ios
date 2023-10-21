@@ -9,7 +9,9 @@
 import Foundation
 import Combine
 
-class TorrentClient {
+class TorrentClient: Loggable {
+    var defaultLoggingTag: LogTag { .model }
+    
     private let workRepository = WorkQueueRepository()
     let series: SeriesFile
     let peers: [Peer]
@@ -33,26 +35,28 @@ class TorrentClient {
         let startTime = Date()
         var downloaded: Double = 0
         work.results.receive(on: DispatchQueue.main).sink { [weak self] data in
+            guard let self = self else { return }
             downloaded += Double(data.downloaded)
             let speed = Int64(downloaded / abs(startTime.timeIntervalSinceNow)).binaryCountFormatted
-            print("=-= Speed: \(speed)/c")
+            log(.verbose, "=-= Speed: \(speed)/c")
 
             writer?.write(piece: data) { [weak self] succeeded in
+                guard let self = self else { return }
                 if succeeded {
-                    self?.work?.setCompletedPiece(data)
-                    self?.saveWork()
-                    let left = self?.work?.getLeftCount() ?? 0
-                    let inProgress = self?.work?.getInProgressCount() ?? 0
-                    let percentage = Double(Int((self?.work?.progress.fractionCompleted ?? 0) * 10000))/100
-                    let peers = self?.clientsCount ?? 0
-                    print("== COMPLETE: - Piece [\(data)] - left: \(left) - in progress: \(inProgress) : \(percentage)% peers: \(peers)")
+                    self.work?.setCompletedPiece(data)
+                    self.saveWork()
+                    let left = self.work?.getLeftCount() ?? 0
+                    let inProgress = self.work?.getInProgressCount() ?? 0
+                    let percentage = Double(Int((self.work?.progress.fractionCompleted ?? 0) * 10000))/100
+                    let peers = self.clientsCount
+                    log(.verbose, "== COMPLETE: - Piece [\(data)] - left: \(left) - in progress: \(inProgress) : \(percentage)% peers: \(peers)")
                 }
                 
-                if self?.work?.progress.isFinished == true {
+                if self.work?.progress.isFinished == true {
                     writer = nil
-                    print("== SUCCESS!!!")
-                    self?.subscribers.removeAll()
-                    self?.clients = []
+                    log(.verbose, "== SUCCESS!!!")
+                    self.subscribers.removeAll()
+                    self.clients = []
                 }
             }
 

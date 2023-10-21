@@ -94,7 +94,6 @@ class MPVLayer: CAOpenGLLayer {
             )
             CGLChoosePixelFormat(attributes, &pix, &npix)
             if let pix = pix {
-                print("Created OpenGL pixel format with \(attributes)")
                 return pix
             }
         }

@@ -17,7 +17,9 @@ enum PeerClientState {
     case broken
 }
 
-class PeerClient: NSObject, StreamDelegate {
+class PeerClient: NSObject, StreamDelegate, Loggable {
+    var defaultLoggingTag: LogTag { .model }
+    
     private let torrent: TorrentData
     private var connection: NWConnection?
     private let queue: DispatchQueue
@@ -42,7 +44,7 @@ class PeerClient: NSObject, StreamDelegate {
                     self.piceProgress = nil
                     self.waitForPiece = nil
                     workQueue.insert(piece)
-                    print("==> Client \(self.peer.ip): return -- Piece [\(piece)]")
+                    log(.verbose, "==> Client \(self.peer.ip): return -- Piece [\(piece)]")
                 }
             }
         }
@@ -63,7 +65,7 @@ class PeerClient: NSObject, StreamDelegate {
             return
         }
         
-        print("Connecting to: \(peer.ip)")
+        log(.verbose, "Connecting to: \(peer.ip)")
         let tcp = NWProtocolTCP.Options()
         tcp.noDelay = true
         let params = NWParameters(tls: nil, tcp: tcp)
@@ -110,7 +112,7 @@ class PeerClient: NSObject, StreamDelegate {
     private func receive() {
         timeoutHolder = DelayedAction(delay: 10) { [weak self] in
             guard let self = self else { return }
-            print("== \(self.peer.ip) - receive timeout")
+            log(.verbose, "== \(self.peer.ip) - receive timeout")
             self.state = .stopped
         }
         connection?.receive(minimumIncompleteLength: 1, maximumLength: 65536) { [weak self] (data, _, isComplete, error) in
@@ -159,11 +161,11 @@ class PeerClient: NSObject, StreamDelegate {
 
         guard let msg = message else {
             if data == keepAlive {
-                print("-- \(self.peer.ip) - Message: keep-alive")
+                log(.verbose, "-- \(self.peer.ip) - Message: keep-alive")
             } else if data.count < 5 {
                 self.unusedBytes = data
             } else {
-                print("-- \(self.peer.ip) - Message: UNKNOWN(\(data.count))")
+                log(.verbose, "-- \(self.peer.ip) - Message: UNKNOWN(\(data.count))")
             }
             return
         }
@@ -177,7 +179,7 @@ class PeerClient: NSObject, StreamDelegate {
             return
         }
         msgBuffer = nil
-        if let piece = piceProgress?.piece { print("-- \(self.peer.ip) - Message: \(msg.id) [\(piece)]") }
+        if let piece = piceProgress?.piece { log(.verbose, "-- \(self.peer.ip) - Message: \(msg.id) [\(piece)]") }
 
         process(msg)
 
@@ -220,7 +222,7 @@ class PeerClient: NSObject, StreamDelegate {
             download(piece: piece)
         } else {
             isDownloading = false
-            print("== \(self.peer.ip) - waitForPiece intersects: \(isIntersects)")
+            log(.verbose, "== \(self.peer.ip) - waitForPiece intersects: \(isIntersects)")
             waitForPiece = workQueue.pieceReturned.first().sink(receiveValue: { [weak self] in
                 self?.download()
             })
@@ -248,7 +250,7 @@ class PeerClient: NSObject, StreamDelegate {
             guard let self = self else { return }
             failedPieces.insert(piece.index)
             self.download(piece: piece)
-            print("== Client \(self.peer.ip): return -- Piece [\(piece)]")
+            log(.verbose, "== Client \(self.peer.ip): return -- Piece [\(piece)]")
         })
         piceProgress?.didComplete({ [weak self] (result) in
             if result.checkIntegrity() {

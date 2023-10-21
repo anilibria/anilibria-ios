@@ -142,7 +142,7 @@ open class PagerView: UIView {
         completionHandler?()
     }
     
-    func transition(direction: PageDirection)  {
+    func transition(direction: PageDirection) {
         let transition = CATransition()
         transition.type = .push
         transition.subtype =  direction == .forward ? .fromRight : .fromLeft
@@ -173,7 +173,7 @@ extension PagerView: UIPageViewControllerDataSource {
     }
 
     public func pageViewController(_ pageViewController: UIPageViewController,
-                            viewControllerAfter viewController: UIViewController) -> UIViewController? {
+                                   viewControllerAfter viewController: UIViewController) -> UIViewController? {
         guard let index = index(of: viewController) else {
             return nil
         }
@@ -214,7 +214,6 @@ extension PagerView: UIScrollViewDelegate {
     public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         activeScrollView = scrollView
     }
-    
     
     public func scrollViewWillEndDragging(_ scrollView: UIScrollView,
                                           withVelocity velocity: CGPoint,

@@ -49,7 +49,8 @@ class TorrentClient: Loggable {
                     let inProgress = self.work?.getInProgressCount() ?? 0
                     let percentage = Double(Int((self.work?.progress.fractionCompleted ?? 0) * 10000))/100
                     let peers = self.clientsCount
-                    log(.verbose, "== COMPLETE: - Piece [\(data)] - left: \(left) - in progress: \(inProgress) : \(percentage)% peers: \(peers)")
+                    let info = "Piece [\(data)] - left: \(left) - in progress: \(inProgress) : \(percentage)% peers: \(peers)"
+                    log(.verbose, "== COMPLETE: - \(info)")
                 }
                 
                 if self.work?.progress.isFinished == true {

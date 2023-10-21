@@ -2,7 +2,6 @@
 //  PagerView.swift
 //
 //  Created by Ivan Morozov on 04.05.2021.
-//  Copyright © 2021 Whisk. All rights reserved.
 //
 
 import UIKit
@@ -13,14 +12,12 @@ public protocol PagerViewDelegate: AnyObject {
     func numberOfPages(for pagerView: PagerView) -> Int
     func pagerView(_ pagerView: PagerView, pageFor index: Int) -> UIViewController?
     func pagerView(_ pagerView: PagerView, willTransitionTo index: Int)
-    func firstPage(_ pagerView: PagerView) -> UIViewController?
-    func lastPage(_ pagerView: PagerView) -> UIViewController?
+    func pagerView(_ pagerView: PagerView, didTransitionTo index: Int)
 }
 
 public extension PagerViewDelegate {
     func pagerView(_ pagerView: PagerView, willTransitionTo index: Int) {}
-    func firstPage(_ pagerView: PagerView) -> UIViewController? { nil }
-    func lastPage(_ pagerView: PagerView) -> UIViewController? { nil }
+    func pagerView(_ pagerView: PagerView, didTransitionTo index: Int) {}
 }
 
 open class PagerView: UIView {
@@ -31,38 +28,39 @@ open class PagerView: UIView {
         }
     }
 
-    public var isScrollEnabled = true {
-        didSet {
-            if isScrollEnabled {
-                self.pageController.dataSource = self
-            } else {
-                self.pageController.dataSource = nil
-            }
-        }
-    }
-
-    public var loopEnabled: Bool = false
     public weak var delegate: PagerViewDelegate?
 
     private var indexes = NSMapTable<UIViewController, NSNumber>(keyOptions: .weakMemory, valueOptions: .strongMemory)
-
     private var indexHandler: ((Int) -> Void)?
+    private var interPageSpacing: CGFloat = 0.0
+    private weak var activeScrollView: UIScrollView?
+    private var delayedScroll: (() -> Void)?
 
     public private(set) lazy var pageController: UIPageViewController = {
         let controller = PageViewController(transitionStyle: .scroll,
                                             navigationOrientation: .horizontal,
-                                            options: nil)
+                                            options: [.interPageSpacing: interPageSpacing])
         controller.dataSource = self
         controller.delegate = self
         controller.scrollDelegate = self
         self.addSubview(controller.view)
+        controller.view.constraintEdgesToSuperview()
         return controller
     }()
-
+    
+    private var nextIndex: Int = -1 {
+        didSet {
+            if nextIndex != oldValue {
+                delegate?.pagerView(self, willTransitionTo: nextIndex)
+            }
+        }
+    }
+    
     public private(set) var currentIndex: Int = -1 {
         didSet {
             if currentIndex != oldValue {
                 indexHandler?(currentIndex)
+                delegate?.pagerView(self, didTransitionTo: currentIndex)
             }
         }
     }
@@ -72,21 +70,33 @@ open class PagerView: UIView {
         return delegate?.pagerView(self, pageFor: currentIndex)
     }
 
-    public init(rootController: UIViewController?) {
-        defer {
-            self.rootController = rootController
-            self.setup()
+    public var isScrollEnabled: Bool {
+        get {
+            var isEnabled: Bool = true
+            pageController.view.subviews.forEach {
+                if let subView = $0 as? UIScrollView {
+                    isEnabled = subView.isScrollEnabled
+                }
+            }
+            return isEnabled
         }
+        set {
+            pageController.view.subviews.forEach {
+                if let subview = $0 as? UIScrollView {
+                    subview.isScrollEnabled = newValue
+                }
+            }
+        }
+    }
+
+    public init(rootController: UIViewController?, interPageSpacing: CGFloat = 0.0) {
+        self.interPageSpacing = interPageSpacing
         super.init(frame: .zero)
+        defer { self.rootController = rootController }
     }
 
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.setup()
-    }
-
-    private func setup() {
-        pageController.view.constraintEdgesToSuperview()
     }
 
     open func didIndexChanged(_ handler: @escaping (Int) -> Void) {
@@ -102,30 +112,49 @@ open class PagerView: UIView {
         else {
             return
         }
+        
+        if activeScrollView?.isDecelerating == true {
+            delayedScroll = { [weak self] in
+                self?.scrollTo(index: index,
+                               direction: direction,
+                               animated: animated,
+                               completionHandler: completionHandler)
+            }
+            return
+        }
+        
+        nextIndex = index
 
+        if isScrollEnabled {
+            // to cancel user touch interactions
+            isScrollEnabled = false
+            isScrollEnabled = true
+        }
         let direction = direction ?? (currentIndex < index ? .forward : .reverse)
 
         setIndex(index, for: controller)
-
-        DispatchQueue.main.async { [weak self, weak pageController] in
-            pageController?.setViewControllers([controller],
-                                               direction: direction,
-                                               animated: animated) { _ in
-                self?.currentIndex = index
-                completionHandler?()
-            }
-        }
+        
+        pageController.setViewControllers([controller],
+                                          direction: direction,
+                                          animated: false)
+        if animated { transition(direction: direction) }
+        currentIndex = index
+        completionHandler?()
     }
-
-    open func resetIndexes() {
-        indexes.removeAllObjects()
-        let controller = getCenterController()
-        setIndex(currentIndex, for: controller)
+    
+    func transition(direction: PageDirection)  {
+        let transition = CATransition()
+        transition.type = .push
+        transition.subtype =  direction == .forward ? .fromRight : .fromLeft
+        transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        transition.fillMode = .forwards
+        transition.duration = 0.2
+        pageController.view.layer.add(transition, forKey: "trsansition")
     }
 }
 
 extension PagerView: UIPageViewControllerDataSource {
-
+    
     public func pageViewController(_ pageViewController: UIPageViewController,
                                    viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let index = index(of: viewController) else {
@@ -133,7 +162,6 @@ extension PagerView: UIPageViewControllerDataSource {
         }
 
         let previousIndex = index - 1
-        print("TEST -> \(previousIndex) Before \(index) of \(viewController)")
 
         if previousIndex >= 0 {
             let controller = delegate?.pagerView(self, pageFor: previousIndex)
@@ -141,31 +169,22 @@ extension PagerView: UIPageViewControllerDataSource {
             return controller
         }
 
-        if self.loopEnabled {
-            return delegate?.lastPage(self)
-        }
-
         return nil
     }
 
     public func pageViewController(_ pageViewController: UIPageViewController,
-                                   viewControllerAfter viewController: UIViewController) -> UIViewController? {
+                            viewControllerAfter viewController: UIViewController) -> UIViewController? {
         guard let index = index(of: viewController) else {
             return nil
         }
 
         let nextIndex = index + 1
         let count = delegate?.numberOfPages(for: self) ?? -1
-        print("TEST -> \(nextIndex) After \(index) of \(viewController)")
 
         if nextIndex < count {
             let controller = delegate?.pagerView(self, pageFor: nextIndex)
             setIndex(nextIndex, for: controller)
             return controller
-        }
-
-        if self.loopEnabled {
-            return delegate?.firstPage(self)
         }
 
         return nil
@@ -185,29 +204,58 @@ extension PagerView: UIPageViewControllerDelegate {
     public func pageViewController(_ pageViewController: UIPageViewController,
                                    willTransitionTo pendingViewControllers: [UIViewController]) {
         if let index = index(of: pendingViewControllers.first) {
-            delegate?.pagerView(self, willTransitionTo: index)
+            nextIndex = index
         }
     }
 }
 
 extension PagerView: UIScrollViewDelegate {
-
-    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if let index = index(of: getCenterController()) {
-            currentIndex = index
+    
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        activeScrollView = scrollView
+    }
+    
+    
+    public func scrollViewWillEndDragging(_ scrollView: UIScrollView,
+                                          withVelocity velocity: CGPoint,
+                                          targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if !scrollView.isTracking { return }
+        
+        let result = extractController(
+            for: targetContentOffset.pointee,
+            with: scrollView
+        )
+        
+        if let index = index(of: result) {
+            nextIndex = index
         }
     }
 
-    private func getCenterController() -> UIViewController? {
-        let result = pageController.children.compactMap { controller -> (position: CGFloat, controller: UIViewController?)? in
-            guard let position = controller.view.superview?.convert(controller.view.center, to: self).x else {
-                return nil
-            }
-            return (abs(position - self.center.x), controller)
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let result = extractController(
+            for: scrollView.contentOffset,
+            with: scrollView
+        )
+        
+        if let index = index(of: result) {
+            currentIndex = index
         }
-        .min(by: { first, second in first.position < second.position })
-
-        return result?.controller
+        
+        delayedScroll?()
+        delayedScroll = nil
+    }
+    
+    private func extractController(for point: CGPoint,
+                                   with scrollView: UIScrollView) -> UIViewController? {
+        return pageController
+            .children
+            .first(where: {
+                let origin = $0.view.superview?.convert($0.view.frame.origin, to: scrollView)
+                if let x = origin?.x {
+                    return abs(x - point.x) <= interPageSpacing
+                }
+                return false
+            })
     }
 }
 

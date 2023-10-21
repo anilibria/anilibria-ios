@@ -21,7 +21,7 @@ extension UIImageView {
             )
         )
         self.kf.setImage(
-            with: ImageResource(downloadURL: url),
+            with: Kingfisher.ImageResource(downloadURL: url),
             placeholder: placeholder,
             options: options,
             completionHandler: completionHandler

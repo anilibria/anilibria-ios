@@ -149,7 +149,7 @@ class PeerClient: NSObject, StreamDelegate {
             data = dataBytes
         }
 
-        if let msgBuffer = msgBuffer {
+        if var msgBuffer = msgBuffer {
             let left = msgBuffer.add(bytes: data)
             try handle(msgBuffer, leftBytes: left)
             return

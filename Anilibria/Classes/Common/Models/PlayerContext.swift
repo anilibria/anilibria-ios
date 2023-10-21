@@ -1,17 +1,30 @@
 import Foundation
 
-public struct PlayerContext: Codable {
-    var quality: VideoQuality?
+public struct MPVPlayerContext: Codable {
+    var id: Int?
+    var time: Double = 0
     var audioTrack: AudioTrack?
     var subtitleTrack: Subtitles?
-    var number: Int = 0
-    var time: Double = 0
-
-    init(quality: VideoQuality?, audioTrack: AudioTrack?, subtitleTrack: Subtitles?, number: Int, time: Double) {
-        self.quality = quality
+    
+    init(id: Int, time: Double, audioTrack: AudioTrack?, subtitleTrack: Subtitles?) {
         self.audioTrack = audioTrack
         self.subtitleTrack = subtitleTrack
-        self.number = number
         self.time = time
+        self.id = id
+    }
+}
+
+public struct PlayerContext: Codable {
+    var quality: VideoQuality?
+    var id: Int?
+    var time: Double = 0
+    
+    // legacy
+    var number: Int = 0
+
+    init(id: Int, time: Double, quality: VideoQuality?) {
+        self.quality = quality
+        self.time = time
+        self.id = id
     }
 }

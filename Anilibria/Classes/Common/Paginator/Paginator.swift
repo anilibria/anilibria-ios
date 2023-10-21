@@ -300,9 +300,9 @@ final class Paginator<T, P: Paging> {
         }
     }
 
-    private class State<T, P: Paging> {
-        weak var paginator: Paginator<T, P>!
-        init(_ paginator: Paginator<T, P>) {
+    private class State<ST, SP: Paging> {
+        weak var paginator: Paginator<ST, SP>!
+        init(_ paginator: Paginator<ST, SP>) {
             self.paginator = paginator
         }
 
@@ -310,64 +310,64 @@ final class Paginator<T, P: Paging> {
         func refresh() {}
         func loadNewPage() {}
         func release() {}
-        func newData(_ data: [T]) {}
+        func newData(_ data: [ST]) {}
         func fail(_ error: Error) {}
     }
 
-    public final class Handler<T> {
+    public final class Handler<HT> {
         fileprivate var showEmptyProgress: Action<Bool>?
         fileprivate var showEmptyError: Action<(show: Bool, error: Error?)>?
         fileprivate var showEmptyView: Action<Bool>?
-        fileprivate var showData: Action<(show: Bool, data: PaginatorData<T>)>?
+        fileprivate var showData: Action<(show: Bool, data: PaginatorData<HT>)>?
         fileprivate var showErrorMessage: Action<Error>?
         fileprivate var showRefreshProgress: Action<Bool>?
         fileprivate var showPageProgress: Action<Bool>?
         fileprivate var allDataFetched: ActionFunc?
 
         @discardableResult
-        func showEmptyProgress(_ action: @escaping Action<Bool>) -> Handler<T> {
+        func showEmptyProgress(_ action: @escaping Action<Bool>) -> Handler<HT> {
             self.showEmptyProgress = action
             return self
         }
 
         @discardableResult
-        func showEmptyError(_ action: @escaping Action<(show: Bool, error: Error?)>) -> Handler<T> {
+        func showEmptyError(_ action: @escaping Action<(show: Bool, error: Error?)>) -> Handler<HT> {
             self.showEmptyError = action
             return self
         }
 
         @discardableResult
-        func showEmptyView(_ action: @escaping Action<Bool>) -> Handler<T> {
+        func showEmptyView(_ action: @escaping Action<Bool>) -> Handler<HT> {
             self.showEmptyView = action
             return self
         }
 
         @discardableResult
-        func showData(_ action: @escaping Action<(show: Bool, data: PaginatorData<T>)>) -> Handler<T> {
+        func showData(_ action: @escaping Action<(show: Bool, data: PaginatorData<HT>)>) -> Handler<HT> {
             self.showData = action
             return self
         }
 
         @discardableResult
-        func showErrorMessage(_ action: @escaping Action<Error>) -> Handler<T> {
+        func showErrorMessage(_ action: @escaping Action<Error>) -> Handler<HT> {
             self.showErrorMessage = action
             return self
         }
 
         @discardableResult
-        func showRefreshProgress(_ action: @escaping Action<Bool>) -> Handler<T> {
+        func showRefreshProgress(_ action: @escaping Action<Bool>) -> Handler<HT> {
             self.showRefreshProgress = action
             return self
         }
 
         @discardableResult
-        func showPageProgress(_ action: @escaping Action<Bool>) -> Handler<T> {
+        func showPageProgress(_ action: @escaping Action<Bool>) -> Handler<HT> {
             self.showPageProgress = action
             return self
         }
 
         @discardableResult
-        func allDataFetched(_ action: @escaping ActionFunc) -> Handler<T> {
+        func allDataFetched(_ action: @escaping ActionFunc) -> Handler<HT> {
             self.allDataFetched = action
             return self
         }

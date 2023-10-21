@@ -8,7 +8,7 @@
 
 import Foundation
 
-class PeerMessage {
+struct PeerMessage {
     let length: Int
     let id: MessageID
     private(set) var payload: [UInt8]
@@ -21,7 +21,7 @@ class PeerMessage {
         Data(UInt32(length).bigEndian.bytes + [id.rawValue] + payload)
     }
 
-    func add(bytes: [UInt8]) -> [UInt8]? {
+    mutating func add(bytes: [UInt8]) -> [UInt8]? {
         let needed = length - 1 - payload.count
         self.payload.append(contentsOf: bytes.prefix(needed))
         let left = bytes.dropFirst(needed)
@@ -37,7 +37,7 @@ class PeerMessage {
         self.payload = payload
     }
 
-    convenience init(id: MessageID, payload: [UInt8] = []) {
+    init(id: MessageID, payload: [UInt8] = []) {
         self.init(length: payload.count + 1, id: id, payload: payload)
     }
 

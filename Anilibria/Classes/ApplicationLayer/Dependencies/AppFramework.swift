@@ -64,6 +64,7 @@ private class PersentersPart: DIPart {
         OtherPart.self,
         ChoiceSheetPart.self,
         PlayerPart.self,
+        MPVPlayerPart.self,
         CommentsAuthPart.self,
         SeriesContainerPart.self,
         CommentsPart.self,

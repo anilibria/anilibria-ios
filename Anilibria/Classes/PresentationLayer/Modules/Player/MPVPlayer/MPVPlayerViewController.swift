@@ -1,13 +1,20 @@
+//
+//  MPVPlayerViewController.swift
+//  Anilibria
+//
+//  Created by Ivan Morozov on 21.10.2023.
+//  Copyright © 2023 Иван Морозов. All rights reserved.
+//
+
 import Combine
 import UIKit
 import AVKit
 
 // MARK: - View Controller
 
-final class PlayerViewController: BaseViewController {
+final class MPVPlayerViewController: BaseViewController {
     @IBOutlet var hidableViews: [UIView]!
     @IBOutlet var titleLabel: UILabel!
-    @IBOutlet var pipButton: UIButton!
     @IBOutlet var playPauseButton: RippleButton!
     @IBOutlet var playPauseIconView: UIImageView!
     @IBOutlet var switcherView: SwitcherView!
@@ -19,8 +26,6 @@ final class PlayerViewController: BaseViewController {
     @IBOutlet var container: UIView!
     @IBOutlet var rewindButtons: [RewindView] = []
 
-    private let airplayView = AVRoutePickerView()
-    private var pictureInPictureController: AVPictureInPictureController?
     private let timeFormatter = FormatterFactory.time.create()
     private var canUpdateTime: Bool = true
     private var playlist: [PlaylistItem] = []
@@ -40,7 +45,7 @@ final class PlayerViewController: BaseViewController {
         }
     }
 
-    var handler: PlayerEventHandler!
+    var handler: MPVPlayerEventHandler!
     var playerView: (any Player)!
 
     // MARK: - Life cycle
@@ -52,8 +57,6 @@ final class PlayerViewController: BaseViewController {
         self.setupPlayer()
         self.setupSwitcher()
         self.setupRewind()
-        self.setupAirPlay()
-        self.setupPictureInPicture()
         self.videoSliderView.setThumbImage(#imageLiteral(resourceName: "icon_circle.pdf"), for: .normal)
 
         let font: UIFont = UIFont.monospacedDigitSystemFont(ofSize: 12, weight: .regular)
@@ -139,22 +142,6 @@ final class PlayerViewController: BaseViewController {
         }
     }
 
-    func setupPictureInPicture() {
-        if let layer = playerView.playerLayer, AVPictureInPictureController.isPictureInPictureSupported() {
-            pipButton.isHidden = false
-            pictureInPictureController = AVPictureInPictureController(playerLayer: layer)
-
-            pipObservation = pictureInPictureController?.observe(
-                \AVPictureInPictureController.isPictureInPicturePossible,
-                 options: [.initial, .new]
-            ) { [weak self] _, change in
-                self?.pipButton.isEnabled = change.newValue ?? false
-            }
-        } else {
-            pipButton.isHidden = true
-        }
-    }
-
     private func apply(rewind time: Double) {
         guard playerView.duration != nil else { return }
         let newTime = videoSliderView.value + Float(time)
@@ -168,16 +155,6 @@ final class PlayerViewController: BaseViewController {
         sliderTouchUp(self)
 
         if playing { playerView.togglePlay() }
-    }
-
-    private func setupAirPlay() {
-        if playerView.isAirplaySupported {
-            airplayView.tintColor = .white
-            container.addSubview(airplayView)
-            airplayView.constraintEdgesToSuperview()
-        } else {
-            container.isHidden = true
-        }
     }
 
     private func clearLabels() {
@@ -194,9 +171,9 @@ final class PlayerViewController: BaseViewController {
     }
 
     private func saveState() {
-        self.handler.save(quality: self.currentQuality,
-                          number: self.currentIndex,
-                          time: self.currentTime)
+        self.handler.save(quality: currentQuality,
+                          id: playlist[currentIndex].id,
+                          time: currentTime)
     }
 
     private func set(playItem index: Int, seek time: Double, preffered: PrefferedSettings? = nil) {
@@ -298,8 +275,6 @@ final class PlayerViewController: BaseViewController {
         self.handler.back()
     }
 
-    @IBAction func downloadAction(_ sender: Any) {}
-
     @IBAction func playPauseAction(_ sender: Any) {
         self.playerView.togglePlay()
         if self.playerView.isPlaying {
@@ -325,18 +300,9 @@ final class PlayerViewController: BaseViewController {
         let item = self.playlist[index]
         self.handler.settings(quality: self.currentQuality, for: item)
     }
-
-    @IBAction func togglePictureInPictureMode(_ sender: UIButton) {
-        guard let pipController = pictureInPictureController else { return }
-        if pipController.isPictureInPictureActive == true {
-            pipController.stopPictureInPicture()
-        } else {
-            pipController.startPictureInPicture()
-        }
-    }
 }
 
-extension PlayerViewController: PlayerViewBehavior {
+extension MPVPlayerViewController: MPVPlayerViewBehavior {
     func set(name: String,
              playlist: [PlaylistItem],
              playItemIndex: Int,
@@ -381,58 +347,5 @@ extension PlayerViewController: PlayerViewBehavior {
     
     func set(subtitle: Subtitles) {
         playerView.set(subtitle: subtitle)
-    }
-}
-
-public final class TouchableSlider: UISlider {
-    private var firstLocation: CGPoint?
-
-    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        guard let touch = touches.first else {
-            return
-        }
-
-        self.firstLocation = touch.location(in: self)
-    }
-
-    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-
-        guard let touch = touches.first else {
-            return
-        }
-
-        let location = touch.location(in: self)
-
-        if floor(location.x) != floor(self.firstLocation?.x ?? 0) {
-            return
-        }
-
-        let thumbWidth = self.currentThumbImage?.size.width ?? 0
-        let percent = Float((location.x - thumbWidth/2) / (self.frame.width - thumbWidth))
-        self.setValue(percent * self.maximumValue, animated: false)
-        self.sendActions(for: .touchDown)
-        self.sendActions(for: .touchUpInside)
-    }
-}
-
-final class RewindView: CircleView {
-    @IBOutlet var titleLabel: UILabel!
-    private var tapHandler: Action<Double>?
-
-    private var time: Double = 0
-
-    func set(time: Double) {
-        self.time = time
-        self.titleLabel.text = "\(Int(abs(time)))"
-    }
-
-    func setDidTap(_ action: Action<Double>?) {
-        self.tapHandler = action
-    }
-
-    @IBAction func tapAction(_ sender: Any) {
-        self.tapHandler?(time)
     }
 }

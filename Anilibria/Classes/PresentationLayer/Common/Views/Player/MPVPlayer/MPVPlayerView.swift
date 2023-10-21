@@ -98,9 +98,6 @@ public final class MPVPlayerView: UIView, Player {
             try checkError(mpv_set_option_string(mpvContext, "force-window", "no"))
             try checkError(mpv_set_option_string(mpvContext, "pause", "yes"))
             try checkError(mpv_set_option_string(mpvContext, "keep-open", "always"))
-            
-            try checkError(mpv_set_option_string(mpvContext, "sub-ass-override", "strip"))
-            try checkError(mpv_set_option_string(mpvContext, "sub-font", "Helvetica Neue"))
         } catch {
             preconditionFailure(error.message)
         }
@@ -116,9 +113,10 @@ public final class MPVPlayerView: UIView, Player {
     }
 
     private func setupMPVCallbacks() {
+        let interceptorPointer = withUnsafeMutablePointer(to: &mpvEventInterceptor) { $0 }
         mpv_set_wakeup_callback(mpvContext, { pointer in
             pointer?.assumingMemoryBound(to: MpvEventInterceptor.self).pointee.wakeup()
-        }, &mpvEventInterceptor)
+        }, interceptorPointer)
     }
 
     private func setupRender() {
@@ -153,9 +151,10 @@ public final class MPVPlayerView: UIView, Player {
             self?.renderView.draw()
         }
 
+        let interceptorPointer = withUnsafeMutablePointer(to: &mpvGLUpdatesInterceptor) { $0 }
         mpv_render_context_set_update_callback(mpvGLContext, { pointer in
             pointer?.assumingMemoryBound(to: MpvGLUpdatesInterceptor.self).pointee.needsUpdate()
-        }, &mpvGLUpdatesInterceptor)
+        }, interceptorPointer)
     }
 
     public func getCurrentTime() -> AnyPublisher<Double, Never> {
@@ -372,7 +371,7 @@ public final class MPVPlayerView: UIView, Player {
     }
 }
 
-private class MpvEventInterceptor: NSObject {
+private struct MpvEventInterceptor {
     private let queue: DispatchQueue
     private var mpvContext: OpaquePointer?
     private let eventHandler: (mpv_event) -> Void
@@ -384,7 +383,7 @@ private class MpvEventInterceptor: NSObject {
     }
 
     func wakeup() {
-        queue.async { [weak self] in self?.readEvent() }
+        queue.async { self.readEvent() }
     }
 
     private func readEvent() {
@@ -401,7 +400,7 @@ private class MpvEventInterceptor: NSObject {
     }
 }
 
-private class MpvGLUpdatesInterceptor: NSObject {
+private struct MpvGLUpdatesInterceptor {
     private let actionHandler: () -> Void
 
     init(actionHandler: @escaping () -> Void) {
@@ -409,6 +408,6 @@ private class MpvGLUpdatesInterceptor: NSObject {
     }
 
     func needsUpdate() {
-        DispatchQueue.main.async { [weak self] in self?.actionHandler() }
+        DispatchQueue.main.async { self.actionHandler() }
     }
 }

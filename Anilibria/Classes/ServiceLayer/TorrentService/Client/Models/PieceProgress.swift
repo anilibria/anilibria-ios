@@ -76,7 +76,7 @@ class PieceProgress {
         let progress = round(Double(piece.downloaded) / Double(piece.length) * 10000) / 100
         print("=@= [\(self.piece)] - progress: \(progress)% speed: \(formattedSpeed)")
 
-        if speed / 1024 < 10 {
+        if speed / 1024 < 100 {
             strike += 1
         }
 

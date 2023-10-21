@@ -1,19 +1,27 @@
+//
+//  MPVPlayerPresenter.swift
+//  Anilibria
+//
+//  Created by Ivan Morozov on 21.10.2023.
+//  Copyright © 2023 Иван Морозов. All rights reserved.
+//
+
 import DITranquillity
 import Combine
 import UIKit
 
-final class PlayerPart: DIPart {
+final class MPVPlayerPart: DIPart {
     static func load(container: DIContainer) {
-        container.register(PlayerPresenter.init)
-            .as(PlayerEventHandler.self)
+        container.register(MPVPlayerPresenter.init)
+            .as(MPVPlayerEventHandler.self)
             .lifetime(.objectGraph)
     }
 }
 
 // MARK: - Presenter
 
-final class PlayerPresenter {
-    private weak var view: PlayerViewBehavior!
+final class MPVPlayerPresenter {
+    private weak var view: MPVPlayerViewBehavior!
     private var router: PlayerRoutable!
     private var series: Series!
     private var playlist: [PlaylistItem] = []
@@ -32,24 +40,25 @@ final class PlayerPresenter {
     }
 }
 
-extension PlayerPresenter: PlayerEventHandler {
-    func bind(view: PlayerViewBehavior,
+extension MPVPlayerPresenter: MPVPlayerEventHandler {
+    func bind(view: MPVPlayerViewBehavior,
               router: PlayerRoutable,
               series: Series,
-              playlist: [PlaylistItem]?) {
+              playlist: [PlaylistItem]) {
         self.view = view
         self.router = router
         self.series = series
-        self.playlist = playlist ?? self.series.playlist.reversed()
+        self.playlist = playlist
     }
 
     func didLoad() {
-        self.playerService
-            .fetchPlayerContext(for: self.series)
-            .sink(onNext: { [weak self] context in
-                self?.run(with: context)
-            })
-            .store(in: &bag)
+//        self.playerService
+//            .fetchPlayerContext(for: self.series)
+//            .sink(onNext: { [weak self] context in
+//                self?.run(with: context)
+//            })
+//            .store(in: &bag)
+        self.run(with: nil)
     }
     
     func set(currentSubtitle: Subtitles?, availableSubtitles: [Subtitles]) {
@@ -138,27 +147,30 @@ extension PlayerPresenter: PlayerEventHandler {
         self.router.back()
     }
 
-    func save(quality: VideoQuality?, number: Int, time: Double) {
-        let context = PlayerContext(quality: quality,
-                                    audioTrack: currentAudio,
-                                    subtitleTrack: currentSubtitle,
-                                    number: number,
-                                    time: time)
-        self.playerService
-            .set(context: context, for: self.series)
-            .sink()
-            .store(in: &bag)
+    func save(quality: VideoQuality?, id: Int, time: Double) {
+//        let context = PlayerContext(id: id,
+//                                    time: time,
+//                                    quality: quality)
+//        self.playerService
+//            .set(context: context, for: self.series)
+//            .sink()
+//            .store(in: &bag)
     }
 
     private func run(with context: PlayerContext?) {
-        let index = context?.number ?? 0
         let settings = self.playerService.fetchSettings()
         let preffered = PrefferedSettings(
             quality: context?.quality ?? settings.quality,
-            audioTrack: context?.audioTrack ?? settings.audioTrack,
-            subtitleTrack: context?.subtitleTrack ?? settings.subtitleTrack
+            audioTrack: settings.audioTrack,
+            subtitleTrack: settings.subtitleTrack
         )
-
+        
+        var index = context?.number ?? 0
+        
+        if let id = context?.id, index == 0 {
+            index = playlist.firstIndex(where: { $0.id == id }) ?? 0
+        }
+        
         self.view.set(name: self.series.names.first ?? "",
                       playlist: self.playlist,
                       playItemIndex: index,

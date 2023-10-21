@@ -13,6 +13,15 @@ final class PlayerAssembly {
         module.handler.bind(view: module, router: router, series: series, playlist: playlist)
         return module
     }
+    
+    class func createModule(series: Series, playlist: [PlaylistItem], parent: Router? = nil) -> MPVPlayerViewController {
+        let module = MPVPlayerViewController()
+        let router = PlayerRouter(view: module, parent: parent)
+        module.playerView = MPVPlayerView()
+        module.handler = MainAppCoordinator.shared.container.resolve()
+        module.handler.bind(view: module, router: router, series: series, playlist: playlist)
+        return module
+    }
 }
 
 // MARK: - Route
@@ -32,8 +41,8 @@ extension PlayerRoute where Self: RouterProtocol {
 
     func openPlayer(series: Series, playlistItem: PlaylistItem) {
         let module = PlayerAssembly.createModule(series: series, playlist: [playlistItem], parent: self)
-        ModalRouter(target: module, parent: nil)
-            .set(level: .statusBar)
+        module.modalPresentationStyle = .fullScreen
+        ModalRouter(target: module, parent: self.controller)
             .move()
     }
 }

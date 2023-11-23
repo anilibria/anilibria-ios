@@ -2,9 +2,6 @@
 "alert.title.error" = "Ошибка";
 "alert.title.warning" = "Внимание!";
 
-"alert.message.exit" = "Вы действительно хотите выйти?";
-
-
 //ERROR
 "error.authorization_failed" = "Не удалось авторизоваться :(";
 "error.social_authorization_failed" = "Не найден связанный аккаунт";
@@ -18,9 +15,8 @@
 "buttons.yes" = "Да";
 "buttons.no" = "Нет";
 "buttons.done" = "Готово";
-"buttons.signIn" = "ВОЙТИ";
-"buttons.signOut" = "Выйти";
 "buttons.signIn" = "Войти";
+"buttons.signOut" = "Выйти";
 "buttons.settings" = "Настройки";
 "buttons.cancel" = "Отмена";
 "buttons.retry" = "Повторить";

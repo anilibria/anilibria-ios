@@ -492,6 +492,7 @@
 		C7182F45244ED78E0046B9ED /* LinksService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinksService.swift; sourceTree = "<group>"; };
 		C7182F48244EE1420046B9ED /* LinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkView.swift; sourceTree = "<group>"; };
 		C7182F4A244EE1F70046B9ED /* LinkView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LinkView.xib; sourceTree = "<group>"; };
+		C72BFEFB2B0F71170093FD64 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C7326BB5234CCDFB00E194C1 /* AppConfigirationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfigirationService.swift; sourceTree = "<group>"; };
 		C7326BB7234CDF1600E194C1 /* AniConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AniConfig.swift; sourceTree = "<group>"; };
 		C7326BBA234CE70D00E194C1 /* CheckRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckRequest.swift; sourceTree = "<group>"; };
@@ -2575,6 +2576,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				C7D4633522CC772800E763DF /* ru */,
+				C72BFEFB2B0F71170093FD64 /* en */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

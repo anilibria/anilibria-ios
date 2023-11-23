@@ -12,13 +12,6 @@ internal enum L10n {
 
   internal enum Alert {
 
-    internal enum Message {
-      /// Вы действительно хотите выйти?
-      internal static var exit: String {
-          return L10n.tr("Localizable", "alert.message.exit")
-      }
-    }
-
     internal enum Title {
       /// Ошибка
       internal static var error: String {

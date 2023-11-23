@@ -5,17 +5,17 @@ import UIKit
 final class CatalogViewController: InfinityCollectionViewController {
     var handler: CatalogEventHandler!
 
-    private lazy var searchButton = BarButton(image:#imageLiteral(resourceName: "menu_item_search.pdf"),
+    private lazy var searchButton = BarButton(image: UIImage(resource: .menuItemSearch),
                                               imageEdge: inset(12, 5, 12, 5)) { [weak self] in
         self?.handler.search()
     }
 
-    private lazy var filterButton = BarButton(image:#imageLiteral(resourceName: "icon_filter")) { [weak self] in
+    private lazy var filterButton = BarButton(image: UIImage(resource: .iconFilter)) { [weak self] in
         self?.handler.openFilter()
     }
 
     #if targetEnvironment(macCatalyst)
-    private lazy var refreshButton = BarButton(image:#imageLiteral(resourceName: "icon_refresh")) { [weak self] in
+    private lazy var refreshButton = BarButton(image: UIImage(resource: .iconRefresh)) { [weak self] in
         _ = self?.showRefreshIndicator()
         self?.collectionView.setContentOffset(.init(x: 0, y: -10), animated: false)
         self?.handler.refresh()

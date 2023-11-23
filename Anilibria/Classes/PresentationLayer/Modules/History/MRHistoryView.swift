@@ -7,7 +7,7 @@ final class HistoryViewController: BaseCollectionViewController {
 
     private let searchView: SearchView? = SearchView.fromNib()
     private let stubView: StubView? = StubView.fromNib()?.apply {
-        $0.set(image: #imageLiteral(resourceName: "icon_history"), color: .darkGray)
+        $0.set(image: UIImage(resource: .iconHistory), color: .darkGray)
         $0.title = L10n.Stub.title
     }
 

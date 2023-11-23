@@ -6,7 +6,7 @@ final class NewsViewController: InfinityCollectionViewController {
     var handler: NewsEventHandler!
 
     #if targetEnvironment(macCatalyst)
-    private lazy var refreshButton = BarButton(image:#imageLiteral(resourceName: "icon_refresh")) { [weak self] in
+    private lazy var refreshButton = BarButton(image: UIImage(resource: .iconRefresh)) { [weak self] in
         _ = self?.showRefreshIndicator()
         self?.collectionView.setContentOffset(.init(x: 0, y: -10), animated: false)
         self?.handler.refresh()

@@ -33,7 +33,7 @@ final class SeriesContainerViewController: BaseViewController {
 
     private func setupNavigationButtons() {
         var item: BarButton!
-        item = BarButton(image: #imageLiteral(resourceName: "icon_share"),
+        item = BarButton(image: UIImage(resource: .iconShare),
                          imageEdge: inset(8, 0, 10, 0)) { [weak self, weak item] in
                             self?.handler.share(sourceView: item?.customView)
         }

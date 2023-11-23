@@ -54,7 +54,7 @@ final class PlayerViewController: BaseViewController {
         self.setupRewind()
         self.setupAirPlay()
         self.setupPictureInPicture()
-        self.videoSliderView.setThumbImage(#imageLiteral(resourceName: "icon_circle.pdf"), for: .normal)
+        self.videoSliderView.setThumbImage(UIImage(resource: .iconCircle), for: .normal)
 
         let font: UIFont = UIFont.monospacedDigitSystemFont(ofSize: 12, weight: .regular)
         self.timeLeftLabel.font = font

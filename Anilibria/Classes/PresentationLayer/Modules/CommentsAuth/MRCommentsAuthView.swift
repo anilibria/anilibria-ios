@@ -11,7 +11,7 @@ final class CommentsAuthViewController: BaseViewController {
 
     // MARK: - Life cycle
 
-    private lazy var closeButton: UIBarButtonItem = UIBarButtonItem(image:#imageLiteral(resourceName: "icon_close.pdf"),
+    private lazy var closeButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(resource: .iconClose),
                                                                     style: .plain,
                                                                     target: self,
                                                                     action: #selector(self.closeAction))

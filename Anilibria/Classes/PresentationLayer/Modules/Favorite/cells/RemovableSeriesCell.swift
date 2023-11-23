@@ -14,7 +14,7 @@ public final class RemovableSeriesCell: DraggableRippleCell {
 
     func configure(_ item: Series) {
         self.imageView.setImage(from: item.poster,
-                                placeholder: UIImage(named: "img_placeholder"))
+                                placeholder: UIImage(resource: .imgPlaceholder))
         let name = item.names.first ?? ""
         self.titleLabel.text = "\(name) (\(item.count))"
         if let value = item.desc {

@@ -1,6 +1,7 @@
 import DITranquillity
 import Kingfisher
 import Combine
+import Foundation
 
 final class AppConfigurationServicePart: DIPart {
     static func load(container: DIContainer) {

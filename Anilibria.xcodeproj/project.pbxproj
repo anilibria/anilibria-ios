@@ -111,6 +111,10 @@
 		C7182F46244ED78E0046B9ED /* LinksService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7182F45244ED78E0046B9ED /* LinksService.swift */; };
 		C7182F49244EE1420046B9ED /* LinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7182F48244EE1420046B9ED /* LinkView.swift */; };
 		C7182F4B244EE1F70046B9ED /* LinkView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C7182F4A244EE1F70046B9ED /* LinkView.xib */; };
+		C72BFEEA2B0F687E0093FD64 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C72BFEE92B0F687E0093FD64 /* Kingfisher */; };
+		C72BFEED2B0F69160093FD64 /* DITranquillity in Frameworks */ = {isa = PBXBuildFile; productRef = C72BFEEC2B0F69160093FD64 /* DITranquillity */; };
+		C72BFEF02B0F69670093FD64 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = C72BFEEF2B0F69670093FD64 /* Lottie */; };
+		C72BFEF32B0F6AB80093FD64 /* Localize_Swift in Frameworks */ = {isa = PBXBuildFile; productRef = C72BFEF22B0F6AB80093FD64 /* Localize_Swift */; };
 		C7326BB6234CCDFB00E194C1 /* AppConfigirationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7326BB5234CCDFB00E194C1 /* AppConfigirationService.swift */; };
 		C7326BB8234CDF1600E194C1 /* AniConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7326BB7234CDF1600E194C1 /* AniConfig.swift */; };
 		C7326BBB234CE70D00E194C1 /* CheckRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7326BBA234CE70D00E194C1 /* CheckRequest.swift */; };
@@ -352,7 +356,6 @@
 		E527C292C182999ED570A44C6CC3FB28 /* MRChoiceSheetRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66DE4E7BF90DADA45EE0F1A7F8F6B5CF /* MRChoiceSheetRouter.swift */; };
 		E8DB6474BF0E796E68781B575E95D0D1 /* MRCommentsAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4688DEE790DA57CF8F2592F07C904A2 /* MRCommentsAssembly.swift */; };
 		ED5AC49A78FEA41001438F47BE60C6B6 /* MRChoiceSheetContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5551CD975754CCD7474E0129DE14A03F /* MRChoiceSheetContracts.swift */; };
-		F9734546F0F72F2E42920767 /* Pods_Anilibria.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C87D8A91480E6CFF19170B9D /* Pods_Anilibria.framework */; };
 		FC962534BE2F65D50F003CA14DB7A1DB /* MRNewsAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = D236ABA3E590576985E9FE4CE55CCA04 /* MRNewsAssembly.swift */; };
 		FC99B4ED1BB734CF0B1DD8C360B3ED74 /* MRNewsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B78F87398C45EE44D39CD12C86F8DF /* MRNewsRouter.swift */; };
 /* End PBXBuildFile section */
@@ -439,7 +442,6 @@
 		554E4DFC171E241EA2C68A4314914FB8 /* MRSeriesRouter.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRSeriesRouter.swift; sourceTree = "<group>"; };
 		5551CD975754CCD7474E0129DE14A03F /* MRChoiceSheetContracts.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRChoiceSheetContracts.swift; sourceTree = "<group>"; };
 		55DC19BCC25FA63B063F511EAC80C133 /* MRSignInView.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRSignInView.swift; sourceTree = "<group>"; };
-		59C572E5CC1D85D52E54B6F8 /* Pods-Anilibria.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anilibria.debug.xcconfig"; path = "Target Support Files/Pods-Anilibria/Pods-Anilibria.debug.xcconfig"; sourceTree = "<group>"; };
 		5BF88888900AE6D263E606721E197CEC /* MRNewsContracts.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRNewsContracts.swift; sourceTree = "<group>"; };
 		6246DB76F09066D031CE1D14C3D14CCB /* MRPlayerContracts.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRPlayerContracts.swift; sourceTree = "<group>"; };
 		62C3CE35A7856887911F8E747C328FDC /* MROtherContracts.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MROtherContracts.swift; sourceTree = "<group>"; };
@@ -454,7 +456,6 @@
 		78B78F87398C45EE44D39CD12C86F8DF /* MRNewsRouter.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRNewsRouter.swift; sourceTree = "<group>"; };
 		792A7C3A46D23719B3BE780B65B5852D /* MRSocialAuthPresenter.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRSocialAuthPresenter.swift; sourceTree = "<group>"; };
 		7AFB9462D8E7DF6F80ADB885F44C01B3 /* MRFavoriteAssembly.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRFavoriteAssembly.swift; sourceTree = "<group>"; };
-		7E44A4915F945B78C7F8411D /* Pods-Anilibria.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Anilibria.release.xcconfig"; path = "Target Support Files/Pods-Anilibria/Pods-Anilibria.release.xcconfig"; sourceTree = "<group>"; };
 		7EAFF91A045C579C9F529C1129B373EB /* MRCommentsAuthPresenter.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRCommentsAuthPresenter.swift; sourceTree = "<group>"; };
 		7F0ED38427E036D8509D24B51898C47C /* MRSettingsRouter.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRSettingsRouter.swift; sourceTree = "<group>"; };
 		80596964CA86C8A6853AF1584A552455 /* MRCommentsPresenter.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRCommentsPresenter.swift; sourceTree = "<group>"; };
@@ -725,7 +726,6 @@
 		C7FD9DD1230BE94600C56FB5 /* PermissionRoute.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PermissionRoute.swift; sourceTree = "<group>"; };
 		C7FD9DD3230BE98800C56FB5 /* AlertRoute.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertRoute.swift; sourceTree = "<group>"; };
 		C80738A17850BBC1266E109F2D33E9DF /* MRSocialAuthRouter.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRSocialAuthRouter.swift; sourceTree = "<group>"; };
-		C87D8A91480E6CFF19170B9D /* Pods_Anilibria.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Anilibria.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C906987764FF753BEB35ED06BC4BFBEF /* MRChoiceSheetAssembly.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRChoiceSheetAssembly.swift; sourceTree = "<group>"; };
 		CC1017185EE99BCB9136A94D0A342159 /* MRCommentsContracts.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRCommentsContracts.swift; sourceTree = "<group>"; };
 		CE2FF105CE5468F479F9BA28FECDADD8 /* MRSeriesContainerAssembly.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRSeriesContainerAssembly.swift; sourceTree = "<group>"; };
@@ -764,10 +764,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C72BFEED2B0F69160093FD64 /* DITranquillity in Frameworks */,
+				C72BFEF32B0F6AB80093FD64 /* Localize_Swift in Frameworks */,
+				C72BFEEA2B0F687E0093FD64 /* Kingfisher in Frameworks */,
 				46B82AB12971A2E0003E450B /* YandexMobileMetricaCrashes.xcframework in Frameworks */,
 				46B82AAE2971A2DE003E450B /* YandexMobileMetrica.xcframework in Frameworks */,
 				C7B0F2CC22D6F0B100540CA9 /* WebKit.framework in Frameworks */,
-				F9734546F0F72F2E42920767 /* Pods_Anilibria.framework in Frameworks */,
+				C72BFEF02B0F69670093FD64 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -801,15 +804,6 @@
 			path = Other;
 			sourceTree = "<group>";
 		};
-		145B3CB0E3CCAC0C61FA629B /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				59C572E5CC1D85D52E54B6F8 /* Pods-Anilibria.debug.xcconfig */,
-				7E44A4915F945B78C7F8411D /* Pods-Anilibria.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		161FD8CA8818C07B4D7FEF042BE5329B /* News */ = {
 			isa = PBXGroup;
 			children = (
@@ -827,7 +821,6 @@
 			isa = PBXGroup;
 			children = (
 				C7B0F2CB22D6F0B100540CA9 /* WebKit.framework */,
-				C87D8A91480E6CFF19170B9D /* Pods_Anilibria.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1381,7 +1374,6 @@
 				4880C22023DACDCD006FABE1 /* MacBundle */,
 				46B82AA829718FB9003E450B /* xcframeworks */,
 				C7D4624022CC73DF00E763DF /* Products */,
-				145B3CB0E3CCAC0C61FA629B /* Pods */,
 				1E00FA7C1790713686A9CDAF /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -2048,14 +2040,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C7D4625122CC73E100E763DF /* Build configuration list for PBXNativeTarget "Anilibria" */;
 			buildPhases = (
-				BC11612467F87E1726382BCC /* [CP] Check Pods Manifest.lock */,
 				C7D4634022CC78CC00E763DF /* L10n generation */,
 				C7D4623B22CC73DF00E763DF /* Sources */,
 				C7D4623C22CC73DF00E763DF /* Frameworks */,
 				C7D4623D22CC73DF00E763DF /* Resources */,
 				C7D4634222CC790900E763DF /* Lint */,
 				4880C22F23DAD192006FABE1 /* Embed PlugIns */,
-				F0D43917EF804CB5A3F71795 /* [CP] Embed Pods Frameworks */,
 				46B82AB02971A2DE003E450B /* Embed Frameworks */,
 				46B82AAD2971956B003E450B /* Strip Script */,
 			);
@@ -2065,6 +2055,12 @@
 				4880C22E23DAD192006FABE1 /* PBXTargetDependency */,
 			);
 			name = Anilibria;
+			packageProductDependencies = (
+				C72BFEE92B0F687E0093FD64 /* Kingfisher */,
+				C72BFEEC2B0F69160093FD64 /* DITranquillity */,
+				C72BFEEF2B0F69670093FD64 /* Lottie */,
+				C72BFEF22B0F6AB80093FD64 /* Localize_Swift */,
+			);
 			productName = Anilibria;
 			productReference = C7D4623F22CC73DF00E763DF /* Anilibria.app */;
 			productType = "com.apple.product-type.application";
@@ -2075,8 +2071,9 @@
 		C7D4623722CC73DF00E763DF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1020;
-				LastUpgradeCheck = 1410;
+				LastUpgradeCheck = 1500;
 				ORGANIZATIONNAME = "Иван Морозов";
 				TargetAttributes = {
 					4880C21E23DACDCD006FABE1 = {
@@ -2105,6 +2102,12 @@
 				ru,
 			);
 			mainGroup = C7D4623622CC73DF00E763DF;
+			packageReferences = (
+				C72BFEE82B0F687E0093FD64 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				C72BFEEB2B0F69160093FD64 /* XCRemoteSwiftPackageReference "DITranquillity" */,
+				C72BFEEE2B0F69670093FD64 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				C72BFEF12B0F6AB80093FD64 /* XCRemoteSwiftPackageReference "Localize-Swift" */,
+			);
 			productRefGroup = C7D4624022CC73DF00E763DF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -2197,28 +2200,6 @@
 			shellPath = /bin/sh;
 			shellScript = "#!/bin/bash\nset -e\n\nif [ \"Release\" = \"${CONFIGURATION}\" ]; then\n    \n    # Path to the app directory\n    APP_DIR_PATH=\"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_FOLDER_PATH}\"\n    # Strip main binary\n    strip -rSTx \"${APP_DIR_PATH}/${EXECUTABLE_NAME}\"\n    # Path to the Frameworks directory\n    APP_FRAMEWORKS_DIR=\"${APP_DIR_PATH}/Frameworks\"\n    \n    # Strip symbols from frameworks, if Frameworks/ exists at all\n    # ... as long as the framework is NOT signed by Apple\n    if [ -d \"$APP_FRAMEWORKS_DIR\" ]; then\n        find \"$APP_FRAMEWORKS_DIR\" -type f -perm +111 -maxdepth 2 -mindepth 2 -exec bash -c 'codesign -v -R=\"anchor apple\" \"{}\" &> /dev/null || (printf \"%s\\\\n\" \"{}\" && strip -rSTx \"{}\")' \\;\n    fi\n    # Re-sign binaries as necessary\nfi\n";
 		};
-		BC11612467F87E1726382BCC /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Anilibria-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		C7D4634022CC78CC00E763DF /* L10n generation */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -2236,7 +2217,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which strings >/dev/null; then\nswiftgen run strings \"${SRCROOT}/${PROJECT_NAME}/Resources/Localize/ru.lproj/Localizable.strings\" --output \"${SRCROOT}/${PROJECT_NAME}/Resources/Localize/Localizable.swift\" -p \"${SRCROOT}/${PROJECT_NAME}/Resources/Localize/strings-swift4.stencil\"\nelse\necho \"warning: SwiftGen not installed, download from https://github.com/SwiftGen/SwiftGen\"\nfi\n";
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\n\nif which swiftgen >/dev/null; then\nswiftgen run strings \"${SRCROOT}/${PROJECT_NAME}/Resources/Localize/ru.lproj/Localizable.strings\" --output \"${SRCROOT}/${PROJECT_NAME}/Resources/Localize/Localizable.swift\" -p \"${SRCROOT}/${PROJECT_NAME}/Resources/Localize/strings-swift4.stencil\"\nelse\necho \"warning: SwiftGen not installed, download from https://github.com/SwiftGen/SwiftGen\"\nfi\n";
 		};
 		C7D4634222CC790900E763DF /* Lint */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2256,23 +2237,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\nswiftlint autocorrect\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
-		};
-		F0D43917EF804CB5A3F71795 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Anilibria/Pods-Anilibria-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Anilibria/Pods-Anilibria-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Anilibria/Pods-Anilibria-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2662,6 +2626,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2697,6 +2662,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -2725,6 +2691,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2760,6 +2727,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -2780,13 +2748,13 @@
 		};
 		C7D4625222CC73E100E763DF /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 59C572E5CC1D85D52E54B6F8 /* Pods-Anilibria.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Anilibria/Anilibria.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 46;
 				DEVELOPMENT_TEAM = 9P3CNK2626;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/Anilibria/Resources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Anilibria;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
@@ -2808,13 +2776,13 @@
 		};
 		C7D4625322CC73E100E763DF /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7E44A4915F945B78C7F8411D /* Pods-Anilibria.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Anilibria/Anilibria.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 46;
 				DEVELOPMENT_TEAM = 9P3CNK2626;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/Anilibria/Resources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Anilibria;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
@@ -2866,6 +2834,64 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C72BFEE82B0F687E0093FD64 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = exactVersion;
+				version = 7.10.0;
+			};
+		};
+		C72BFEEB2B0F69160093FD64 /* XCRemoteSwiftPackageReference "DITranquillity" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ivlevAstef/DITranquillity.git";
+			requirement = {
+				kind = exactVersion;
+				version = 4.5.0;
+			};
+		};
+		C72BFEEE2B0F69670093FD64 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
+			requirement = {
+				kind = exactVersion;
+				version = 4.3.3;
+			};
+		};
+		C72BFEF12B0F6AB80093FD64 /* XCRemoteSwiftPackageReference "Localize-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/marmelroy/Localize-Swift.git";
+			requirement = {
+				kind = exactVersion;
+				version = 3.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C72BFEE92B0F687E0093FD64 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C72BFEE82B0F687E0093FD64 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		C72BFEEC2B0F69160093FD64 /* DITranquillity */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C72BFEEB2B0F69160093FD64 /* XCRemoteSwiftPackageReference "DITranquillity" */;
+			productName = DITranquillity;
+		};
+		C72BFEEF2B0F69670093FD64 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C72BFEEE2B0F69670093FD64 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
+		C72BFEF22B0F6AB80093FD64 /* Localize_Swift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C72BFEF12B0F6AB80093FD64 /* XCRemoteSwiftPackageReference "Localize-Swift" */;
+			productName = Localize_Swift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C7D4623722CC73DF00E763DF /* Project object */;
 }

@@ -20,7 +20,7 @@ public final class SearchResultCell: RippleViewCell {
     private func configure(item: Series) {
         self.iconView.isHidden = true
         self.imageView.setImage(from: item.poster,
-                                placeholder: UIImage(named: "img_placeholder"))
+                                placeholder: UIImage(resource: .imgPlaceholder))
         self.titleLabel.text = item.names.first
     }
 

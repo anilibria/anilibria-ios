@@ -1,5 +1,6 @@
 import Foundation
 import Kingfisher
+import UIKit
 
 extension UIImageView {
     public func setImage(from url: URL?,
@@ -21,7 +22,7 @@ extension UIImageView {
             )
         )
         self.kf.setImage(
-            with: ImageResource(downloadURL: url),
+            with: KF.ImageResource(downloadURL: url),
             placeholder: placeholder,
             options: options,
             completionHandler: completionHandler

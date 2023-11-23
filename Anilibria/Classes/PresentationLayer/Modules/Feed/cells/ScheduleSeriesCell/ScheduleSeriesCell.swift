@@ -10,7 +10,7 @@ final class ScheduleSeriesCell: RippleViewCell {
         self.releaseTitleLabel.superview?.isHidden = true
 
         self.imageView.setImage(from: item.poster,
-                                placeholder: UIImage(named: "img_placeholder")) { result in
+                                placeholder: UIImage(resource: .imgPlaceholder)) { result in
             switch result {
             case .failure:
                 self.releaseTitleLabel.superview?.isHidden = false

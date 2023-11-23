@@ -16,7 +16,7 @@ public final class NewsCell: RippleViewCell {
         self.commentsCountLabel.text = "\(item.comments)"
         self.viewsCountLabel.text = "\(item.views)"
         self.imageView.setImage(from: item.image,
-                                placeholder: UIImage(named: "img_placeholder"))
+                                placeholder: UIImage(resource: .imgPlaceholder))
         self.viewsIconView.tintColor = .darkGray
         self.commentsIconView.tintColor = .darkGray
     }

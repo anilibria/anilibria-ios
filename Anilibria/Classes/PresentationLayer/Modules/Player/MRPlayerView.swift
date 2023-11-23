@@ -107,7 +107,7 @@ final class PlayerViewController: BaseViewController {
 
         self.playerView.getPlayChanges()
             .sink(onNext: { [weak self] value in
-                let image: UIImage = value ? #imageLiteral(resourceName: "icon_pause") : #imageLiteral(resourceName: "icon_play")
+                let image = UIImage(resource: value ? .iconPause : .iconPlay)
                 self?.playPauseIconView.templateImage = image
             })
             .store(in: &subscribers)

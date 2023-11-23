@@ -12,7 +12,7 @@ public final class SeriesCell: RippleViewCell {
 
     func configure(_ item: Series) {
         self.imageView.setImage(from: item.poster,
-                                placeholder: UIImage(named: "img_placeholder"))
+                                placeholder: UIImage(resource: .imgPlaceholder))
         let name = item.names.first ?? ""
         if item.count.isEmpty {
             self.titleLabel.text = name

@@ -36,10 +36,6 @@ internal enum L10n {
     internal static var done: String {
         return L10n.tr("Localizable", "buttons.done")
     }
-    /// Пропустить
-    internal static var next: String {
-        return L10n.tr("Localizable", "buttons.next")
-    }
     /// Нет
     internal static var no: String {
         return L10n.tr("Localizable", "buttons.no")
@@ -63,6 +59,10 @@ internal enum L10n {
     /// Выйти
     internal static var signOut: String {
         return L10n.tr("Localizable", "buttons.signOut")
+    }
+    /// Пропустить
+    internal static var skip: String {
+        return L10n.tr("Localizable", "buttons.skip")
     }
     /// Да
     internal static var yes: String {
@@ -244,9 +244,28 @@ internal enum L10n {
   internal enum Screen {
 
     internal enum Auth {
+      /// Секретный код 2FA
+      internal static var code: String {
+          return L10n.tr("Localizable", "screen.auth.code")
+      }
+      /// Логин или email
+      internal static var login: String {
+          return L10n.tr("Localizable", "screen.auth.login")
+      }
+      /// Пароль
+      internal static var password: String {
+          return L10n.tr("Localizable", "screen.auth.password")
+      }
       /// Авторизация
       internal static var title: String {
           return L10n.tr("Localizable", "screen.auth.title")
+      }
+
+      internal enum Code {
+        /// Оставьте поле пустым, если вы не настроили двухфакторную аутентификацию
+        internal static var description: String {
+            return L10n.tr("Localizable", "screen.auth.code.description")
+        }
       }
     }
 

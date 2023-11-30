@@ -20,7 +20,7 @@
 "buttons.settings" = "Настройки";
 "buttons.cancel" = "Отмена";
 "buttons.retry" = "Повторить";
-"buttons.next" = "Пропустить";
+"buttons.skip" = "Пропустить";
 "buttons.reset" = "Сброс";
 "buttons.apply" = "Применить";
 
@@ -96,6 +96,10 @@
 
 //AUTH SCREEN
 "screen.auth.title" = "Авторизация";
+"screen.auth.login" = "Логин или email";
+"screen.auth.password" = "Пароль";
+"screen.auth.code" = "Секретный код 2FA";
+"screen.auth.code.description" = "Оставьте поле пустым, если вы не настроили двухфакторную аутентификацию";
 
 //SETTINGS SCREEN
 "screen.settings.title" = "Настройки";

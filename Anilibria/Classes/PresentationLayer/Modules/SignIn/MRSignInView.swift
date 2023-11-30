@@ -7,8 +7,10 @@ final class SignInViewController: BaseViewController {
     @IBOutlet var loginField: UITextField!
     @IBOutlet var passwordField: UITextField!
     @IBOutlet var codeField: UITextField!
+    @IBOutlet var codeLabel: UILabel!
     @IBOutlet var socialContainer: UIView!
     @IBOutlet var logInButton: UIButton!
+    @IBOutlet var skipButton: UIButton!
     @IBOutlet var scrollView: UIScrollView!
 
     var handler: SignInEventHandler!
@@ -20,6 +22,16 @@ final class SignInViewController: BaseViewController {
         self.handler.didLoad()
         self.addKeyboardObservers()
         self.subscribes()
+    }
+    
+    override func setupStrings() {
+        super.setupStrings()
+        loginField.placeholder = L10n.Screen.Auth.login
+        passwordField.placeholder = L10n.Screen.Auth.password
+        codeField.placeholder = L10n.Screen.Auth.code
+        codeLabel.text = L10n.Screen.Auth.Code.description
+        logInButton.setTitle(L10n.Buttons.signIn, for: .normal)
+        skipButton.setTitle(L10n.Buttons.skip, for: .normal)
     }
 
     override func viewWillAppear(_ animated: Bool) {

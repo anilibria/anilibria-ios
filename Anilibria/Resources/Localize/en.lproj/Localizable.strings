@@ -20,7 +20,7 @@
 "buttons.settings" = "Settings";
 "buttons.cancel" = "Cancel";
 "buttons.retry" = "Retry";
-"buttons.next" = "Skip";
+"buttons.skip" = "Skip";
 "buttons.reset" = "Reset";
 "buttons.apply" = "Apply";
 
@@ -96,6 +96,10 @@
 
 //AUTH SCREEN
 "screen.auth.title" = "Sign In";
+"screen.auth.login" = "Login or email";
+"screen.auth.password" = "Password";
+"screen.auth.code" = "Secret 2FA code";
+"screen.auth.code.description" = "Leave this field empty if you didn't set up two factor authorization";
 
 //SETTINGS SCREEN
 "screen.settings.title" = "Settings";

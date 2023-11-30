@@ -103,6 +103,10 @@
 
 //SETTINGS SCREEN
 "screen.settings.title" = "Настройки";
+"screen.settings.common" = "Общие";
+"screen.settings.language" = "Язык";
+"screen.settings.video_quality" = "Качество видео";
+"screen.settings.about_app" = "О приложении";
 
 //STUB VIEW
 "stub.title" = "Нет данных";
@@ -119,3 +123,7 @@
 "screen.filter.sotring" = "Сортировка";
 "screen.filter.Sotring.popularity" = "Популярность";
 "screen.filter.Sotring.newest" = "Новизна";
+
+//OTHER SCREEN
+"screen.other.team" = "Список команды";
+"screen.other.donate" = "Поддержать";

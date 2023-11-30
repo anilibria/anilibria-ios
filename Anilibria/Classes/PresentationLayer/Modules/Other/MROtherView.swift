@@ -6,7 +6,12 @@ final class OtherViewController: BaseViewController {
     @IBOutlet var userNameLabel: UILabel!
     @IBOutlet var authButton: UIButton!
     @IBOutlet var linksStakView: UIStackView!
-	@IBOutlet var historyView: UIView!
+    
+    @IBOutlet var historyTitleLabel: UILabel!
+    @IBOutlet var historyView: UIView!
+    @IBOutlet var teamTitleLabel: UILabel!
+    @IBOutlet var donateTitleLabel: UILabel!
+    @IBOutlet var settingsTitleLabel: UILabel!
 
     var handler: OtherEventHandler!
 
@@ -14,11 +19,19 @@ final class OtherViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.handler.didLoad()
 
 		if UIDevice.current.userInterfaceIdiom == .pad {
 			historyView.isHidden = true
 		}
+    }
+    
+    override func setupStrings() {
+        super.setupStrings()
+        handler.didLoad()
+        historyTitleLabel.text = L10n.Screen.Feed.history
+        teamTitleLabel.text = L10n.Screen.Other.team
+        donateTitleLabel.text = L10n.Screen.Other.donate
+        settingsTitleLabel.text = L10n.Screen.Settings.title
     }
 
     override func viewWillAppear(_ animated: Bool) {

@@ -362,6 +362,17 @@ internal enum L10n {
       }
     }
 
+    internal enum Other {
+      /// Поддержать
+      internal static var donate: String {
+          return L10n.tr("Localizable", "screen.other.donate")
+      }
+      /// Список команды
+      internal static var team: String {
+          return L10n.tr("Localizable", "screen.other.team")
+      }
+    }
+
     internal enum Series {
       /// Добавлен 
       internal static var addedDate: String {
@@ -398,9 +409,25 @@ internal enum L10n {
     }
 
     internal enum Settings {
+      /// О приложении
+      internal static var aboutApp: String {
+          return L10n.tr("Localizable", "screen.settings.about_app")
+      }
+      /// Общие
+      internal static var common: String {
+          return L10n.tr("Localizable", "screen.settings.common")
+      }
+      /// Язык
+      internal static var language: String {
+          return L10n.tr("Localizable", "screen.settings.language")
+      }
       /// Настройки
       internal static var title: String {
           return L10n.tr("Localizable", "screen.settings.title")
+      }
+      /// Качество видео
+      internal static var videoQuality: String {
+          return L10n.tr("Localizable", "screen.settings.video_quality")
       }
     }
   }

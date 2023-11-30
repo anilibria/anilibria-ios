@@ -103,7 +103,10 @@
 
 //SETTINGS SCREEN
 "screen.settings.title" = "Settings";
-
+"screen.settings.common" = "Common";
+"screen.settings.language" = "Language";
+"screen.settings.video_quality" = "Video quality";
+"screen.settings.about_app" = "About";
 //STUB VIEW
 "stub.title" = "Empty";
 "stub.favorite.message" = "Your favorite series will be here";
@@ -119,3 +122,7 @@
 "screen.filter.sotring" = "Sorting";
 "screen.filter.Sotring.popularity" = "Popularity";
 "screen.filter.Sotring.newest" = "Newest";
+
+//OTHER SCREEN
+"screen.other.team" = "Our team";
+"screen.other.donate" = "Donate";

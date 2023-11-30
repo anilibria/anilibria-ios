@@ -8,8 +8,7 @@ final class SeriesContainerViewController: BaseViewController {
     private lazy var titleControl = UISegmentedControl(items: [
         L10n.Screen.Series.title,
         L10n.Screen.Comments.title
-    ])
-        .apply { [unowned self] in
+    ]).apply { [unowned self] in
         $0.addTarget(self, action: #selector(valueChanged(_:)), for: .valueChanged)
     }
 
@@ -29,6 +28,12 @@ final class SeriesContainerViewController: BaseViewController {
 
     private func setupTitleView() {
         self.navigationItem.titleView = self.titleControl
+    }
+    
+    override func setupStrings() {
+        super.setupStrings()
+        titleControl.setTitle(L10n.Screen.Series.title, forSegmentAt: 0)
+        titleControl.setTitle(L10n.Screen.Comments.title, forSegmentAt: 1)
     }
 
     private func setupNavigationButtons() {

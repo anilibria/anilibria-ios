@@ -36,6 +36,11 @@ extension SettingsPresenter: RouterCommandResponder {
             self.update(quality)
             return true
         }
+        if let language = (command as? ChoiceResult)?.value as? Language {
+            Language.current = language
+            self.view.set(language: language)
+            return true
+        }
         return false
     }
 }
@@ -50,6 +55,7 @@ extension SettingsPresenter: SettingsEventHandler {
 
     func didLoad() {
         self.view.set(quality: self.playerSettings.quality)
+        self.view.set(language: Language.current)
         self.view.set(name: Bundle.main.displayName ?? "",
                       version: Bundle.main.releaseVersionNumber ?? "")
     }
@@ -61,6 +67,15 @@ extension SettingsPresenter: SettingsEventHandler {
             ChoiceItem($0, title: $0.name, isSelected: playerSettings.quality == $0, isLast: qualities.last == $0)
         }
 
+        self.router.openSheet(with: items)
+    }
+    
+    func selectLanguage() {
+        let languages = Language.allCases
+        let items = languages.map {
+            ChoiceItem($0, title: $0.name, isSelected: Language.current == $0, isLast: languages.last == $0)
+        }
+        
         self.router.openSheet(with: items)
     }
 

@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 
-public enum Language: String, Equatable, Codable {
+public enum Language: String, Equatable, Codable, CaseIterable {
     case ru
     case en
     

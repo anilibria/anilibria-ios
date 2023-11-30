@@ -124,6 +124,25 @@ internal enum L10n {
       }
     }
 
+    internal enum Seasons {
+      /// Осень
+      internal static var fall: String {
+          return L10n.tr("Localizable", "common.seasons.fall")
+      }
+      /// Весна
+      internal static var spring: String {
+          return L10n.tr("Localizable", "common.seasons.spring")
+      }
+      /// Лето
+      internal static var summer: String {
+          return L10n.tr("Localizable", "common.seasons.summer")
+      }
+      /// Зима
+      internal static var winter: String {
+          return L10n.tr("Localizable", "common.seasons.winter")
+      }
+    }
+
     internal enum WeekDay {
       /// Пятница
       internal static var fri: String {

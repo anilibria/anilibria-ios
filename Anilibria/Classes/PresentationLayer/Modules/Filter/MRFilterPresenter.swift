@@ -75,7 +75,7 @@ extension FilterPresenter: FilterEventHandler {
     }
 
     private func generateSeasonsTags() -> FilterTagsItem {
-        let changed: Action<Selectable<String>> = { [weak self] param in
+        let changed: Action<FilterTag> = { [weak self] param in
             param.isSelected.toggle()
             if param.isSelected {
                 self?.filter.seasons.insert(param.value)
@@ -84,9 +84,9 @@ extension FilterPresenter: FilterEventHandler {
             }
         }
 
-        let seasons = self.data.seasons.map { value -> Selectable<String> in
-            let item = Selectable(value)
-            item.isSelected = self.filter.seasons.contains(value)
+        let seasons = self.data.seasons.map { value -> FilterTag in
+            let item = FilterTag(value: value.original, displayValue: value.displayValue)
+            item.isSelected = self.filter.seasons.contains(value.original)
             return item
         }
 
@@ -97,7 +97,7 @@ extension FilterPresenter: FilterEventHandler {
 
     private func generateYearsTags() -> FilterTagsItem? {
         if self.data.years.isEmpty == false {
-            let changed: Action<Selectable<String>> = { [weak self] param in
+            let changed: Action<FilterTag> = { [weak self] param in
                 param.isSelected.toggle()
                 if param.isSelected {
                     self?.filter.years.insert(param.value)
@@ -106,8 +106,8 @@ extension FilterPresenter: FilterEventHandler {
                 }
             }
 
-            let years = self.data.years.map { value -> Selectable<String> in
-                let item = Selectable(value)
+            let years = self.data.years.map { value -> FilterTag in
+                let item = FilterTag(value: value)
                 item.isSelected = self.filter.years.contains(value)
                 return item
             }
@@ -122,7 +122,7 @@ extension FilterPresenter: FilterEventHandler {
 
     private func generateGenresTags() -> FilterTagsItem? {
         if self.data.genres.isEmpty == false {
-            let changed: Action<Selectable<String>> = { [weak self] param in
+            let changed: Action<FilterTag> = { [weak self] param in
                 param.isSelected.toggle()
                 if param.isSelected {
                     self?.filter.genres.insert(param.value)
@@ -131,8 +131,8 @@ extension FilterPresenter: FilterEventHandler {
                 }
             }
 
-            let genres = self.data.genres.map { value -> Selectable<String> in
-                let item = Selectable(value)
+            let genres = self.data.genres.map { value -> FilterTag in
+                let item = FilterTag(value: value)
                 item.isSelected = self.filter.genres.contains(value)
                 return item
             }

@@ -42,6 +42,11 @@
 "common.week_day.on_sat" = "в субботу";
 "common.week_day.on_sun" = "в воскресенье";
 
+"common.seasons.winter" = "Зима";
+"common.seasons.spring" = "Весна";
+"common.seasons.summer" = "Лето";
+"common.seasons.fall" = "Осень";
+
 "common.quality.sd" = "480p";
 "common.quality.hd" = "720p";
 "common.quality.full_hd" = "1080p";

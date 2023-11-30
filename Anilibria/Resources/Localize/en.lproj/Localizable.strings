@@ -42,6 +42,11 @@
 "common.week_day.on_sat" = "on Saturday";
 "common.week_day.on_sun" = "on Sunday";
 
+"common.seasons.winter" = "Winter";
+"common.seasons.spring" = "Spring";
+"common.seasons.summer" = "Summer";
+"common.seasons.fall" = "Fall";
+
 "common.quality.sd" = "480p";
 "common.quality.hd" = "720p";
 "common.quality.full_hd" = "1080p";

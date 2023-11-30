@@ -29,7 +29,9 @@ class BaseViewController: UIViewController, WaitingBehavior, LanguageBehavior, L
         self.setupStrings()
     }
 
-    func initialize() {}
+    func initialize() {
+        self.observeLanguageChanges().store(in: &subscribers)
+    }
 
     func setupStrings() {}
 

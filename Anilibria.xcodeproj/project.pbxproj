@@ -113,8 +113,6 @@
 		C7182F4B244EE1F70046B9ED /* LinkView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C7182F4A244EE1F70046B9ED /* LinkView.xib */; };
 		C72BFEEA2B0F687E0093FD64 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C72BFEE92B0F687E0093FD64 /* Kingfisher */; };
 		C72BFEED2B0F69160093FD64 /* DITranquillity in Frameworks */ = {isa = PBXBuildFile; productRef = C72BFEEC2B0F69160093FD64 /* DITranquillity */; };
-		C72BFEF02B0F69670093FD64 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = C72BFEEF2B0F69670093FD64 /* Lottie */; };
-		C72BFEF32B0F6AB80093FD64 /* Localize_Swift in Frameworks */ = {isa = PBXBuildFile; productRef = C72BFEF22B0F6AB80093FD64 /* Localize_Swift */; };
 		C7326BB6234CCDFB00E194C1 /* AppConfigirationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7326BB5234CCDFB00E194C1 /* AppConfigirationService.swift */; };
 		C7326BB8234CDF1600E194C1 /* AniConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7326BB7234CDF1600E194C1 /* AniConfig.swift */; };
 		C7326BBB234CE70D00E194C1 /* CheckRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7326BBA234CE70D00E194C1 /* CheckRequest.swift */; };
@@ -157,6 +155,7 @@
 		C7648F1B22DCB87800A3B092 /* SpecialCharactersConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7648F1A22DCB87800A3B092 /* SpecialCharactersConverter.swift */; };
 		C7648F1D22DCBB4800A3B092 /* SafariRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7648F1C22DCBB4800A3B092 /* SafariRoute.swift */; };
 		C7648F1F22DCBE7D00A3B092 /* OtherViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C7648F1E22DCBE7D00A3B092 /* OtherViewController.xib */; };
+		C778A88F2B18A40000340A23 /* nyan_cat.gif in Resources */ = {isa = PBXBuildFile; fileRef = C778A88E2B18A40000340A23 /* nyan_cat.gif */; };
 		C781CA5D22D387880046B0F2 /* SearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C781CA5C22D387880046B0F2 /* SearchViewController.xib */; };
 		C781CA6022D397BC0046B0F2 /* SearchResultCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C781CA5F22D397BC0046B0F2 /* SearchResultCell.xib */; };
 		C781CA6222D397CD0046B0F2 /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C781CA6122D397CD0046B0F2 /* SearchResultCell.swift */; };
@@ -320,7 +319,7 @@
 		C7D4632722CC74EF00E763DF /* AppFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D462D422CC74EF00E763DF /* AppFont.swift */; };
 		C7D4632922CC74EF00E763DF /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D462D622CC74EF00E763DF /* Configuration.swift */; };
 		C7D4633A22CC772800E763DF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C7D4632E22CC772800E763DF /* Localizable.strings */; };
-		C7D4633C22CC772800E763DF /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D4633222CC772800E763DF /* Language.swift */; };
+		C7D4633C22CC772800E763DF /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D4633222CC772800E763DF /* Localization.swift */; };
 		C7D4633F22CC772800E763DF /* Localizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D4633822CC772800E763DF /* Localizable.swift */; };
 		C7D4634422CDACE300E763DF /* PagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D4634322CDACE300E763DF /* PagerView.swift */; };
 		C7D4634822CDAE0400E763DF /* PublisherExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D4634722CDAE0400E763DF /* PublisherExtensions.swift */; };
@@ -330,7 +329,6 @@
 		C7D4635122CE4D1D00E763DF /* MainContainerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C7D4635022CE4D1D00E763DF /* MainContainerViewController.xib */; };
 		C7D4635422CE51B300E763DF /* MenuItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C7D4635322CE51B300E763DF /* MenuItemView.xib */; };
 		C7D4635622CE51DB00E763DF /* MenuItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D4635522CE51DB00E763DF /* MenuItemView.swift */; };
-		C7D4635A22CE61DF00E763DF /* nyan_cat.json in Resources */ = {isa = PBXBuildFile; fileRef = C7D4635922CE61DF00E763DF /* nyan_cat.json */; };
 		C7D686A822D8DF9500CF4190 /* SwitcherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D686A622D8DF9400CF4190 /* SwitcherView.swift */; };
 		C7D686A922D8DF9500CF4190 /* SwitcherView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C7D686A722D8DF9400CF4190 /* SwitcherView.xib */; };
 		C7D686AE22D8E26300CF4190 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D686AD22D8E26300CF4190 /* PlayerView.swift */; };
@@ -535,6 +533,7 @@
 		C7648F1A22DCB87800A3B092 /* SpecialCharactersConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpecialCharactersConverter.swift; sourceTree = "<group>"; };
 		C7648F1C22DCBB4800A3B092 /* SafariRoute.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SafariRoute.swift; sourceTree = "<group>"; };
 		C7648F1E22DCBE7D00A3B092 /* OtherViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OtherViewController.xib; sourceTree = "<group>"; };
+		C778A88E2B18A40000340A23 /* nyan_cat.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = nyan_cat.gif; sourceTree = "<group>"; };
 		C781CA5C22D387880046B0F2 /* SearchViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchViewController.xib; sourceTree = "<group>"; };
 		C781CA5F22D397BC0046B0F2 /* SearchResultCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchResultCell.xib; sourceTree = "<group>"; };
 		C781CA6122D397CD0046B0F2 /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
@@ -701,7 +700,7 @@
 		C7D462D222CC74EF00E763DF /* AppTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		C7D462D422CC74EF00E763DF /* AppFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppFont.swift; sourceTree = "<group>"; };
 		C7D462D622CC74EF00E763DF /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
-		C7D4633222CC772800E763DF /* Language.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Language.swift; sourceTree = "<group>"; };
+		C7D4633222CC772800E763DF /* Localization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
 		C7D4633522CC772800E763DF /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C7D4633722CC772800E763DF /* strings-swift4.stencil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "strings-swift4.stencil"; sourceTree = "<group>"; };
 		C7D4633822CC772800E763DF /* Localizable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Localizable.swift; sourceTree = "<group>"; };
@@ -713,7 +712,6 @@
 		C7D4635022CE4D1D00E763DF /* MainContainerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainContainerViewController.xib; sourceTree = "<group>"; };
 		C7D4635322CE51B300E763DF /* MenuItemView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MenuItemView.xib; sourceTree = "<group>"; };
 		C7D4635522CE51DB00E763DF /* MenuItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemView.swift; sourceTree = "<group>"; };
-		C7D4635922CE61DF00E763DF /* nyan_cat.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = nyan_cat.json; sourceTree = "<group>"; };
 		C7D686A622D8DF9400CF4190 /* SwitcherView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitcherView.swift; sourceTree = "<group>"; };
 		C7D686A722D8DF9400CF4190 /* SwitcherView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwitcherView.xib; sourceTree = "<group>"; };
 		C7D686AD22D8E26300CF4190 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
@@ -766,12 +764,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				C72BFEED2B0F69160093FD64 /* DITranquillity in Frameworks */,
-				C72BFEF32B0F6AB80093FD64 /* Localize_Swift in Frameworks */,
 				C72BFEEA2B0F687E0093FD64 /* Kingfisher in Frameworks */,
 				46B82AB12971A2E0003E450B /* YandexMobileMetricaCrashes.xcframework in Frameworks */,
 				46B82AAE2971A2DE003E450B /* YandexMobileMetrica.xcframework in Frameworks */,
 				C7B0F2CC22D6F0B100540CA9 /* WebKit.framework in Frameworks */,
-				C72BFEF02B0F69670093FD64 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1903,7 +1899,7 @@
 			isa = PBXGroup;
 			children = (
 				C7D4632E22CC772800E763DF /* Localizable.strings */,
-				C7D4633222CC772800E763DF /* Language.swift */,
+				C7D4633222CC772800E763DF /* Localization.swift */,
 				C7D4633722CC772800E763DF /* strings-swift4.stencil */,
 				C7D4633822CC772800E763DF /* Localizable.swift */,
 			);
@@ -1930,7 +1926,7 @@
 		C7D4635B22CE61E800E763DF /* Lottie */ = {
 			isa = PBXGroup;
 			children = (
-				C7D4635922CE61DF00E763DF /* nyan_cat.json */,
+				C778A88E2B18A40000340A23 /* nyan_cat.gif */,
 			);
 			path = Lottie;
 			sourceTree = "<group>";
@@ -2059,8 +2055,6 @@
 			packageProductDependencies = (
 				C72BFEE92B0F687E0093FD64 /* Kingfisher */,
 				C72BFEEC2B0F69160093FD64 /* DITranquillity */,
-				C72BFEEF2B0F69670093FD64 /* Lottie */,
-				C72BFEF22B0F6AB80093FD64 /* Localize_Swift */,
 			);
 			productName = Anilibria;
 			productReference = C7D4623F22CC73DF00E763DF /* Anilibria.app */;
@@ -2106,8 +2100,6 @@
 			packageReferences = (
 				C72BFEE82B0F687E0093FD64 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				C72BFEEB2B0F69160093FD64 /* XCRemoteSwiftPackageReference "DITranquillity" */,
-				C72BFEEE2B0F69670093FD64 /* XCRemoteSwiftPackageReference "lottie-ios" */,
-				C72BFEF12B0F6AB80093FD64 /* XCRemoteSwiftPackageReference "Localize-Swift" */,
 			);
 			productRefGroup = C7D4624022CC73DF00E763DF /* Products */;
 			projectDirPath = "";
@@ -2132,12 +2124,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				C78D920424CDD7AF00EB8EA0 /* PlaceholderViewController.xib in Resources */,
-				C7D4635A22CE61DF00E763DF /* nyan_cat.json in Resources */,
 				C7B0F2CE22D73E7300540CA9 /* CommentsAuthViewController.xib in Resources */,
 				C783950922D0C78000ACC353 /* FilterTagTitleCell.xib in Resources */,
 				C78394CE22CF80D700ACC353 /* ActionCell.xib in Resources */,
 				C7D686A922D8DF9500CF4190 /* SwitcherView.xib in Resources */,
 				C7D4624D22CC73E100E763DF /* LaunchScreen.storyboard in Resources */,
+				C778A88F2B18A40000340A23 /* nyan_cat.gif in Resources */,
 				C78394FD22D0C02300ACC353 /* FilterHeaderCell.xib in Resources */,
 				C7D4631D22CC74EF00E763DF /* NewsCell.xib in Resources */,
 				C799EBE222DF170C00C6BD9B /* SocialAuthViewController.xib in Resources */,
@@ -2276,7 +2268,7 @@
 				C7D462DF22CC74EF00E763DF /* RefreshIndicator.swift in Sources */,
 				C78D920224CDD79600EB8EA0 /* PlaceholderViewController.swift in Sources */,
 				C7B0F2C222D6012500540CA9 /* TouchesScrollView.swift in Sources */,
-				C7D4633C22CC772800E763DF /* Language.swift in Sources */,
+				C7D4633C22CC772800E763DF /* Localization.swift in Sources */,
 				C737923222E0157F00DDF2B2 /* DraggableView.swift in Sources */,
 				C783950F22D0DC8400ACC353 /* FilterData.swift in Sources */,
 				46A4DAB72917DF82003944FD /* LeftAlignedCollectionViewFlowLayout.swift in Sources */,
@@ -2854,22 +2846,6 @@
 				version = 4.5.0;
 			};
 		};
-		C72BFEEE2B0F69670093FD64 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
-			requirement = {
-				kind = exactVersion;
-				version = 4.3.3;
-			};
-		};
-		C72BFEF12B0F6AB80093FD64 /* XCRemoteSwiftPackageReference "Localize-Swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/marmelroy/Localize-Swift.git";
-			requirement = {
-				kind = exactVersion;
-				version = 3.2.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -2882,16 +2858,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C72BFEEB2B0F69160093FD64 /* XCRemoteSwiftPackageReference "DITranquillity" */;
 			productName = DITranquillity;
-		};
-		C72BFEEF2B0F69670093FD64 /* Lottie */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C72BFEEE2B0F69670093FD64 /* XCRemoteSwiftPackageReference "lottie-ios" */;
-			productName = Lottie;
-		};
-		C72BFEF22B0F6AB80093FD64 /* Localize_Swift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C72BFEF12B0F6AB80093FD64 /* XCRemoteSwiftPackageReference "Localize-Swift" */;
-			productName = Localize_Swift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

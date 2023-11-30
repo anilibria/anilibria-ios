@@ -19,24 +19,6 @@
       }
     },
     {
-      "identity" : "localize-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/marmelroy/Localize-Swift.git",
-      "state" : {
-        "revision" : "0aa221fed0512772eaad04171d966b8d77b15212",
-        "version" : "3.2.0"
-      }
-    },
-    {
-      "identity" : "lottie-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/airbnb/lottie-ios.git",
-      "state" : {
-        "revision" : "45517c3cfec9469bbdd4f86e32393c28ae9df0bc",
-        "version" : "4.3.3"
-      }
-    },
-    {
       "identity" : "swiftlazy",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ivlevAstef/SwiftLazy.git",

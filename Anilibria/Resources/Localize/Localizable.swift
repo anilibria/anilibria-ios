@@ -2,7 +2,6 @@
 // Updated by Allui
 
 import Foundation
-import Localize_Swift
 
 // swiftlint:disable superfluous_disable_command
 // swiftlint:disable file_length

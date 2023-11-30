@@ -148,7 +148,7 @@ extension FeedPresenter: FeedEventHandler {
         if items.isEmpty {
             return
         }
-        let scheduleAction = ActionItem(L10n.Screen.Feed.schedule.uppercased()) { [weak self] in
+        let scheduleAction = ActionItem(L10n.Screen.Feed.schedule) { [weak self] in
             self?.allSchedule()
         }
 

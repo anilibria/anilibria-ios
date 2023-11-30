@@ -24,6 +24,7 @@ public final class SearchView: UIView {
     }
 
     private func setupSearchField() {
+        self.searchField.placeholder = L10n.Common.Search.byName
         self.searchField.textPublisher.map { $0 ?? "" }
             .sink(onNext: { [weak self] text in
                 self?.queryRelay.send(text)

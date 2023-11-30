@@ -21,6 +21,7 @@ extension UIImageView {
                 DelayRetryStrategy(maxRetryCount: maxRetryCount, retryInterval: .seconds(0.1))
             )
         )
+        self.kf.cancelDownloadTask()
         self.kf.setImage(
             with: KF.ImageResource(downloadURL: url),
             placeholder: placeholder,

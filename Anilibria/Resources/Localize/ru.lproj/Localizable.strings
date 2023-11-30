@@ -21,6 +21,8 @@
 "buttons.cancel" = "Отмена";
 "buttons.retry" = "Повторить";
 "buttons.next" = "Пропустить";
+"buttons.reset" = "Сброс";
+"buttons.apply" = "Применить";
 
 //COMMON
 "common.today" = "Сегодня";
@@ -44,6 +46,7 @@
 "common.quality.hd" = "720p";
 "common.quality.full_hd" = "1080p";
 
+"common.search.by_name" = "Поиск по названию";
 "common.google_search.query" = "Найти в гугле \"%@\"";
 "common.filter_search.title" = "Искать по жанрам и годам";
 
@@ -65,8 +68,8 @@
 "screen.feed.soon_title" = "Ожидается";
 "screen.feed.schedule" = "Расписание";
 "screen.feed.updates_title" = "Обновления";
-"screen.feed.random_release" = "СЛУЧАЙНЫЙ РЕЛИЗ";
-"screen.feed.history" = "ИСТОРИЯ";
+"screen.feed.random_release" = "Случайный релиз";
+"screen.feed.history" = "История";
 
 //FILTER SCREEN
 "screen.filter.genres" = "Жанры";
@@ -98,3 +101,12 @@
 "stub.history.message" = "Здесь будет отображаться локальная история просмотра релизов";
 "stub.message_not_found" = "По запросу \"%@\" ничего не найдено";
 
+//CONFIGURATION SCRIEEN
+"screen.configuration.title" = "Обновление конфигурации";
+
+//FILTER SCREEN
+"screen.filter.title" = "Фильтер";
+"screen.filter.complete" = "Релиз завершен";
+"screen.filter.sotring" = "Сортировка";
+"screen.filter.Sotring.popularity" = "Популярность";
+"screen.filter.Sotring.newest" = "Новизна";

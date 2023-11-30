@@ -24,6 +24,10 @@ internal enum L10n {
   }
 
   internal enum Buttons {
+    /// Применить
+    internal static var apply: String {
+        return L10n.tr("Localizable", "buttons.apply")
+    }
     /// Отмена
     internal static var cancel: String {
         return L10n.tr("Localizable", "buttons.cancel")
@@ -39,6 +43,10 @@ internal enum L10n {
     /// Нет
     internal static var no: String {
         return L10n.tr("Localizable", "buttons.no")
+    }
+    /// Сброс
+    internal static var reset: String {
+        return L10n.tr("Localizable", "buttons.reset")
     }
     /// Повторить
     internal static var retry: String {
@@ -106,6 +114,13 @@ internal enum L10n {
       /// 480p
       internal static var sd: String {
           return L10n.tr("Localizable", "common.quality.sd")
+      }
+    }
+
+    internal enum Search {
+      /// Поиск по названию
+      internal static var byName: String {
+          return L10n.tr("Localizable", "common.search.by_name")
       }
     }
 
@@ -230,12 +245,19 @@ internal enum L10n {
       }
     }
 
+    internal enum Configuration {
+      /// Обновление конфигурации
+      internal static var title: String {
+          return L10n.tr("Localizable", "screen.configuration.title")
+      }
+    }
+
     internal enum Feed {
-      /// ИСТОРИЯ
+      /// История
       internal static var history: String {
           return L10n.tr("Localizable", "screen.feed.history")
       }
-      /// СЛУЧАЙНЫЙ РЕЛИЗ
+      /// Случайный релиз
       internal static var randomRelease: String {
           return L10n.tr("Localizable", "screen.feed.random_release")
       }
@@ -258,6 +280,10 @@ internal enum L10n {
     }
 
     internal enum Filter {
+      /// Релиз завершен
+      internal static var complete: String {
+          return L10n.tr("Localizable", "screen.filter.complete")
+      }
       /// Жанры
       internal static var genres: String {
           return L10n.tr("Localizable", "screen.filter.genres")
@@ -266,9 +292,28 @@ internal enum L10n {
       internal static var seasons: String {
           return L10n.tr("Localizable", "screen.filter.seasons")
       }
+      /// Сортировка
+      internal static var sotring: String {
+          return L10n.tr("Localizable", "screen.filter.sotring")
+      }
+      /// Фильтер
+      internal static var title: String {
+          return L10n.tr("Localizable", "screen.filter.title")
+      }
       /// Года
       internal static var years: String {
           return L10n.tr("Localizable", "screen.filter.years")
+      }
+
+      internal enum Sotring {
+        /// Новизна
+        internal static var newest: String {
+            return L10n.tr("Localizable", "screen.filter.Sotring.newest")
+        }
+        /// Популярность
+        internal static var popularity: String {
+            return L10n.tr("Localizable", "screen.filter.Sotring.popularity")
+        }
       }
     }
 

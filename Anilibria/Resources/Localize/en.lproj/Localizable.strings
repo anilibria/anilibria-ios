@@ -21,6 +21,8 @@
 "buttons.cancel" = "Cancel";
 "buttons.retry" = "Retry";
 "buttons.next" = "Skip";
+"buttons.reset" = "Reset";
+"buttons.apply" = "Apply";
 
 //COMMON
 "common.today" = "Today";
@@ -44,10 +46,11 @@
 "common.quality.hd" = "720p";
 "common.quality.full_hd" = "1080p";
 
+"common.search.by_name" = "Search by name";
 "common.google_search.query" = "Google \"%@\"";
 "common.filter_search.title" = "Search by genre and year";
 
-"common.donate_pls" = "Понравилась озвучка?\nПоддержи проект :3";
+"common.donate_pls" = "Do you like our voice acting?\nPlease support our project :3";
 "common.guest" = "Guest";
 
 //PERMISSION
@@ -62,7 +65,7 @@
 
 //FEED SCREEN
 "screen.feed.title" = "Feed";
-"screen.feed.soon_title" = "Soon";
+"screen.feed.soon_title" = "Coming soon";
 "screen.feed.schedule" = "Schedule";
 "screen.feed.updates_title" = "Updates";
 "screen.feed.random_release" = "Randome release";
@@ -78,8 +81,8 @@
 "screen.series.year" = "Year: ";
 "screen.series.voices" = "Voices: ";
 "screen.series.type" = "Type: ";
-"screen.series.status" = "Состояние релиза: ";
-"screen.series.genres" = "Жанр: ";
+"screen.series.status" = "Status: ";
+"screen.series.genres" = "Genres: ";
 "screen.series.added_date" = "Added ";
 "screen.series.downloaded" = "File %@ saved into\n~/Downloads/%@";
 
@@ -97,3 +100,13 @@
 "stub.favorite.message" = "Your favorite series will be here";
 "stub.history.message" = "Your watching history will be here";
 "stub.message_not_found" = "No results found for \"%@\"";
+
+//CONFIGURATION SCRIEEN
+"screen.configuration.title" = "Configuration...";
+
+//FILTER SCREEN
+"screen.filter.title" = "Filter";
+"screen.filter.complete" = "Complete";
+"screen.filter.sotring" = "Sorting";
+"screen.filter.Sotring.popularity" = "Popularity";
+"screen.filter.Sotring.newest" = "Newest";

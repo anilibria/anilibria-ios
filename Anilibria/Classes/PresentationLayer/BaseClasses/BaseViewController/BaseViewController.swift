@@ -1,7 +1,7 @@
 import Combine
 import UIKit
 
-class BaseViewController: UIViewController, WaitingBehavior, LanguageBehavior, Loggable {
+class BaseViewController: UIViewController, WaitingBehavior, Loggable {
     var defaultLoggingTag: LogTag { .view }
     
     var subscribers = Set<AnyCancellable>()
@@ -30,7 +30,9 @@ class BaseViewController: UIViewController, WaitingBehavior, LanguageBehavior, L
     }
 
     func initialize() {
-        self.observeLanguageChanges().store(in: &subscribers)
+        Language.languageChanged.sink { [weak self] _ in
+            self?.setupStrings()
+        }.store(in: &subscribers)
     }
 
     func setupStrings() {}

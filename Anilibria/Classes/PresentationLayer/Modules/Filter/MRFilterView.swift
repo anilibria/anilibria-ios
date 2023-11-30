@@ -34,6 +34,12 @@ final class FilterViewController: BaseCollectionViewController {
             }
         }
     }
+    
+    override func setupStrings() {
+        super.setupStrings()
+        resetButton.setTitle(L10n.Buttons.reset, for: .normal)
+        applyButton.setTitle(L10n.Buttons.apply, for: .normal)
+    }
 
     @IBAction func backAction(_ sender: Any) {
         self.handler.back()

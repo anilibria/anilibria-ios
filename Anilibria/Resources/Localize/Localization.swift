@@ -1,3 +1,11 @@
+//
+//  Localization.swift
+//  Anilibria
+//
+//  Created by Ivan Morozov on 30.11.2023.
+//  Copyright © 2023 Иван Морозов. All rights reserved.
+//
+
 import Foundation
 import Combine
 

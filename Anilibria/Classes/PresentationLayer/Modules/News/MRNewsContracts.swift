@@ -2,12 +2,12 @@ import UIKit
 
 // MARK: - Contracts
 
-protocol NewsViewBehavior: WaitingBehavior, InfinityLoadingBehavior {
-    func set(items: [News])
-    func append(items: [News])
+protocol NewsViewBehavior: WaitingBehavior, RefreshBehavior {
+    func set(items: [NSObject])
+    func append(items: [NSObject])
 }
 
-protocol NewsEventHandler: ViewControllerEventHandler, InfinityLoadingEventHandler {
+protocol NewsEventHandler: ViewControllerEventHandler, RefreshEventHandler {
     func bind(view: NewsViewBehavior, router: NewsRoutable)
 
     func select(news: News)

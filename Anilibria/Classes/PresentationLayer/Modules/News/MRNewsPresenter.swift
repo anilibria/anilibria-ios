@@ -20,17 +20,15 @@ final class NewsPresenter {
 
     private var bag = Set<AnyCancellable>()
     private var activity: ActivityDisposable?
-
-    private lazy var paginator: Paginator = Paginator<News, IntPaging>(IntPaging()) { [unowned self] in
-        return self.feedService.fetchNews(page: $0)
+    private var pageSubscriber: AnyCancellable?
+    private var nextPage: Int = 0
+    
+    private lazy var pagination = PaginationViewModel { [weak self] completion in
+        self?.loadPage(completion: completion)
     }
 
     init(newsService: FeedService) {
         self.feedService = newsService
-    }
-
-    deinit {
-        self.paginator.release()
     }
 }
 
@@ -41,49 +39,51 @@ extension NewsPresenter: NewsEventHandler {
     }
 
     func didLoad() {
-        self.setupPaginator()
         self.activity = self.view.showLoading(fullscreen: false)
-        self.paginator.refresh()
+        self.load()
     }
 
     func refresh() {
         self.activity = self.view.showRefreshIndicator()
-        self.paginator.refresh()
-    }
-
-    func loadMore() {
-        self.paginator.loadNewPage()
+        self.load()
     }
 
     func select(news: News) {
         self.router.open(url: .web(news.vidUrl))
     }
-
-    private func setupPaginator() {
-        var pageActivity: ActivityDisposable?
-
-        self.paginator.handler
-            .showData { [weak self] value in
-                switch value.data {
-                case let .first(items):
-                    self?.view.set(items: items)
-                case let .next(items):
-                    self?.view.append(items: items)
-                }
-                self?.activity?.dispose()
-            }
-            .showEmptyError { [weak self] value in
-                if let error = value.error {
-                    self?.router.show(error: error)
-                }
-                self?.activity?.dispose()
-            }
-            .showPageProgress { [weak self] show in
-                if show {
-                    pageActivity = self?.view.loadPageProgress()
-                } else {
-                    pageActivity?.dispose()
-                }
-            }
+    
+    private func load() {
+        nextPage = 0
+        pageSubscriber = feedService.fetchNews(page: nextPage)
+            .sink(onNext: { [weak self] items in
+                self?.nextPage += 1
+                self?.set(items: items)
+                self?.activity = nil
+            }, onError: { [weak self] error in
+                self?.router.show(error: error)
+                self?.activity = nil
+            })
+    }
+    
+    private func loadPage(completion: @escaping Action<Bool>) {
+        pageSubscriber = feedService.fetchNews(page: nextPage)
+            .sink(onNext: { [weak self] items in
+                self?.nextPage += 1
+                self?.append(items: items)
+                completion(items.isEmpty)
+                self?.activity = nil
+            }, onError: { [weak self] error in
+                self?.router.show(error: error)
+                completion(false)
+                self?.activity = nil
+            })
+    }
+    
+    private func set(items: [News]) {
+        self.view.set(items: items + [pagination])
+    }
+    
+    private func append(items: [News]) {
+        self.view.append(items: items + [pagination])
     }
 }

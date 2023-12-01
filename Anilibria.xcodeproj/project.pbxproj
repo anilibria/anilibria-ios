@@ -279,8 +279,6 @@
 		C7D462E722CC74EF00E763DF /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D4627022CC74EE00E763DF /* Logger.swift */; };
 		C7D462E822CC74EF00E763DF /* SimpleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D4627122CC74EE00E763DF /* SimpleLogger.swift */; };
 		C7D462E922CC74EF00E763DF /* AttributeStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D4627322CC74EE00E763DF /* AttributeStringBuilder.swift */; };
-		C7D462ED22CC74EF00E763DF /* Paginator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D4627A22CC74EE00E763DF /* Paginator.swift */; };
-		C7D462EE22CC74EF00E763DF /* IdPaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D4627C22CC74EE00E763DF /* IdPaging.swift */; };
 		C7D462EF22CC74EF00E763DF /* ApiError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D4627E22CC74EE00E763DF /* ApiError.swift */; };
 		C7D462F022CC74EF00E763DF /* ErrorCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D4627F22CC74EE00E763DF /* ErrorCodes.swift */; };
 		C7D462F122CC74EF00E763DF /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D4628022CC74EE00E763DF /* AppError.swift */; };
@@ -303,7 +301,7 @@
 		C7D4630422CC74EF00E763DF /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D462A222CC74EE00E763DF /* BaseViewController.swift */; };
 		C7D4630522CC74EF00E763DF /* BaseNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D462A322CC74EE00E763DF /* BaseNavigationController.swift */; };
 		C7D4630722CC74EF00E763DF /* ViewControllerEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D462A622CC74EE00E763DF /* ViewControllerEventHandler.swift */; };
-		C7D4630822CC74EF00E763DF /* InfinityLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D462A722CC74EE00E763DF /* InfinityLoading.swift */; };
+		C7D4630822CC74EF00E763DF /* RefreshBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D462A722CC74EE00E763DF /* RefreshBehavior.swift */; };
 		C7D4630922CC74EF00E763DF /* Waiting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D462A822CC74EE00E763DF /* Waiting.swift */; };
 		C7D4630B22CC74EF00E763DF /* MRAppAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D462AD22CC74EE00E763DF /* MRAppAlertController.swift */; };
 		C7D4630D22CC74EF00E763DF /* LoadableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D462B022CC74EE00E763DF /* LoadableView.swift */; };
@@ -664,8 +662,6 @@
 		C7D4627022CC74EE00E763DF /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		C7D4627122CC74EE00E763DF /* SimpleLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleLogger.swift; sourceTree = "<group>"; };
 		C7D4627322CC74EE00E763DF /* AttributeStringBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttributeStringBuilder.swift; sourceTree = "<group>"; };
-		C7D4627A22CC74EE00E763DF /* Paginator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Paginator.swift; sourceTree = "<group>"; };
-		C7D4627C22CC74EE00E763DF /* IdPaging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdPaging.swift; sourceTree = "<group>"; };
 		C7D4627E22CC74EE00E763DF /* ApiError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiError.swift; sourceTree = "<group>"; };
 		C7D4627F22CC74EE00E763DF /* ErrorCodes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorCodes.swift; sourceTree = "<group>"; };
 		C7D4628022CC74EE00E763DF /* AppError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
@@ -688,7 +684,7 @@
 		C7D462A222CC74EE00E763DF /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		C7D462A322CC74EE00E763DF /* BaseNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseNavigationController.swift; sourceTree = "<group>"; };
 		C7D462A622CC74EE00E763DF /* ViewControllerEventHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerEventHandler.swift; sourceTree = "<group>"; };
-		C7D462A722CC74EE00E763DF /* InfinityLoading.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfinityLoading.swift; sourceTree = "<group>"; };
+		C7D462A722CC74EE00E763DF /* RefreshBehavior.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefreshBehavior.swift; sourceTree = "<group>"; };
 		C7D462A822CC74EE00E763DF /* Waiting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Waiting.swift; sourceTree = "<group>"; };
 		C7D462AD22CC74EE00E763DF /* MRAppAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MRAppAlertController.swift; sourceTree = "<group>"; };
 		C7D462B022CC74EE00E763DF /* LoadableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadableView.swift; sourceTree = "<group>"; };
@@ -1502,7 +1498,6 @@
 				C7D4626F22CC74EE00E763DF /* Logger */,
 				C7D4627222CC74EE00E763DF /* Other */,
 				C7D4627422CC74EE00E763DF /* Models */,
-				C7D4627922CC74EE00E763DF /* Paginator */,
 				C7D4627D22CC74EE00E763DF /* Error */,
 			);
 			path = Common;
@@ -1571,23 +1566,6 @@
 				C778A8922B18CD4F00340A23 /* TextWithTranslation.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		C7D4627922CC74EE00E763DF /* Paginator */ = {
-			isa = PBXGroup;
-			children = (
-				C7D4627A22CC74EE00E763DF /* Paginator.swift */,
-				C7D4627B22CC74EE00E763DF /* Paging */,
-			);
-			path = Paginator;
-			sourceTree = "<group>";
-		};
-		C7D4627B22CC74EE00E763DF /* Paging */ = {
-			isa = PBXGroup;
-			children = (
-				C7D4627C22CC74EE00E763DF /* IdPaging.swift */,
-			);
-			path = Paging;
 			sourceTree = "<group>";
 		};
 		C7D4627D22CC74EE00E763DF /* Error */ = {
@@ -1754,7 +1732,7 @@
 			isa = PBXGroup;
 			children = (
 				C7D462A622CC74EE00E763DF /* ViewControllerEventHandler.swift */,
-				C7D462A722CC74EE00E763DF /* InfinityLoading.swift */,
+				C7D462A722CC74EE00E763DF /* RefreshBehavior.swift */,
 				C7D462A822CC74EE00E763DF /* Waiting.swift */,
 			);
 			path = Protocols;
@@ -2358,7 +2336,6 @@
 				C799EBBE22DE04CD00C6BD9B /* UITextFieldExtension.swift in Sources */,
 				C78394CA22CF80C500ACC353 /* ActionCellAdapter.swift in Sources */,
 				C7D4634F22CE154400E763DF /* ListItem.swift in Sources */,
-				C7D462EE22CC74EF00E763DF /* IdPaging.swift in Sources */,
 				C7B0F2C022D5A85F00540CA9 /* SeriesRequest.swift in Sources */,
 				C7D4630D22CC74EF00E763DF /* LoadableView.swift in Sources */,
 				C783949122CF180A00ACC353 /* CGFloatExtension.swift in Sources */,
@@ -2383,7 +2360,7 @@
 				C7B0F2BC22D59AB700540CA9 /* SeriesHeaderView.swift in Sources */,
 				C7D462F122CC74EF00E763DF /* AppError.swift in Sources */,
 				C7D4632422CC74EF00E763DF /* Constants.swift in Sources */,
-				C7D4630822CC74EF00E763DF /* InfinityLoading.swift in Sources */,
+				C7D4630822CC74EF00E763DF /* RefreshBehavior.swift in Sources */,
 				C778A8932B18CD4F00340A23 /* TextWithTranslation.swift in Sources */,
 				C7D462F422CC74EF00E763DF /* AppDelegate.swift in Sources */,
 				C7D462F222CC74EF00E763DF /* DependenciesConfiguration.swift in Sources */,
@@ -2411,7 +2388,6 @@
 				C7D4631422CC74EF00E763DF /* ShareRoute.swift in Sources */,
 				C7D462FD22CC74EF00E763DF /* BackendAPIRequest.swift in Sources */,
 				C7FD9DD0230BD3F100C56FB5 /* PushData.swift in Sources */,
-				C7D462ED22CC74EF00E763DF /* Paginator.swift in Sources */,
 				C7D4630722CC74EF00E763DF /* ViewControllerEventHandler.swift in Sources */,
 				C7182F41244ED39F0046B9ED /* LinkData.swift in Sources */,
 				46A4DAB22917A0D5003944FD /* BaseCollectionViewController.swift in Sources */,

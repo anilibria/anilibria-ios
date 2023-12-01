@@ -50,6 +50,12 @@ class CollectionViewAdapter: NSObject {
             return $0.sectionId
         })
         for section in content.sections {
+            let currentItems = snapshot.itemIdentifiers
+            let toDelete = section.items.filter { currentItems.contains($0) }
+            if !toDelete.isEmpty {
+                snapshot.deleteItems(toDelete)
+            }
+            
             snapshot.appendItems(section.items, toSection: section.sectionId)
         }
 

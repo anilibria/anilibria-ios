@@ -35,7 +35,7 @@ final class FeedPresenter {
         self?.selectHistory()
     }
 
-    private lazy var paginator = PaginationViewModel { [weak self] completion in
+    private lazy var pagination = PaginationViewModel { [weak self] completion in
         self?.loadPage(completion: completion)
     }
 
@@ -170,11 +170,11 @@ extension FeedPresenter: FeedEventHandler {
         let items = scheduleBlock + 
             [randomSeries, history, updates] +
             feeds.compactMap { $0.value } +
-            [paginator]
+            [pagination]
         self.view.set(items: items)
     }
 
     private func append(_ feeds: [Feed]) {
-        self.view.append(items: feeds.compactMap { $0.value } + [paginator])
+        self.view.append(items: feeds.compactMap { $0.value } + [pagination])
     }
 }

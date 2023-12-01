@@ -9,6 +9,11 @@ public final class SeriesCell: RippleViewCell {
         .set(font: .font(ofSize: 13, weight: .regular))
         .set(color: .darkGray)
         .set(lineBreakMode: .byTruncatingTail)
+    
+    public override func prepareForReuse() {
+        super.prepareForReuse()
+        self.imageView.cancelDownloadTask()
+    }
 
     func configure(_ item: Series) {
         self.imageView.setImage(from: item.poster,

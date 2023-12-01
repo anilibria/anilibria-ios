@@ -29,6 +29,10 @@ extension UIImageView {
             completionHandler: completionHandler
         )
     }
+    
+    public func cancelDownloadTask() {
+        self.kf.cancelDownloadTask()
+    }
 }
 
 extension UIImageView {

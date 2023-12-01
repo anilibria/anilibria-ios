@@ -158,6 +158,10 @@
 		C778A88F2B18A40000340A23 /* nyan_cat.gif in Resources */ = {isa = PBXBuildFile; fileRef = C778A88E2B18A40000340A23 /* nyan_cat.gif */; };
 		C778A8912B18AFDE00340A23 /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C778A8902B18AFDE00340A23 /* Localization.swift */; };
 		C778A8932B18CD4F00340A23 /* TextWithTranslation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C778A8922B18CD4F00340A23 /* TextWithTranslation.swift */; };
+		C778A8962B19F6EA00340A23 /* PaginationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C778A8952B19F6EA00340A23 /* PaginationViewModel.swift */; };
+		C778A8982B19F91100340A23 /* PaginationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C778A8972B19F91100340A23 /* PaginationAdapter.swift */; };
+		C778A89A2B19F93000340A23 /* PaginationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C778A8992B19F93000340A23 /* PaginationCell.xib */; };
+		C778A89C2B19FB5B00340A23 /* PaginationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C778A89B2B19FB5B00340A23 /* PaginationCell.swift */; };
 		C781CA5D22D387880046B0F2 /* SearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C781CA5C22D387880046B0F2 /* SearchViewController.xib */; };
 		C781CA6022D397BC0046B0F2 /* SearchResultCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C781CA5F22D397BC0046B0F2 /* SearchResultCell.xib */; };
 		C781CA6222D397CD0046B0F2 /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C781CA6122D397CD0046B0F2 /* SearchResultCell.swift */; };
@@ -535,6 +539,10 @@
 		C778A88E2B18A40000340A23 /* nyan_cat.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = nyan_cat.gif; sourceTree = "<group>"; };
 		C778A8902B18AFDE00340A23 /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
 		C778A8922B18CD4F00340A23 /* TextWithTranslation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextWithTranslation.swift; sourceTree = "<group>"; };
+		C778A8952B19F6EA00340A23 /* PaginationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginationViewModel.swift; sourceTree = "<group>"; };
+		C778A8972B19F91100340A23 /* PaginationAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginationAdapter.swift; sourceTree = "<group>"; };
+		C778A8992B19F93000340A23 /* PaginationCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PaginationCell.xib; sourceTree = "<group>"; };
+		C778A89B2B19FB5B00340A23 /* PaginationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginationCell.swift; sourceTree = "<group>"; };
 		C781CA5C22D387880046B0F2 /* SearchViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchViewController.xib; sourceTree = "<group>"; };
 		C781CA5F22D397BC0046B0F2 /* SearchResultCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchResultCell.xib; sourceTree = "<group>"; };
 		C781CA6122D397CD0046B0F2 /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
@@ -1155,6 +1163,17 @@
 			path = Configuration;
 			sourceTree = "<group>";
 		};
+		C778A8942B19F6CC00340A23 /* Pagination */ = {
+			isa = PBXGroup;
+			children = (
+				C778A8952B19F6EA00340A23 /* PaginationViewModel.swift */,
+				C778A8972B19F91100340A23 /* PaginationAdapter.swift */,
+				C778A8992B19F93000340A23 /* PaginationCell.xib */,
+				C778A89B2B19FB5B00340A23 /* PaginationCell.swift */,
+			);
+			path = Pagination;
+			sourceTree = "<group>";
+		};
 		C781CA5E22D389830046B0F2 /* cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -1744,6 +1763,7 @@
 		C7D462AB22CC74EE00E763DF /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				C778A8942B19F6CC00340A23 /* Pagination */,
 				46A4DAA829179E4E003944FD /* CollectionAdapter */,
 				C7D462AC22CC74EE00E763DF /* Alert */,
 				C7D462AF22CC74EE00E763DF /* Views */,
@@ -2151,6 +2171,7 @@
 				C783950722D0C76E00ACC353 /* FilterTagCell.xib in Resources */,
 				C78394DF22CFA07E00ACC353 /* ScheduleSeriesCell.xib in Resources */,
 				C7D4631022CC74EF00E763DF /* MRLoaderView.xib in Resources */,
+				C778A89A2B19F93000340A23 /* PaginationCell.xib in Resources */,
 				C78394EB22D0907400ACC353 /* CatalogViewController.xib in Resources */,
 				C78394D822CF87F300ACC353 /* SoonCell.xib in Resources */,
 				C7B0F2C422D6DAEB00540CA9 /* SeriesContainerViewController.xib in Resources */,
@@ -2352,6 +2373,7 @@
 				C78394E322CFA8F800ACC353 /* ScheduleRequest.swift in Sources */,
 				C7D462E922CC74EF00E763DF /* AttributeStringBuilder.swift in Sources */,
 				C7326BBB234CE70D00E194C1 /* CheckRequest.swift in Sources */,
+				C778A8982B19F91100340A23 /* PaginationAdapter.swift in Sources */,
 				46F8FA9029731B49002B792B /* UIInterfaceOrientationExtension.swift in Sources */,
 				C7D462FC22CC74EF00E763DF /* BackendRepository.swift in Sources */,
 				C7D462E222CC74EF00E763DF /* CAPropertyAnimation+Key.swift in Sources */,
@@ -2444,6 +2466,7 @@
 				C1C6C99D53ABC53126D236C2EA3166F6 /* MRScheduleView.swift in Sources */,
 				9B8875386806F6D49297B09D0D53AE80 /* MRScheduleRouter.swift in Sources */,
 				C78394F422D0BAD300ACC353 /* BlurPresentationController.swift in Sources */,
+				C778A89C2B19FB5B00340A23 /* PaginationCell.swift in Sources */,
 				5B45445012CEE170F59BC3851B4DA26D /* MRCatalogAssembly.swift in Sources */,
 				773DC042B66DC0B9CEB695C936D3FABD /* MRCatalogContracts.swift in Sources */,
 				B0952D3744C1102D28884720D0B2F37E /* MRCatalogPresenter.swift in Sources */,
@@ -2506,6 +2529,7 @@
 				645E4FCEEE5B1B15BF92CB550A67711E /* MROtherContracts.swift in Sources */,
 				C759F5AB234F6A9300F8736A /* ConfigurationContracts.swift in Sources */,
 				E520901F58DF4C8FE7488F68198FD174 /* MROtherPresenter.swift in Sources */,
+				C778A8962B19F6EA00340A23 /* PaginationViewModel.swift in Sources */,
 				5B63E71FA5311A641064BAE2E8273E81 /* MROtherView.swift in Sources */,
 				8FB876EBDFC6EE26ED720A07BE93B45A /* MROtherRouter.swift in Sources */,
 				54354CD0AEFEDEA69761897CBB56095C /* MRSignInAssembly.swift in Sources */,

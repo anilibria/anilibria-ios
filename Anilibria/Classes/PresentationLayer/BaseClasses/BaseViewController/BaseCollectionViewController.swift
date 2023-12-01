@@ -121,6 +121,8 @@ extension BaseCollectionViewController: RefreshBehavior {
 }
 
 class InfinityCollectionViewController: BaseCollectionViewController {
+    private var inLoadMoreZone: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.scrollViewDelegate = self
@@ -139,7 +141,12 @@ extension InfinityCollectionViewController: UIScrollViewDelegate {
                                           targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let distance = scrollView.contentSize.height - (targetContentOffset.pointee.y + scrollView.bounds.height)
         if distance < 200 {
-            self.loadMore()
+            if !inLoadMoreZone {
+                self.loadMore()
+                inLoadMoreZone = true
+            }
+        } else if inLoadMoreZone {
+            inLoadMoreZone = false
         }
     }
 }

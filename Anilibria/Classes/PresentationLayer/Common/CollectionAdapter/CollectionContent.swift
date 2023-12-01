@@ -172,6 +172,7 @@ protocol CellAdapterProtocol: Hashable, AnyObject {
     func sizeForItem(at index: IndexPath, collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout) -> CGSize
     func cellForItem(at index: IndexPath, context: CollectionContext) -> UICollectionViewCell?
     func didSelect(at index: IndexPath)
+    func willDisplay(at index: IndexPath)
 }
 
 extension CellAdapterProtocol {
@@ -198,6 +199,8 @@ class BaseCellAdapter<T: Hashable>: CellAdapterProtocol {
     }
 
     func didSelect(at index: IndexPath) {}
+    
+    func willDisplay(at index: IndexPath) {}
 
     func sizeForItem(at index: IndexPath, collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout) -> CGSize {
         .zero

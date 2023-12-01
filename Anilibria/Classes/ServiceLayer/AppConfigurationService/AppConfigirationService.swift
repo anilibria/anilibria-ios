@@ -26,15 +26,18 @@ final class AppConfigurationServiceImp: AppConfigurationService {
     let backendRepository: BackendRepository
     let configRepository: ConfigRepository
 
-    var currentProxy: AniProxy?
+    var currentProxy: AniProxy? {
+        didSet {
+            self.updateProxy()
+        }
+    }
+    
     private let statusRelay: CurrentValueSubject<ConfigurationState, Never> = CurrentValueSubject(.started)
 
     init(backendRepository: BackendRepository,
          configRepository: ConfigRepository) {
         self.backendRepository = backendRepository
         self.configRepository = configRepository
-        ImageDownloader.default.delegate = self
-
     }
 
     func fetchState() -> AnyPublisher<ConfigurationState, Never> {
@@ -64,14 +67,12 @@ final class AppConfigurationServiceImp: AppConfigurationService {
     func manualComplete() {
         self.backendRepository.apply(.default)
         self.currentProxy = nil
-        self.updateProxy()
         self.statusRelay.send(.completed)
     }
 
     private func applySettingsAndCheck(_ settings: AniSettings) -> AnyPublisher<AniSettings, Error> {
         self.backendRepository.apply(settings)
         self.currentProxy = settings.proxy
-        self.updateProxy()
 
         return self.backendRepository
             .request(CheckRequest())
@@ -111,9 +112,7 @@ final class AppConfigurationServiceImp: AppConfigurationService {
         .subscribe(on: DispatchQueue.global())
         .eraseToAnyPublisher()
     }
-}
-
-extension AppConfigurationServiceImp: ImageDownloaderDelegate {
+    
     func updateProxy() {
         var proxyData: [AnyHashable : Any] = [:]
         if let proxy = self.currentProxy {
@@ -122,13 +121,6 @@ extension AppConfigurationServiceImp: ImageDownloaderDelegate {
         let conf = ImageDownloader.default.sessionConfiguration
         conf.connectionProxyDictionary = proxyData
         ImageDownloader.default.sessionConfiguration = conf
-    }
-
-    public func imageDownloader(_ downloader: ImageDownloader,
-                                didFinishDownloadingImageForURL url: URL,
-                                with response: URLResponse?,
-                                error: Error?) {
-        self.updateProxy()
     }
 }
 

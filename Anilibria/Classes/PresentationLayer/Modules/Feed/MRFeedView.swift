@@ -2,7 +2,7 @@ import UIKit
 
 // MARK: - View Controller
 
-final class FeedViewController: InfinityCollectionViewController {
+final class FeedViewController: BaseCollectionViewController {
     var handler: FeedEventHandler!
 
     private lazy var searchButton = BarButton(image: UIImage(resource: .menuItemSearch),
@@ -40,11 +40,6 @@ final class FeedViewController: InfinityCollectionViewController {
         self.handler.refresh()
     }
 
-    override func loadMore() {
-        super.loadMore()
-        self.handler.loadMore()
-    }
-
     private func setupNavbar() {
         var items = [self.searchButton]
         #if targetEnvironment(macCatalyst)
@@ -71,6 +66,8 @@ final class FeedViewController: InfinityCollectionViewController {
             return TitleCellAdapter(viewModel: model)
         case let model as ActionItem:
             return ActionCellAdapter(viewModel: model)
+        case let model as PaginationViewModel:
+            return PaginationAdapter(viewModel: model)
         default:
             return nil
         }

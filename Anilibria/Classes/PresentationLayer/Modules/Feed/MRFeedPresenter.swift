@@ -21,7 +21,6 @@ final class FeedPresenter {
 
     private var bag = Set<AnyCancellable>()
     private var activity: ActivityDisposable?
-    // private var items: [NSObject] = []
     private var scheduleBlock: [NSObject] = []
     private var schedules: [Schedule] = []
     private let updates = TitleItem(L10n.Screen.Feed.updatesTitle)
@@ -138,7 +137,6 @@ extension FeedPresenter: FeedEventHandler {
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })
-
             .store(in: &bag)
     }
 

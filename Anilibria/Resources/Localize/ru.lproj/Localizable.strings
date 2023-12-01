@@ -41,6 +41,13 @@
 "common.week_day.on_fri" = "в пятницу";
 "common.week_day.on_sat" = "в субботу";
 "common.week_day.on_sun" = "в воскресенье";
+"common.week_day.short.mon" = "Пн";
+"common.week_day.short.tue" = "Вт";
+"common.week_day.short.wen" = "Ср";
+"common.week_day.short.thu" = "Чт";
+"common.week_day.short.fri" = "Пт";
+"common.week_day.short.sat" = "Сб";
+"common.week_day.short.sun" = "Вс";
 
 "common.seasons.winter" = "Зима";
 "common.seasons.spring" = "Весна";

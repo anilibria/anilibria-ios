@@ -200,6 +200,37 @@ internal enum L10n {
       internal static var wen: String {
           return L10n.tr("Localizable", "common.week_day.wen")
       }
+
+      internal enum Short {
+        /// Пт
+        internal static var fri: String {
+            return L10n.tr("Localizable", "common.week_day.short.fri")
+        }
+        /// Пн
+        internal static var mon: String {
+            return L10n.tr("Localizable", "common.week_day.short.mon")
+        }
+        /// Сб
+        internal static var sat: String {
+            return L10n.tr("Localizable", "common.week_day.short.sat")
+        }
+        /// Вс
+        internal static var sun: String {
+            return L10n.tr("Localizable", "common.week_day.short.sun")
+        }
+        /// Чт
+        internal static var thu: String {
+            return L10n.tr("Localizable", "common.week_day.short.thu")
+        }
+        /// Вт
+        internal static var tue: String {
+            return L10n.tr("Localizable", "common.week_day.short.tue")
+        }
+        /// Ср
+        internal static var wen: String {
+            return L10n.tr("Localizable", "common.week_day.short.wen")
+        }
+      }
     }
   }
 

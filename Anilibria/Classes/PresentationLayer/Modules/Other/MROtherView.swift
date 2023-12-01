@@ -93,6 +93,9 @@ extension OtherViewController: OtherViewBehavior {
             }
             return view
         }
+        self.linksStakView.arrangedSubviews.forEach {
+            $0.removeFromSuperview()
+        }
         for view in views {
             self.linksStakView.addArrangedSubview(view)
         }

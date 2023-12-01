@@ -41,6 +41,13 @@
 "common.week_day.on_fri" = "on Friday";
 "common.week_day.on_sat" = "on Saturday";
 "common.week_day.on_sun" = "on Sunday";
+"common.week_day.short.mon" = "Mon";
+"common.week_day.short.tue" = "Tue";
+"common.week_day.short.wen" = "Wed";
+"common.week_day.short.thu" = "Thu";
+"common.week_day.short.fri" = "Fri";
+"common.week_day.short.sat" = "Sat";
+"common.week_day.short.sun" = "Sun";
 
 "common.seasons.winter" = "Winter";
 "common.seasons.spring" = "Spring";

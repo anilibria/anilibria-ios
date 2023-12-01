@@ -1863,7 +1863,7 @@
 		C7D462CE22CC74EF00E763DF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				C7D4635B22CE61E800E763DF /* Lottie */,
+				C7D4635B22CE61E800E763DF /* Animations */,
 				C7D4632B22CC772800E763DF /* Localize */,
 				C7D462D122CC74EF00E763DF /* Theme */,
 				C7D462D322CC74EF00E763DF /* Font */,
@@ -1920,12 +1920,12 @@
 			path = views;
 			sourceTree = "<group>";
 		};
-		C7D4635B22CE61E800E763DF /* Lottie */ = {
+		C7D4635B22CE61E800E763DF /* Animations */ = {
 			isa = PBXGroup;
 			children = (
 				C778A88E2B18A40000340A23 /* nyan_cat.gif */,
 			);
-			path = Lottie;
+			path = Animations;
 			sourceTree = "<group>";
 		};
 		C7D686A122D8B71E00CF4190 /* SwitcherView */ = {

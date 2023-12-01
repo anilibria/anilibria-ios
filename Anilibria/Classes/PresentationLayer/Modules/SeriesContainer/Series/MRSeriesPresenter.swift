@@ -45,6 +45,7 @@ extension SeriesPresenter: SeriesEventHandler {
     }
 
     func didLoad() {
+        bag.removeAll()
         self.view.set(series: self.series)
         self.view.set(favorite: self.series.favorite?.added ?? false,
                       count: self.series.favorite?.rating ?? 0)

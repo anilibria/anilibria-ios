@@ -32,10 +32,13 @@ class BaseViewController: UIViewController, WaitingBehavior, Loggable {
     func initialize() {
         Language.languageChanged.sink { [weak self] _ in
             self?.setupStrings()
+            self?.languageDidChanged()
         }.store(in: &subscribers)
     }
 
     func setupStrings() {}
+    
+    func languageDidChanged() {}
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return self.statusBarStyle

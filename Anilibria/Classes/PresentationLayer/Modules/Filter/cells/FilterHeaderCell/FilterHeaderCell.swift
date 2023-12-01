@@ -9,6 +9,15 @@ public final class FilterHeaderCell: UICollectionViewCell {
 
     private var changeHandler: Action<SeriesFilter>?
     private var item: FilterHeaderItem?
+    
+    public override func awakeFromNib() {
+        super.awakeFromNib()
+        filterTitleLabel.text = L10n.Screen.Filter.title
+        releaseTitleLabel.text = L10n.Screen.Filter.complete
+        sortTitleLabel.text = L10n.Screen.Filter.sotring
+        segmentControl.setTitle(L10n.Screen.Filter.Sotring.popularity, forSegmentAt: 0)
+        segmentControl.setTitle(L10n.Screen.Filter.Sotring.newest, forSegmentAt: 1)
+    }
 
     public func configure(_ item: FilterHeaderItem, handler: ((SeriesFilter) -> Void)?) {
         self.segmentControl.selectedSegmentIndex = item.filter.sorting == .mostPopularity ? 0 : 1

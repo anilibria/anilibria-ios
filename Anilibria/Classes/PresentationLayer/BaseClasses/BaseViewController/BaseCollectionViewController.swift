@@ -119,27 +119,3 @@ extension BaseCollectionViewController: RefreshBehavior {
         return activity
     }
 }
-
-class InfinityCollectionViewController: BaseCollectionViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.scrollViewDelegate = self
-    }
-
-    public func loadMore() {
-        // override me
-    }
-}
-
-// MARK: - UIScrollViewDelegate
-
-extension InfinityCollectionViewController: UIScrollViewDelegate {
-    public func scrollViewWillEndDragging(_ scrollView: UIScrollView,
-                                          withVelocity velocity: CGPoint,
-                                          targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        let distance = scrollView.contentSize.height - (targetContentOffset.pointee.y + scrollView.bounds.height)
-        if distance < 200 {
-            self.loadMore()
-        }
-    }
-}

@@ -51,6 +51,6 @@ extension AppUrlRoute {
     }
 
     private func fail(_ url: URL) {
-        print("Can't open url: \(url)")
+        assertionFailure("Can't open url: \(url)")
     }
 }

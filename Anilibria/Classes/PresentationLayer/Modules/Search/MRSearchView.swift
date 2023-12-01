@@ -42,6 +42,7 @@ final class SearchViewController: BaseCollectionViewController {
     }
 
     private func setupSearchField() {
+        self.searchField.placeholder = L10n.Common.Search.byName
         self.searchField.publisher(for: .editingChanged)
             .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
             .sink(onNext: { [weak self] in

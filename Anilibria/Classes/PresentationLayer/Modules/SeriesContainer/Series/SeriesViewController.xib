@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -26,14 +26,8 @@
                 <outlet property="titleLabel" destination="JFd-xw-0Ok" id="ajx-CL-jed"/>
                 <outlet property="torrentsStackView" destination="Rfz-hF-F2o" id="hXj-MD-5m5"/>
                 <outlet property="view" destination="iN0-l3-epB" id="dz8-Bh-UUE"/>
+                <outlet property="weekDayStackView" destination="hGA-mx-iMn" id="rw1-g8-BfT"/>
                 <outlet property="weekDaysContainer" destination="3zb-ch-ENz" id="Xbt-sV-jLq"/>
-                <outletCollection property="weekDayViews" destination="3Wi-g7-T7z" collectionClass="NSMutableArray" id="uiV-Pz-1c8"/>
-                <outletCollection property="weekDayViews" destination="aER-8D-WTA" collectionClass="NSMutableArray" id="Lbe-LT-Yc5"/>
-                <outletCollection property="weekDayViews" destination="84s-n0-zHm" collectionClass="NSMutableArray" id="SU1-2S-dh5"/>
-                <outletCollection property="weekDayViews" destination="7jG-4B-SAt" collectionClass="NSMutableArray" id="FSm-Gw-YFS"/>
-                <outletCollection property="weekDayViews" destination="aHP-Lb-HFN" collectionClass="NSMutableArray" id="AHi-cE-uGb"/>
-                <outletCollection property="weekDayViews" destination="Hp9-Ff-POf" collectionClass="NSMutableArray" id="a4a-oK-BdH"/>
-                <outletCollection property="weekDayViews" destination="Ism-iI-lKe" collectionClass="NSMutableArray" id="cke-fr-R2l"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -137,228 +131,16 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3zb-ch-ENz">
-                                            <rect key="frame" x="49" y="13" width="316" height="40"/>
+                                            <rect key="frame" x="16" y="13" width="382" height="40"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="hGA-mx-iMn">
-                                                    <rect key="frame" x="0.0" y="0.0" width="316" height="40"/>
-                                                    <subviews>
-                                                        <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Wi-g7-T7z" customClass="WeekDayView" customModule="Anilibria" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
-                                                            <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ПН" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OwK-cR-Wi8">
-                                                                    <rect key="frame" x="10" y="10" width="20" height="20"/>
-                                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
-                                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                            </subviews>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" secondItem="3Wi-g7-T7z" secondAttribute="height" multiplier="1:1" id="0PD-Jc-JB9"/>
-                                                                <constraint firstItem="OwK-cR-Wi8" firstAttribute="leading" secondItem="3Wi-g7-T7z" secondAttribute="leading" constant="10" id="5iM-4i-NfL"/>
-                                                                <constraint firstAttribute="trailing" secondItem="OwK-cR-Wi8" secondAttribute="trailing" constant="10" id="UqH-Ub-mRe"/>
-                                                                <constraint firstAttribute="bottom" secondItem="OwK-cR-Wi8" secondAttribute="bottom" constant="10" id="bfg-fW-IVX"/>
-                                                                <constraint firstItem="OwK-cR-Wi8" firstAttribute="top" secondItem="3Wi-g7-T7z" secondAttribute="top" constant="10" id="u3u-Jc-XNE"/>
-                                                            </constraints>
-                                                            <userDefinedRuntimeAttributes>
-                                                                <userDefinedRuntimeAttribute type="number" keyPath="borderThickness">
-                                                                    <real key="value" value="1"/>
-                                                                </userDefinedRuntimeAttribute>
-                                                                <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                                    <color key="value" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                </userDefinedRuntimeAttribute>
-                                                            </userDefinedRuntimeAttributes>
-                                                            <connections>
-                                                                <outlet property="titleLabel" destination="OwK-cR-Wi8" id="lTL-lo-FbZ"/>
-                                                            </connections>
-                                                        </view>
-                                                        <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aER-8D-WTA" customClass="WeekDayView" customModule="Anilibria" customModuleProvider="target">
-                                                            <rect key="frame" x="46" y="0.0" width="40" height="40"/>
-                                                            <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ВТ" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bjf-Q9-Jlk">
-                                                                    <rect key="frame" x="10" y="10" width="20" height="20"/>
-                                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
-                                                                    <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                            </subviews>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="trailing" secondItem="bjf-Q9-Jlk" secondAttribute="trailing" constant="10" id="7af-h8-vvX"/>
-                                                                <constraint firstItem="bjf-Q9-Jlk" firstAttribute="top" secondItem="aER-8D-WTA" secondAttribute="top" constant="10" id="Umh-Rl-zsP"/>
-                                                                <constraint firstItem="bjf-Q9-Jlk" firstAttribute="leading" secondItem="aER-8D-WTA" secondAttribute="leading" constant="10" id="eOV-VR-rn4"/>
-                                                                <constraint firstAttribute="bottom" secondItem="bjf-Q9-Jlk" secondAttribute="bottom" constant="10" id="nin-Pw-cs0"/>
-                                                                <constraint firstAttribute="width" secondItem="aER-8D-WTA" secondAttribute="height" multiplier="1:1" id="wnH-ra-kLD"/>
-                                                            </constraints>
-                                                            <userDefinedRuntimeAttributes>
-                                                                <userDefinedRuntimeAttribute type="number" keyPath="borderThickness">
-                                                                    <real key="value" value="1"/>
-                                                                </userDefinedRuntimeAttribute>
-                                                                <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                                    <color key="value" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                </userDefinedRuntimeAttribute>
-                                                            </userDefinedRuntimeAttributes>
-                                                            <connections>
-                                                                <outlet property="titleLabel" destination="bjf-Q9-Jlk" id="5F0-Vy-cll"/>
-                                                            </connections>
-                                                        </view>
-                                                        <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="84s-n0-zHm" customClass="WeekDayView" customModule="Anilibria" customModuleProvider="target">
-                                                            <rect key="frame" x="92" y="0.0" width="40" height="40"/>
-                                                            <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="СР" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dBd-Tj-BGt">
-                                                                    <rect key="frame" x="10" y="10" width="20" height="20"/>
-                                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
-                                                                    <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                            </subviews>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <constraints>
-                                                                <constraint firstItem="dBd-Tj-BGt" firstAttribute="leading" secondItem="84s-n0-zHm" secondAttribute="leading" constant="10" id="FLx-nr-zyk"/>
-                                                                <constraint firstAttribute="trailing" secondItem="dBd-Tj-BGt" secondAttribute="trailing" constant="10" id="GwA-7q-brM"/>
-                                                                <constraint firstAttribute="width" secondItem="84s-n0-zHm" secondAttribute="height" multiplier="1:1" id="QBa-a4-IWj"/>
-                                                                <constraint firstItem="dBd-Tj-BGt" firstAttribute="top" secondItem="84s-n0-zHm" secondAttribute="top" constant="10" id="WJq-eU-g1K"/>
-                                                                <constraint firstAttribute="bottom" secondItem="dBd-Tj-BGt" secondAttribute="bottom" constant="10" id="ZMU-Ig-L9v"/>
-                                                            </constraints>
-                                                            <userDefinedRuntimeAttributes>
-                                                                <userDefinedRuntimeAttribute type="number" keyPath="borderThickness">
-                                                                    <real key="value" value="1"/>
-                                                                </userDefinedRuntimeAttribute>
-                                                                <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                                    <color key="value" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                </userDefinedRuntimeAttribute>
-                                                            </userDefinedRuntimeAttributes>
-                                                            <connections>
-                                                                <outlet property="titleLabel" destination="dBd-Tj-BGt" id="MbE-Gm-bte"/>
-                                                            </connections>
-                                                        </view>
-                                                        <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7jG-4B-SAt" customClass="WeekDayView" customModule="Anilibria" customModuleProvider="target">
-                                                            <rect key="frame" x="138" y="0.0" width="40" height="40"/>
-                                                            <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ЧТ" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xb1-RZ-xuJ">
-                                                                    <rect key="frame" x="10" y="10" width="20" height="20"/>
-                                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
-                                                                    <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                            </subviews>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="trailing" secondItem="xb1-RZ-xuJ" secondAttribute="trailing" constant="10" id="CbL-HK-SuB"/>
-                                                                <constraint firstAttribute="bottom" secondItem="xb1-RZ-xuJ" secondAttribute="bottom" constant="10" id="SoV-ef-OlX"/>
-                                                                <constraint firstItem="xb1-RZ-xuJ" firstAttribute="leading" secondItem="7jG-4B-SAt" secondAttribute="leading" constant="10" id="a6q-f4-xju"/>
-                                                                <constraint firstAttribute="width" secondItem="7jG-4B-SAt" secondAttribute="height" multiplier="1:1" id="b0t-ch-eWq"/>
-                                                                <constraint firstItem="xb1-RZ-xuJ" firstAttribute="top" secondItem="7jG-4B-SAt" secondAttribute="top" constant="10" id="opv-ji-Gsh"/>
-                                                            </constraints>
-                                                            <userDefinedRuntimeAttributes>
-                                                                <userDefinedRuntimeAttribute type="number" keyPath="borderThickness">
-                                                                    <real key="value" value="1"/>
-                                                                </userDefinedRuntimeAttribute>
-                                                                <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                                    <color key="value" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                </userDefinedRuntimeAttribute>
-                                                            </userDefinedRuntimeAttributes>
-                                                            <connections>
-                                                                <outlet property="titleLabel" destination="xb1-RZ-xuJ" id="eoS-I0-3mT"/>
-                                                            </connections>
-                                                        </view>
-                                                        <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aHP-Lb-HFN" customClass="WeekDayView" customModule="Anilibria" customModuleProvider="target">
-                                                            <rect key="frame" x="184" y="0.0" width="40" height="40"/>
-                                                            <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ПТ" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="unl-fw-biG">
-                                                                    <rect key="frame" x="10" y="10" width="20" height="20"/>
-                                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
-                                                                    <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                            </subviews>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="bottom" secondItem="unl-fw-biG" secondAttribute="bottom" constant="10" id="0nY-qy-O1V"/>
-                                                                <constraint firstAttribute="trailing" secondItem="unl-fw-biG" secondAttribute="trailing" constant="10" id="GgM-D6-Wyh"/>
-                                                                <constraint firstAttribute="width" secondItem="aHP-Lb-HFN" secondAttribute="height" multiplier="1:1" id="YtF-sM-jA5"/>
-                                                                <constraint firstItem="unl-fw-biG" firstAttribute="top" secondItem="aHP-Lb-HFN" secondAttribute="top" constant="10" id="uvj-6P-Hyc"/>
-                                                                <constraint firstItem="unl-fw-biG" firstAttribute="leading" secondItem="aHP-Lb-HFN" secondAttribute="leading" constant="10" id="vrx-uV-cws"/>
-                                                            </constraints>
-                                                            <userDefinedRuntimeAttributes>
-                                                                <userDefinedRuntimeAttribute type="number" keyPath="borderThickness">
-                                                                    <real key="value" value="1"/>
-                                                                </userDefinedRuntimeAttribute>
-                                                                <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                                    <color key="value" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                </userDefinedRuntimeAttribute>
-                                                            </userDefinedRuntimeAttributes>
-                                                            <connections>
-                                                                <outlet property="titleLabel" destination="unl-fw-biG" id="Lg9-Lw-Pb0"/>
-                                                            </connections>
-                                                        </view>
-                                                        <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hp9-Ff-POf" customClass="WeekDayView" customModule="Anilibria" customModuleProvider="target">
-                                                            <rect key="frame" x="230" y="0.0" width="40" height="40"/>
-                                                            <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="СБ" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tFE-2Z-Iwt">
-                                                                    <rect key="frame" x="10" y="10" width="20" height="20"/>
-                                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
-                                                                    <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                            </subviews>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <constraints>
-                                                                <constraint firstItem="tFE-2Z-Iwt" firstAttribute="leading" secondItem="Hp9-Ff-POf" secondAttribute="leading" constant="10" id="03T-Lc-MZh"/>
-                                                                <constraint firstAttribute="bottom" secondItem="tFE-2Z-Iwt" secondAttribute="bottom" constant="10" id="OCm-BU-waQ"/>
-                                                                <constraint firstAttribute="width" secondItem="Hp9-Ff-POf" secondAttribute="height" multiplier="1:1" id="ciJ-ja-NwX"/>
-                                                                <constraint firstAttribute="trailing" secondItem="tFE-2Z-Iwt" secondAttribute="trailing" constant="10" id="dLz-Fv-XIH"/>
-                                                                <constraint firstItem="tFE-2Z-Iwt" firstAttribute="top" secondItem="Hp9-Ff-POf" secondAttribute="top" constant="10" id="kLr-9s-6JT"/>
-                                                            </constraints>
-                                                            <userDefinedRuntimeAttributes>
-                                                                <userDefinedRuntimeAttribute type="number" keyPath="borderThickness">
-                                                                    <real key="value" value="1"/>
-                                                                </userDefinedRuntimeAttribute>
-                                                                <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                                    <color key="value" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                </userDefinedRuntimeAttribute>
-                                                            </userDefinedRuntimeAttributes>
-                                                            <connections>
-                                                                <outlet property="titleLabel" destination="tFE-2Z-Iwt" id="gQn-Ct-bIY"/>
-                                                            </connections>
-                                                        </view>
-                                                        <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ism-iI-lKe" customClass="WeekDayView" customModule="Anilibria" customModuleProvider="target">
-                                                            <rect key="frame" x="276" y="0.0" width="40" height="40"/>
-                                                            <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ВС" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zYM-OL-0x3">
-                                                                    <rect key="frame" x="10" y="10" width="20" height="20"/>
-                                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
-                                                                    <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                            </subviews>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="bottom" secondItem="zYM-OL-0x3" secondAttribute="bottom" constant="10" id="SNO-5j-zLt"/>
-                                                                <constraint firstItem="zYM-OL-0x3" firstAttribute="top" secondItem="Ism-iI-lKe" secondAttribute="top" constant="10" id="Yn3-85-1ZM"/>
-                                                                <constraint firstAttribute="width" secondItem="Ism-iI-lKe" secondAttribute="height" multiplier="1:1" id="nh8-DU-JZD"/>
-                                                                <constraint firstItem="zYM-OL-0x3" firstAttribute="leading" secondItem="Ism-iI-lKe" secondAttribute="leading" constant="10" id="ohR-f8-S4b"/>
-                                                                <constraint firstAttribute="trailing" secondItem="zYM-OL-0x3" secondAttribute="trailing" constant="10" id="xoi-vm-Rve"/>
-                                                            </constraints>
-                                                            <userDefinedRuntimeAttributes>
-                                                                <userDefinedRuntimeAttribute type="number" keyPath="borderThickness">
-                                                                    <real key="value" value="1"/>
-                                                                </userDefinedRuntimeAttribute>
-                                                                <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                                    <color key="value" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                </userDefinedRuntimeAttribute>
-                                                            </userDefinedRuntimeAttributes>
-                                                            <connections>
-                                                                <outlet property="titleLabel" destination="zYM-OL-0x3" id="gGO-Bi-hic"/>
-                                                            </connections>
-                                                        </view>
-                                                    </subviews>
+                                                    <rect key="frame" x="0.0" y="0.0" width="382" height="40"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" relation="lessThanOrEqual" constant="40" id="gnR-i6-0K8"/>
                                                     </constraints>
                                                 </stackView>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gWR-lw-O1U">
-                                                    <rect key="frame" x="0.0" y="0.0" width="316" height="40"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="382" height="40"/>
                                                     <connections>
                                                         <action selector="weekDaysAction:" destination="-1" eventType="touchUpInside" id="6yo-8s-Qn5"/>
                                                     </connections>

@@ -1,11 +1,11 @@
 import UIKit
 
 public final class ActionItem: NSObject {
-    let title: String
+    let localizedTitle: () -> String
     private let action: ActionFunc
 
-    init(_ title: String, action: @escaping ActionFunc) {
-        self.title = title
+    init(_ title: @escaping @autoclosure () -> String, action: @escaping ActionFunc) {
+        self.localizedTitle = title
         self.action = action
     }
 
@@ -25,7 +25,7 @@ final class ActionCellAdapter: BaseCellAdapter<ActionItem> {
 
     override func cellForItem(at index: IndexPath, context: CollectionContext) -> UICollectionViewCell? {
         let cell = context.dequeueReusableNibCell(type: ActionCell.self, for: index)
-        cell.configure(viewModel.title)
+        cell.configure(viewModel)
         return cell
     }
 

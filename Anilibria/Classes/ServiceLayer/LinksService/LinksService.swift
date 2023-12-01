@@ -1,5 +1,6 @@
 import DITranquillity
 import Combine
+import Foundation
 
 final class LinksServicePart: DIPart {
     static func load(container: DIContainer) {

@@ -1,5 +1,6 @@
 import DITranquillity
 import Combine
+import Foundation
 
 final class SessionServicePart: DIPart {
     static func load(container: DIContainer) {
@@ -23,7 +24,9 @@ protocol SessionService: AnyObject {
     func logout()
 }
 
-final class SessionServiceImp: SessionService {
+final class SessionServiceImp: SessionService, Loggable {
+    var defaultLoggingTag: LogTag { .service }
+    
     let backendRepository: BackendRepository
     let userRepository: UserRepository
     let clearManager: ClearableManager
@@ -92,8 +95,8 @@ final class SessionServiceImp: SessionService {
                     self.userRepository.set(user: user)
                     self.statusRelay.send(.user(user))
                 })
-                .mapError {
-                    print($0)
+                .mapError { [weak self] in
+                    self?.log(.error, $0.localizedDescription)
                     return AppError.server(message: L10n.Error.socialAuthorizationFailed)
                 }
                 .eraseToAnyPublisher()

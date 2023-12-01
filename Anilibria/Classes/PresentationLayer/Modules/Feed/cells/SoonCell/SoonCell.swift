@@ -1,35 +1,44 @@
 import UIKit
+import Combine
 
 final class SoonCell: BaseCollectionCell {
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var leftView: UIView!
     @IBOutlet var rightView: UIView!
 
-    private var bag: Any?
+    private var langSubscriber: AnyCancellable?
+    private var sizeSubscriber: AnyCancellable?
+    private var offsetSubscriber: AnyCancellable?
 
     override func awakeFromNib() {
         super.awakeFromNib()
         self.collectionView.contentInset.right = 16
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        langSubscriber = nil
+        sizeSubscriber = nil
+        offsetSubscriber = nil
     }
 
     func configure(_ item: Schedule, handler: ((Series) -> Void)?) {
         self.leftView.alpha = 0
         self.rightView.alpha = 0
         self.collectionView.contentOffset = .zero
-
-        if let day = item.day {
-            self.titleLabel.text = self.generateTitle(day)
-        } else {
-            self.titleLabel.text = ""
+        
+        langSubscriber = Language.languageChanged.sink { [weak self] in
+            self?.titleLabel.text = self?.generateTitle(item.day)
         }
+        self.titleLabel.text = self.generateTitle(item.day)
 
         self.reload(sections: [
             ScheduleSeriesSectionAdapter(
                 item.items.map { ScheduleSeriesCellAdapter(viewModel: $0, seclect: handler) }
             )
         ])
-
-        self.bag = self.collectionView.observe(\.contentSize) { [weak self] (_, _) in
+        
+        sizeSubscriber = collectionView.publisher(for: \.contentSize).sink { [weak self] _ in
             self?.checkSize()
         }
         self.checkSize()
@@ -70,7 +79,7 @@ final class SoonCell: BaseCollectionCell {
     }
 
     private func observeOffset() {
-        self.bag = self.collectionView.observe(\.contentOffset) { [weak self] (_, _) in
+        offsetSubscriber = self.collectionView.publisher(for: \.contentOffset).sink { [weak self] _ in
             self?.handleOffset()
         }
         self.handleOffset()
@@ -101,7 +110,9 @@ final class SoonCell: BaseCollectionCell {
         }
     }
 
-    private func generateTitle(_ weekDay: WeekDay) -> String {
+    private func generateTitle(_ weekDay: WeekDay?) -> String {
+        guard let weekDay else { return "" }
+        
         let current = WeekDay.getCurrent()
         let soonTitle = L10n.Screen.Feed.soonTitle
 

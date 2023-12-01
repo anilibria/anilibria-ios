@@ -1,13 +1,15 @@
 import Combine
 import UIKit
 
-class BaseViewController: UIViewController, WaitingBehavior, LanguageBehavior {
+class BaseViewController: UIViewController, WaitingBehavior, Loggable {
+    var defaultLoggingTag: LogTag { .view }
+    
     var subscribers = Set<AnyCancellable>()
 
     public var statusBarStyle: UIStatusBarStyle = .default
 
     deinit {
-        print("[D] \(self) destroyed")
+        log(.info, "[D] \(self) destroyed")
         NotificationCenter.default.removeObserver(self)
     }
 
@@ -27,9 +29,16 @@ class BaseViewController: UIViewController, WaitingBehavior, LanguageBehavior {
         self.setupStrings()
     }
 
-    func initialize() {}
+    func initialize() {
+        Language.languageChanged.sink { [weak self] _ in
+            self?.setupStrings()
+            self?.languageDidChanged()
+        }.store(in: &subscribers)
+    }
 
     func setupStrings() {}
+    
+    func languageDidChanged() {}
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return self.statusBarStyle

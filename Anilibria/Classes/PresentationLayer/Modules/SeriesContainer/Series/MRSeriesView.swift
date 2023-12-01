@@ -1,4 +1,5 @@
 import UIKit
+import Combine
 
 // MARK: - View Controller
 
@@ -12,7 +13,7 @@ final class SeriesViewController: BaseViewController {
     @IBOutlet var favoriteButton: RippleButton!
     @IBOutlet var paramsTextView: AttributeLinksView!
     @IBOutlet var descTextView: AttributeLinksView!
-    @IBOutlet var weekDayViews: [WeekDayView]!
+    @IBOutlet var weekDayStackView: UIStackView!
     @IBOutlet var weekDaysContainer: UIView!
     @IBOutlet var anonceLabel: UILabel!
     @IBOutlet var separatorView: UIView!
@@ -21,6 +22,7 @@ final class SeriesViewController: BaseViewController {
     @IBOutlet var torrentsStackView: UIStackView!
 
     private var header: SeriesHeaderView!
+    private var weekDayViews: [WeekDayView] = []
 
     var handler: SeriesEventHandler!
 
@@ -33,9 +35,9 @@ final class SeriesViewController: BaseViewController {
     // MARK: - Life cycle
 
     override func viewDidLoad() {
-        super.viewDidLoad()
         self.setupHeader()
-        self.handler.didLoad()
+        self.setupWeekView()
+        super.viewDidLoad()
 
         let action: Action<URL> = { [weak self] url in
             if url.isAttributeLink {
@@ -63,6 +65,7 @@ final class SeriesViewController: BaseViewController {
 
     override func setupStrings() {
         super.setupStrings()
+        self.handler.didLoad()
         self.supportLabel.text = L10n.Common.donatePls
     }
 
@@ -75,6 +78,17 @@ final class SeriesViewController: BaseViewController {
             self.header.setPlay { [weak self] in
                 self?.handler.play()
             }
+        }
+    }
+    
+    private func setupWeekView() {
+        let days = WeekDay.allCases
+        
+        for day in days {
+            let view = WeekDayView()
+            view.configure(day)
+            weekDayStackView.addArrangedSubview(view)
+            weekDayViews.append(view)
         }
     }
 
@@ -120,8 +134,8 @@ extension SeriesViewController: SeriesViewBehavior {
         if series.statusCode == .finished {
             self.weekDaysContainer.isHidden = true
         } else {
-            if let index = series.day?.index {
-                self.weekDayViews[index].isSelected = true
+            if let day = series.day {
+                self.weekDayViews.first(where: { $0.day == day })?.isSelected = true
             }
         }
 
@@ -217,7 +231,46 @@ extension SeriesViewController: SeriesViewBehavior {
 }
 
 public final class WeekDayView: CircleView {
-    @IBOutlet var titleLabel: UILabel!
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.font(ofSize: 12, weight: .semibold)
+        label.textColor = .darkGray
+        label.textAlignment = .center
+        return label
+    }()
+    
+    private var subscriber: AnyCancellable?
+    
+    public private(set) var day: WeekDay?
+    
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setup()
+    }
+    
+    private func setup() {
+        addSubview(titleLabel)
+        borderColor = .lightGray
+        borderThickness = 1
+        backgroundColor = .clear
+        
+        titleLabel.constraintEdgesToSuperview(.init(top: 10, left: 4, bottom: 10, right: 4))
+        widthAnchor.constraint(equalTo: heightAnchor, multiplier: 1).isActive = true
+    }
+    
+    func configure(_ weekDay: WeekDay) {
+        self.day = weekDay
+        titleLabel.text = weekDay.shortName
+        
+        subscriber = Language.languageChanged.sink { [weak self] in
+            self?.titleLabel.text = weekDay.shortName
+        }
+    }
 
     var isSelected: Bool = false {
         didSet {
@@ -227,7 +280,7 @@ public final class WeekDayView: CircleView {
                 self.borderThickness = 0
             } else {
                 self.backgroundColor = .clear
-                self.titleLabel.textColor = .lightGray
+                self.titleLabel.textColor = .darkGray
                 self.borderThickness = 1
             }
         }

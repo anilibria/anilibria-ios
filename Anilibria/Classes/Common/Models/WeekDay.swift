@@ -1,6 +1,6 @@
 import Foundation
 
-public enum WeekDay: String, Codable {
+public enum WeekDay: String, Codable, CaseIterable {
     case mon = "1"
     case tue = "2"
     case wen = "3"
@@ -9,39 +9,40 @@ public enum WeekDay: String, Codable {
     case sat = "6"
     case sun = "7"
 
-    var index: Int? {
-        if let value = Int(self.rawValue) {
-            return value - 1
-        }
-        return nil
-    }
-
-    private static let names: [WeekDay: String] = [
-        .mon : L10n.Common.WeekDay.mon,
-        .tue : L10n.Common.WeekDay.tue,
-        .wen : L10n.Common.WeekDay.wen,
-        .thu : L10n.Common.WeekDay.thu,
-        .fri : L10n.Common.WeekDay.fri,
-        .sat : L10n.Common.WeekDay.sat,
-        .sun : L10n.Common.WeekDay.sun
-    ]
-
-    private static let onDays: [WeekDay: String] = [
-        .mon : L10n.Common.WeekDay.onMon,
-        .tue : L10n.Common.WeekDay.onTue,
-        .wen : L10n.Common.WeekDay.onWen,
-        .thu : L10n.Common.WeekDay.onThu,
-        .fri : L10n.Common.WeekDay.onFri,
-        .sat : L10n.Common.WeekDay.onSat,
-        .sun : L10n.Common.WeekDay.onSun
-    ]
-
     var name: String {
-        return Self.names[self]!
+        switch self {
+        case .mon: L10n.Common.WeekDay.mon
+        case .tue: L10n.Common.WeekDay.tue
+        case .wen: L10n.Common.WeekDay.wen
+        case .thu: L10n.Common.WeekDay.thu
+        case .fri: L10n.Common.WeekDay.fri
+        case .sat: L10n.Common.WeekDay.sat
+        case .sun: L10n.Common.WeekDay.sun
+        }
     }
 
     var onDay: String {
-        return Self.onDays[self]!
+        switch self {
+        case .mon: L10n.Common.WeekDay.onMon
+        case .tue: L10n.Common.WeekDay.onTue
+        case .wen: L10n.Common.WeekDay.onWen
+        case .thu: L10n.Common.WeekDay.onThu
+        case .fri: L10n.Common.WeekDay.onFri
+        case .sat: L10n.Common.WeekDay.onSat
+        case .sun: L10n.Common.WeekDay.onSun
+        }
+    }
+    
+    var shortName: String {
+        switch self {
+        case .mon: L10n.Common.WeekDay.Short.mon
+        case .tue: L10n.Common.WeekDay.Short.tue
+        case .wen: L10n.Common.WeekDay.Short.wen
+        case .thu: L10n.Common.WeekDay.Short.thu
+        case .fri: L10n.Common.WeekDay.Short.fri
+        case .sat: L10n.Common.WeekDay.Short.sat
+        case .sun: L10n.Common.WeekDay.Short.sun
+        }
     }
 
     static func getMsk() -> WeekDay {

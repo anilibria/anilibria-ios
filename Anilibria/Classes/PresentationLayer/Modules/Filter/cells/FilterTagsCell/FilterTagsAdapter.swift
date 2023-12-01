@@ -1,14 +1,27 @@
 import UIKit
 
+public class FilterTag: NSObject {
+    let value: String
+    let displayValue: String
+
+    @objc dynamic var isSelected: Bool = false
+
+    init(value: String, displayValue: String? = nil) {
+        self.value = value
+        self.displayValue = displayValue ?? value
+    }
+}
+
+
 public final class FilterTagsItem: NSObject {
     let title: String
-    let items: [Selectable<String>]
+    let items: [FilterTag]
 
-    fileprivate let changed: ((Selectable<String>) -> Void)?
+    fileprivate let changed: ((FilterTag) -> Void)?
 
     init(title: String,
-         items: [Selectable<String>],
-         changed: @escaping (Selectable<String>) -> Void) {
+         items: [FilterTag],
+         changed: @escaping (FilterTag) -> Void) {
         self.title = title
         self.items = items
         self.changed = changed
@@ -32,11 +45,11 @@ final class FilterTagsTitleAdapter: BaseCellAdapter<FilterTagsItem> {
     }
 }
 
-final class FilterTagAdapter: BaseCellAdapter<Selectable<String>> {
+final class FilterTagAdapter: BaseCellAdapter<FilterTag> {
     private let size: CGSize
-    private var selectAction: ((Selectable<String>) -> Void)?
+    private var selectAction: ((FilterTag) -> Void)?
 
-    init(viewModel: Selectable<String>, seclect: ((Selectable<String>) -> Void)?) {
+    init(viewModel: FilterTag, seclect: ((FilterTag) -> Void)?) {
         self.selectAction = seclect
         self.size = FilterTagCell.size(for: viewModel)
         super.init(viewModel: viewModel)

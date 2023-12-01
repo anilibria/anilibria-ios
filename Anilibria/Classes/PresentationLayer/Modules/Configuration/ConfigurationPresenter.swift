@@ -56,7 +56,7 @@ extension ConfigurationPresenter: ConfigurationEventHandler {
     private func showAlert(with message: String) {
         self.router.openAlert(title: L10n.Alert.Title.error,
                               message: message,
-                              buttons: [L10n.Buttons.retry, L10n.Buttons.next]) { [weak self] index in
+                              buttons: [L10n.Buttons.retry, L10n.Buttons.skip]) { [weak self] index in
             if index == 0 {
                 self?.didLoad()
             } else {

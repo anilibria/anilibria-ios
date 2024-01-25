@@ -1,6 +1,5 @@
 import UIKit
 
-@IBDesignable
 public class CircleView: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
@@ -27,7 +26,6 @@ public class CircleView: UIView {
     }
 }
 
-@IBDesignable
 public class BorderedView: UIView {
     private var border = CAShapeLayer()
 

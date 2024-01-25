@@ -28,10 +28,25 @@ public enum VideoQuality: Int, CaseIterable, Codable {
     }
 }
 
+struct Skips: Decodable {
+    let opening: Range<Int>?
+    let ending: Range<Int>?
+    
+    public init(from decoder: Decoder) throws {
+        let rangeConverter = RangeConverter()
+        let opening: Range<Int>? = decoder["opening"] <- rangeConverter
+        let ending: Range<Int>? = decoder["ending"] <- rangeConverter
+        
+        self.opening = opening
+        self.ending = ending
+    }
+}
+
 public final class PlaylistItem: NSObject, Decodable {
     var id: Int = 0
     var title: String = ""
     var video: [VideoQuality: URL] = [:]
+    var skips: Skips?
 
     public func supportedQualities() -> [VideoQuality] {
         return self.video.keys.sorted(by: { $0.rawValue < $1.rawValue })
@@ -54,5 +69,6 @@ public final class PlaylistItem: NSObject, Decodable {
 			result[.sd] = url
 		}
 		self.video = result
+        self.skips <- decoder["skips"]
     }
 }

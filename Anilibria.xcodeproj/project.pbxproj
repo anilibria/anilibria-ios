@@ -27,6 +27,7 @@
 		20BE747BF499AB9683E069EDD2E60DD9 /* MRPlayerContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6246DB76F09066D031CE1D14C3D14CCB /* MRPlayerContracts.swift */; };
 		2747F74DE8ACA99DA9154475FB2E2BD3 /* MRCommentsContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1017185EE99BCB9136A94D0A342159 /* MRCommentsContracts.swift */; };
 		2870A6569DB65AE6BC40C84B4693B4FA /* MRCommentsAuthRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8549723F1A8C806EB3A4A0BD823C751 /* MRCommentsAuthRouter.swift */; };
+		2BAB4DF02A3B74AE002D4A60 /* RangeConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BAB4DEF2A3B74AE002D4A60 /* RangeConverter.swift */; };
 		2BD8CD1046E7B91978F0092D9B991D0B /* MRSeriesContainerRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F11037AE197D1D51B78C01BD76FB0B3 /* MRSeriesContainerRouter.swift */; };
 		2C204A44E0A33899E2C83F7172870D98 /* MRCommentsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB3EBBAF26044447A27252C0ECEFCDC /* MRCommentsRouter.swift */; };
 		2ECEEEC613CEEFA50A768C59306537CF /* MRFeedPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4C223DDA648DF5E1077FE6A29F7468 /* MRFeedPresenter.swift */; };
@@ -410,6 +411,7 @@
 		23D96A0A7C14210E78F088295483FBAA /* MRCommentsAuthAssembly.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRCommentsAuthAssembly.swift; sourceTree = "<group>"; };
 		256D2D653E3CDD13E37C293805E3F626 /* MRSignInRouter.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRSignInRouter.swift; sourceTree = "<group>"; };
 		2BA370104F3FF23C54D6350CD65EDF4D /* MRSeriesContracts.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRSeriesContracts.swift; sourceTree = "<group>"; };
+		2BAB4DEF2A3B74AE002D4A60 /* RangeConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeConverter.swift; sourceTree = "<group>"; };
 		30E255AB5EA70341C0DC3F7F4F3A01B5 /* MRFilterPresenter.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRFilterPresenter.swift; sourceTree = "<group>"; };
 		3473770E4238927474C8ADE0B8420A1E /* MRSettingsContracts.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MRSettingsContracts.swift; sourceTree = "<group>"; };
 		3951F89D057929433EBD9AE96146EA7C /* MROtherAssembly.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = MROtherAssembly.swift; sourceTree = "<group>"; };
@@ -1514,6 +1516,7 @@
 				C783949422CF215300ACC353 /* DateConverter.swift */,
 				C7D4626E22CC74EE00E763DF /* Converter.swift */,
 				C737925D22E0C68D00DDF2B2 /* ArrayConverterrDecorator.swift */,
+				2BAB4DEF2A3B74AE002D4A60 /* RangeConverter.swift */,
 			);
 			path = Mapping;
 			sourceTree = "<group>";
@@ -2493,6 +2496,7 @@
 				2C204A44E0A33899E2C83F7172870D98 /* MRCommentsRouter.swift in Sources */,
 				CC8CE21A2C8A7CD8E025FA28EE9CEB1D /* MRCommentsAuthAssembly.swift in Sources */,
 				B56FB597E8EA9BC2EAE352CB34C39D44 /* MRCommentsAuthContracts.swift in Sources */,
+				2BAB4DF02A3B74AE002D4A60 /* RangeConverter.swift in Sources */,
 				6F08F216116856951B891AE167A703AA /* MRCommentsAuthPresenter.swift in Sources */,
 				B3995E58355E5890F72953B0C4F6F4EC /* MRCommentsAuthView.swift in Sources */,
 				2870A6569DB65AE6BC40C84B4693B4FA /* MRCommentsAuthRouter.swift in Sources */,

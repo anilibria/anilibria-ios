@@ -18,7 +18,9 @@ final class PlayerViewController: BaseViewController {
     @IBOutlet var loaderContainer: UIView!
     @IBOutlet var container: UIView!
     @IBOutlet var rewindButtons: [RewindView] = []
-
+    @IBOutlet var skipContainer: UIView!
+    @IBOutlet var skipButton: RewindView!
+    
     private let playerView = PlayerView()
     private let airplayView = AVRoutePickerView()
     private var pictureInPictureController: AVPictureInPictureController?
@@ -40,6 +42,12 @@ final class PlayerViewController: BaseViewController {
             self.setUI(visible: self.uiIsVisible)
         }
     }
+    
+    private let skipButtonShowingSeconds = 10
+    
+    private var currentListItem: PlaylistItem? {
+        playlist[safe: currentIndex]
+    }
 
     var handler: PlayerEventHandler!
 
@@ -60,6 +68,8 @@ final class PlayerViewController: BaseViewController {
         self.timeLeftLabel.font = font
         self.elapsedTimeLabel.font = font
         self.clearLabels()
+        
+        setupSkipButton()
 
         #if targetEnvironment(macCatalyst)
         let window = UIApplication.getWindow()
@@ -82,6 +92,14 @@ final class PlayerViewController: BaseViewController {
         MacOSHelper.shared.fullscreenButtonEnabled = false
         #endif
     }
+    
+    private func setupSkipButton() {
+        skipButton.setDidTap { [weak self] _ in
+            guard let self = self,
+                  self.playerView.duration != nil else { return }
+            self.skipDidTap()
+        }
+    }
 
     private func setupSwitcher() {
         self.switcherView.didTapTitle { [weak self] in
@@ -102,6 +120,7 @@ final class PlayerViewController: BaseViewController {
                 self?.currentTime = time
                 self?.videoSliderView.setValue(value, animated: true)
                 self?.updateLabels()
+                self?.updateSkipButton()
             })
             .store(in: &subscribers)
 
@@ -188,6 +207,18 @@ final class PlayerViewController: BaseViewController {
         let max = self.videoSliderView.maximumValue
         let elapsed = self.timeFormatter.string(from: max - value) ?? ""
         self.elapsedTimeLabel.text = "-\(elapsed)"
+    }
+    
+    private func updateSkipButton() {
+        if let canSkip = currentListItem?.skips?.canSkip(
+            time: Int(currentTime),
+            upperBound: skipButtonShowingSeconds
+        ),
+           canSkip {
+            skipContainer.isHidden = false
+        } else {
+            skipContainer.isHidden = true
+        }
     }
 
     private func saveState() {
@@ -313,6 +344,20 @@ final class PlayerViewController: BaseViewController {
             pipController.startPictureInPicture()
         }
     }
+    
+    private func skipDidTap() {
+        let currentTime = Int(videoSliderView.value)
+        guard
+            let currentListItem = currentListItem,
+            let skips = currentListItem.skips,
+              let endTime = skips.upperBound(time: currentTime),
+              endTime > currentTime
+        else {
+            return
+        }
+        
+        self.apply(rewind: Double(endTime - currentTime))
+    }
 }
 
 extension PlayerViewController: PlayerViewBehavior {
@@ -414,5 +459,21 @@ final class RewindView: CircleView {
 
     @IBAction func tapAction(_ sender: Any) {
         self.tapHandler?(time)
+    }
+}
+
+extension Skips {
+    func canSkip(time: Int, upperBound: Int) -> Bool {
+        [opening, ending]
+            .compactMap { $0 }
+            .compactMap { Range(uncheckedBounds: ($0.lowerBound, $0.lowerBound + upperBound)) }
+            .contains(where: { $0.contains(time) })
+    }
+    
+    func upperBound(time: Int) -> Int? {
+        [opening, ending]
+            .compactMap { $0 }
+            .first(where: { $0.contains(time) })?
+            .upperBound
     }
 }

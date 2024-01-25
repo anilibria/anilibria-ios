@@ -34,11 +34,8 @@ struct Skips: Decodable {
     
     public init(from decoder: Decoder) throws {
         let rangeConverter = RangeConverter()
-        let opening: Range<Int>? = decoder["opening"] <- rangeConverter
-        let ending: Range<Int>? = decoder["ending"] <- rangeConverter
-        
-        self.opening = opening
-        self.ending = ending
+        self.opening = (decoder["opening"] <- rangeConverter)
+        self.ending = (decoder["ending"] <- rangeConverter)
     }
 }
 
@@ -70,5 +67,21 @@ public final class PlaylistItem: NSObject, Decodable {
 		}
 		self.video = result
         self.skips <- decoder["skips"]
+    }
+}
+
+extension Skips {
+    func canSkip(time: Int, length: Int) -> Bool {
+        [opening, ending]
+            .compactMap { $0 }
+            .compactMap { Range(uncheckedBounds: ($0.lowerBound, $0.lowerBound + length)) }
+            .contains(where: { $0.contains(time) })
+    }
+
+    func upperBound(time: Int) -> Int? {
+        [opening, ending]
+            .compactMap { $0 }
+            .first(where: { $0.contains(time) })?
+            .upperBound
     }
 }

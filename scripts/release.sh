@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+cd $SCRIPT_DIR
+cd ..
+
 APP_NAME="Anilibria"
 
 IOS_APP_DIR=./Build/Build/Products/Release-iphoneos
@@ -12,13 +16,13 @@ MACOS_APP=${MACOS_APP_DIR}/${APP_NAME}.app
 VERSION=$(xcodebuild -showBuildSettings | grep MARKETING_VERSION | tr -d 'MARKETING_VERSION =')
 echo $VERSION
 
+
 makeIPA () {
     if [ -d $IOS_APP_DIR ]; then
         rm -rf $IOS_APP_DIR
     fi
 
     xcodebuild \
-        -workspace $APP_NAME.xcworkspace \
         -scheme $APP_NAME \
         -destination "generic/platform=iOS" \
         -configuration Release \
@@ -54,7 +58,6 @@ makeMacOSApp () {
     fi
 
     xcodebuild \
-        -workspace $APP_NAME.xcworkspace \
         -scheme $APP_NAME \
         -destination "generic/platform=macOS" \
         -configuration Release \
@@ -66,7 +69,7 @@ makeMacOSApp () {
     fi
 
     mv $MACOS_APP $APP_NAME\ Catalyst.app
-    create-dmg $APP_NAME\ Catalyst.app
+    create-dmg  ${APP_NAME}_${VERSION}.dmg $APP_NAME\ Catalyst.app
 
     if [ -d $APP_NAME\ Catalyst.app ]; then
         rm -rf $APP_NAME\ Catalyst.app
@@ -75,5 +78,4 @@ makeMacOSApp () {
 
 TARGET=13.0
 makeIPA
-
 makeMacOSApp

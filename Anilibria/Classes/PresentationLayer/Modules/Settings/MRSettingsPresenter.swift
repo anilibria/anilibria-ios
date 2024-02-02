@@ -39,6 +39,7 @@ extension SettingsPresenter: SettingsEventHandler {
 
     func didLoad() {
         self.view.set(quality: self.playerSettings.quality)
+        self.view.set(language: Language.current)
         self.view.set(audio: self.playerSettings.audioTrack.title)
         self.view.set(subtitle: self.playerSettings.subtitleTrack.title)
         self.view.set(name: Bundle.main.displayName ?? "",
@@ -53,8 +54,8 @@ extension SettingsPresenter: SettingsEventHandler {
             return ChoiceItem(value, title: name, isSelected: playerSettings.quality == value)
         }
         
-        let group = ChoiceGroup(title: L10n.Common.quality, items: items)
-        
+        let group = ChoiceGroup(title: L10n.Screen.Settings.videoQuality, items: items)
+
         group.choiceCompleted = { [weak self] value in
             if let quality = value as? VideoQuality {
                 self?.update(quality)
@@ -93,6 +94,23 @@ extension SettingsPresenter: SettingsEventHandler {
             }
         }
         
+        self.router.openSheet(with: [group])
+    }
+    
+    func selectLanguage() {
+        let items = Language.allCases.map {
+            ChoiceItem($0, title: $0.name, isSelected: Language.current == $0)
+        }
+
+        let group = ChoiceGroup(title: L10n.Screen.Settings.language, items: items)
+
+        group.choiceCompleted = { [weak self] value in
+            if let language = value as? Language {
+                Language.current = language
+                self?.view.set(language: language)
+            }
+        }
+
         self.router.openSheet(with: [group])
     }
 

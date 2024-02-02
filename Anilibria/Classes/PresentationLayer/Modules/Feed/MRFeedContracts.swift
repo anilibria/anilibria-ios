@@ -2,12 +2,12 @@ import UIKit
 
 // MARK: - Contracts
 
-protocol FeedViewBehavior: WaitingBehavior, InfinityLoadingBehavior {
+protocol FeedViewBehavior: WaitingBehavior, RefreshBehavior {
     func set(items: [NSObject])
     func append(items: [NSObject])
 }
 
-protocol FeedEventHandler: ViewControllerEventHandler, InfinityLoadingEventHandler {
+protocol FeedEventHandler: ViewControllerEventHandler, RefreshEventHandler {
     func bind(view: FeedViewBehavior, router: FeedRoutable)
 
     func select(news: News)

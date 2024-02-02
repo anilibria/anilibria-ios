@@ -20,10 +20,12 @@ final class CatalogPresenter {
 
     private var activity: ActivityDisposable?
     private var bag = Set<AnyCancellable>()
+    private var pageSubscriber: AnyCancellable?
     private var filter: SeriesFilter = SeriesFilter()
-
-    private lazy var paginator: Paginator = Paginator<Series, IntPaging>(IntPaging()) { [unowned self] in
-        return self.feedService.fetchCatalog(page: $0, filter: self.filter)
+    private var nextPage: Int = 0
+    
+    private lazy var pagination = PaginationViewModel { [weak self] completion in
+        self?.loadPage(completion: completion)
     }
 
     init(feedService: FeedService) {
@@ -67,18 +69,13 @@ extension CatalogPresenter: CatalogEventHandler {
 
     func didLoad() {
         self.update(filter: self.filter)
-        self.setupPaginator()
         self.activity = self.view.showLoading(fullscreen: false)
-        self.paginator.refresh()
+        self.load()
     }
 
     func refresh() {
         self.activity = self.view.showRefreshIndicator()
-        self.paginator.refresh()
-    }
-
-    func loadMore() {
-        self.paginator.loadNewPage()
+        self.load()
     }
 
     func select(series: Series) {
@@ -106,38 +103,45 @@ extension CatalogPresenter: CatalogEventHandler {
     func search() {
         self.router.openSearchScreen()
     }
+    
+    private func load() {
+        nextPage = 0
+        pageSubscriber = feedService.fetchCatalog(page: nextPage, filter: filter)
+            .sink(onNext: { [weak self] feeds in
+                self?.nextPage += 1
+                self?.set(items: feeds)
+                self?.activity = nil
+            }, onError: { [weak self] error in
+                self?.router.show(error: error)
+                self?.activity = nil
+            })
+    }
+    
+    private func loadPage(completion: @escaping Action<Bool>) {
+        pageSubscriber = feedService.fetchCatalog(page: nextPage, filter: filter)
+            .sink(onNext: { [weak self] feeds in
+                self?.nextPage += 1
+                self?.append(items: feeds)
+                completion(feeds.isEmpty)
+                self?.activity = nil
+            }, onError: { [weak self] error in
+                self?.router.show(error: error)
+                completion(false)
+                self?.activity = nil
+            })
+    }
+    
+    private func set(items: [Series]) {
+        self.view.set(items: items + [pagination])
+    }
+    
+    private func append(items: [Series]) {
+        self.view.append(items: items + [pagination])
+    }
 
     private func update(filter: SeriesFilter) {
         self.filter = filter
         self.view.setFilter(active: self.filter != SeriesFilter())
         self.refresh()
-    }
-
-    private func setupPaginator() {
-        var pageActivity: ActivityDisposable?
-
-        self.paginator.handler
-            .showData { [weak self] value in
-                switch value.data {
-                case let .first(items):
-                    self?.view.set(items: items)
-                case let .next(items):
-                    self?.view.append(items: items)
-                }
-                self?.activity?.dispose()
-            }
-            .showEmptyError { [weak self] value in
-                if let error = value.error {
-                    self?.router.show(error: error)
-                }
-                self?.activity?.dispose()
-            }
-            .showPageProgress { [weak self] show in
-                if show {
-                    pageActivity = self?.view.loadPageProgress()
-                } else {
-                    pageActivity?.dispose()
-                }
-            }
     }
 }

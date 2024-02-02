@@ -98,7 +98,7 @@ extension MPVPlayerPresenter: MPVPlayerEventHandler {
         var groups: [ChoiceGroup] = []
 
         if !items.isEmpty {
-            let group = ChoiceGroup(title: L10n.Common.quality, items: items)
+            let group = ChoiceGroup(title: L10n.Screen.Settings.videoQuality, items: items)
             group.choiceCompleted = { [weak self] value in
                 if let selectedQuality = value as? VideoQuality, selectedQuality != quality {
                     self?.view.set(quality: selectedQuality)

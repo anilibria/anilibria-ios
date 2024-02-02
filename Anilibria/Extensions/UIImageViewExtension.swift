@@ -1,5 +1,6 @@
 import Foundation
 import Kingfisher
+import UIKit
 
 extension UIImageView {
     public func setImage(from url: URL?,
@@ -20,12 +21,17 @@ extension UIImageView {
                 DelayRetryStrategy(maxRetryCount: maxRetryCount, retryInterval: .seconds(0.1))
             )
         )
+        self.kf.cancelDownloadTask()
         self.kf.setImage(
-            with: Kingfisher.ImageResource(downloadURL: url),
+            with: KF.ImageResource(downloadURL: url),
             placeholder: placeholder,
             options: options,
             completionHandler: completionHandler
         )
+    }
+    
+    public func cancelDownloadTask() {
+        self.kf.cancelDownloadTask()
     }
 }
 

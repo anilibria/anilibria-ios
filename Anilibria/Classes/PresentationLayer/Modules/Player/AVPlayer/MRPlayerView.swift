@@ -18,6 +18,8 @@ final class PlayerViewController: BaseViewController {
     @IBOutlet var loaderContainer: UIView!
     @IBOutlet var container: UIView!
     @IBOutlet var rewindButtons: [RewindView] = []
+    @IBOutlet var skipContainer: UIView!
+    @IBOutlet var skipButtonLabel: UILabel!
 
     private let airplayView = AVRoutePickerView()
     private var pictureInPictureController: AVPictureInPictureController?
@@ -39,6 +41,12 @@ final class PlayerViewController: BaseViewController {
             self.setUI(visible: self.uiIsVisible)
         }
     }
+    
+    private let skipButtonShowingSeconds = 10
+    
+    private var currentListItem: PlaylistItem? {
+        playlist[safe: currentIndex]
+    }
 
     var handler: PlayerEventHandler!
     var playerView: (any Player)!
@@ -54,7 +62,7 @@ final class PlayerViewController: BaseViewController {
         self.setupRewind()
         self.setupAirPlay()
         self.setupPictureInPicture()
-        self.videoSliderView.setThumbImage(#imageLiteral(resourceName: "icon_circle.pdf"), for: .normal)
+        self.videoSliderView.setThumbImage(UIImage(resource: .iconCircle), for: .normal)
 
         let font: UIFont = UIFont.monospacedDigitSystemFont(ofSize: 12, weight: .regular)
         self.timeLeftLabel.font = font
@@ -68,6 +76,11 @@ final class PlayerViewController: BaseViewController {
 
         MacOSHelper.shared.fullscreenButtonEnabled = true
         #endif
+    }
+
+    override func setupStrings() {
+        super.setupStrings()
+        skipButtonLabel.text = L10n.Buttons.skip
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -102,12 +115,13 @@ final class PlayerViewController: BaseViewController {
                 self?.currentTime = time
                 self?.videoSliderView.setValue(value, animated: true)
                 self?.updateLabels()
+                self?.updateSkipButton(time: Int(time))
             })
             .store(in: &subscribers)
 
         self.playerView.getPlayChanges()
             .sink(onNext: { [weak self] value in
-                let image: UIImage = value ? #imageLiteral(resourceName: "icon_pause") : #imageLiteral(resourceName: "icon_play")
+                let image = UIImage(resource: value ? .iconPause : .iconPlay)
                 self?.playPauseIconView.templateImage = image
             })
             .store(in: &subscribers)
@@ -168,6 +182,7 @@ final class PlayerViewController: BaseViewController {
         sliderTouchUp(self)
 
         if playing { playerView.togglePlay() }
+        updateSkipButton(time: Int(newTime))
     }
 
     private func setupAirPlay() {
@@ -191,6 +206,17 @@ final class PlayerViewController: BaseViewController {
         let max = self.videoSliderView.maximumValue
         let elapsed = self.timeFormatter.string(from: max - value) ?? ""
         self.elapsedTimeLabel.text = "-\(elapsed)"
+    }
+    
+    private func updateSkipButton(time: Int) {
+        if let canSkip = currentListItem?.skips?.canSkip(
+            time: time,
+            length: skipButtonShowingSeconds
+        ), canSkip {
+            skipContainer.isHidden = false
+        } else {
+            skipContainer.isHidden = true
+        }
     }
 
     private func saveState() {
@@ -324,6 +350,20 @@ final class PlayerViewController: BaseViewController {
         } else {
             pipController.startPictureInPicture()
         }
+    }
+    
+    @IBAction func skipDidTap() {
+        let currentTime = Int(videoSliderView.value)
+        guard
+            let currentListItem = currentListItem,
+            let skips = currentListItem.skips,
+            let endTime = skips.upperBound(time: currentTime),
+            endTime > currentTime
+        else {
+            return
+        }
+        
+        self.apply(rewind: Double(endTime - currentTime))
     }
 }
 

@@ -1,7 +1,7 @@
 import Combine
 import UIKit
 
-class BaseViewController: UIViewController, WaitingBehavior, LanguageBehavior, Loggable {
+class BaseViewController: UIViewController, WaitingBehavior, Loggable {
     var defaultLoggingTag: LogTag { .view }
     
     var subscribers = Set<AnyCancellable>()
@@ -29,9 +29,16 @@ class BaseViewController: UIViewController, WaitingBehavior, LanguageBehavior, L
         self.setupStrings()
     }
 
-    func initialize() {}
+    func initialize() {
+        Language.languageChanged.sink { [weak self] _ in
+            self?.setupStrings()
+            self?.languageDidChanged()
+        }.store(in: &subscribers)
+    }
 
     func setupStrings() {}
+    
+    func languageDidChanged() {}
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return self.statusBarStyle

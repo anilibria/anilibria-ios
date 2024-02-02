@@ -2,20 +2,20 @@ import UIKit
 
 // MARK: - View Controller
 
-final class CatalogViewController: InfinityCollectionViewController {
+final class CatalogViewController: BaseCollectionViewController {
     var handler: CatalogEventHandler!
 
-    private lazy var searchButton = BarButton(image:#imageLiteral(resourceName: "menu_item_search.pdf"),
+    private lazy var searchButton = BarButton(image: UIImage(resource: .menuItemSearch),
                                               imageEdge: inset(12, 5, 12, 5)) { [weak self] in
         self?.handler.search()
     }
 
-    private lazy var filterButton = BarButton(image:#imageLiteral(resourceName: "icon_filter")) { [weak self] in
+    private lazy var filterButton = BarButton(image: UIImage(resource: .iconFilter)) { [weak self] in
         self?.handler.openFilter()
     }
 
     #if targetEnvironment(macCatalyst)
-    private lazy var refreshButton = BarButton(image:#imageLiteral(resourceName: "icon_refresh")) { [weak self] in
+    private lazy var refreshButton = BarButton(image: UIImage(resource: .iconRefresh)) { [weak self] in
         _ = self?.showRefreshIndicator()
         self?.collectionView.setContentOffset(.init(x: 0, y: -10), animated: false)
         self?.handler.refresh()
@@ -42,11 +42,6 @@ final class CatalogViewController: InfinityCollectionViewController {
         self.handler.refresh()
     }
 
-    override func loadMore() {
-        super.loadMore()
-        self.handler.loadMore()
-    }
-
     private func setupNavbar() {
         var items = [self.searchButton, self.filterButton]
         #if targetEnvironment(macCatalyst)
@@ -55,20 +50,28 @@ final class CatalogViewController: InfinityCollectionViewController {
         self.navigationItem.setRightBarButtonItems(items ,animated: false)
     }
 
-    private func createAdapter(for item: Series) -> any CellAdapterProtocol {
-        SeriesCellAdapter(viewModel: item, seclect: { [weak self] item in
-            self?.handler.select(series: item)
-        })
+    private func createAdapter(for model: NSObject) -> (any CellAdapterProtocol)? {
+        switch model {
+        case let item as Series:
+            return SeriesCellAdapter(viewModel: item, seclect: { [weak self] item in
+                self?.handler.select(series: item)
+            })
+        case let item as PaginationViewModel:
+            return PaginationAdapter(viewModel: item)
+        default:
+            return nil
+        }
     }
 }
 
 extension CatalogViewController: CatalogViewBehavior {
-    func set(items: [Series]) {
-        self.reload(sections: [SectionAdapter(items.map(createAdapter))])
+    func set(items: [NSObject]) {
+        self.collectionView.contentOffset = CGPoint(x: 0, y: -collectionView.contentInset.top)
+        self.reload(sections: [SectionAdapter(items.compactMap(createAdapter))])
     }
 
-    func append(items: [Series]) {
-        append(sections: [SectionAdapter(items.map(createAdapter))])
+    func append(items: [NSObject]) {
+        append(sections: [SectionAdapter(items.compactMap(createAdapter))])
     }
 
     func setFilter(active: Bool) {

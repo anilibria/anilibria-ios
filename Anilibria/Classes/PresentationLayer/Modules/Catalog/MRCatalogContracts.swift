@@ -2,13 +2,13 @@ import UIKit
 
 // MARK: - Contracts
 
-protocol CatalogViewBehavior: WaitingBehavior, InfinityLoadingBehavior {
-    func set(items: [Series])
-    func append(items: [Series])
+protocol CatalogViewBehavior: WaitingBehavior, RefreshBehavior {
+    func set(items: [NSObject])
+    func append(items: [NSObject])
     func setFilter(active: Bool)
 }
 
-protocol CatalogEventHandler: ViewControllerEventHandler, InfinityLoadingEventHandler {
+protocol CatalogEventHandler: ViewControllerEventHandler, RefreshEventHandler {
     func bind(view: CatalogViewBehavior,
               router: CatalogRoutable,
               filter: SeriesFilter)

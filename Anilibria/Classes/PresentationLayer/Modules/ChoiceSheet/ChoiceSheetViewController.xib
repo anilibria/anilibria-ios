@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ChoiceSheetViewController" customModule="Anilibria" customModuleProvider="target">
             <connections>
-                <outlet property="backButton" destination="Apj-zN-056" id="gE4-Es-xtR"/>
                 <outlet property="collectionHeightConstraint" destination="0NC-wK-Lml" id="v0q-Nu-gtO"/>
                 <outlet property="collectionView" destination="L4Q-ad-4vg" id="BHH-IC-9ZM"/>
+                <outlet property="doneButton" destination="Apj-zN-056" id="xn3-qY-5Vy"/>
                 <outlet property="view" destination="iN0-l3-epB" id="ffI-bp-H71"/>
             </connections>
         </placeholder>
@@ -46,7 +46,7 @@
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="backAction:" destination="-1" eventType="touchUpInside" id="jRQ-GO-fQX"/>
+                                                    <action selector="backAction:" destination="-1" eventType="touchUpInside" id="I33-bu-IZp"/>
                                                 </connections>
                                             </button>
                                         </subviews>

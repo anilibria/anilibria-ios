@@ -12,7 +12,7 @@ public final class SeriesHeaderView: UIView {
 
     func configure(_ series: Series) {
         self.imageView.setImage(from: series.poster,
-                                placeholder: UIImage(named: "img_placeholder"))
+                                placeholder: UIImage(resource: .imgPlaceholder))
     }
 
     func setPlayVisible(value: Bool) {

@@ -4,6 +4,8 @@ import UIKit
 
 final class SettingsViewController: BaseViewController {
     @IBOutlet var prefferedTitleLabel: UILabel!
+    @IBOutlet var languageTitleLabel: UILabel!
+    @IBOutlet var selectedLanguageLabel: UILabel!
     @IBOutlet var qualityTitleLabel: UILabel!
     @IBOutlet var qualityLabel: UILabel!
     @IBOutlet var audioTitleLabel: UILabel!
@@ -11,7 +13,7 @@ final class SettingsViewController: BaseViewController {
     @IBOutlet var subtitleTrackTitleLabel: UILabel!
     @IBOutlet var subtitleTrackLabel: UILabel!
     
-    @IBOutlet var aboutAppTitleLabel: UILabel!
+    @IBOutlet var aboutTitleLabel: UILabel!
     @IBOutlet var appNameLabel: UILabel!
     @IBOutlet var appVersionLabel: UILabel!
 
@@ -28,14 +30,19 @@ final class SettingsViewController: BaseViewController {
         super.setupStrings()
         self.navigationItem.title = L10n.Screen.Settings.title
         self.prefferedTitleLabel.text = L10n.Screen.Settings.preffered
-        self.qualityTitleLabel.text = L10n.Common.quality
+        self.languageTitleLabel.text = L10n.Screen.Settings.language
+        self.qualityTitleLabel.text = L10n.Screen.Settings.videoQuality
         self.audioTitleLabel.text = L10n.Common.audioTrack
         self.subtitleTrackTitleLabel.text = L10n.Common.sublitleTrack
-        self.aboutAppTitleLabel.text = L10n.Screen.Settings.aboutApp
+        self.aboutTitleLabel.text = L10n.Screen.Settings.aboutApp
     }
 
     @IBAction func qualityAction(_ sender: Any) {
         self.handler.selectQuality()
+    }
+    
+    @IBAction func languageAction(_ sender: Any) {
+        self.handler.selectLanguage()
     }
     
     @IBAction func audioAction(_ sender: Any) {
@@ -55,6 +62,10 @@ extension SettingsViewController: SettingsViewBehavior {
 
     func set(quality: VideoQuality) {
         self.qualityLabel.text = quality.name
+    }
+    
+    func set(language: Language) {
+        self.selectedLanguageLabel.text = language.name
     }
     
     func set(audio track: String) {

@@ -7,12 +7,12 @@ final class FavoriteViewController: BaseCollectionViewController {
 
     private let searchView: SearchView? = SearchView.fromNib()
     private let stubView: StubView? = StubView.fromNib()?.apply {
-        $0.set(image: #imageLiteral(resourceName: "star-outline"), color: .darkGray)
+        $0.set(image: UIImage(resource: .starOutline), color: .darkGray)
         $0.title = L10n.Stub.title
     }
 
     #if targetEnvironment(macCatalyst)
-    private lazy var refreshButton = BarButton(image:#imageLiteral(resourceName: "icon_refresh")) { [weak self] in
+    private lazy var refreshButton = BarButton(image: UIImage(resource: .iconRefresh)) { [weak self] in
         _ = self?.showRefreshIndicator()
         self?.collectionView.setContentOffset(.init(x: 0, y: -10), animated: false)
         self?.handler.refresh()

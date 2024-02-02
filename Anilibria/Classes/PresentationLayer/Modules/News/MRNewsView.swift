@@ -2,11 +2,11 @@ import UIKit
 
 // MARK: - View Controller
 
-final class NewsViewController: InfinityCollectionViewController {
+final class NewsViewController: BaseCollectionViewController {
     var handler: NewsEventHandler!
 
     #if targetEnvironment(macCatalyst)
-    private lazy var refreshButton = BarButton(image:#imageLiteral(resourceName: "icon_refresh")) { [weak self] in
+    private lazy var refreshButton = BarButton(image: UIImage(resource: .iconRefresh)) { [weak self] in
         _ = self?.showRefreshIndicator()
         self?.collectionView.setContentOffset(.init(x: 0, y: -10), animated: false)
         self?.handler.refresh()
@@ -43,17 +43,20 @@ final class NewsViewController: InfinityCollectionViewController {
         self.handler.refresh()
     }
 
-    override func loadMore() {
-        super.loadMore()
-        self.handler.loadMore()
-    }
-
     // MARK: - Adapter creators
 
-    private func createAdapter(for item: News) -> any CellAdapterProtocol {
-        NewsCellAdapter(viewModel: item, seclect: { [weak self] item in
-            self?.handler.select(news: item)
-        })
+    private func createAdapter(for model: NSObject) -> (any CellAdapterProtocol)? {
+        switch model {
+        case let item as News:
+            return NewsCellAdapter(viewModel: item, seclect: { [weak self] item in
+                self?.handler.select(news: item)
+            })
+        case let item as PaginationViewModel:
+            return PaginationAdapter(viewModel: item)
+        default:
+            return nil
+        }
+        
     }
 }
 
@@ -62,13 +65,13 @@ extension NewsViewController: NewsViewBehavior {
         return nil
     }
 
-    func set(items: [News]) {
-        sectionAdapter.set(items.map(createAdapter))
+    func set(items: [NSObject]) {
+        sectionAdapter.set(items.compactMap(createAdapter))
         reload(sections: [sectionAdapter])
     }
 
-    func append(items: [News]) {
-        sectionAdapter.set(items.map(createAdapter))
+    func append(items: [NSObject]) {
+        sectionAdapter.set(items.compactMap(createAdapter))
         append(sections: [sectionAdapter])
     }
 }

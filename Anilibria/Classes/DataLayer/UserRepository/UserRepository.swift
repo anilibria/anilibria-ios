@@ -1,4 +1,5 @@
 import DITranquillity
+import Foundation
 
 final class UserRepositoryPart: DIPart {
     static func load(container: DIContainer) {

@@ -4,7 +4,7 @@ import UIKit
 
 final class ChoiceSheetViewController: BaseCollectionViewController {
     @IBOutlet var collectionHeightConstraint: NSLayoutConstraint!
-    @IBOutlet var backButton: UIButton!
+    @IBOutlet var doneButton: UIButton!
 
     var handler: ChoiceSheetEventHandler!
     private var bag: Any?
@@ -25,7 +25,7 @@ final class ChoiceSheetViewController: BaseCollectionViewController {
     
     override func setupStrings() {
         super.setupStrings()
-        backButton.setTitle(L10n.Buttons.done, for: .normal)
+        doneButton.setTitle(L10n.Buttons.done, for: .normal)
     }
 
     override var shouldAutorotate: Bool {

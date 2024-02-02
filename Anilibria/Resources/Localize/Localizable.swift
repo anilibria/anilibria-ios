@@ -2,7 +2,6 @@
 // Updated by Allui
 
 import Foundation
-import Localize_Swift
 
 // swiftlint:disable superfluous_disable_command
 // swiftlint:disable file_length
@@ -11,13 +10,6 @@ import Localize_Swift
 internal enum L10n {
 
   internal enum Alert {
-
-    internal enum Message {
-      /// Вы действительно хотите выйти?
-      internal static var exit: String {
-          return L10n.tr("Localizable", "alert.message.exit")
-      }
-    }
 
     internal enum Title {
       /// Ошибка
@@ -32,6 +24,10 @@ internal enum L10n {
   }
 
   internal enum Buttons {
+    /// Применить
+    internal static var apply: String {
+        return L10n.tr("Localizable", "buttons.apply")
+    }
     /// Отмена
     internal static var cancel: String {
         return L10n.tr("Localizable", "buttons.cancel")
@@ -40,13 +36,13 @@ internal enum L10n {
     internal static var done: String {
         return L10n.tr("Localizable", "buttons.done")
     }
-    /// Пропустить
-    internal static var next: String {
-        return L10n.tr("Localizable", "buttons.next")
-    }
     /// Нет
     internal static var no: String {
         return L10n.tr("Localizable", "buttons.no")
+    }
+    /// Сброс
+    internal static var reset: String {
+        return L10n.tr("Localizable", "buttons.reset")
     }
     /// Повторить
     internal static var retry: String {
@@ -64,6 +60,10 @@ internal enum L10n {
     internal static var signOut: String {
         return L10n.tr("Localizable", "buttons.signOut")
     }
+    /// Пропустить
+    internal static var skip: String {
+        return L10n.tr("Localizable", "buttons.skip")
+    }
     /// Да
     internal static var yes: String {
         return L10n.tr("Localizable", "buttons.yes")
@@ -71,7 +71,7 @@ internal enum L10n {
   }
 
   internal enum Common {
-    /// Аудио трек
+    /// Аудио дорожка
     internal static var audioTrack: String {
         return L10n.tr("Localizable", "common.audio_track")
     }
@@ -87,11 +87,7 @@ internal enum L10n {
     internal static var mskTimeZone: String {
         return L10n.tr("Localizable", "common.msk_time_zone")
     }
-    /// Качество видео
-    internal static var quality: String {
-        return L10n.tr("Localizable", "common.quality")
-    }
-    /// Трек субтитров
+    /// Дорожка субтитров
     internal static var sublitleTrack: String {
         return L10n.tr("Localizable", "common.sublitle_track")
     }
@@ -126,6 +122,32 @@ internal enum L10n {
       /// 480p
       internal static var sd: String {
           return L10n.tr("Localizable", "common.quality.sd")
+      }
+    }
+
+    internal enum Search {
+      /// Поиск по названию
+      internal static var byName: String {
+          return L10n.tr("Localizable", "common.search.by_name")
+      }
+    }
+
+    internal enum Seasons {
+      /// Осень
+      internal static var fall: String {
+          return L10n.tr("Localizable", "common.seasons.fall")
+      }
+      /// Весна
+      internal static var spring: String {
+          return L10n.tr("Localizable", "common.seasons.spring")
+      }
+      /// Лето
+      internal static var summer: String {
+          return L10n.tr("Localizable", "common.seasons.summer")
+      }
+      /// Зима
+      internal static var winter: String {
+          return L10n.tr("Localizable", "common.seasons.winter")
       }
     }
 
@@ -186,6 +208,37 @@ internal enum L10n {
       internal static var wen: String {
           return L10n.tr("Localizable", "common.week_day.wen")
       }
+
+      internal enum Short {
+        /// Пт
+        internal static var fri: String {
+            return L10n.tr("Localizable", "common.week_day.short.fri")
+        }
+        /// Пн
+        internal static var mon: String {
+            return L10n.tr("Localizable", "common.week_day.short.mon")
+        }
+        /// Сб
+        internal static var sat: String {
+            return L10n.tr("Localizable", "common.week_day.short.sat")
+        }
+        /// Вс
+        internal static var sun: String {
+            return L10n.tr("Localizable", "common.week_day.short.sun")
+        }
+        /// Чт
+        internal static var thu: String {
+            return L10n.tr("Localizable", "common.week_day.short.thu")
+        }
+        /// Вт
+        internal static var tue: String {
+            return L10n.tr("Localizable", "common.week_day.short.tue")
+        }
+        /// Ср
+        internal static var wen: String {
+            return L10n.tr("Localizable", "common.week_day.short.wen")
+        }
+      }
     }
   }
 
@@ -230,9 +283,28 @@ internal enum L10n {
   internal enum Screen {
 
     internal enum Auth {
+      /// Секретный код 2FA
+      internal static var code: String {
+          return L10n.tr("Localizable", "screen.auth.code")
+      }
+      /// Логин или email
+      internal static var login: String {
+          return L10n.tr("Localizable", "screen.auth.login")
+      }
+      /// Пароль
+      internal static var password: String {
+          return L10n.tr("Localizable", "screen.auth.password")
+      }
       /// Авторизация
       internal static var title: String {
           return L10n.tr("Localizable", "screen.auth.title")
+      }
+
+      internal enum Code {
+        /// Оставьте поле пустым, если вы не настроили двухфакторную аутентификацию
+        internal static var description: String {
+            return L10n.tr("Localizable", "screen.auth.code.description")
+        }
       }
     }
 
@@ -250,12 +322,19 @@ internal enum L10n {
       }
     }
 
+    internal enum Configuration {
+      /// Обновление конфигурации
+      internal static var title: String {
+          return L10n.tr("Localizable", "screen.configuration.title")
+      }
+    }
+
     internal enum Feed {
-      /// ИСТОРИЯ
+      /// История
       internal static var history: String {
           return L10n.tr("Localizable", "screen.feed.history")
       }
-      /// СЛУЧАЙНЫЙ РЕЛИЗ
+      /// Случайный релиз
       internal static var randomRelease: String {
           return L10n.tr("Localizable", "screen.feed.random_release")
       }
@@ -278,6 +357,10 @@ internal enum L10n {
     }
 
     internal enum Filter {
+      /// Релиз завершен
+      internal static var complete: String {
+          return L10n.tr("Localizable", "screen.filter.complete")
+      }
       /// Жанры
       internal static var genres: String {
           return L10n.tr("Localizable", "screen.filter.genres")
@@ -286,9 +369,28 @@ internal enum L10n {
       internal static var seasons: String {
           return L10n.tr("Localizable", "screen.filter.seasons")
       }
+      /// Сортировка
+      internal static var sotring: String {
+          return L10n.tr("Localizable", "screen.filter.sotring")
+      }
+      /// Фильтер
+      internal static var title: String {
+          return L10n.tr("Localizable", "screen.filter.title")
+      }
       /// Года
       internal static var years: String {
           return L10n.tr("Localizable", "screen.filter.years")
+      }
+
+      internal enum Sotring {
+        /// Новизна
+        internal static var newest: String {
+            return L10n.tr("Localizable", "screen.filter.Sotring.newest")
+        }
+        /// Популярность
+        internal static var popularity: String {
+            return L10n.tr("Localizable", "screen.filter.Sotring.popularity")
+        }
       }
     }
 
@@ -296,6 +398,17 @@ internal enum L10n {
       /// YouTube
       internal static var title: String {
           return L10n.tr("Localizable", "screen.news.title")
+      }
+    }
+
+    internal enum Other {
+      /// Поддержать
+      internal static var donate: String {
+          return L10n.tr("Localizable", "screen.other.donate")
+      }
+      /// Список команды
+      internal static var team: String {
+          return L10n.tr("Localizable", "screen.other.team")
       }
     }
 
@@ -339,9 +452,9 @@ internal enum L10n {
       internal static var aboutApp: String {
           return L10n.tr("Localizable", "screen.settings.about_app")
       }
-      /// Общие
-      internal static var common: String {
-          return L10n.tr("Localizable", "screen.settings.common")
+      /// Язык
+      internal static var language: String {
+          return L10n.tr("Localizable", "screen.settings.language")
       }
       /// Предпочтения
       internal static var preffered: String {
@@ -350,6 +463,10 @@ internal enum L10n {
       /// Настройки
       internal static var title: String {
           return L10n.tr("Localizable", "screen.settings.title")
+      }
+      /// Качество видео
+      internal static var videoQuality: String {
+          return L10n.tr("Localizable", "screen.settings.video_quality")
       }
     }
   }

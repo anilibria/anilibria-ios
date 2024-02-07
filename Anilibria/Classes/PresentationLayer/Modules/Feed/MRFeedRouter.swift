@@ -7,6 +7,7 @@ protocol FeedRoutable: BaseRoutable,
     ScheduleRoute,
     SearchRoute,
     SeriesRoute,
-    HistoryRoute {}
+    HistoryRoute,
+    LocalFilesRoute {}
 
 final class FeedRouter: BaseRouter, FeedRoutable {}

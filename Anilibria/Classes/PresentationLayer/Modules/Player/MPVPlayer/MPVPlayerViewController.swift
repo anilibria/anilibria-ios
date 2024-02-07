@@ -23,7 +23,6 @@ final class MPVPlayerViewController: BaseViewController {
     @IBOutlet var videoSliderView: TouchableSlider!
     @IBOutlet var playerContainer: UIView!
     @IBOutlet var loaderContainer: UIView!
-    @IBOutlet var container: UIView!
     @IBOutlet var rewindButtons: [RewindView] = []
 
     private let timeFormatter = FormatterFactory.time.create()

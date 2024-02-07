@@ -1,4 +1,5 @@
 import UIKit
+import UniformTypeIdentifiers
 
 final class HistoryAssembly {
     class func createModule(parent: Router? = nil) -> HistoryViewController {

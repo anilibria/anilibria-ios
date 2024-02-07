@@ -35,6 +35,10 @@ final class FeedPresenter {
         self?.selectHistory()
     }
 
+    private lazy var localFiles = ActionItem(L10n.Screen.Feed.localFiles) { [weak self] in
+        self?.selectLocalFiles()
+    }
+
     private lazy var pagination = PaginationViewModel { [weak self] completion in
         self?.loadPage(completion: completion)
     }
@@ -110,6 +114,10 @@ extension FeedPresenter: FeedEventHandler {
         self.router.openHistory()
     }
 
+    func selectLocalFiles() {
+        self.router.showLocalFiles()
+    }
+
     func search() {
         self.router.openSearchScreen()
     }
@@ -168,7 +176,7 @@ extension FeedPresenter: FeedEventHandler {
        
         
         let items = scheduleBlock + 
-            [randomSeries, history, updates] +
+            [randomSeries, history, localFiles, updates] +
             feeds.compactMap { $0.value } +
             [pagination]
         self.view.set(items: items)

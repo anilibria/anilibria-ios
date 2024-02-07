@@ -8,7 +8,7 @@
 
 import Foundation
 
-class PieceWork: Hashable, Codable, CustomDebugStringConvertible {
+struct PieceWork: Hashable, Codable, CustomDebugStringConvertible {
     let index: Int
     let hash: [UInt8]
     let length: Int
@@ -29,10 +29,9 @@ class PieceWork: Hashable, Codable, CustomDebugStringConvertible {
         self.hash = hash
         self.length = length
         self.buffer = [UInt8](repeating: 0, count: length)
-
     }
 
-    required init(from decoder: Decoder) throws {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.index = try container.decode(Int.self, forKey: .index)
         self.hash = try container.decode([UInt8].self, forKey: .hash)
@@ -47,7 +46,7 @@ class PieceWork: Hashable, Codable, CustomDebugStringConvertible {
         try container.encode(self.length, forKey: .length)
     }
 
-    func reset() {
+    mutating func reset() {
         downloaded = 0
     }
 

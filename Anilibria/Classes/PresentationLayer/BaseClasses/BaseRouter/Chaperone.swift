@@ -256,13 +256,13 @@ private class MRViewController: UIViewController {
 
 private extension UIViewController {
     func storeLink(_ item: Any?) {
-        let shit = ShitView()
-        shit.storedObject = item
-        self.view.addSubview(shit)
+        let holder = HolderHelper()
+        holder.storedObject = item
+        self.view.addLayoutGuide(holder)
     }
 }
 
-private final class ShitView: UIView {
+private final class HolderHelper: UILayoutGuide {
     var storedObject: Any?
 
     deinit {

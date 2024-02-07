@@ -16,7 +16,7 @@ class PieceProgress: Loggable {
     let maxBlockSize = 16384
     let maxStrikeCount = 1
 
-    let piece: PieceWork
+    private(set) var piece: PieceWork
     var requested: Int = 0
     var backlog: Int = 0
     private var strike = 0

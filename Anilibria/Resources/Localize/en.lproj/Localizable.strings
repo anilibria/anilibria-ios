@@ -85,6 +85,7 @@
 "screen.feed.updates_title" = "Updates";
 "screen.feed.random_release" = "Randome release";
 "screen.feed.history" = "History";
+"screen.feed.local_files" = "Downloaded files";
 
 //FILTER SCREEN
 "screen.filter.genres" = "Genres";

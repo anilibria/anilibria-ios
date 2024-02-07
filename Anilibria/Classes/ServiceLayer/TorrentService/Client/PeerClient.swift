@@ -256,8 +256,9 @@ class PeerClient: NSObject, StreamDelegate, Loggable {
             if result.checkIntegrity() {
                 self?.workQueue.set(result: result)
             } else {
-                result.reset()
-                self?.workQueue.insert(result)
+                var item = result
+                item.reset()
+                self?.workQueue.insert(item)
             }
             self?.isDownloading = false
             self?.piceProgress = nil

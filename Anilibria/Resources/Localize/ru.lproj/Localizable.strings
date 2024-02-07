@@ -85,6 +85,7 @@
 "screen.feed.updates_title" = "Обновления";
 "screen.feed.random_release" = "Случайный релиз";
 "screen.feed.history" = "История";
+"screen.feed.local_files" = "Скаченные торренты";
 
 //FILTER SCREEN
 "screen.filter.genres" = "Жанры";

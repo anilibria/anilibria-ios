@@ -334,6 +334,10 @@ internal enum L10n {
       internal static var history: String {
           return L10n.tr("Localizable", "screen.feed.history")
       }
+      /// Скаченные торренты
+      internal static var localFiles: String {
+          return L10n.tr("Localizable", "screen.feed.local_files")
+      }
       /// Случайный релиз
       internal static var randomRelease: String {
           return L10n.tr("Localizable", "screen.feed.random_release")

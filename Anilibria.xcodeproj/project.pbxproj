@@ -318,6 +318,7 @@
 		C799EBDE22DF135500C6BD9B /* SocialDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C799EBDD22DF135500C6BD9B /* SocialDataRequest.swift */; };
 		C799EBE022DF142F00C6BD9B /* SocialOAuthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C799EBDF22DF142F00C6BD9B /* SocialOAuthData.swift */; };
 		C799EBE222DF170C00C6BD9B /* SocialAuthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C799EBE122DF170C00C6BD9B /* SocialAuthViewController.xib */; };
+		C79BDBC12B7355420077814E /* LocalFilesAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79BDBC02B7355420077814E /* LocalFilesAssembly.swift */; };
 		C7A87DF32AE3DD910026FF62 /* MPVPlayerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A87DF22AE3DD910026FF62 /* MPVPlayerPresenter.swift */; };
 		C7A87DF52AE3DDA70026FF62 /* MPVPlayerContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A87DF42AE3DDA70026FF62 /* MPVPlayerContracts.swift */; };
 		C7A87DF72AE3DF8E0026FF62 /* MPVPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A87DF62AE3DF8E0026FF62 /* MPVPlayerViewController.swift */; };
@@ -774,6 +775,7 @@
 		C799EBDD22DF135500C6BD9B /* SocialDataRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocialDataRequest.swift; sourceTree = "<group>"; };
 		C799EBDF22DF142F00C6BD9B /* SocialOAuthData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocialOAuthData.swift; sourceTree = "<group>"; };
 		C799EBE122DF170C00C6BD9B /* SocialAuthViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SocialAuthViewController.xib; sourceTree = "<group>"; };
+		C79BDBC02B7355420077814E /* LocalFilesAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFilesAssembly.swift; sourceTree = "<group>"; };
 		C7A87DF22AE3DD910026FF62 /* MPVPlayerPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MPVPlayerPresenter.swift; sourceTree = "<group>"; };
 		C7A87DF42AE3DDA70026FF62 /* MPVPlayerContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MPVPlayerContracts.swift; sourceTree = "<group>"; };
 		C7A87DF62AE3DF8E0026FF62 /* MPVPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MPVPlayerViewController.swift; sourceTree = "<group>"; };
@@ -1142,6 +1144,7 @@
 		46A15F682920E050002756AD /* Torrent */ = {
 			isa = PBXGroup;
 			children = (
+				C79BDBBF2B7355150077814E /* LocalFiles */,
 				46A15F692920E065002756AD /* TorrentList */,
 			);
 			path = Torrent;
@@ -1689,6 +1692,14 @@
 				C799EBD922DEC9AA00C6BD9B /* UserRepository.swift */,
 			);
 			path = UserRepository;
+			sourceTree = "<group>";
+		};
+		C79BDBBF2B7355150077814E /* LocalFiles */ = {
+			isa = PBXGroup;
+			children = (
+				C79BDBC02B7355420077814E /* LocalFilesAssembly.swift */,
+			);
+			path = LocalFiles;
 			sourceTree = "<group>";
 		};
 		C7A87DF02AE3DC590026FF62 /* AVPlayer */ = {
@@ -2414,6 +2425,7 @@
 				C7D4634222CC790900E763DF /* Lint */,
 				4880C22F23DAD192006FABE1 /* Embed PlugIns */,
 				46B82A602971193D003E450B /* Embed Frameworks */,
+				C79BDBC22B73594E0077814E /* Strip */,
 			);
 			buildRules = (
 			);
@@ -2547,7 +2559,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		46B82AAD2971956B003E450B /* Strip Script */ = {
+		C79BDBC22B73594E0077814E /* Strip */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -2557,7 +2569,7 @@
 			);
 			inputPaths = (
 			);
-			name = "Strip Script";
+			name = Strip;
 			outputFileListPaths = (
 			);
 			outputPaths = (
@@ -2933,6 +2945,7 @@
 				6451BD93E8094166AB490768819512C3 /* MRSocialAuthAssembly.swift in Sources */,
 				2FA5113A3C31E06C356424B87E739386 /* MRSocialAuthContracts.swift in Sources */,
 				46A15F4D2920DC33002756AD /* Hasher.swift in Sources */,
+				C79BDBC12B7355420077814E /* LocalFilesAssembly.swift in Sources */,
 				5D4EAD489BF348F08CD35B838C12E559 /* MRSocialAuthPresenter.swift in Sources */,
 				A5A79CBC825406CB69EF0128635E4558 /* MRSocialAuthView.swift in Sources */,
 				841F5D267CCACF684F13DF46CC975005 /* MRSocialAuthRouter.swift in Sources */,
@@ -3171,6 +3184,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Anilibria/Resources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Anilibria;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -3200,6 +3214,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Anilibria/Resources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Anilibria;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (

@@ -76,7 +76,7 @@ public final class MPVPlayerView: UIView, Player, Loggable {
     }
 
     private func initializeMpv() {
-        mpvContext = mpv_create()
+        mpvContext = mpv_create_weak_client(nil, nil)
 
         if mpvContext == nil {
             preconditionFailure("initialization failed")
@@ -194,16 +194,7 @@ public final class MPVPlayerView: UIView, Player, Loggable {
     }
     
     private func tryToLoad(url: URL) {
-        do {
-            try checkError(mpv_command(mpvContext, makeCommand("loadfile", args: url.absoluteString)))
-            delayedAction = DelayedAction(delay: 5) { [weak self] in
-                self?.tryToLoad(url: url)
-            }
-        } catch {
-            delayedAction = DelayedAction(delay: 5) { [weak self] in
-                self?.tryToLoad(url: url)
-            }
-        }
+        try? checkError(mpv_command(mpvContext, makeCommand("loadfile", args: url.absoluteString)))
     }
 
     public func set(time: Double) {
@@ -255,7 +246,10 @@ public final class MPVPlayerView: UIView, Player, Loggable {
         mpv_render_context_set_update_callback(mpvGLContext, nil, nil)
         mpv_render_context_free(mpvGLContext)
         mpv_set_wakeup_callback(mpvContext, nil, nil)
-        mpv_destroy(mpvContext)
+        mpv_terminate_destroy(mpvContext)
+
+        self.mpvEventInterceptor = nil
+        self.mpvGLUpdatesInterceptor = nil
     }
 
     private func handle(event: mpv_event) {
@@ -373,7 +367,7 @@ public final class MPVPlayerView: UIView, Player, Loggable {
     }
 }
 
-private struct MpvEventInterceptor {
+private final class MpvEventInterceptor {
     private let queue: DispatchQueue
     private var mpvContext: OpaquePointer?
     private let eventHandler: (mpv_event) -> Void
@@ -385,7 +379,7 @@ private struct MpvEventInterceptor {
     }
 
     func wakeup() {
-        queue.async { self.readEvent() }
+        queue.async { [weak self] in self?.readEvent() }
     }
 
     private func readEvent() {
@@ -402,7 +396,7 @@ private struct MpvEventInterceptor {
     }
 }
 
-private struct MpvGLUpdatesInterceptor {
+private final class MpvGLUpdatesInterceptor {
     private let actionHandler: () -> Void
 
     init(actionHandler: @escaping () -> Void) {
@@ -410,6 +404,6 @@ private struct MpvGLUpdatesInterceptor {
     }
 
     func needsUpdate() {
-        DispatchQueue.main.async { self.actionHandler() }
+        DispatchQueue.main.async { [weak self] in self?.actionHandler() }
     }
 }

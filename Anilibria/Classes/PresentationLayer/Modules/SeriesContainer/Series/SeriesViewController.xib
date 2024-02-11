@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -271,13 +271,16 @@
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="8Hg-c2-dS8" secondAttribute="trailing" id="5RQ-p7-2Dq"/>
                         <constraint firstAttribute="trailing" secondItem="Tck-c2-HNR" secondAttribute="trailing" id="9OF-2Y-0Ar"/>
-                        <constraint firstItem="8Hg-c2-dS8" firstAttribute="top" secondItem="Tck-c2-HNR" secondAttribute="bottom" id="Cal-Xb-R2U"/>
+                        <constraint firstItem="8Hg-c2-dS8" firstAttribute="top" secondItem="Tck-c2-HNR" secondAttribute="bottom" priority="999" id="Cal-Xb-R2U"/>
                         <constraint firstItem="8Hg-c2-dS8" firstAttribute="top" secondItem="VTk-KK-TSM" secondAttribute="top" id="beq-yg-odk"/>
                         <constraint firstItem="8Hg-c2-dS8" firstAttribute="leading" secondItem="VTk-KK-TSM" secondAttribute="leading" id="miA-Jd-PeJ"/>
                         <constraint firstAttribute="bottom" secondItem="8Hg-c2-dS8" secondAttribute="bottom" id="sK1-xr-PET"/>
                         <constraint firstItem="Tck-c2-HNR" firstAttribute="leading" secondItem="VTk-KK-TSM" secondAttribute="leading" id="sOZ-BT-YKq"/>
                         <constraint firstItem="8Hg-c2-dS8" firstAttribute="width" secondItem="VTk-KK-TSM" secondAttribute="width" id="wbb-al-fMa"/>
+                        <constraint firstItem="Tck-c2-HNR" firstAttribute="top" secondItem="h9k-Ku-hWA" secondAttribute="top" id="y2O-75-dwG"/>
                     </constraints>
+                    <viewLayoutGuide key="contentLayoutGuide" id="jlk-6l-wfD"/>
+                    <viewLayoutGuide key="frameLayoutGuide" id="h9k-Ku-hWA"/>
                 </scrollView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ROA-Jq-GvY" customClass="GradientView" customModule="Anilibria" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="44" width="414" height="5"/>
@@ -305,7 +308,6 @@
                 <constraint firstItem="VTk-KK-TSM" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="Jeh-cl-Doz"/>
                 <constraint firstItem="ROA-Jq-GvY" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="QpP-gi-PGX"/>
                 <constraint firstAttribute="bottom" secondItem="VTk-KK-TSM" secondAttribute="bottom" id="alM-Ok-ZL0"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="top" secondItem="Tck-c2-HNR" secondAttribute="top" id="g3C-Yp-jrA"/>
                 <constraint firstItem="ROA-Jq-GvY" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="veF-B4-BXK"/>
                 <constraint firstItem="ROA-Jq-GvY" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="yby-Nb-4mN"/>
             </constraints>

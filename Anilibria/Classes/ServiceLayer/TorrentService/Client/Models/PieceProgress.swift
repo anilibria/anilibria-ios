@@ -91,7 +91,7 @@ class PieceProgress: Loggable {
             run(isChocked)
         }
     }
-    
+
     private func setTimeout() {
         if delayedAction == nil {
             delayedAction = DelayedAction(delay: 5) { [weak self] in

@@ -14,54 +14,63 @@ enum PeerClientState {
     case initial
     case ready
     case stopped
-    case broken
 }
 
-class PeerClient: NSObject, StreamDelegate, Loggable {
+class PeerClient: NSObject, Loggable {
     var defaultLoggingTag: LogTag { .model }
     
     private let torrent: TorrentData
     private var connection: NWConnection?
     private let queue: DispatchQueue
     private var piceProgress: PieceProgress?
-    private let workQueue: WorkQueue
+    private weak var workQueue: WorkQueueActor?
     private var waitForPiece: AnyCancellable?
     private var timeoutHolder: DelayedAction?
 
     private(set) var isChocked = true
     private(set) var isDownloading = false
     private(set) var bitfield = Bitfield()
-    private var failedPieces = Set<Int>()
     let peer: Peer
 
-    @Published private(set) var state: PeerClientState = .initial {
+    let statePublisher = PassthroughSubject<PeerClientState, Never>()
+    private(set) var state: PeerClientState = .initial {
         didSet {
-            if state == .stopped || state == .broken {
-                if let piece = self.piceProgress?.piece, self.piceProgress?.isCompleted == false {
-                    if connection?.state == .ready {
-                        connection?.cancel()
-                    }
-                    self.piceProgress = nil
-                    self.waitForPiece = nil
-                    workQueue.insert(piece)
-                    log(.verbose, "==> Client \(self.peer.ip): return -- Piece [\(piece)]")
+            if state == .stopped,
+               let piece = self.piceProgress?.piece,
+               self.piceProgress?.isCompleted == false {
+                if connection?.state == .ready {
+                    connection?.cancel()
                 }
+                self.piceProgress = nil
+                self.waitForPiece = nil
+                Task {
+                    await workQueue?.insert(piece)
+                    statePublisher.send(state)
+                    log(.verbose, "==> Client \(peer.ip): return -- Piece [\(piece)]")
+                }
+            } else {
+                statePublisher.send(state)
             }
         }
     }
 
-    init?(torrent: TorrentData, peer: Peer, workQueue: WorkQueue) {
+    init?(
+        torrent: TorrentData,
+        peer: Peer,
+        workQueue: WorkQueueActor,
+        queue: DispatchQueue
+    ) {
         self.torrent = torrent
         self.peer = peer
         self.workQueue = workQueue
-        self.queue = DispatchQueue(label: "peer.queue.\(peer.ip.hashValue)")
+        self.queue = queue
         super.init()
         self.start()
     }
     
     private func start() {
         guard let ip = IPv4Address(peer.ip), let port = NWEndpoint.Port(rawValue: peer.port) else {
-            self.state = .broken
+            self.state = .stopped
             return
         }
         
@@ -104,7 +113,7 @@ class PeerClient: NSObject, StreamDelegate, Loggable {
             }
         case .ready:
             try? readMessage([UInt8](data))
-        case .stopped, .broken:
+        case .stopped:
             break
         }
     }
@@ -195,7 +204,7 @@ class PeerClient: NSObject, StreamDelegate, Loggable {
         case .unchoke:
             self.isChocked = false
             self.piceProgress?.run(isChocked)
-            self.download()
+            Task { await self.download() }
         case .choke:
             self.isChocked = true
             self.piceProgress?.run(isChocked)
@@ -210,37 +219,20 @@ class PeerClient: NSObject, StreamDelegate, Loggable {
         }
     }
 
-    private func download() {
-        if state != .ready || bitfield.isEmpty || isDownloading {
+    private func download() async {
+        guard let workQueue, state == .ready, !bitfield.isEmpty, !isDownloading else {
             return
         }
         waitForPiece = nil
         isDownloading = true
 
-        let isIntersects = workQueue.getBitfield().intersects(bitfield)
-        if isIntersects, let piece = workQueue.next() {
-            download(piece: piece)
+        let hasIntersection = await workQueue.getBitfield().intersects(bitfield)
+        if hasIntersection, let piece = await workQueue.getPiece(for: bitfield) {
+            attemptDownload(piece: piece)
         } else {
             isDownloading = false
-            log(.verbose, "== \(self.peer.ip) - waitForPiece intersects: \(isIntersects)")
-            waitForPiece = workQueue.pieceReturned.first().sink(receiveValue: { [weak self] in
-                self?.download()
-            })
+            state = .stopped
         }
-    }
-
-    private func download(piece: PieceWork) {
-        var piece = piece
-        while !bitfield.hasPiece(index: piece.index) || failedPieces.contains(piece.index) {
-            if let pw = workQueue.exchange(piece) {
-                piece = pw
-            } else {
-                self.state = .stopped
-                return
-            }
-        }
-
-        self.attemptDownload(piece: piece)
     }
 
     private func attemptDownload(piece: PieceWork) {
@@ -248,21 +240,28 @@ class PeerClient: NSObject, StreamDelegate, Loggable {
         piceProgress?.setSender({ [weak self] in self?.send(message: $0)  })
         piceProgress?.setTimeout({ [weak self] in
             guard let self = self else { return }
-            failedPieces.insert(piece.index)
-            self.download(piece: piece)
+            self.bitfield.removePiece(index: piece.index)
+            self.piceProgress = nil
+            Task {
+                await self.workQueue?.insert(piece)
+                await self.download()
+            }
             log(.verbose, "== Client \(self.peer.ip): return -- Piece [\(piece)]")
         })
         piceProgress?.didComplete({ [weak self] (result) in
-            if result.checkIntegrity() {
-                self?.workQueue.set(result: result)
-            } else {
-                var item = result
-                item.reset()
-                self?.workQueue.insert(item)
+            guard let self = self else { return }
+            Task {
+                if result.checkIntegrity() {
+                    await self.workQueue?.set(result: result)
+                } else {
+                    var item = result
+                    item.reset()
+                    await self.workQueue?.insert(item)
+                }
+                self.isDownloading = false
+                self.piceProgress = nil
+                await self.download()
             }
-            self?.isDownloading = false
-            self?.piceProgress = nil
-            self?.download()
         })
 
         piceProgress?.run(isChocked)

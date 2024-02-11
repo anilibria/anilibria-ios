@@ -9,28 +9,68 @@
 import Foundation
 import Combine
 
+actor WorkQueueActor {
+    let queue: WorkQueue
+    private var resultsСontinuation: AsyncStream<PieceWork>.Continuation?
+
+    private(set) lazy var results = AsyncStream<PieceWork> { continuation in
+        resultsСontinuation = continuation
+    }
+
+    init(queue: WorkQueue) {
+        self.queue = queue
+    }
+
+    func getPiece(for target: Bitfield) -> PieceWork? {
+        queue.getPiece(for: target)
+    }
+
+    func insert(_ item: PieceWork) {
+        queue.insert(item)
+    }
+
+    func set(result: PieceWork) {
+        resultsСontinuation?.yield(result)
+    }
+
+    func setCompletedPiece(_ item: PieceWork) {
+        queue.setCompletedPiece(item)
+        if queue.progress.isFinished {
+            resultsСontinuation?.finish()
+        }
+    }
+
+    func getInProgressCount() -> Int {
+        queue.getInProgressCount()
+    }
+
+    func getLeftCount() -> Int {
+        queue.getLeftCount()
+    }
+
+    func getBitfield() -> Bitfield {
+        queue.getBitfield()
+    }
+
+    func getProgress() -> Progress {
+        queue.progress
+    }
+
+    deinit {
+        print("TEST> DEINIT WorkQueueActor")
+    }
+}
+
 class WorkQueue: Codable {
-    private var pieces: [PieceWork] = []
+    private var pieces: [Int: PieceWork] = [:]
     private var inProgressPieces: Set<PieceWork> = []
-    private let lock = NSRecursiveLock()
-
-    private let resultsSubject = PassthroughSubject<PieceWork, Never>()
-    private let pieceReturnedSubject = PassthroughSubject<Void, Never>()
-
-    var results: AnyPublisher<PieceWork, Never> {
-        resultsSubject.eraseToAnyPublisher()
-    }
-
-    var pieceReturned: AnyPublisher<Void, Never> {
-        pieceReturnedSubject.eraseToAnyPublisher()
-    }
 
     private(set) lazy var progress: Progress = Progress(totalUnitCount: Int64(workCount))
 
     let workCount: Int
     private var bitfield = Bitfield()
 
-    init(pieces: [PieceWork]) {
+    init(pieces: [Int: PieceWork]) {
         self.pieces = pieces
         self.workCount = pieces.count
         fillBitfield()
@@ -40,15 +80,15 @@ class WorkQueue: Codable {
         self.workCount = decoder["workCount"] ?? 0
         self.pieces <- decoder["pieces"]
         if let inProgress: [PieceWork] = decoder["inProgressPieces"] {
-            self.pieces.insert(contentsOf: inProgress, at: 0)
+            inProgress.forEach { self.pieces[$0.index] = $0 }
         }
         progress.completedUnitCount = Int64(workCount - pieces.count)
         fillBitfield()
     }
     
     private func fillBitfield() {
-        pieces.forEach {
-            bitfield.setPiece(index: $0.index)
+        pieces.keys.forEach {
+            bitfield.setPiece(index: $0)
         }
     }
 
@@ -60,70 +100,38 @@ class WorkQueue: Codable {
         }
     }
 
-    func next() -> PieceWork? {
-        lock.sync {
-            if pieces.isEmpty { return nil }
-            let item = pieces.removeFirst()
+    func getPiece(for target: Bitfield) -> PieceWork? {
+        if pieces.isEmpty { return nil }
+        if let index = bitfield.intersection(target).getFirstIndex(),
+           let item = pieces[index] {
+            pieces.removeValue(forKey: index)
             bitfield.removePiece(index: item.index)
             inProgressPieces.insert(item)
             return item
         }
-    }
-
-    func exchange(_ item: PieceWork) -> PieceWork? {
-        lock.sync {
-            if pieces.isEmpty {
-                pieces.insert(item, at: 0)
-                bitfield.setPiece(index: item.index)
-                pieceReturnedSubject.send()
-                return nil
-            }
-            let nextItem = pieces.removeFirst()
-            pieces.insert(item, at: 0)
-            bitfield.setPiece(index: item.index)
-            bitfield.removePiece(index: nextItem.index)
-            pieceReturnedSubject.send()
-            return nextItem
-        }
+        return nil
     }
 
     func insert(_ item: PieceWork) {
-        lock.sync {
-            inProgressPieces.remove(item)
-            pieces.insert(item, at: 0)
-            bitfield.setPiece(index: item.index)
-            pieceReturnedSubject.send()
-        }
-    }
-
-    func set(result: PieceWork) {
-        lock.sync {
-            resultsSubject.send(result)
-        }
+        inProgressPieces.remove(item)
+        pieces[item.index] = item
+        bitfield.setPiece(index: item.index)
     }
 
     func setCompletedPiece(_ item: PieceWork) {
-        lock.sync {
-            progress.completedUnitCount += 1
-            inProgressPieces.remove(item)
-        }
+        progress.completedUnitCount += 1
+        inProgressPieces.remove(item)
     }
 
     func getInProgressCount() -> Int {
-        lock.sync {
-            return inProgressPieces.count
-        }
+        inProgressPieces.count
     }
 
     func getLeftCount() -> Int {
-        lock.sync {
-            pieces.count
-        }
+        pieces.count
     }
     
     func getBitfield() -> Bitfield {
-        lock.sync {
-            bitfield
-        }
+        bitfield
     }
 }

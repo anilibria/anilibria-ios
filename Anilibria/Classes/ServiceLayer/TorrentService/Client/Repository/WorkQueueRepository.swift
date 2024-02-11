@@ -17,10 +17,11 @@ class WorkQueueRepository {
             return item
         }
 
-        let pieces = series.torrentFile.position.boundsRange.map { index in
+        var pieces: [Int: PieceWork] = [:]
+        series.torrentFile.position.boundsRange.forEach { index in
             let hash = series.torrent.pieceHashes[index]
             let size = series.torrent.calculatePieceSize(index: index, file: series.torrentFile)
-            return PieceWork(index: index, hash: hash, length: size)
+            pieces[index] = PieceWork(index: index, hash: hash, length: size)
         }
 
         return WorkQueue(pieces: pieces)

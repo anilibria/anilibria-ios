@@ -130,6 +130,14 @@ class TorrentFileWriter {
         }
     }
 
+    func write(piece: PieceWork) async -> Bool {
+        return await withCheckedContinuation { continuation in
+            write(piece: piece) { result in
+                continuation.resume(returning: result)
+            }
+        }
+    }
+
     private func prepare(piece: PieceWork) -> (offset: Int, buffer: [UInt8]) {
         let bounds = series.torrent.calculateBoundsForPiece(index: piece.index, file: series.torrentFile)
         let offset = max(bounds.begin, 0)

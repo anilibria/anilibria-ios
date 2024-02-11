@@ -11,15 +11,16 @@ import Combine
 
 class TorrentClient: Loggable {
     var defaultLoggingTag: LogTag { .model }
-    
+    private let peersQueue = DispatchQueue(label: "peers.queue")
+
     private let workRepository = WorkQueueRepository()
     let series: SeriesFile
     let peers: [Peer]
-    var work: WorkQueue?
 
-    var clients: [PeerClient] = []
+    var clients: Set<PeerClient> = []
 
     var subscribers = Set<AnyCancellable>()
+    private var downloadTask: Task<Void, Never>?
 
     init(series: SeriesFile, peers: [Peer]) {
         self.series = series
@@ -29,64 +30,64 @@ class TorrentClient: Loggable {
     var clientsCount = 0
 
     func download() {
-        var writer = try? TorrentFileWriter(series: series)
-        let work = workRepository.getWork(for: series)
+        let workQueue = workRepository.getWork(for: series)
+        let work = WorkQueueActor(queue: workQueue)
+        self.subscribers.removeAll()
+        self.downloadTask?.cancel()
 
-        let startTime = Date()
-        var downloaded: Double = 0
-        work.results.receive(on: DispatchQueue.main).sink { [weak self] data in
-            guard let self = self else { return }
-            downloaded += Double(data.downloaded)
-            let speed = Int64(downloaded / abs(startTime.timeIntervalSinceNow)).binaryCountFormatted
-            log(.verbose, "=-= Speed: \(speed)/c")
+        downloadTask = Task {
+            let startTime = Date()
+            var downloaded: Double = 0
+            let writer = try? TorrentFileWriter(series: series)
 
-            writer?.write(piece: data) { [weak self] succeeded in
-                guard let self = self else { return }
-                if succeeded {
-                    self.work?.setCompletedPiece(data)
-                    self.saveWork()
-                    let left = self.work?.getLeftCount() ?? 0
-                    let inProgress = self.work?.getInProgressCount() ?? 0
-                    let percentage = Double(Int((self.work?.progress.fractionCompleted ?? 0) * 10000))/100
+            for await data in await work.results {
+                downloaded += Double(data.downloaded)
+                let speed = Int64(downloaded / abs(startTime.timeIntervalSinceNow)).binaryCountFormatted
+                log(.verbose, "=-= Speed: \(speed)/c")
+
+                if await writer?.write(piece: data) == true {
+                    await work.setCompletedPiece(data)
+                    let inProgress = await work.getInProgressCount()
+                    let progress = await work.getProgress()
+                    let left = await work.getLeftCount()
+                    let percentage = Double(Int((progress.fractionCompleted) * 10000))/100
                     let peers = self.clientsCount
                     let info = "Piece [\(data)] - left: \(left) - in progress: \(inProgress) : \(percentage)% peers: \(peers)"
-                    log(.verbose, "== COMPLETE: - \(info)")
-                }
-                
-                if self.work?.progress.isFinished == true {
-                    writer = nil
-                    log(.verbose, "== SUCCESS!!!")
-                    self.subscribers.removeAll()
-                    self.clients = []
+                    self.log(.verbose, "== COMPLETE: - \(info)")
+
+                    if progress.isFinished == true {
+                        self.log(.verbose, "== SUCCESS!!!")
+                        self.subscribers.removeAll()
+                        self.clients = []
+                        try? workRepository.remove(work: work.queue, for: series)
+                    } else {
+                        try? workRepository.update(work: work.queue, for: series)
+                    }
                 }
             }
+        }
 
-        }.store(in: &self.subscribers)
-
-        self.work = work
-
-        self.clients = peers.compactMap {
-            let client = PeerClient(torrent: series.torrent, peer: $0, workQueue: work)
-            client?.$state.withPrevious(startWith: .initial).sink(receiveValue: { [weak self] state in
-                switch state.current {
-                case .ready where state.previous == .initial:
-                    self?.clientsCount += 1
-                case .stopped where state.previous == .ready:
-                    self?.clientsCount -= 1
-                default:
-                    break
-                }
-            }).store(in: &self.subscribers)
+        self.clientsCount = peers.count
+        self.clients = Set(peers.compactMap { peer in
+            let client = PeerClient(torrent: series.torrent, peer: peer, workQueue: work, queue: peersQueue)
+            client?.statePublisher.filter { $0 == .stopped }
+                .first()
+                .sink(receiveValue: { [weak self, weak client] state in
+                    guard let self, let client else { return }
+                    clientsCount -= 1
+                    self.clients.remove(client)
+                    if clientsCount <= 0 {
+                        Task {
+                            let left = await work.getLeftCount()
+                            if left > 0 {
+                                self.log(.verbose, "== clientsCount: \(self.clientsCount) TRY TO RESTART!!!")
+                                self.download()
+                            }
+                        }
+                    }
+                })
+                .store(in: &self.subscribers)
             return client
-        }
-    }
-
-    private func saveWork() {
-        guard let work = work else { return }
-        if work.progress.isFinished == true {
-            try? workRepository.remove(work: work, for: series)
-        } else {
-            try? workRepository.update(work: work, for: series)
-        }
+        })
     }
 }

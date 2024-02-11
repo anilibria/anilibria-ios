@@ -61,4 +61,33 @@ extension Bitfield {
         }
         return bitfield.intersects(self)
     }
+
+    func intersection(_ bitfield: Bitfield) -> Bitfield {
+        if data.count <= bitfield.data.count {
+            var result = self
+            data.enumerated().forEach { item in
+                result.data[item.offset] = bitfield.data[item.offset] & item.element
+            }
+            return result
+        }
+        return bitfield.intersection(self)
+    }
+
+    func getFirstIndex() -> Int? {
+        if isEmpty {
+            return nil
+        }
+
+        guard let byteIndex = data.firstIndex(where: { $0 > 0 }) else { return nil }
+        var offset = 0
+        while offset < 8 {
+            if data[byteIndex] >> (7 - offset) & 1 != 0 {
+                break
+            }
+            offset += 1
+        }
+
+        if offset > 7 { return nil }
+        return byteIndex * 8 + offset
+    }
 }

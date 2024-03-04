@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct TorrentContent {
+struct TorrentContent: Codable {
     let length: Int
     let files: [TorrentFile]
 
@@ -75,7 +75,10 @@ extension TorrentContent {
         let endInset = contentPicesCount * pieceLength - length - beginInset
         assert(endInset >= 0, "Wrong end inset")
 
-        return DataPosition(hashesBounds: (begin, end), dataInsets: (beginInset, endInset))
+        return DataPosition(
+            hashesBounds: .init(begin: begin, end: end),
+            dataInsets: .init(begin: beginInset, end: endInset)
+        )
     }
 
     private static func calculateFloorPiecesCount(_ length: Int, pieceLength: Int) -> Int {

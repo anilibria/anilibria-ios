@@ -23,12 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        if let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-            let trash = directory.appendingPathComponent(".Trash")
-            if FileManager.default.fileExists(atPath: trash.path) {
-                try? FileManager.default.removeItem(at: trash)
-            }
-        }
+        FileManager.default.emptyTrash()
     }
 
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {

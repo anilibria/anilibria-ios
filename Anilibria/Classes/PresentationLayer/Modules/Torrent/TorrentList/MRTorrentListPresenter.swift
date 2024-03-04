@@ -27,7 +27,6 @@ final class TorrentListPresenter {
     private var series: Series!
     private var activity: ActivityDisposable?
     private var bag = Set<AnyCancellable>()
-    private var client: TorrentClient?
 
     let torrentService: TorrentService
 
@@ -50,17 +49,19 @@ extension TorrentListPresenter: TorrentListEventHandler {
         load()
     }
 
-    func select(file: SeriesFile) {
-        if file.status == .ready {
-            open(file: file)
+    func select(model: TorrentListItemViewModel) {
+        if model.item.status == .ready {
+            open(file: model.item)
             return
         }
-        self.torrentService.makeClient(series: file)
+        if model.operation != nil {
+            return
+        }
+        TorrentClient.instance.makeOperation(series: model.item)
             .manageActivity(self.view.showLoading(fullscreen: false))
-            .sink(onNext: { [weak self] client in
-                self?.client = client
-                client.download()
-                self?.open(file: file)
+            .sink(onNext: { [weak model] operation in
+                model?.operation = operation
+                operation.download()
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })
@@ -79,10 +80,15 @@ extension TorrentListPresenter: TorrentListEventHandler {
 
     private func load() {
         guard let url = metadata.url else { return }
-        self.torrentService.fetchTorrentData(for: series, url: url)
+        self.torrentService.fetchTorrentData(for: series.id, url: url)
             .manageActivity(activity)
             .sink(onNext: { [weak self] items in
-                self?.view.set(items: items)
+                self?.view.set(items: items.map({ file in
+                    TorrentListItemViewModel(
+                        item: file,
+                        operation: TorrentClient.instance.getExistingOperation(for: file)
+                    )
+                }))
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })

@@ -30,6 +30,12 @@ public extension Decoder {
 		return try? self.container(keyedBy: K.self)[key]
 	}
 
+    subscript<T, K>(required key: K...) -> () throws -> T where T: Decodable, K: CodingKey {
+        return {
+            let data = try self.container(keyedBy: K.self).find(keys: key)
+            return try data.container.decode(T.self, forKey: data.key)
+        }
+    }
 }
 
 public extension Encoder {
@@ -76,30 +82,26 @@ public extension KeyedDecodingContainer {
 	}
 
 	fileprivate subscript<T>(key: [Key]) -> T? where T: Decodable {
-		if let data = self.find(keys: key) {
+		if let data = try? self.find(keys: key) {
 			return try? data.container.decodeIfPresent(T.self, forKey: data.key)
 		}
 		return nil
 	}
 
-	private func find(keys: [Key]) -> (key: Key, container: KeyedDecodingContainer)? {
-		guard keys.isEmpty == false else { return nil}
+	fileprivate func find(keys: [Key]) throws -> (key: Key, container: KeyedDecodingContainer) {
+		guard keys.isEmpty == false else { fatalError("Can't be empty") }
 
 		if keys.count == 1 {
 			return (keys[0], self)
 		}
 
 		let last = keys.count - 1
-		var container: KeyedDecodingContainer? = self
+		var container: KeyedDecodingContainer = self
 		for index in 0..<last {
-			container = try? container?.nestedContainer(keyedBy: Key.self, forKey: keys[index])
+            container = try container.nestedContainer(keyedBy: Key.self, forKey: keys[index])
 		}
 
-		if let value = container {
-			return (keys[last], value)
-		}
-
-		return nil
+        return (keys[last], container)
 	}
 }
 

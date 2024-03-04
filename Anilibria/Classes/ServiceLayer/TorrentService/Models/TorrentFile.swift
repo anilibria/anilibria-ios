@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct TorrentFile: Hashable {
+struct TorrentFile: Codable, Hashable {
     let name: String
     let path: String
     let length: Int
@@ -26,9 +26,14 @@ struct TorrentFile: Hashable {
     }
 }
 
-struct DataPosition {
-    let hashesBounds: (begin: Int, end: Int)
-    let dataInsets: (begin: Int, end: Int)
+struct DataPosition: Codable {
+    struct Bounds: Codable {
+        let begin: Int
+        let end: Int
+    }
+
+    let hashesBounds: Bounds
+    let dataInsets: Bounds
 }
 
 extension DataPosition {

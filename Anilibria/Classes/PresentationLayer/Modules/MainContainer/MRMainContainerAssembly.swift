@@ -64,7 +64,7 @@ public final class MenuItemsControllersFactory {
         splitview.maximumPrimaryColumnWidth = 2000
         #endif
 
-        splitview.preferredDisplayMode = UISplitViewController.DisplayMode.allVisible
+        splitview.preferredDisplayMode = UISplitViewController.DisplayMode.oneBesideSecondary
 
         if type == .other {
             let history = HistoryAssembly.createModule()

@@ -34,11 +34,11 @@ extension TorrentListViewController: TorrentListViewBehavior {
         self.navigationItem.title = title
     }
 
-    func set(items: [SeriesFile]) {
+    func set(items: [TorrentListItemViewModel]) {
         reload(sections: [SectionAdapter(
             items.map {
-                TorrentFileCellAdapter(viewModel: $0) { [weak self] file in
-                    self?.handler.select(file: file)
+                TorrentFileCellAdapter(viewModel: $0) { [weak self] model in
+                    self?.handler.select(model: model)
                 }
             })
         ])

@@ -9,8 +9,8 @@
 import Foundation
 import Combine
 
-class SeriesFile: Hashable {
-    let series: Series
+class SeriesFile: Codable, Hashable {
+    let seriesID: Int
     let filePath: URL
     let torrentFile: TorrentFile
     let torrent: TorrentData
@@ -29,18 +29,38 @@ class SeriesFile: Hashable {
         }
     }
 
-    init(series: Series, torrent: TorrentData, file: TorrentFile) throws {
-        self.series = series
+    init(seriesID: Int, torrent: TorrentData, file: TorrentFile) throws {
+        self.seriesID = seriesID
         self.torrent = torrent
         self.torrentFile = file
 
         guard
-            let dir = Self.getDirectoryUrl(name: "\(series.id)"),
+            let dir = Self.getDirectoryUrl(name: "\(seriesID)"),
             dir.hasFreeSpace(minCapacity: file.length)
         else { throw AppError.error(code: 1) }
 
         self.filePath = dir.appendingPathComponent(file.name)
+        try updateFileSize()
+    }
 
+    required init(from decoder: Decoder) throws {
+        self.seriesID = try decoder[required: "seriesID"]()
+        self.filePath = try decoder[required: "filePath"]()
+        self.torrentFile = try decoder[required: "torrentFile"]()
+        self.torrent = try decoder[required: "torrent"]()
+        try updateFileSize()
+    }
+
+    func encode(to encoder: Encoder) throws {
+        encoder.apply { values in
+            values["seriesID"] = seriesID
+            values["filePath"] = filePath
+            values["torrentFile"] = torrentFile
+            values["torrent"] = torrent
+        }
+    }
+
+    private func updateFileSize() throws {
         if FileManager.default.fileExists(atPath: filePath.path) {
             let attributes = try FileManager.default.attributesOfItem(atPath: filePath.path)
             fileSize = (attributes[FileAttributeKey.size] as? NSNumber)?.intValue ?? 0

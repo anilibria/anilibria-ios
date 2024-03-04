@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct TorrentData {
+struct TorrentData: Codable {
     let announce: String
     let infoHash: [UInt8]
     let pieceHashes: [[UInt8]]

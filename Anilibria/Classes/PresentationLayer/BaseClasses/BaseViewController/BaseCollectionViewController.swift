@@ -34,19 +34,15 @@ class BaseCollectionViewController: BaseViewController {
     }
     // MARK: - Setup
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(rotated),
-            name: UIDevice.orientationDidChangeNotification,
-            object: nil
-        )
-    }
-
     public override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         self.updateRefreshControlRect()
+    }
+
+    public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
+        collectionView?.collectionViewLayout.invalidateLayout()
     }
 
     // MARK: - Refresh
@@ -80,11 +76,6 @@ class BaseCollectionViewController: BaseViewController {
     @objc
     public func refresh() {
         // override me
-    }
-
-    @objc
-    private func rotated() {
-        self.collectionView.reloadData()
     }
 
     // MARK: - Methods

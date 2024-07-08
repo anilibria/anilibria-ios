@@ -12,6 +12,11 @@ public final class RemovableSeriesCell: DraggableRippleCell {
         .set(color: .darkGray)
         .set(lineBreakMode: .byTruncatingTail)
 
+    public override func awakeFromNib() {
+        super.awakeFromNib()
+        draggableView.swipeOffset = 100
+    }
+
     func configure(_ item: Series) {
         self.imageView.setImage(from: item.poster,
                                 placeholder: UIImage(resource: .imgPlaceholder))
@@ -36,5 +41,9 @@ public final class RemovableSeriesCell: DraggableRippleCell {
         super.apply(layoutAttributes)
         self.layer.zPosition = CGFloat.createFromParts(int: layoutAttributes.indexPath.section,
                                                        fractional: layoutAttributes.indexPath.row)
+    }
+
+    public override func callPrimaryAction() {
+        self.deleteHandler?()
     }
 }

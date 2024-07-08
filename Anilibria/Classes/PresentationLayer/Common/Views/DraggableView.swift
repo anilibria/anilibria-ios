@@ -1,161 +1,264 @@
 import UIKit
 
+public struct FeedbackGenerator {
+
+    public static let `default` = FeedbackGenerator()
+
+    private init() {}
+
+    public func produce(style: UIImpactFeedbackGenerator.FeedbackStyle = .light) {
+        let impactFeedbackgenerator = UIImpactFeedbackGenerator(style: style)
+        impactFeedbackgenerator.prepare()
+        impactFeedbackgenerator.impactOccurred()
+    }
+}
+
+
+import UIKit
+
 public protocol DraggableViewDelegate: AnyObject {
+    func callPrimaryAction()
     func didStart()
     func didEnd(_ isOpen: Bool)
     func progressChanged(value: CGFloat)
 }
 
-public class DraggableView: UIView {
-    fileprivate weak static var openedView: DraggableView?
+public extension DraggableViewDelegate {
+    func callPrimaryAction() {}
+    func didStart() {}
+    func didEnd(_ isOpen: Bool) {}
+    func progressChanged(value: CGFloat) {}
+}
 
-    @IBInspectable public var shiftLenght: CGFloat = 0
+open class DraggableView: UIView {
+    private weak static var activeView: DraggableView?
 
+    @IBOutlet public var contentView: UIView!
+
+    public var swipeOffset: CGFloat = 0
+    public var threshold: CGFloat = 0.6
     public var isDraggingEnabled = true
-    weak var delegate: DraggableViewDelegate?
+    public weak var delegate: DraggableViewDelegate?
 
+    public private(set) var isOpen: Bool = false
+
+    private var needsCallAction: Bool = false
     private var locationX: CGFloat!
     private var startX: CGFloat?
-    private var originalLocation: CGPoint!
-    private(set) var isOpen: Bool = false
-    fileprivate var scrolling: Bool = false
+    private let panRecognizer: UIPanGestureRecognizer = UIPanGestureRecognizer()
+    private let tapRecognizer: UITapGestureRecognizer = UITapGestureRecognizer()
+    private weak var scrollView: UIScrollView?
 
     private var progress: CGFloat = 0 {
         didSet {
             if oldValue != self.progress {
-                self.delegate?.progressChanged(value: self.progress)
+                delegate?.progressChanged(value: self.progress)
             }
         }
     }
 
-    public override func layoutSubviews() {
-        super.layoutSubviews()
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        contentView = UIView()
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(contentView)
+        contentView.constraintEdgesToSuperview(
+            .init(left: .margins(0), right: .margins(0))
+        )
         self.setup()
     }
 
-    // MARK: - public
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        self.setup()
+    }
+
+    open func setup() {
+        isUserInteractionEnabled = true
+        update(position: 0)
+        panRecognizer.addTarget(self, action: #selector(self.panAction(gesture:)))
+        panRecognizer.delegate = self
+        addGestureRecognizer(panRecognizer)
+
+        tapRecognizer.addTarget(self, action: #selector(self.tapAction(gesture:)))
+        tapRecognizer.delegate = self
+        addGestureRecognizer(tapRecognizer)
+    }
+
+    deinit {
+        scrollView?.panGestureRecognizer.removeTarget(self, action: nil)
+    }
+
+    public override func didMoveToWindow() {
+        super.didMoveToWindow()
+        var view: UIView = self
+        while let superview = view.superview {
+            view = superview
+
+            if let collectionView = view as? UIScrollView {
+                self.scrollView = collectionView
+
+                scrollView?.panGestureRecognizer.removeTarget(self, action: nil)
+                scrollView?.panGestureRecognizer.addTarget(self, action: #selector(handleScrollPan(gesture:)))
+                return
+            }
+        }
+    }
 
     public func open() {
-        self.progress = 1
-        self.isOpen = true
-        self.delegate?.didEnd(self.isOpen)
-        if DraggableView.openedView != self {
-            DraggableView.openedView?.close(true)
-            DraggableView.openedView = self
+        progress = 1
+        isOpen = true
+        delegate?.didEnd(self.isOpen)
+        if DraggableView.activeView != self {
+            DraggableView.activeView?.close(true)
+            DraggableView.activeView = self
         }
-        UIView.animate(withDuration: 0.2,
-                       delay: 0,
-                       options: .curveEaseOut,
-                       animations: {
-                           self.transform = CGAffineTransform(translationX: -self.shiftLenght, y: 0)
-                       },
-                       completion: nil)
+
+        update(position: swipeOffset)
+        apply(animation: true, action: {
+            self.layoutIfNeeded()
+        })
     }
 
     public func close(_ animation: Bool = false) {
-        if self.isOpen == false {
-            return
+        cancelPan()
+        isOpen = false
+        delegate?.didEnd(isOpen)
+        if DraggableView.activeView == self {
+            DraggableView.activeView = nil
         }
-        self.progress = 0
-        self.isOpen = false
-        self.delegate?.didEnd(self.isOpen)
-        if animation {
-            UIView.animate(withDuration: 0.2,
-                           delay: 0,
-                           options: .curveEaseOut,
-                           animations: {
-                               self.transform = CGAffineTransform(translationX: 0, y: 0)
-                           },
-                           completion: nil)
-        } else {
-            self.transform = CGAffineTransform(translationX: 0, y: 0)
+        update(position: 0)
+        apply(animation: animation) {
+            self.layoutIfNeeded()
+        } completion: {
+            self.progress = 0
         }
     }
 
     public func toggle() {
         if let startLocationX = startX {
-            if self.locationX - startLocationX < 0 {
-                self.open()
+            if locationX - startLocationX < 0 {
+                open()
             } else {
-                self.close(true)
+                close(true)
             }
         } else {
-            self.close(true)
+            close(true)
         }
     }
 
-    // MARK: - Animate
-
-    private func setup() {
-        if self.originalLocation == nil && self.isDraggingEnabled {
-            self.originalLocation = CGPoint(x: self.center.x, y: self.center.y)
-            self.transform = CGAffineTransform(translationX: 0, y: 0)
-            self.setupGestureRecornizer()
+    private func apply(animation: Bool,
+                       action: @escaping () -> Void,
+                       completion: (() -> Void)? = nil) {
+        if animation {
+            UIView.animate(withDuration: 0.4,
+                           delay: 0,
+                           usingSpringWithDamping: 1,
+                           initialSpringVelocity: 1,
+                           options: .curveEaseInOut,
+                           animations: action,
+                           completion: { _ in  completion?() })
+        } else {
+            action()
+            completion?()
         }
     }
 
-    private func setupGestureRecornizer() {
-        let p = UIPanGestureRecognizer(target: self, action: #selector(self.panAction(gesture:)))
-        p.maximumNumberOfTouches = 1
-        p.delegate = self
-        self.addGestureRecognizer(p)
+    @objc private func handleScrollPan(gesture: UIPanGestureRecognizer) {
+        if gesture.state == .began {
+            DraggableView.activeView?.close(true)
+        }
     }
 
-    @objc func panAction(gesture: UIPanGestureRecognizer) {
-        if self.scrolling { return }
-        let t = gesture.translation(in: nil)
-        var translation = ceil(t.x)
+    @objc private func tapAction(gesture: UIPanGestureRecognizer) {
+        DraggableView.activeView?.close(true)
+    }
 
-        if self.isOpen {
-            translation -= self.shiftLenght
+    @objc private func panAction(gesture: UIPanGestureRecognizer) {
+        var translation = ceil(gesture.translation(in: nil).x)
+
+        if isOpen {
+            translation -= swipeOffset
         }
+
+        if gesture.state == .began {
+            if DraggableView.activeView != self &&
+                DraggableView.activeView != nil &&
+                DraggableView.activeView?.isOpen == false {
+                return
+            }
+
+            if DraggableView.activeView != self {
+                DraggableView.activeView?.close(true)
+                DraggableView.activeView = self
+            }
+
+            delegate?.didStart()
+            startX = ceil(gesture.location(in: nil).x)
+            return
+        }
+
+        if DraggableView.activeView != self { return }
 
         switch gesture.state {
-        case .began:
-            self.delegate?.didStart()
-            self.startX = ceil(gesture.location(in: nil).x)
-        case .ended:
-            self.locationX = ceil(gesture.location(in: nil).x)
-            self.toggle()
-        default:
-            if -translation > self.shiftLenght {
-                self.transform = CGAffineTransform(translationX: -self.shiftLenght, y: 0)
-                self.progress = 1
+        case .changed:
+            if -translation > swipeOffset {
+                update(position: -translation)
+                progress = 1
             } else if translation > 0 {
-                self.transform = CGAffineTransform(translationX: 0, y: 0)
-                self.progress = 0
+                update(position: 0)
+                progress = 0
             } else {
-                self.transform = CGAffineTransform(translationX: translation, y: 0)
-                self.progress = abs(translation / self.shiftLenght)
+                update(position: -translation)
+                progress = abs(translation / swipeOffset)
             }
+            setNeeedsCall(abs(translation / self.bounds.width) >= threshold)
+        case .ended, .failed, .cancelled:
+            locationX = ceil(gesture.location(in: nil).x)
+            if needsCallAction {
+                needsCallAction = false
+                delegate?.callPrimaryAction()
+                close(true)
+            } else {
+                toggle()
+            }
+        default:
+            break
         }
+    }
+
+    private func cancelPan() {
+        panRecognizer.isEnabled = false
+        panRecognizer.isEnabled = true
+    }
+
+    private func setNeeedsCall(_ value: Bool) {
+        if needsCallAction != value {
+            needsCallAction = value
+            FeedbackGenerator.default.produce()
+        }
+    }
+
+    private func update(position: CGFloat) {
+        layoutMargins.left = -position
+        layoutMargins.right = position
     }
 }
 
 extension DraggableView: UIGestureRecognizerDelegate {
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
-                                  shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        if let translation = (gestureRecognizer as? UIPanGestureRecognizer)?.translation(in: nil) {
-            self.scrolling = false
-            if abs(translation.x) < abs(translation.y) {
-                self.scrolling = true
-                DraggableView.openedView?.close(true)
-                return true
-            } else if translation.x < 0 {
-                return false
-            } else {
-                if self.progress == 0 {
-                    gestureRecognizer.isEnabled = false
-                    gestureRecognizer.isEnabled = true
-                    DraggableView.openedView?.close(true)
-                }
-                return self.progress == 0
-            }
-        }
-        return false
-    }
-
     public override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if !isDraggingEnabled { return false }
+
+        if gestureRecognizer == tapRecognizer {
+            return DraggableView.activeView != nil
+        }
+
+        if gestureRecognizer == panRecognizer {
+            let view = panRecognizer.view
+            let translation = panRecognizer.translation(in: view)
+            return abs(translation.y) <= abs(translation.x)
+        }
+
         return true
     }
 }

@@ -1,6 +1,6 @@
 import UIKit
 
-public class DraggableRippleCell: RippleViewCell {
+public class DraggableRippleCell: RippleViewCell, DraggableViewDelegate {
     @IBOutlet var draggableView: DraggableView!
 
     public override func prepareForReuse() {
@@ -12,12 +12,6 @@ public class DraggableRippleCell: RippleViewCell {
         super.awakeFromNib()
         self.draggableView.delegate = self
     }
-}
 
-extension DraggableRippleCell: DraggableViewDelegate {
-    public func didStart() {}
-
-    public func progressChanged(value: CGFloat) {}
-
-    public func didEnd(_ isOpen: Bool) {}
+    public func callPrimaryAction() {}
 }

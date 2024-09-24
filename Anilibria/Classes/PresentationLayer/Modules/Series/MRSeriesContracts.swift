@@ -23,4 +23,5 @@ protocol SeriesEventHandler: ViewControllerEventHandler {
 
     func favorite()
     func donate()
+    func share()
 }

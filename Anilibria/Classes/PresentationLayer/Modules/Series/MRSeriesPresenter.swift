@@ -134,10 +134,16 @@ extension SeriesPresenter: SeriesEventHandler {
             .manageActivity(self.view.showLoading(fullscreen: false))
             .sink(onNext: { [weak self] in
                 self?.router.openAlert(message: L10n.Screen.Series.downloaded(name, Constants.downloadFolder))
-                }, onError: { [weak self] error in
-                    self?.router.show(error: error)
+            }, onError: { [weak self] error in
+                self?.router.show(error: error)
             })
             .store(in: &bag)
+    }
+
+    func share() {
+        if let url = URLHelper.releaseUrl(self.series) {
+            self.router.openShare(items: [url])
+        }
     }
 }
 

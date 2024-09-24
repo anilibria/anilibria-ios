@@ -25,7 +25,6 @@ final class FeedServiceImp: FeedService {
     let backendRepository: BackendRepository
 
     private var filterData: FilterData?
-    private var comments: VKComments?
 
     init(backendRepository: BackendRepository) {
         self.backendRepository = backendRepository
@@ -116,38 +115,6 @@ final class FeedServiceImp: FeedService {
 
     func series(with code: String) -> AnyPublisher<Series, Error> {
         return Deferred { [unowned self] in
-            Publishers.Zip(self.fetchComments(code: code),self.fetchSeries(code: code))
-                .map {
-                    $1.comments = $0
-                    return $1
-                }
-        }
-        .subscribe(on: DispatchQueue.global())
-        .receive(on: DispatchQueue.main)
-        .eraseToAnyPublisher()
-    }
-
-    private func fetchComments(code: String) -> AnyPublisher<VKComments, Error> {
-        return Deferred { [unowned self] in
-            if let comments = self.comments {
-                return  AnyPublisher<VKComments, Error>.just(comments.generateUrl(for: code))
-            }
-            let request = CommentsRequest()
-            return self.backendRepository
-                .request(request)
-                .do(onNext: { [unowned self] item in
-                    self.comments = item
-                })
-                .map { $0.generateUrl(for: code) }
-                .eraseToAnyPublisher()
-        }
-        .subscribe(on: DispatchQueue.global())
-        .receive(on: DispatchQueue.main)
-        .eraseToAnyPublisher()
-    }
-
-    private func fetchSeries(code: String) -> AnyPublisher<Series, Error> {
-        return Deferred { [unowned self] in
             let request = SeriesRequest(code: code)
             return self.backendRepository
                 .request(request)
@@ -156,6 +123,7 @@ final class FeedServiceImp: FeedService {
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
+
 
     func fetchFiltedData() -> AnyPublisher<FilterData, Error> {
         return Deferred { [unowned self] in

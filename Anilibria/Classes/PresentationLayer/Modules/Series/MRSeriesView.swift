@@ -65,8 +65,17 @@ final class SeriesViewController: BaseViewController {
 
     override func setupStrings() {
         super.setupStrings()
-        self.handler.didLoad()
+        self.navigationItem.title = L10n.Screen.Series.title
         self.supportLabel.text = L10n.Common.donatePls
+        self.handler.didLoad()
+    }
+
+    private func setupNavigationButtons() {
+        let item = BarButton(image: UIImage(resource: .iconShare),
+                             imageEdge: inset(8, 0, 10, 0)) { [weak self] in
+            self?.handler.share()
+        }
+        self.navigationItem.setRightBarButtonItems([item], animated: false)
     }
 
     private func setupHeader() {

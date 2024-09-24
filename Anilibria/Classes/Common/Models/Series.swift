@@ -27,7 +27,6 @@ public final class Series: NSObject, Codable {
     var desc: NSAttributedString?
     var playlist: [PlaylistItem] = []
     var favorite: Favorite?
-    var comments: VKComments?
     var torrents: [Torrent] = []
 
     private var originalDesc: String = ""

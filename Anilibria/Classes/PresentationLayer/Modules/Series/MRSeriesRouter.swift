@@ -6,6 +6,7 @@ protocol SeriesRoutable: BaseRoutable,
     BackRoute,
     PlayerRoute,
     AppUrlRoute,
-    AlertRoute {}
+    AlertRoute,
+    ShareRoute {}
 
 final class SeriesRouter: BaseRouter, SeriesRoutable {}

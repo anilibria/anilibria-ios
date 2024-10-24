@@ -5,16 +5,13 @@ public protocol AppTheme {
 
     // MARK: - Colors
 
-    var white: UIColor { get }
-    var black: UIColor { get }
-    var red: UIColor { get }
-    var darkRed: UIColor { get }
-
     var defaultFont: AppFont? { get }
 }
 
 public struct MainTheme: AppTheme {
     public static var shared: AppTheme = MainTheme()
+
+    private init() {}
 
     public func apply() {
         self.configureNavBar()
@@ -27,29 +24,22 @@ public struct MainTheme: AppTheme {
         navbar.isTranslucent = true
         navbar.isOpaque = false
         navbar.titleTextAttributes = [
-            .foregroundColor: black,
+            .foregroundColor: UIColor(resource: .Text.main),
             .font: UIFont.font(ofSize: 17, weight: .medium)
         ]
-        navbar.barTintColor = self.white
-        navbar.tintColor = black
+        navbar.barTintColor = UIColor(resource: .Surfaces.background)
+        navbar.tintColor = UIColor(resource: .Tint.main)
         navbar.shadowImage = UIImage()
     }
 
     func configureTextView() {
-        UITextView.appearance().tintColor = self.black
-        UITextField.appearance().tintColor = self.black
+        UITextView.appearance().tintColor = UIColor(resource: .Tint.main)
+        UITextField.appearance().tintColor = UIColor(resource: .Tint.main)
     }
 
     func configureCollectionView() {
         UICollectionView.appearance().isPrefetchingEnabled = false
     }
-
-    // MARK: - Colors
-
-    public var white: UIColor = .white
-    public var black: UIColor = .black
-    public var red: UIColor = .red
-    public var darkRed: UIColor = #colorLiteral(red: 0.707420184, green: 0, blue: 0, alpha: 1)
 
     // MARK: - Font
 

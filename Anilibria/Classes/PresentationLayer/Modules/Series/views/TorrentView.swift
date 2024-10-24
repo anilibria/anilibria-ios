@@ -20,18 +20,18 @@ public final class TorrentView: UIView {
 
     private func getTitle(from torrent: Torrent) -> String {
         let dateFormatter = FormatterFactory.date("dd.MM.yyyy HH:mm").create()
-        let date = dateFormatter.string(from: torrent.ctime) ?? ""
+        let date = dateFormatter.string(from: torrent.updatedAt) ?? ""
         return """
-               \(torrent.series) [\(torrent.quality)]
+               \(torrent.description)
 
                \(L10n.Screen.Series.addedDate) \(date)
                """
     }
 
     private func getInfo(from torrent: Torrent) -> String {
-        let size = round((torrent.size / pow(1024, 3)) * 100) / 100
+        let size = ByteCountFormatter.string(fromByteCount: torrent.size, countStyle: .binary)
         return """
-               \(size) GB
+               \(size)
                ↑ \(torrent.seeders)
                ↓ \(torrent.leechers)
                ✓ \(torrent.completed)

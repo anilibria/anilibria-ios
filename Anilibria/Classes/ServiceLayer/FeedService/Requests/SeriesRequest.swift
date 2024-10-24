@@ -1,14 +1,14 @@
 public struct SeriesRequest: BackendAPIRequest {
     typealias ResponseObject = Series
 
-    private(set) var endpoint: String = "/public/api/index.php"
-    private(set) var method: NetworkManager.Method = .POST
-    private(set) var parameters: [String: Any]
+    let endpoint: String
+    let method: NetworkManager.Method = .GET
 
-    init(code: String) {
-        self.parameters = [
-            "query": "release",
-            "code": code
-        ]
+    init(alias: String) {
+        endpoint = "/anime/releases/\(alias)"
+    }
+
+    init(id: Int) {
+        endpoint = "/anime/releases/\(id)"
     }
 }

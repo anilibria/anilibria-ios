@@ -45,23 +45,8 @@ final class AppConfigurationServiceImp: AppConfigurationService {
     }
 
     func startConfiguration() -> AnyPublisher<ConfigurationState, Error> {
-        return self.loadConfig()
-            .flatMap { [unowned self] in
-                if let old = self.configRepository.getCurrentSettings() {
-                    old.next = $0
-                    return self.applySettingsAndCheck(old)
-                }
-                return self.applySettingsAndCheck($0)
-            }
-            .do(onNext: { [unowned self] settings in
-                self.configRepository.setCurrent(settings: settings)
-            })
-            .map { _ in ConfigurationState.completed }
-            .receive(on: DispatchQueue.main)
-            .do(onNext: { [weak self] state in
-                self?.statusRelay.send(state)
-            })
-            .eraseToAnyPublisher()
+        self.manualComplete()
+        return .just(.completed)
     }
 
     func manualComplete() {

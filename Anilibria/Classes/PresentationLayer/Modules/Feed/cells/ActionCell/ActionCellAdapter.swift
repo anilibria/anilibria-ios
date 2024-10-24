@@ -17,11 +17,11 @@ public final class ActionItem: NSObject {
 final class ActionCellAdapter: BaseCellAdapter<ActionItem> {
     private var size: CGSize?
 
-    override func sizeForItem(at index: IndexPath,
-                              collectionView: UICollectionView,
-                              layout collectionViewLayout: UICollectionViewLayout) -> CGSize {
-        return  CGSize(width: collectionView.frame.width, height: 60)
-    }
+//    override func sizeForItem(at index: IndexPath,
+//                              collectionView: UICollectionView,
+//                              layout collectionViewLayout: UICollectionViewLayout) -> CGSize {
+//        return  CGSize(width: collectionView.frame.width, height: 60)
+//    }
 
     override func cellForItem(at index: IndexPath, context: CollectionContext) -> UICollectionViewCell? {
         let cell = context.dequeueReusableNibCell(type: ActionCell.self, for: index)

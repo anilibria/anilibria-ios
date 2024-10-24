@@ -46,12 +46,21 @@ open class NetworkManager: Loggable {
         return configuration
     }
 
-    func request(url: URL,
-                 method: Method,
-                 params: [String: Any]? = nil,
-                 headers: [String: String]? = nil) -> AnyPublisher<NetworkResponse, Error> {
-
-        let request = self.createRequest(url: url, method: method, params: params, headers: headers)
+    func request(
+        url: URL,
+        method: Method,
+        body: (any Encodable)? = nil,
+        params: [String: Any]? = nil,
+        headers: [String: String]? = nil
+    ) -> AnyPublisher<NetworkResponse, Error> {
+        
+        let request = self.createRequest(
+            url: url,
+            method: method,
+            params: params,
+            body: body,
+            headers: headers
+        )
         self.log(.debug, request.curl)
 
         var retryNumber = 0
@@ -98,16 +107,12 @@ open class NetworkManager: Loggable {
     private func createRequest(url: URL,
                                method: Method,
                                params: [String: Any]?,
+                               body: (any Encodable)?,
                                headers: [String: String]?) -> URLRequest {
         var requestURL: URL = url
         let parameterString = params?.stringFromHttpParameters()
-        var bodyData: Data?
         if let values = parameterString {
-            if method == .GET {
-                requestURL = URL(string: "\(url)?\(values)")!
-            } else {
-                bodyData = values.data(using: .utf8)
-            }
+            requestURL = URL(string: "\(url)?\(values)")!
         }
 
         var request = URLRequest(url: requestURL,
@@ -124,7 +129,7 @@ open class NetworkManager: Loggable {
         request.httpMethod = method.rawValue
         request.httpShouldHandleCookies = true
 
-        if let data = bodyData {
+        if let item = body, let data = try? JSONEncoder().encode(item) {
             request.httpBody = data
         }
 
@@ -142,14 +147,14 @@ extension URLRequest {
         let complement = "\\\n"
         let method = "-X \(self.httpMethod ?? "GET") \(complement)"
         let urlAbsoluteString: String = url?.absoluteString ?? ""
-        let url = "\"\(urlAbsoluteString)\""
+        let url = "'\(urlAbsoluteString)'"
 
         let header = self.allHTTPHeaderFields?.reduce("", { (result, data) -> String in
-            return result + "-H \"\(data.key): \(data.value)\" \(complement)"
+            return result + "-H '\(data.key): \(data.value)' \(complement)"
         }) ?? ""
 
-        if let bodyData = self.httpBody, let bodyString = String(data:bodyData, encoding:.utf8) {
-            data = "-d \"\(bodyString)\" \(complement)"
+        if let bodyData = self.httpBody, let bodyString = String(data: bodyData, encoding: .utf8) {
+            data = "-d '\(bodyString)' \(complement)"
         }
 
         let command = "curl -i " + complement + method + header + data + url

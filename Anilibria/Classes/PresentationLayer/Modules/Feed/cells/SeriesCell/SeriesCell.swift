@@ -18,17 +18,13 @@ public final class SeriesCell: RippleViewCell {
     func configure(_ item: Series) {
         self.imageView.setImage(from: item.poster,
                                 placeholder: UIImage(resource: .imgPlaceholder))
-        let name = item.names.first ?? ""
-        if item.count.isEmpty {
+        let name = item.name?.main ?? ""
+        if item.episodesTotal == 0 {
             self.titleLabel.text = name
         } else {
-            self.titleLabel.text = "\(name) (\(item.count))"
+            self.titleLabel.text = "\(name) (\(item.episodesTotal))"
         }
-        if let value = item.desc {
-            self.descLabel.attributedText = Self.textBuilder.build(value.string)
-        } else {
-            self.descLabel.text = ""
-        }
+        self.descLabel.attributedText = Self.textBuilder.build(item.desc)
     }
 
     public override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {

@@ -24,7 +24,7 @@ final class FeedPresenter {
     private var schedules: [Schedule] = []
     private let updates = TitleItem(L10n.Screen.Feed.updatesTitle)
    
-    private var nextPage: Int = 0
+    private var nextPage: Int = 1
     private var pageSubscriber: AnyCancellable?
 
     private lazy var randomSeries = ActionItem(L10n.Screen.Feed.randomRelease) { [weak self] in
@@ -85,7 +85,7 @@ extension FeedPresenter: FeedEventHandler {
     }
 
     func select(series: Series) {
-        self.feedService.series(with: series.code)
+        self.feedService.series(with: series.alias)
             .manageActivity(self.view.showLoading(fullscreen: false))
             .sink(onNext: { [weak self] item in
                 self?.router.open(series: item)
@@ -121,7 +121,7 @@ extension FeedPresenter: FeedEventHandler {
     }
 
     private func load() {
-        nextPage = 0
+        nextPage = 1
         
         Publishers.Zip(
             self.feedService.fetchSchedule(),
@@ -166,15 +166,19 @@ extension FeedPresenter: FeedEventHandler {
             scheduleBlock.append(scheduleAction)
         }
        
-        
-        let items = scheduleBlock + 
-            [randomSeries, history, updates] +
-            feeds.compactMap { $0.value } +
-            [pagination]
+
+        var items: [any Hashable] = []
+        items.append(contentsOf: scheduleBlock)
+        items.append(randomSeries)
+        items.append(history)
+        items.append(updates)
+        items.append(contentsOf: feeds.compactMap { $0.value })
+        items.append(pagination)
         self.view.set(items: items)
     }
 
     private func append(_ feeds: [Feed]) {
-        self.view.append(items: feeds.compactMap { $0.value } + [pagination])
+        let items: [any Hashable] = feeds.compactMap { $0.value }
+        self.view.append(items: items + [pagination])
     }
 }

@@ -71,6 +71,10 @@ internal enum L10n {
   }
 
   internal enum Common {
+    /// По умолчанию
+    internal static var `default`: String {
+        return L10n.tr("Localizable", "common.default")
+    }
     /// Понравилась озвучка?\nПоддержи проект :3
     internal static var donatePls: String {
         return L10n.tr("Localizable", "common.donate_pls")
@@ -349,6 +353,10 @@ internal enum L10n {
     }
 
     internal enum Filter {
+      /// Возрастной рейтинг
+      internal static var ageRatings: String {
+          return L10n.tr("Localizable", "screen.filter.age_ratings")
+      }
       /// Релиз завершен
       internal static var complete: String {
           return L10n.tr("Localizable", "screen.filter.complete")
@@ -356,6 +364,14 @@ internal enum L10n {
       /// Жанры
       internal static var genres: String {
           return L10n.tr("Localizable", "screen.filter.genres")
+      }
+      /// Статус озвучки
+      internal static var productionStatuses: String {
+          return L10n.tr("Localizable", "screen.filter.production_statuses")
+      }
+      /// Статус выхода
+      internal static var publishStatuses: String {
+          return L10n.tr("Localizable", "screen.filter.publish_statuses")
       }
       /// Сезоны
       internal static var seasons: String {
@@ -365,9 +381,13 @@ internal enum L10n {
       internal static var sotring: String {
           return L10n.tr("Localizable", "screen.filter.sotring")
       }
-      /// Фильтер
+      /// Фильтр
       internal static var title: String {
           return L10n.tr("Localizable", "screen.filter.title")
+      }
+      /// Тип
+      internal static var types: String {
+          return L10n.tr("Localizable", "screen.filter.types")
       }
       /// Года
       internal static var years: String {

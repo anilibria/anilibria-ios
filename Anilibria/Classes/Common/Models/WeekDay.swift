@@ -1,13 +1,13 @@
 import Foundation
 
-public enum WeekDay: String, Codable, CaseIterable {
-    case mon = "1"
-    case tue = "2"
-    case wen = "3"
-    case thu = "4"
-    case fri = "5"
-    case sat = "6"
-    case sun = "7"
+public enum WeekDay: Int, Codable, CaseIterable {
+    case mon = 1
+    case tue
+    case wen
+    case thu
+    case fri
+    case sat
+    case sun
 
     var name: String {
         switch self {
@@ -66,6 +66,9 @@ public enum WeekDay: String, Codable, CaseIterable {
         if weekDay == 0 {
             weekDay = 7
         }
-        return WeekDay(rawValue: "\(weekDay)")!
+        if let day = WeekDay(rawValue: weekDay) {
+            return day
+        }
+        preconditionFailure("should not happen")
     }
 }

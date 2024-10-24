@@ -36,7 +36,7 @@ extension SchedulePresenter: ScheduleEventHandler {
     }
 
     func select(series: Series) {
-        self.feedService.series(with: series.code)
+        self.feedService.series(with: series.alias)
             .manageActivity(self.view.showLoading(fullscreen: false))
             .sink(onNext: { [weak self] item in
                 self?.router.open(series: item)

@@ -16,7 +16,7 @@ class PaginationCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        indicatorView.lineColor = MainTheme.shared.black
+        indicatorView.lineColor = UIColor(resource: .Tint.main)
     }
     
     override func prepareForReuse() {

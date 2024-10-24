@@ -61,28 +61,9 @@ class CollectionContent {
     }
 }
 
-class CompositeSectionAdapter: SectionAdapterProtocol {
-    private let uid = UUID()
-    private var items: [any SectionAdapterProtocol]
-
-    func getIdentifier() -> AnyHashable {
-        uid
-    }
-
-    init(_ items: [any SectionAdapterProtocol]) {
-        self.items = items
-    }
-
-    func getItems() -> [any CellAdapterProtocol] {
-        items.reduce([any CellAdapterProtocol]()) { partialResult, section in
-            partialResult + section.getItems()
-        }
-    }
-}
-
 class SectionAdapter: SectionAdapterProtocol {
     let uid = UUID()
-    var insets: UIEdgeInsets = .zero
+    var insets: NSDirectionalEdgeInsets = .zero
     var minimumLineSpacing: CGFloat = 0
     var minimumInteritemSpacing: CGFloat = 0
     private(set) var items: [any CellAdapterProtocol] = []
@@ -106,22 +87,26 @@ class SectionAdapter: SectionAdapterProtocol {
         items
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        insetForSectionAt section: Int) -> UIEdgeInsets {
-        insets
-    }
+    func getSectionLayout(environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(50)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        minimumLineSpacing
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        minimumInteritemSpacing
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(50)
+        )
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: groupSize,
+            subitems: [item]
+        )
+        group.interItemSpacing = .flexible(minimumInteritemSpacing)
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = insets
+        section.interGroupSpacing = minimumLineSpacing
+        return section
     }
 }
 
@@ -132,36 +117,21 @@ protocol CellAdaptersProvider {
 protocol SectionAdapterProtocol: AnyObject, CellAdaptersProvider {
     func getIdentifier() -> AnyHashable
 
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        insetForSectionAt section: Int) -> UIEdgeInsets
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumLineSpacingForSectionAt section: Int) -> CGFloat
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat
+    func getSectionLayout(environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection?
+    func supplementaryFor(
+        elementKind: String,
+        index: IndexPath,
+        context: CollectionContext
+    ) -> UICollectionReusableView?
 }
 
 extension SectionAdapterProtocol {
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        insetForSectionAt section: Int) -> UIEdgeInsets {
-        .zero
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        0
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        0
+    func supplementaryFor(
+        elementKind: String,
+        index: IndexPath,
+        context: CollectionContext
+    ) -> UICollectionReusableView? {
+        nil
     }
 }
 
@@ -169,7 +139,6 @@ protocol CellAdapterProtocol: Hashable, AnyObject {
     // must be weak
     var section: (any SectionAdapterProtocol)? { get set }
 
-    func sizeForItem(at index: IndexPath, collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout) -> CGSize
     func cellForItem(at index: IndexPath, context: CollectionContext) -> UICollectionViewCell?
     func didSelect(at index: IndexPath)
     func willDisplay(at index: IndexPath)
@@ -201,8 +170,4 @@ class BaseCellAdapter<T: Hashable>: CellAdapterProtocol {
     func didSelect(at index: IndexPath) {}
     
     func willDisplay(at index: IndexPath) {}
-
-    func sizeForItem(at index: IndexPath, collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout) -> CGSize {
-        .zero
-    }
 }

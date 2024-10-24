@@ -14,11 +14,11 @@ final class SearchResultAdapter: BaseCellAdapter<SearchValue> {
         super.init(viewModel: viewModel)
     }
 
-    override func sizeForItem(at index: IndexPath,
-                              collectionView: UICollectionView,
-                              layout collectionViewLayout: UICollectionViewLayout) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: 50)
-    }
+//    override func sizeForItem(at index: IndexPath,
+//                              collectionView: UICollectionView,
+//                              layout collectionViewLayout: UICollectionViewLayout) -> CGSize {
+//        return CGSize(width: collectionView.frame.width, height: 50)
+//    }
 
     override func cellForItem(at index: IndexPath, context: CollectionContext) -> UICollectionViewCell? {
         let cell = context.dequeueReusableNibCell(type: SearchResultCell.self, for: index)

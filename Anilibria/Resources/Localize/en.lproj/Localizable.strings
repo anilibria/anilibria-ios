@@ -65,6 +65,8 @@
 "common.donate_pls" = "Do you like our voice acting?\nPlease support our project :3";
 "common.guest" = "Guest";
 
+"common.default" = "Default";
+
 //PERMISSION
 "permission.title" = "Permission";
 "permission.push" = "To recieve push notifications you should enable it on the iOS Settings.";
@@ -82,11 +84,6 @@
 "screen.feed.updates_title" = "Updates";
 "screen.feed.random_release" = "Randome release";
 "screen.feed.history" = "History";
-
-//FILTER SCREEN
-"screen.filter.genres" = "Genres";
-"screen.filter.years" = "Years";
-"screen.filter.seasons" = "Seasons";
 
 //SERIES SCREEN
 "screen.series.title" = "Description";
@@ -114,6 +111,7 @@
 "screen.settings.language" = "Language";
 "screen.settings.video_quality" = "Video quality";
 "screen.settings.about_app" = "About";
+
 //STUB VIEW
 "stub.title" = "Empty";
 "stub.favorite.message" = "Your favorite series will be here";
@@ -129,6 +127,13 @@
 "screen.filter.sotring" = "Sorting";
 "screen.filter.Sotring.popularity" = "Popularity";
 "screen.filter.Sotring.newest" = "Newest";
+"screen.filter.genres" = "Genres";
+"screen.filter.years" = "Years";
+"screen.filter.seasons" = "Seasons";
+"screen.filter.publish_statuses" = "Publish statuses";
+"screen.filter.production_statuses" = "Production statuses";
+"screen.filter.types" = "Types";
+"screen.filter.age_ratings" = "Age ratings";
 
 //OTHER SCREEN
 "screen.other.team" = "Our team";

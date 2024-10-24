@@ -50,7 +50,7 @@ final class CatalogViewController: BaseCollectionViewController {
         self.navigationItem.setRightBarButtonItems(items ,animated: false)
     }
 
-    private func createAdapter(for model: NSObject) -> (any CellAdapterProtocol)? {
+    private func createAdapter(for model: any Hashable) -> (any CellAdapterProtocol)? {
         switch model {
         case let item as Series:
             return SeriesCellAdapter(viewModel: item, seclect: { [weak self] item in
@@ -65,17 +65,21 @@ final class CatalogViewController: BaseCollectionViewController {
 }
 
 extension CatalogViewController: CatalogViewBehavior {
-    func set(items: [NSObject]) {
+    func set(items: [any Hashable]) {
         self.collectionView.contentOffset = CGPoint(x: 0, y: -collectionView.contentInset.top)
         self.reload(sections: [SectionAdapter(items.compactMap(createAdapter))])
     }
 
-    func append(items: [NSObject]) {
+    func append(items: [any Hashable]) {
         append(sections: [SectionAdapter(items.compactMap(createAdapter))])
     }
 
     func setFilter(active: Bool) {
-        self.filterButton.tintColor = active ? MainTheme.shared.red : MainTheme.shared.black
+        self.filterButton.tintColor = if active {
+            UIColor(resource: .Tint.active)
+        } else {
+            UIColor(resource: .Tint.main)
+        }
     }
 
     func loadPageProgress() -> ActivityDisposable? {

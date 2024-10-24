@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -25,7 +23,8 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0WA-yS-LvH">
                                 <rect key="frame" x="16" y="5" width="28" height="40"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="0WA-yS-LvH" secondAttribute="height" multiplier="7:10" id="YfH-LL-BCy"/>
+                                    <constraint firstAttribute="width" constant="28" id="tVh-2E-Jmi"/>
+                                    <constraint firstAttribute="height" constant="40" id="zd3-2K-AZi"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -34,7 +33,7 @@
                                 </userDefinedRuntimeAttributes>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zMv-0q-8EP">
-                                <rect key="frame" x="54" y="16" width="250" height="18"/>
+                                <rect key="frame" x="54" y="5" width="250" height="40"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -53,25 +52,26 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="zMv-0q-8EP" firstAttribute="top" secondItem="xfx-8L-QRy" secondAttribute="top" constant="5" id="7i0-rm-rm7"/>
                             <constraint firstItem="aZM-Jy-hzz" firstAttribute="centerY" secondItem="0WA-yS-LvH" secondAttribute="centerY" id="9SB-Zq-kjr"/>
-                            <constraint firstAttribute="bottom" secondItem="0WA-yS-LvH" secondAttribute="bottom" constant="5" id="J1g-Kb-6tx"/>
                             <constraint firstAttribute="trailing" secondItem="zMv-0q-8EP" secondAttribute="trailing" constant="16" id="Kgc-yG-t0i"/>
-                            <constraint firstItem="zMv-0q-8EP" firstAttribute="centerY" secondItem="xfx-8L-QRy" secondAttribute="centerY" id="Yba-pI-m0b"/>
                             <constraint firstItem="0WA-yS-LvH" firstAttribute="leading" secondItem="xfx-8L-QRy" secondAttribute="leading" constant="16" id="bkn-qh-2Eo"/>
                             <constraint firstItem="aZM-Jy-hzz" firstAttribute="centerX" secondItem="0WA-yS-LvH" secondAttribute="centerX" id="bpS-XT-keQ"/>
                             <constraint firstItem="zMv-0q-8EP" firstAttribute="leading" secondItem="0WA-yS-LvH" secondAttribute="trailing" constant="10" id="hY3-9O-pSi"/>
+                            <constraint firstAttribute="bottom" secondItem="zMv-0q-8EP" secondAttribute="bottom" constant="5" id="j05-JQ-hkZ"/>
                             <constraint firstItem="0WA-yS-LvH" firstAttribute="top" secondItem="xfx-8L-QRy" secondAttribute="top" constant="5" id="py6-Zf-p6V"/>
+                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="0WA-yS-LvH" secondAttribute="bottom" constant="5" id="vaR-RB-ZQF"/>
                         </constraints>
                     </view>
                 </subviews>
             </view>
+            <viewLayoutGuide key="safeArea" id="Kgj-yR-kTf"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="xfx-8L-QRy" secondAttribute="bottom" id="5Zx-D6-klb"/>
                 <constraint firstItem="xfx-8L-QRy" firstAttribute="top" secondItem="Iqt-2O-7bU" secondAttribute="top" id="EgM-QL-a70"/>
                 <constraint firstItem="xfx-8L-QRy" firstAttribute="leading" secondItem="Iqt-2O-7bU" secondAttribute="leading" id="FOk-LV-7L6"/>
                 <constraint firstAttribute="trailing" secondItem="xfx-8L-QRy" secondAttribute="trailing" id="ol5-dp-125"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="Kgj-yR-kTf"/>
             <userDefinedRuntimeAttributes>
                 <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
                     <color key="value" red="0.086274509799999996" green="0.14901960780000001" blue="0.21960784310000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

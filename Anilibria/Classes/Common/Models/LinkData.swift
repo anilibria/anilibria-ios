@@ -46,26 +46,26 @@ public final class LinkData: NSObject, Codable {
         return self.sitePagePath
     }
 
-    public init(from decoder: Decoder) throws {
-        super.init()
-		self.title <- decoder["title"]
-		self.absoluteLink <- decoder["absoluteLink"] <- URLConverter(Configuration.server)
-		self.sitePagePath <- decoder["sitePagePath"] <- URLConverter(Configuration.server)
-		self.linkType <- decoder["icon"]
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        encoder.apply { values in
-            values["title"] = self.title
-            values["icon"] = self.linkType
-
-            if let link = self.absoluteLink?.absoluteString {
-                values["absoluteLink"] = link
-            }
-
-            if let link = self.sitePagePath?.absoluteString {
-                values["sitePagePath"] = link
-            }
-        }
-    }
+//    public init(from decoder: Decoder) throws {
+//        super.init()
+//		self.title <- decoder["title"]
+//		self.absoluteLink <- decoder["absoluteLink"] <- URLConverter(Configuration.server)
+//		self.sitePagePath <- decoder["sitePagePath"] <- URLConverter(Configuration.server)
+//		self.linkType <- decoder["icon"]
+//    }
+//
+//    public func encode(to encoder: Encoder) throws {
+//        encoder.apply { values in
+//            values["title"] = self.title
+//            values["icon"] = self.linkType
+//
+//            if let link = self.absoluteLink?.absoluteString {
+//                values["absoluteLink"] = link
+//            }
+//
+//            if let link = self.sitePagePath?.absoluteString {
+//                values["sitePagePath"] = link
+//            }
+//        }
+//    }
 }

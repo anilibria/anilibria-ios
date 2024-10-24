@@ -21,8 +21,8 @@ final class NewsPresenter {
     private var bag = Set<AnyCancellable>()
     private var activity: ActivityDisposable?
     private var pageSubscriber: AnyCancellable?
-    private var nextPage: Int = 0
-    
+    private var nextPage: Int = 1
+
     private lazy var pagination = PaginationViewModel { [weak self] completion in
         self?.loadPage(completion: completion)
     }
@@ -53,7 +53,7 @@ extension NewsPresenter: NewsEventHandler {
     }
     
     private func load() {
-        nextPage = 0
+        nextPage = 1
         pageSubscriber = feedService.fetchNews(page: nextPage)
             .sink(onNext: { [weak self] items in
                 self?.nextPage += 1

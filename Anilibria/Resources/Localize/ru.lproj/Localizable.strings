@@ -65,6 +65,8 @@
 "common.donate_pls" = "Понравилась озвучка?\nПоддержи проект :3";
 "common.guest" = "Гость";
 
+"common.default" = "По умолчанию";
+
 //PERMISSION
 "permission.title" = "Разрешение";
 "permission.push" = "Для работы уведомлений вы должны разрешить \"Допуск уведомлений\".\nРазрешение можно установить через \"Настройки\"";
@@ -82,11 +84,6 @@
 "screen.feed.updates_title" = "Обновления";
 "screen.feed.random_release" = "Случайный релиз";
 "screen.feed.history" = "История";
-
-//FILTER SCREEN
-"screen.filter.genres" = "Жанры";
-"screen.filter.years" = "Года";
-"screen.filter.seasons" = "Сезоны";
 
 //SERIES SCREEN
 "screen.series.title" = "Описание";
@@ -125,11 +122,18 @@
 "screen.configuration.title" = "Обновление конфигурации";
 
 //FILTER SCREEN
-"screen.filter.title" = "Фильтер";
+"screen.filter.title" = "Фильтр";
 "screen.filter.complete" = "Релиз завершен";
 "screen.filter.sotring" = "Сортировка";
 "screen.filter.Sotring.popularity" = "Популярность";
 "screen.filter.Sotring.newest" = "Новизна";
+"screen.filter.genres" = "Жанры";
+"screen.filter.years" = "Года";
+"screen.filter.seasons" = "Сезоны";
+"screen.filter.publish_statuses" = "Статус выхода";
+"screen.filter.production_statuses" = "Статус озвучки";
+"screen.filter.types" = "Тип";
+"screen.filter.age_ratings" = "Возрастной рейтинг";
 
 //OTHER SCREEN
 "screen.other.team" = "Список команды";

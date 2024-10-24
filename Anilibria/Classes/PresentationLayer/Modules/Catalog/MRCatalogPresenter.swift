@@ -16,20 +16,20 @@ final class CatalogPresenter {
     private weak var view: CatalogViewBehavior!
     private var router: CatalogRoutable!
 
-    private let feedService: FeedService
+    private let catalogService: CatalogService
 
     private var activity: ActivityDisposable?
     private var bag = Set<AnyCancellable>()
     private var pageSubscriber: AnyCancellable?
     private var filter: SeriesFilter = SeriesFilter()
-    private var nextPage: Int = 0
-    
+    private var nextPage: Int = 1
+
     private lazy var pagination = PaginationViewModel { [weak self] completion in
         self?.loadPage(completion: completion)
     }
 
-    init(feedService: FeedService) {
-        self.feedService = feedService
+    init(catalogService: CatalogService) {
+        self.catalogService = catalogService
     }
 }
 
@@ -79,18 +79,22 @@ extension CatalogPresenter: CatalogEventHandler {
     }
 
     func select(series: Series) {
-        self.feedService.series(with: series.code)
-            .manageActivity(self.view.showLoading(fullscreen: false))
-            .sink(onNext: { [weak self] item in
-                self?.router.open(series: item)
-            }, onError: { [weak self] error in
-                self?.router.show(error: error)
-            })
-            .store(in: &bag)
+        if !series.playlist.isEmpty {
+            router.open(series: series)
+        } else {
+            self.catalogService.fetchSeries(id: series.id)
+                .manageActivity(self.view.showLoading(fullscreen: false))
+                .sink(onNext: { [weak self] item in
+                    self?.router.open(series: item)
+                }, onError: { [weak self] error in
+                    self?.router.show(error: error)
+                })
+                .store(in: &bag)
+        }
     }
 
     func openFilter() {
-        self.feedService.fetchFiltedData()
+        self.catalogService.fetchFiltedData()
             .manageActivity(self.view.showLoading(fullscreen: false))
             .sink(onNext: { [weak self] data in
                 self?.router.open(filter: self!.filter, data: data)
@@ -105,8 +109,8 @@ extension CatalogPresenter: CatalogEventHandler {
     }
     
     private func load() {
-        nextPage = 0
-        pageSubscriber = feedService.fetchCatalog(page: nextPage, filter: filter)
+        nextPage = 1
+        pageSubscriber = catalogService.fetchCatalog(page: nextPage, filter: filter)
             .sink(onNext: { [weak self] feeds in
                 self?.nextPage += 1
                 self?.set(items: feeds)
@@ -118,7 +122,7 @@ extension CatalogPresenter: CatalogEventHandler {
     }
     
     private func loadPage(completion: @escaping Action<Bool>) {
-        pageSubscriber = feedService.fetchCatalog(page: nextPage, filter: filter)
+        pageSubscriber = catalogService.fetchCatalog(page: nextPage, filter: filter)
             .sink(onNext: { [weak self] feeds in
                 self?.nextPage += 1
                 self?.append(items: feeds)

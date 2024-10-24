@@ -59,13 +59,28 @@ public class CollectionContext {
     ) -> ViewType {
         let identifier = String(describing: type)
         if registeredSupplementaries[value]?.contains(identifier) != true {
-            self.collectioView?.register(ViewType.self, forSupplementaryViewOfKind: value, withReuseIdentifier: identifier)
-            if registeredSupplementaries[value] == nil {
-                registeredSupplementaries[value] = []
-            }
-            self.registeredCells.insert(identifier)
+            collectioView?.register(ViewType.self, forSupplementaryViewOfKind: value, withReuseIdentifier: identifier)
+            registeredSupplementaries[value, default: []].insert(identifier)
         }
-        let view = self.collectioView?.dequeueReusableSupplementaryView(ofKind: value, withReuseIdentifier: identifier, for: indexPath)
+        let view = collectioView?.dequeueReusableSupplementaryView(ofKind: value, withReuseIdentifier: identifier, for: indexPath)
+        guard let result = view as? ViewType else {
+            preconditionFailure("collectioView is nil or SupplementaryView not registered")
+        }
+        return result
+    }
+
+    public func dequeueReusableNibSupplementaryView<ViewType: UICollectionReusableView>(
+        type: ViewType.Type,
+        ofKind value: String,
+        for indexPath: IndexPath
+    ) -> ViewType {
+        let nibName = String(describing: type)
+        if registeredSupplementaries[value]?.contains(nibName) != true {
+            let nib = UINib(nibName: nibName, bundle: nil)
+            self.collectioView?.register(nib, forSupplementaryViewOfKind: value, withReuseIdentifier: nibName)
+            registeredSupplementaries[value, default: []].insert(nibName)
+        }
+        let view = collectioView?.dequeueReusableSupplementaryView(ofKind: value, withReuseIdentifier: nibName, for: indexPath)
         guard let result = view as? ViewType else {
             preconditionFailure("collectioView is nil or SupplementaryView not registered")
         }

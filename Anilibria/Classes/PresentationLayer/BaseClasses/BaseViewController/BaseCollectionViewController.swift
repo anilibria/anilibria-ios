@@ -47,13 +47,13 @@ class BaseCollectionViewController: BaseViewController {
 
     // MARK: - Refresh
 
-    public func addRefreshControl(color: UIColor = MainTheme.shared.black) {
+    public func addRefreshControl(color: UIColor? = nil) {
         if self.refreshControl != nil {
             return
         }
         self.collectionView.alwaysBounceVertical = true
         self.refreshControl = RefreshIndicator(style: .prominent)
-        self.refreshControl?.indicator.lineColor = color
+        self.refreshControl?.indicator.lineColor = color ?? UIColor(resource: .Text.main)
         self.collectionView.addSubview(self.refreshControl!)
         self.refreshControl?.addTarget(self,
                                        action: #selector(self.refresh),

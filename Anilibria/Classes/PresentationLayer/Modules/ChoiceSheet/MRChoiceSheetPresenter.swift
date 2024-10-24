@@ -9,6 +9,40 @@ final class ChoiceSheetPart: DIPart {
     }
 }
 
+private protocol ChoiceValue {
+    func select() -> Bool
+}
+
+private struct SomeChoiceValue<T>: ChoiceValue {
+    let value: T
+    let didSelect: (T) -> Bool
+
+    func select() -> Bool {
+        return didSelect(value)
+    }
+}
+
+public final class ChoiceItem: NSObject {
+    private let value: any ChoiceValue
+    let title: String
+    let isSelected: Bool
+
+    init<T>(
+        value: T,
+        title: String,
+        isSelected: Bool,
+        didSelect: @escaping (T) -> Bool
+    ) {
+        self.value = SomeChoiceValue(value: value, didSelect: didSelect)
+        self.title = title
+        self.isSelected = isSelected
+    }
+
+    fileprivate func select() -> Bool {
+        value.select()
+    }
+}
+
 // MARK: - Presenter
 
 final class ChoiceSheetPresenter {
@@ -27,12 +61,7 @@ extension ChoiceSheetPresenter: ChoiceSheetEventHandler {
     }
 
     func didLoad() {
-        self.view.set(items: self.items.map {
-            $0.didSelect = { [weak self] item in
-                self?.select(item: item)
-            }
-            return $0
-        })
+        self.view.set(items: self.items)
     }
 
     func back() {
@@ -40,12 +69,8 @@ extension ChoiceSheetPresenter: ChoiceSheetEventHandler {
     }
 
     func select(item: ChoiceItem) {
-        let command = ChoiceResult(value: item.value)
-        self.router.execute(command)
-        self.router.back()
+        if item.select() {
+            router.back()
+        }
     }
-}
-
-public struct ChoiceResult: RouteCommand {
-    let value: Any
 }

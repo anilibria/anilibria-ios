@@ -42,7 +42,8 @@ private class ServicesPart: DIPart {
         MenuServicePart.self,
         FeedServicePart.self,
         LinksServicePart.self,
-        DownloadServicePart.self
+        DownloadServicePart.self,
+        CatalogServicePart.self
     ]
 
     static func load(container: DIContainer) {

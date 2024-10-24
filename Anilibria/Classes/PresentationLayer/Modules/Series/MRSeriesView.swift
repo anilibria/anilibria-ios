@@ -52,14 +52,15 @@ final class SeriesViewController: BaseViewController {
         self.paramsTextView.setTapLink(handler: action)
         self.descTextView.setTapLink(handler: action)
 
+        let color = UIColor(resource: .Tint.active)
         self.paramsTextView.linkTextAttributes = [
-            .foregroundColor: MainTheme.shared.red,
-            .underlineColor: MainTheme.shared.red
+            .foregroundColor: color,
+            .underlineColor: color
         ]
 
         self.descTextView.linkTextAttributes = [
-            .foregroundColor: MainTheme.shared.red,
-            .underlineColor: MainTheme.shared.red
+            .foregroundColor: color,
+            .underlineColor: color
         ]
     }
 
@@ -124,31 +125,26 @@ extension SeriesViewController: SeriesViewBehavior {
     }
 
     func set(favorite: Bool, count: Int) {
-        let theme = MainTheme.shared
-        self.favoriteStarView.tintColor = favorite ? theme.darkRed : .darkGray
+        self.favoriteStarView.tintColor = .darkGray
         self.favoriteCountLabel.text = "\(count)"
     }
 
     func set(series: Series) {
         self.header.configure(series)
 
-        self.set(names: series.names)
+        self.set(name: series.name)
         self.setParams(from: series)
-        if let desc = series.desc {
-            self.set(desc: desc)
-        }
+        self.set(desc: series.desc)
 
-        self.anonceLabel.text = series.announce
+        self.anonceLabel.text = series.notification
 
-        if series.statusCode == .finished {
-            self.weekDaysContainer.isHidden = true
+        if let publishDay = series.publishDay, series.isOngoing {
+            self.weekDayViews.first(where: { $0.day == publishDay.value })?.isSelected = true
         } else {
-            if let day = series.day {
-                self.weekDayViews.first(where: { $0.day == day })?.isSelected = true
-            }
+            self.weekDaysContainer.isHidden = true
         }
 
-        if series.announce.isEmpty {
+        if series.notification.isEmpty {
             self.anonceLabel.isHidden = true
         }
 
@@ -174,11 +170,11 @@ extension SeriesViewController: SeriesViewBehavior {
         }
     }
 
-    func set(names: [String]) {
-        self.titleLabel.text = names.first
+    func set(name: SeriesName?) {
+        self.titleLabel.text = name?.main
 
-        if names.count > 1 {
-            self.seconTitleLabel.text = names.last
+        if name?.english.isEmpty == false {
+            self.seconTitleLabel.text = name?.english
         }
     }
 
@@ -186,29 +182,36 @@ extension SeriesViewController: SeriesViewBehavior {
         let strings = L10n.Screen.Series.self
         var result: NSMutableAttributedString = .init()
 
-        if series.year.isEmpty == false {
+        if let year = series.year {
             let title = self.boldTextBuilder.build(strings.year)
-            let value = self.regularTextBuilder.build("\(series.year)\n")
+            let value = self.regularTextBuilder.build("\(year)\n")
             result = result + title + value
         }
 
-        if series.voices.isEmpty == false {
-            let title = self.boldTextBuilder.build(strings.voices)
-            let value = self.regularTextBuilder.build("\(series.voices.joined(separator: ", "))\n")
-            result = result + title + value
+        if  series.members.isEmpty != false {
+            let members = Dictionary(grouping: series.members) { member in
+                member.role?.value
+            }
+
+            members.forEach { _, values in
+                let role = values.first?.role?.description ?? ""
+                let title = self.boldTextBuilder.build("\(role):")
+                let value = self.regularTextBuilder.build("\(values.lazy.map { $0.name }.joined(separator: ", "))\n")
+                result = result + title + value
+            }
         }
 
-        if series.type.isEmpty == false {
+        if let type = series.type {
             let title = self.boldTextBuilder.build(strings.type)
-            let value = self.regularTextBuilder.build("\(series.type)\n")
+            let value = self.regularTextBuilder.build("\(type.description)\n")
             result = result + title + value
         }
 
-        if series.status.isEmpty == false {
-            let title = self.boldTextBuilder.build(strings.status)
-            let value = self.regularTextBuilder.build("\(series.status)\n")
-            result = result + title + value
-        }
+//        if series.status.isEmpty == false {
+//            let title = self.boldTextBuilder.build(strings.status)
+//            let value = self.regularTextBuilder.build("\(series.status)\n")
+//            result = result + title + value
+//        }
 
         if series.genres.isEmpty == false {
             var data = self.boldTextBuilder.build(strings.genres)
@@ -217,9 +220,9 @@ extension SeriesViewController: SeriesViewBehavior {
             let last = series.genres.last
 
             for genre in series.genres {
-                if let url = URL(attributeLinkValue: genre) {
+                if let url = URL(attributeLinkValue: "\(genre.id)") {
                     linkBuilder.set(link: url)
-                    data = data + linkBuilder.build(genre)
+                    data = data + linkBuilder.build(genre.name)
                     if genre == last {
                         data = data + self.regularTextBuilder.build("\n")
                     } else {
@@ -234,8 +237,8 @@ extension SeriesViewController: SeriesViewBehavior {
         self.paramsTextView.attributedText = result
     }
 
-    func set(desc: NSAttributedString) {
-        self.descTextView.attributedText = desc
+    func set(desc: String) {
+        self.descTextView.text = desc
     }
 }
 
@@ -284,8 +287,8 @@ public final class WeekDayView: CircleView {
     var isSelected: Bool = false {
         didSet {
             if self.isSelected {
-                self.backgroundColor = MainTheme.shared.darkRed
-                self.titleLabel.textColor = MainTheme.shared.white
+                self.backgroundColor = UIColor(resource: .Buttons.selected)
+                self.titleLabel.textColor = UIColor(resource: .Text.reversedMain)
                 self.borderThickness = 0
             } else {
                 self.backgroundColor = .clear

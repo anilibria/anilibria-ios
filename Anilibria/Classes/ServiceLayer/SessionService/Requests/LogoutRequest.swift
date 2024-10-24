@@ -4,7 +4,6 @@ public struct LogoutRequest: BackendAPIRequest {
     private(set) var endpoint: String = "/public/logout.php"
     private(set) var method: NetworkManager.Method = .POST
     private(set) var parameters: [String: Any] = [:]
-    var customResponseConverter: BackendResponseConverter? = FullDataResponseConverter()
 
     init() {}
 }

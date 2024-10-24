@@ -1,21 +1,24 @@
 import Foundation
 
-public struct User: Codable {
-    private(set) var id: Int = 0
-    private(set) var name: String = ""
-    private(set) var avatar: URL?
+public struct User: Codable, Hashable {
+    let id: Int
+    let name: String
+    let avatar: URL?
 
     public init(from decoder: Decoder) throws {
-		self.id <- decoder["id"]
-		self.name <- decoder["login"]
-		self.avatar <- decoder["avatar"] <- URLConverter(Configuration.imageServer)
+        let container = try decoder.container(keyedBy: CodingKeyString.self)
+        self.id = try container.decode(required: "id")
+		self.name = container.decode("nickname") ?? ""
+        self.avatar = URLConverter(Configuration.imageServer).convert(
+            from: container.decode("avatar", "preview")
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        encoder.apply { values in
+        encoder.apply(CodingKeyString.self) { values in
             values["id"] = id
-            values["login"] = name
-            values["avatar"] = avatar?.absoluteString
+            values["nickname"] = name
+            values["avatar"]["preview"] = avatar?.absoluteString
         }
     }
 }

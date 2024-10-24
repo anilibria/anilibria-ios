@@ -12,8 +12,10 @@ public struct ServerResponse: Decodable {
     private(set) var error: AppError?
 
     public init(from decoder: Decoder) throws {
-        self.key <- decoder["key"]
-		self.message <- decoder["mes"]
-		self.error <- decoder["err"] <- ErrorConverter()
+        let container = try decoder.container(keyedBy: CodingKeyString.self)
+        self.key = container.decode("key") ?? .unknown
+		self.message = container.decode("message") ?? ""
+        let text: String? = container.decode("err")
+        self.error = ErrorConverter().convert(from: text)
     }
 }

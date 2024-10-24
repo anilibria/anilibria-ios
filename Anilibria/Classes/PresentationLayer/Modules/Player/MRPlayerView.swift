@@ -206,7 +206,7 @@ final class PlayerViewController: BaseViewController {
     }
     
     private func updateSkipButton(time: Int) {
-        if let canSkip = currentListItem?.skips?.canSkip(
+        if let canSkip = currentListItem?.skips.canSkip(
             time: time,
             length: skipButtonShowingSeconds
         ), canSkip {
@@ -344,8 +344,7 @@ final class PlayerViewController: BaseViewController {
         let currentTime = Int(videoSliderView.value)
         guard
             let currentListItem = currentListItem,
-            let skips = currentListItem.skips,
-            let endTime = skips.upperBound(time: currentTime),
+            let endTime = currentListItem.skips.upperBound(time: currentTime),
             endTime > currentTime
         else {
             return

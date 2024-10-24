@@ -6,7 +6,7 @@ final class ScheduleSeriesCell: RippleViewCell {
     @IBOutlet var releaseTitleLabel: UILabel!
 
     func configure(_ item: Series) {
-        self.releaseTitleLabel.text = item.names.first
+        self.releaseTitleLabel.text = item.name?.main
         self.releaseTitleLabel.superview?.isHidden = true
 
         self.imageView.setImage(from: item.poster,
@@ -23,8 +23,8 @@ final class ScheduleSeriesCell: RippleViewCell {
     }
 
     private func renderIndicator(_ item: Series) {
-        let hasUpdates = item.hasUpdates()
-        self.releaseIndicatorView.forEach { $0.isHidden = !hasUpdates }
+//        let hasUpdates = item.hasUpdates()
+        self.releaseIndicatorView.forEach { $0.isHidden = true }
     }
 
     static func size(with width: CGFloat, gap: CGFloat) -> CGSize {

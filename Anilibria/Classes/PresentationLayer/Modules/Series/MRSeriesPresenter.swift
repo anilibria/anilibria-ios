@@ -47,8 +47,7 @@ extension SeriesPresenter: SeriesEventHandler {
     func didLoad() {
         bag.removeAll()
         self.view.set(series: self.series)
-        self.view.set(favorite: self.series.favorite?.added ?? false,
-                      count: self.series.favorite?.rating ?? 0)
+        self.view.set(favorite: false, count: self.series.addedInUsersFavorites)
 
         self.view.can(watch: self.series.playlist.isEmpty == false)
         self.sessionService
@@ -65,10 +64,10 @@ extension SeriesPresenter: SeriesEventHandler {
     }
 
     func select(genre: String) {
-        var filter = SeriesFilter()
-        filter.genres = [genre]
-        let command = FilterRouteCommand(value: filter)
-        self.router.execute(command)
+//        var filter = SeriesFilter()
+//        filter.genres = [genre]
+//        let command = FilterRouteCommand(value: filter)
+//        self.router.execute(command)
     }
 
     func select(url: URL) {
@@ -80,24 +79,24 @@ extension SeriesPresenter: SeriesEventHandler {
     }
 
     func favorite() {
-        if let favorite = self.series.favorite {
-            let added = !favorite.added
-            let command = FavoriteCommand(added: added,
-                                          value: self.series)
-            self.favoriteService
-                .favorite(add: added, series: self.series)
-                .manageActivity(self.view.showLoading(fullscreen: false))
-                .sink(onNext: { [weak self] _ in
-                    favorite.added = added
-                    let value = added ? 1 : -1
-                    favorite.rating += value
-                    self?.view.set(favorite: added, count: favorite.rating)
-                    self?.router.execute(command)
-                }, onError: { [weak self] error in
-                    self?.router.show(error: error)
-                })
-                .store(in: &bag)
-        }
+//        if let favorite = self.series.favorite {
+//            let added = !favorite.added
+//            let command = FavoriteCommand(added: added,
+//                                          value: self.series)
+//            self.favoriteService
+//                .favorite(add: added, series: self.series)
+//                .manageActivity(self.view.showLoading(fullscreen: false))
+//                .sink(onNext: { [weak self] _ in
+//                    favorite.added = added
+//                    let value = added ? 1 : -1
+//                    favorite.rating += value
+//                    self?.view.set(favorite: added, count: favorite.rating)
+//                    self?.router.execute(command)
+//                }, onError: { [weak self] error in
+//                    self?.router.show(error: error)
+//                })
+//                .store(in: &bag)
+//        }
     }
 
     func donate() {
@@ -128,16 +127,16 @@ extension SeriesPresenter: SeriesEventHandler {
     }
 
     func download(torrent: Torrent) {
-        var name = self.series.names.last ?? self.series.code
-        name.removingRegexMatches(pattern: "[^A-Za-z0-9]+", replaceWith: "_")
-        self.downloadService.download(torrent: torrent, fileName: name)
-            .manageActivity(self.view.showLoading(fullscreen: false))
-            .sink(onNext: { [weak self] in
-                self?.router.openAlert(message: L10n.Screen.Series.downloaded(name, Constants.downloadFolder))
-            }, onError: { [weak self] error in
-                self?.router.show(error: error)
-            })
-            .store(in: &bag)
+//        var name = self.series.names.last ?? self.series.code
+//        name.removingRegexMatches(pattern: "[^A-Za-z0-9]+", replaceWith: "_")
+//        self.downloadService.download(torrent: torrent, fileName: name)
+//            .manageActivity(self.view.showLoading(fullscreen: false))
+//            .sink(onNext: { [weak self] in
+//                self?.router.openAlert(message: L10n.Screen.Series.downloaded(name, Constants.downloadFolder))
+//            }, onError: { [weak self] error in
+//                self?.router.show(error: error)
+//            })
+//            .store(in: &bag)
     }
 
     func share() {

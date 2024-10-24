@@ -36,14 +36,12 @@ struct AniProxy: Codable {
 final class AniSettings: Codable {
     let server: String
     let images: String
-    let widget: String
     let proxy: AniProxy?
     var next: AniSettings?
 
     init(address: AniAddress, proxy: AniProxy?) {
         self.server = address.base
         self.images = address.baseImages
-        self.widget = address.widgetsSite
         self.proxy = proxy
     }
 
@@ -70,15 +68,13 @@ final class AniSettings: Codable {
         return result
     }
 
-    private init(server: String, images: String, widget: String) {
+    private init(server: String, images: String) {
         self.server = server
         self.images = images
-        self.widget = widget
         self.proxy = nil
         self.next = nil
     }
 
-    static let `default`: AniSettings = AniSettings(server: "https://www.anilibria.tv",
-                                                    images: "https://www.anilibria.tv",
-                                                    widget: "https://www.anilibria.tv")
+    static let `default`: AniSettings = AniSettings(server: "https://anilibria.top",
+                                                    images: "https://anilibria.top")
 }

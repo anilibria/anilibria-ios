@@ -71,7 +71,7 @@ extension FavoritePresenter: FavoriteEventHandler {
 
             if query.isEmpty == false {
                 result = result.filter {
-                    $0.names.contains(where: { $0.lowercased().contains(query) })
+                    ($0.name?.main ?? "").contains(where: { $0.lowercased().contains(query) })
                 }
             }
 
@@ -94,7 +94,7 @@ extension FavoritePresenter: FavoriteEventHandler {
     }
 
     func select(series: Series) {
-        self.feedService.series(with: series.code)
+        self.feedService.series(with: series.alias)
             .manageActivity(self.view.showLoading(fullscreen: false))
             .sink(onNext: { [weak self] item in
                 self?.router.open(series: item)

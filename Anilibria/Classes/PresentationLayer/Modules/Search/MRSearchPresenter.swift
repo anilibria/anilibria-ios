@@ -39,6 +39,10 @@ extension SearchPresenter: SearchEventHandler {
 
     func search(query: String) {
         self.currentQuery = query
+        if query.isEmpty {
+            handle([])
+            return
+        }
         self.cancellable = feedService.search(query: query)
             .sink(onNext: { [weak self] items in
                 self?.handle(items)

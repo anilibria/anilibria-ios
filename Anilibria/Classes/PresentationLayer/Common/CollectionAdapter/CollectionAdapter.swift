@@ -25,6 +25,18 @@ class CollectionViewAdapter: NSObject {
         self.context = CollectionContext(collectionView)
         super.init()
         self.dataSource = makeDataSource()
+        collectionView.collectionViewLayout = UICollectionViewCompositionalLayout(
+            sectionProvider: { [weak self] sectionIndex, environment in
+                guard
+                    let self,
+                    let data = self.content?.sections[safe: sectionIndex]
+                else {
+                    assertionFailure("layout is not found for section \(sectionIndex)")
+                    return nil
+                }
+                return data.section.getSectionLayout(environment: environment)
+            }
+        )
         self.collectionView.delegate = self
     }
 
@@ -36,8 +48,8 @@ class CollectionViewAdapter: NSObject {
             snapshot.appendItems(section.items, toSection: section.sectionId)
         }
 
-        dataSource.apply(snapshot, animatingDifferences: animated, completion: completion)
         self.content = content
+        dataSource.apply(snapshot, animatingDifferences: animated, completion: completion)
     }
 
     func append(content: CollectionContent, animated: Bool = true, completion: (() -> Void)? = nil) {
@@ -58,16 +70,22 @@ class CollectionViewAdapter: NSObject {
             
             snapshot.appendItems(section.items, toSection: section.sectionId)
         }
-
-        dataSource.apply(snapshot, animatingDifferences: animated, completion: completion)
         self.content?.append(content)
+        dataSource.apply(snapshot, animatingDifferences: animated, completion: completion)
     }
 
     private func makeDataSource() -> DataSource {
-        DataSource(collectionView: collectionView) { [weak self] _, indexPath, wrapper in
+        let dataSource = DataSource(collectionView: collectionView) { [weak self] _, indexPath, wrapper in
             guard let self = self else { return nil }
             return wrapper.item.cellForItem(at: indexPath, context: self.context)
         }
+
+        dataSource.supplementaryViewProvider = { [weak self] _, kind, indexPath in
+            guard let self, let data = content?.sections[safe: indexPath.section] else { return nil }
+            return data.section.supplementaryFor(elementKind: kind, index: indexPath, context: context)
+        }
+
+        return dataSource
     }
 
     private func item(for index: IndexPath) -> (any CellAdapterProtocol)? {
@@ -77,66 +95,20 @@ class CollectionViewAdapter: NSObject {
     private func item(for section: Int) -> (any CellAdapterProtocol)? {
         dataSource.itemIdentifier(for: IndexPath(item: 0, section: section))?.item
     }
-
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
-extension CollectionViewAdapter: UICollectionViewDelegateFlowLayout {
+extension CollectionViewAdapter: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         item(for: indexPath)?.didSelect(at: indexPath)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
         item(for: indexPath)?.willDisplay(at: indexPath)
     }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-        item(for: indexPath)?.sizeForItem(at: indexPath,
-                                          collectionView: collectionView,
-                                          layout: collectionViewLayout) ?? .zero
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        insetForSectionAt section: Int) -> UIEdgeInsets {
-        item(for: section)?
-            .section?
-            .collectionView(collectionView, layout: collectionViewLayout, insetForSectionAt: section) ?? .zero
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        item(for: section)?
-            .section?
-            .collectionView(collectionView, layout: collectionViewLayout, minimumInteritemSpacingForSectionAt: section) ?? 0
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        item(for: section)?
-            .section?
-            .collectionView(collectionView, layout: collectionViewLayout, minimumLineSpacingForSectionAt: section) ?? 0
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        referenceSizeForHeaderInSection section: Int) -> CGSize {
-        .zero
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        referenceSizeForFooterInSection section: Int) -> CGSize {
-        .zero
-    }
-
 }
 
 // MARK: - UIScrollViewDelegate

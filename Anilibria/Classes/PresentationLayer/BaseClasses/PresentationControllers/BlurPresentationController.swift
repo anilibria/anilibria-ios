@@ -10,15 +10,16 @@ protocol Transformation {
 final class BlurPresentationController: UIPresentationController {
     public var isBlured: Bool = true
     private lazy var dimmingView: UIView = {
+        let color = UIColor(resource: .Tint.main)
         if self.isBlured {
             let view = FractionVisualEffectView(effect: UIBlurEffect(style: .dark),
                                                 fraction: 0.3)
 
-            view.backgroundColor = MainTheme.shared.black.withAlphaComponent(0.4)
+            view.backgroundColor = color.withAlphaComponent(0.4)
             return view
         }
         let view = UIView()
-        view.backgroundColor = MainTheme.shared.black.withAlphaComponent(0.6)
+        view.backgroundColor = color.withAlphaComponent(0.6)
         return view
 
     }()

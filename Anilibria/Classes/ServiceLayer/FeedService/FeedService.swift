@@ -12,7 +12,6 @@ final class FeedServicePart: DIPart {
 
 protocol FeedService {
     func fetchRandom() -> AnyPublisher<Series, Error>
-    func fetchFiltedData() -> AnyPublisher<FilterData, Error>
     func fetchSchedule() -> AnyPublisher<[Schedule], Error>
     func fetchFeed(page: Int) -> AnyPublisher<[Feed], Error>
     func fetchNews(page: Int) -> AnyPublisher<[News], Error>
@@ -24,33 +23,12 @@ protocol FeedService {
 final class FeedServiceImp: FeedService {
     let backendRepository: BackendRepository
 
-    private var filterData: FilterData?
-
     init(backendRepository: BackendRepository) {
         self.backendRepository = backendRepository
     }
 
     func fetchSchedule() -> AnyPublisher<[Schedule], Error> {
-        return Deferred { [unowned self] in
-            let request = ScheduleRequest()
-            return self.backendRepository
-                .request(request)
-                .map {
-                    $0.forEach({ item in
-                        item.items.sort(by: { one, two -> Bool in
-                            guard let first = one.lastRelease,
-                                let second = two.lastRelease else {
-                                return false
-                            }
-                            return first > second
-                        })
-                    })
-                    return $0
-                }
-        }
-        .subscribe(on: DispatchQueue.global())
-        .receive(on: DispatchQueue.main)
-        .eraseToAnyPublisher()
+        return .just([])
     }
 
     func fetchFeed(page: Int) -> AnyPublisher<[Feed], Error> {
@@ -105,7 +83,7 @@ final class FeedServiceImp: FeedService {
             return self.backendRepository
                 .request(request)
                 .flatMap { [unowned self] in
-                    self.series(with: $0.code)
+                    self.series(with: $0.alias)
                 }
         }
         .subscribe(on: DispatchQueue.global())
@@ -115,50 +93,7 @@ final class FeedServiceImp: FeedService {
 
     func series(with code: String) -> AnyPublisher<Series, Error> {
         return Deferred { [unowned self] in
-            let request = SeriesRequest(code: code)
-            return self.backendRepository
-                .request(request)
-        }
-        .subscribe(on: DispatchQueue.global())
-        .receive(on: DispatchQueue.main)
-        .eraseToAnyPublisher()
-    }
-
-
-    func fetchFiltedData() -> AnyPublisher<FilterData, Error> {
-        return Deferred { [unowned self] in
-            if let data = self.filterData {
-                return AnyPublisher<FilterData, Error>.just(data)
-            }
-            return Publishers.Zip(self.fetchGenres(), self.fetchYears()).map {
-                let data = FilterData()
-                data.genres = $0
-                data.years = $1
-                return data
-            }.do(onNext: { [weak self] in
-                self?.filterData = $0
-            })
-            .eraseToAnyPublisher()
-        }
-        .subscribe(on: DispatchQueue.global())
-        .receive(on: DispatchQueue.main)
-        .eraseToAnyPublisher()
-    }
-
-    private func fetchGenres() -> AnyPublisher<[String], Error> {
-        return Deferred { [unowned self] in
-            let request = GenresRequest()
-            return self.backendRepository
-                .request(request)
-        }
-        .subscribe(on: DispatchQueue.global())
-        .receive(on: DispatchQueue.main)
-        .eraseToAnyPublisher()
-    }
-
-    private func fetchYears() -> AnyPublisher<[String], Error> {
-        return Deferred { [unowned self] in
-            let request = YearsRequest()
+            let request = SeriesRequest(alias: code)
             return self.backendRepository
                 .request(request)
         }

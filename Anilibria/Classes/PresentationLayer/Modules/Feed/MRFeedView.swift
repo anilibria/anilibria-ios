@@ -48,7 +48,7 @@ final class FeedViewController: BaseCollectionViewController {
         self.navigationItem.setRightBarButtonItems(items, animated: false)
     }
 
-    private func map(item: NSObject) -> (any CellAdapterProtocol)? {
+    private func map(item: any Hashable) -> (any CellAdapterProtocol)? {
         switch item {
         case let model as Series:
             return SeriesCellAdapter(viewModel: model) { [weak self] item in
@@ -75,11 +75,11 @@ final class FeedViewController: BaseCollectionViewController {
 }
 
 extension FeedViewController: FeedViewBehavior {
-    func set(items: [NSObject]) {
+    func set(items: [any Hashable]) {
         reload(sections: [SectionAdapter(items.compactMap(self.map(item:)))])
     }
 
-    func append(items: [NSObject]) {
+    func append(items: [any Hashable]) {
         append(sections: [SectionAdapter(items.compactMap(self.map(item:)))])
     }
 

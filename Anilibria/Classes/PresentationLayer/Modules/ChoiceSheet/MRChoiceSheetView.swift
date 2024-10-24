@@ -56,7 +56,9 @@ final class ChoiceSheetViewController: BaseCollectionViewController {
 
 extension ChoiceSheetViewController: ChoiceSheetViewBehavior {
     func set(items: [ChoiceItem]) {
-        let section = ChoiceCellAdapterSectionFactory.create(for: items)
+        let section = ChoiceCellAdapterSectionFactory.create(for: items) { [weak self] item in
+            self?.handler.select(item: item)
+        }
         self.reload(sections: [section])
     }
 }

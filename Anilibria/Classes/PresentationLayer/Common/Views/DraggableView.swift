@@ -1,21 +1,5 @@
 import UIKit
 
-public struct FeedbackGenerator {
-
-    public static let `default` = FeedbackGenerator()
-
-    private init() {}
-
-    public func produce(style: UIImpactFeedbackGenerator.FeedbackStyle = .light) {
-        let impactFeedbackgenerator = UIImpactFeedbackGenerator(style: style)
-        impactFeedbackgenerator.prepare()
-        impactFeedbackgenerator.impactOccurred()
-    }
-}
-
-
-import UIKit
-
 public protocol DraggableViewDelegate: AnyObject {
     func callPrimaryAction()
     func didStart()

@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -63,14 +61,15 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="4O1-CK-OMT"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="t3z-jX-0vy" firstAttribute="top" secondItem="jol-C7-qHy" secondAttribute="top" constant="4" id="2aM-yD-dU9"/>
                             <constraint firstItem="t3z-jX-0vy" firstAttribute="leading" secondItem="4O1-CK-OMT" secondAttribute="leading" constant="16" id="3D4-5J-Suc"/>
                             <constraint firstAttribute="bottom" secondItem="t3z-jX-0vy" secondAttribute="bottom" constant="16" id="3vn-yF-XsG"/>
                             <constraint firstItem="4O1-CK-OMT" firstAttribute="trailing" secondItem="t3z-jX-0vy" secondAttribute="trailing" constant="16" id="J3C-p2-hqT"/>
+                            <constraint firstAttribute="height" priority="999" constant="140" id="jm3-XL-ISe"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="4O1-CK-OMT"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="shadowX">
                                 <real key="value" value="0.0"/>
@@ -88,13 +87,13 @@
                     </view>
                 </subviews>
             </view>
+            <viewLayoutGuide key="safeArea" id="fNZ-EC-PJv"/>
             <constraints>
                 <constraint firstItem="jol-C7-qHy" firstAttribute="leading" secondItem="8oi-jf-8Gk" secondAttribute="leading" id="D9A-3Y-GtY"/>
                 <constraint firstAttribute="trailing" secondItem="jol-C7-qHy" secondAttribute="trailing" id="Tqo-QI-PJl"/>
                 <constraint firstItem="jol-C7-qHy" firstAttribute="top" secondItem="8oi-jf-8Gk" secondAttribute="top" id="W1m-1M-h0B"/>
                 <constraint firstAttribute="bottom" secondItem="jol-C7-qHy" secondAttribute="bottom" id="WDN-CO-OWb"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="fNZ-EC-PJv"/>
             <size key="customSize" width="320" height="247"/>
             <userDefinedRuntimeAttributes>
                 <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">

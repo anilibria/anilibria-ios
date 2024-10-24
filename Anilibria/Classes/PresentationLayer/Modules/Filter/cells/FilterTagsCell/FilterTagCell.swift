@@ -9,15 +9,14 @@ public final class FilterTagCell: RippleViewCell {
         .set(font: UIFont.font(ofSize: 15, weight: .regular))
 
     func configure(_ item: FilterTag) {
-        self.backView.backgroundColor = item.isSelected ? #colorLiteral(red: 0.707420184, green: 0, blue: 0, alpha: 1) : #colorLiteral(red: 0.9247149825, green: 0.9219169021, blue: 0.9385299683, alpha: 1)
-        self.titleLabel.textColor = item.isSelected ? #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        renderSelect(item.isSelected, animated: false)
         self.titleLabel.text = item.displayValue
         self.subscribe(item)
     }
 
     private func subscribe(_ item: FilterTag) {
-        self.bag = item.observe(\FilterTag.isSelected) { [weak self] _,_ in
-            self?.renderSelect(item)
+        self.bag = item.value.isSelected.dropFirst().sink { [weak self] value in
+            self?.renderSelect(value, animated: true)
         }
     }
 
@@ -27,10 +26,19 @@ public final class FilterTagCell: RippleViewCell {
         return CGSize(width: width, height: height)
     }
 
-    private func renderSelect(_ item: FilterTag) {
+    private func renderSelect(_ selected: Bool, animated: Bool) {
+        func apply() {
+            if selected {
+                backView.backgroundColor = UIColor(resource: .Buttons.selected)
+                titleLabel.textColor = UIColor(resource: .Text.reversedMain)
+            } else {
+                backView.backgroundColor = UIColor(resource: .Buttons.unselected)
+                titleLabel.textColor = UIColor(resource: .Text.main)
+            }
+        }
+
         UIView.animate(withDuration: 0.3) {
-            self.backView.backgroundColor = item.isSelected ? #colorLiteral(red: 0.707420184, green: 0, blue: 0, alpha: 1) : #colorLiteral(red: 0.9247149825, green: 0.9219169021, blue: 0.9385299683, alpha: 1)
-            self.titleLabel.textColor = item.isSelected ? #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            apply()
         }
     }
 }

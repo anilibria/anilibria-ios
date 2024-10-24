@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,18 +18,23 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L1h-th-x3c" customClass="BorderedView" customModule="Anilibria" customModuleProvider="target">
-                        <rect key="frame" x="5" y="4" width="88" height="30"/>
+                        <rect key="frame" x="4" y="4" width="56" height="30"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2010" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JlY-mt-fQ4">
-                                <rect key="frame" x="11" y="6" width="66" height="18"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="251" text="2010" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JlY-mt-fQ4">
+                                <rect key="frame" x="11" y="6" width="34" height="18"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="18" id="OeS-b5-7HJ"/>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="250" id="bRb-eN-pGD"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="JlY-mt-fQ4" firstAttribute="centerY" secondItem="L1h-th-x3c" secondAttribute="centerY" id="LQf-bT-3dG"/>
+                            <constraint firstItem="JlY-mt-fQ4" firstAttribute="top" secondItem="L1h-th-x3c" secondAttribute="top" constant="6" id="AIt-zB-4oS"/>
                             <constraint firstItem="JlY-mt-fQ4" firstAttribute="leading" secondItem="L1h-th-x3c" secondAttribute="leading" constant="11" id="Ryt-ja-dFL"/>
+                            <constraint firstAttribute="bottom" secondItem="JlY-mt-fQ4" secondAttribute="bottom" constant="6" id="lju-HI-oME"/>
                             <constraint firstAttribute="trailing" secondItem="JlY-mt-fQ4" secondAttribute="trailing" constant="11" id="op4-sA-IzM"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
@@ -42,9 +47,9 @@
             </view>
             <viewLayoutGuide key="safeArea" id="fd3-MM-hGs"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="L1h-th-x3c" secondAttribute="bottom" constant="4" id="124-1n-vyX"/>
-                <constraint firstAttribute="trailing" secondItem="L1h-th-x3c" secondAttribute="trailing" constant="3" id="4tl-0G-oQi"/>
-                <constraint firstItem="L1h-th-x3c" firstAttribute="leading" secondItem="3kf-62-BcA" secondAttribute="leading" constant="5" id="8KB-fG-MbW"/>
+                <constraint firstAttribute="bottom" secondItem="L1h-th-x3c" secondAttribute="bottom" priority="999" constant="4" id="124-1n-vyX"/>
+                <constraint firstAttribute="trailing" secondItem="L1h-th-x3c" secondAttribute="trailing" priority="999" constant="4" id="4tl-0G-oQi"/>
+                <constraint firstItem="L1h-th-x3c" firstAttribute="leading" secondItem="3kf-62-BcA" secondAttribute="leading" constant="4" id="8KB-fG-MbW"/>
                 <constraint firstItem="L1h-th-x3c" firstAttribute="top" secondItem="3kf-62-BcA" secondAttribute="top" constant="4" id="TMK-mf-6X3"/>
             </constraints>
             <size key="customSize" width="96" height="98"/>

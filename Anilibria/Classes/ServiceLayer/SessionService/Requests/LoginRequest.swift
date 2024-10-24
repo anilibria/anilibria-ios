@@ -4,7 +4,6 @@ public struct LoginRequest: BackendAPIRequest {
     private(set) var endpoint: String = "/public/login.php"
     private(set) var method: NetworkManager.Method = .POST
     private(set) var parameters: [String: Any]
-    var customResponseConverter: BackendResponseConverter? = FullDataResponseConverter()
 
     init(login: String, password: String, code: String) {
         self.parameters = [

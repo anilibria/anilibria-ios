@@ -23,10 +23,11 @@ final class SearchViewController: BaseCollectionViewController {
 
         self.scrollView.isScrollEnabled = false
         self.collectionView.layer.cornerRadius = 5
+        self.collectionHeightConstraint.constant = 1
         self.collectionView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         self.bag = self.collectionView.observe(\UICollectionView.contentSize) { [weak self] _, _ in
             if let height = self?.collectionView.contentSize.height {
-                self?.collectionHeightConstraint.constant = height
+                self?.collectionHeightConstraint.constant = max(height, 1)
                 UIView.animate(withDuration: 0.2) {
                     self?.view.layoutIfNeeded()
                 }

@@ -55,14 +55,26 @@ final class FilterViewController: BaseCollectionViewController {
 }
 
 extension FilterViewController: FilterViewBehavior {
-    func set(header: FilterHeaderItem, items: [FilterTagsItem]) {
-        reload(sections: [
-            SectionAdapter([FilterHeaderAdapter(viewModel: header, action: { [weak self] item in
-                self?.handler.change(filter: item)
-            })]),
-            CompositeSectionAdapter(
-                items.map { FilterTagsSectionAdapter(item: $0) }
-            )
-        ], animated: false)
+    func set(sorting: FilterSingleItem?, years: FilterRangeItem?, items: [FilterTagsItem]) {
+        var sections: [any SectionAdapterProtocol] = [
+            SectionAdapter([
+                FilterHeaderAdapter()
+            ])
+        ]
+        if let sorting {
+            sections.append(SectionAdapter([
+                FilterSingleItemAdapter(viewModel: sorting)
+            ]))
+        }
+
+        if let years {
+            sections.append(SectionAdapter([
+                FilterRangeItemAdapter(viewModel: years)
+            ]))
+        }
+
+        sections += items.map { FilterTagsSectionAdapter(item: $0) }
+
+        reload(sections: sections, animated: false)
     }
 }

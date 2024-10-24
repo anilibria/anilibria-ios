@@ -3,7 +3,7 @@ import UIKit
 // MARK: - Contracts
 
 protocol FilterViewBehavior: AnyObject {
-    func set(header: FilterHeaderItem, items: [FilterTagsItem])
+    func set(sorting: FilterSingleItem?, years: FilterRangeItem?, items: [FilterTagsItem])
 }
 
 protocol FilterEventHandler: ViewControllerEventHandler {

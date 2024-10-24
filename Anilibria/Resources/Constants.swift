@@ -85,7 +85,7 @@ struct URLHelper {
     
     static func releaseUrl(_ series: Series?) -> URL? {
         if let value = series {
-            return URL(string: "https://www.anilibria.tv/release/\(value.code).html")
+            return URL(string: "https://www.anilibria.tv/release/\(value.alias).html")
         }
         return nil
     }

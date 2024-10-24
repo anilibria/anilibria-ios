@@ -5,8 +5,7 @@ extension UIView {
         let nibView = Bundle.main.loadNibNamed(String(describing: self),
                                                owner: nil,
                                                options: nil)?.first
-        let view = nibView >> self
-        return view
+        return nibView as? Self
     }
     
     func constraintEdgesToSuperview(_ edges: LayoutInsets = .init()) {

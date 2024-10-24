@@ -11,11 +11,11 @@ public struct SocialOAuthData: Decodable {
     private(set) var resultPattern: String = ""
     private(set) var errorUrlPattern: String = ""
 
-    public init(from decoder: Decoder) throws {
-		self.key <- decoder["key"]
-		self.title <- decoder["title"]
-		self.socialUrl <- decoder["socialUrl"] <- URLConverter("")
-		self.resultPattern <- decoder["resultPattern"]
-		self.errorUrlPattern <- decoder["errorUrlPattern"]
-    }
+//    public init(from decoder: Decoder) throws {
+//		self.key <- decoder["key"]
+//		self.title <- decoder["title"]
+//		self.socialUrl <- decoder["socialUrl"] <- URLConverter("")
+//		self.resultPattern <- decoder["resultPattern"]
+//		self.errorUrlPattern <- decoder["errorUrlPattern"]
+//    }
 }

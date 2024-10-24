@@ -26,30 +26,12 @@ final class PlayerPresenter {
     }
 }
 
-extension PlayerPresenter: RouterCommandResponder {
-    func respond(command: RouteCommand) -> Bool {
-        if let command = command as? ChoiceResult {
-            if let value = command.value as? PlaylistItem,
-                let index = self.playlist.firstIndex(of: value) {
-                self.view.set(playItemIndex: index)
-                return true
-            }
-            if let value = command.value as? VideoQuality {
-                self.view.set(quality: value)
-                return true
-            }
-        }
-        return false
-    }
-}
-
 extension PlayerPresenter: PlayerEventHandler {
     func bind(view: PlayerViewBehavior,
               router: PlayerRoutable,
               series: Series) {
         self.view = view
         self.router = router
-        self.router.responder = self
         self.series = series
         self.playlist = self.series.playlist.reversed()
     }
@@ -64,22 +46,37 @@ extension PlayerPresenter: PlayerEventHandler {
     }
 
     func select(playItemIndex: Int) {
-        let lastIndex = self.playlist.count - 1
+        let didSelect: (PlaylistItem) -> Bool = { [weak self] item in
+            guard let index = self?.playlist.firstIndex(of: item) else { return true }
+            self?.view.set(playItemIndex: index)
+            return true
+        }
+
         let items = self.playlist.enumerated().map { value in
-            ChoiceItem(value.element,
-                       title: value.element.title,
-                       isSelected: value.offset == playItemIndex,
-                       isLast: value.offset == lastIndex)
+            ChoiceItem(
+                value: value.element,
+                title: value.element.title,
+                isSelected: value.offset == playItemIndex,
+                didSelect: didSelect
+            )
         }
 
         self.router.openSheet(with: items)
     }
 
     func settings(quality: VideoQuality, for item: PlaylistItem) {
+        let didSelect: (VideoQuality) -> Bool = { [weak self] item in
+            self?.view.set(quality: item)
+            return true
+        }
+
         let qualities = item.supportedQualities()
         let items = qualities.map {
-            ChoiceItem($0, title: $0.name, isSelected: quality == $0,
-                       isLast: qualities.last == $0)
+            ChoiceItem(
+                value: $0,
+                title: $0.name, isSelected: quality == $0,
+                didSelect: didSelect
+            )
         }
 
         self.router.openSheet(with: items)
@@ -104,7 +101,7 @@ extension PlayerPresenter: PlayerEventHandler {
         let settingsQuality = self.playerService.fetchSettings().quality
         let prefferedQualities: VideoQuality = context?.quality ?? settingsQuality
 
-        self.view.set(name: self.series.names.first ?? "",
+        self.view.set(name: self.series.name?.main ?? "",
                       playlist: self.playlist,
                       playItemIndex: index,
                       time: Double(context?.time ?? 0),

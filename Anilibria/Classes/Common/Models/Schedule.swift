@@ -7,9 +7,9 @@ public final class Schedule: NSObject, Decodable {
         TitleItem({ [weak self] in self?.day?.name ?? "" }())
     }
 
-    public init(from decoder: Decoder) throws {
-        super.init()
-		self.day <- decoder["day"]
-		self.items <- decoder["items"]
-    }
+//    public init(from decoder: Decoder) throws {
+//        super.init()
+//		self.day <- decoder["day"]
+//		self.items <- decoder["items"]
+//    }
 }

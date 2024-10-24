@@ -45,6 +45,7 @@ final class BackendRepositoryImp: BackendRepository, Loggable {
     private func defaultRequest<T: BackendAPIRequest>(_ request: T) -> AnyPublisher<NetworkResponse, Error> {
         return self.networkManager.request(url: request.buildUrl(),
                                            method: request.method,
+                                           body: request.body,
                                            params: request.parameters,
                                            headers: request.headers)
     }

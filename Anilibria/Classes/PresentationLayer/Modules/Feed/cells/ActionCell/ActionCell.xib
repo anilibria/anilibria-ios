@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -44,6 +44,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="5tY-qs-K6D"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="W7f-EV-pZc" firstAttribute="leading" secondItem="5tY-qs-K6D" secondAttribute="leading" priority="750" constant="16" id="5NB-Sf-9gd"/>
@@ -52,31 +53,16 @@
                             <constraint firstAttribute="bottom" secondItem="W7f-EV-pZc" secondAttribute="bottom" constant="16" id="rqm-cd-0yc"/>
                             <constraint firstItem="5tY-qs-K6D" firstAttribute="trailing" secondItem="W7f-EV-pZc" secondAttribute="trailing" priority="750" constant="16" id="x4S-75-tJG"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="5tY-qs-K6D"/>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="number" keyPath="shadowX">
-                                <real key="value" value="0.0"/>
-                            </userDefinedRuntimeAttribute>
-                            <userDefinedRuntimeAttribute type="number" keyPath="shadowY">
-                                <real key="value" value="5"/>
-                            </userDefinedRuntimeAttribute>
-                            <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
-                                <real key="value" value="0.14999999999999999"/>
-                            </userDefinedRuntimeAttribute>
-                            <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
-                                <real key="value" value="8"/>
-                            </userDefinedRuntimeAttribute>
-                        </userDefinedRuntimeAttributes>
                     </view>
                 </subviews>
             </view>
+            <viewLayoutGuide key="safeArea" id="Pso-py-h9N"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="gei-IG-kfO" secondAttribute="bottom" id="6kF-pf-tJO"/>
                 <constraint firstItem="gei-IG-kfO" firstAttribute="top" secondItem="iU2-5f-z9x" secondAttribute="top" id="VSU-VL-BYb"/>
                 <constraint firstAttribute="trailing" secondItem="gei-IG-kfO" secondAttribute="trailing" id="Yic-sf-XP2"/>
                 <constraint firstItem="gei-IG-kfO" firstAttribute="leading" secondItem="iU2-5f-z9x" secondAttribute="leading" id="k7t-Re-GBl"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="Pso-py-h9N"/>
             <size key="customSize" width="320" height="247"/>
             <userDefinedRuntimeAttributes>
                 <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">

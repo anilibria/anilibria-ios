@@ -429,13 +429,29 @@ internal enum L10n {
       internal static var addedDate: String {
           return L10n.tr("Localizable", "screen.series.added_date")
       }
+      /// ~ %@ мин
+      internal static func approximalMinutes(_ p1: String) -> String {
+        return L10n.tr("Localizable", "screen.series.approximal_minutes", p1)
+      }
       /// Файл %@ сохранен в папку\n~/Downloads/%@
       internal static func downloaded(_ p1: String, _ p2: String) -> String {
         return L10n.tr("Localizable", "screen.series.downloaded", p1, p2)
       }
+      /// Длительность: 
+      internal static var duration: String {
+          return L10n.tr("Localizable", "screen.series.duration")
+      }
+      /// Всего эпизодов: 
+      internal static var episodes: String {
+          return L10n.tr("Localizable", "screen.series.episodes")
+      }
       /// Жанр: 
       internal static var genres: String {
           return L10n.tr("Localizable", "screen.series.genres")
+      }
+      /// Сезон: 
+      internal static var season: String {
+          return L10n.tr("Localizable", "screen.series.season")
       }
       /// Состояние релиза: 
       internal static var status: String {

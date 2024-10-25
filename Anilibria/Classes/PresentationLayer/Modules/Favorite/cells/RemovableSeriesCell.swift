@@ -1,6 +1,7 @@
 import UIKit
 
 public final class RemovableSeriesCell: DraggableRippleCell {
+    @IBOutlet var containerView: UIView!
     @IBOutlet var imageView: UIImageView!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var descLabel: UILabel!
@@ -9,19 +10,20 @@ public final class RemovableSeriesCell: DraggableRippleCell {
 
     private static let textBuilder: AttributeStringBuilder = AttributeStringBuilder()
         .set(font: .font(ofSize: 13, weight: .regular))
-        .set(color: .darkGray)
+        .set(color: UIColor(resource: .Text.secondary))
         .set(lineBreakMode: .byTruncatingTail)
 
     public override func awakeFromNib() {
         super.awakeFromNib()
         draggableView.swipeOffset = 100
+        containerView.smoothCorners(with: 4)
+        containerView.backgroundColor = UIColor(resource: .Surfaces.content)
     }
 
     func configure(_ item: Series) {
         self.imageView.setImage(from: item.poster,
                                 placeholder: UIImage(resource: .imgPlaceholder))
-        let name = item.name?.main ?? ""
-        self.titleLabel.text = "\(name) (\(item.episodesTotal))"
+        self.titleLabel.text = item.name?.main ?? ""
         self.descLabel.attributedText = Self.textBuilder.build(item.desc)
     }
 

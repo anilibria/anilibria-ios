@@ -18,6 +18,7 @@ final class SearchViewController: BaseCollectionViewController {
     override func viewDidLoad() {
         self.defaultBottomInset = 0
         super.viewDidLoad()
+        self.view.backgroundColor = .black.withAlphaComponent(0.5)
         self.addKeyboardObservers()
         self.handler.didLoad()
 

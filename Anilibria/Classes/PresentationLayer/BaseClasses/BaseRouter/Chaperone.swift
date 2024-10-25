@@ -242,6 +242,7 @@ private final class MRWindow: UIWindow {
         alertWindow.rootViewController = controller
         alertWindow.windowLevel = windowLavel
         alertWindow.makeKeyAndVisible()
+        alertWindow.tintColor = UIColor(resource: .Buttons.selected)
         return alertWindow
     }
 }

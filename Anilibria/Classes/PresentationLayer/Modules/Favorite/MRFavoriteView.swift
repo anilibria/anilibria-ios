@@ -7,7 +7,7 @@ final class FavoriteViewController: BaseCollectionViewController {
 
     private let searchView: SearchView? = SearchView.fromNib()
     private let stubView: StubView? = StubView.fromNib()?.apply {
-        $0.set(image: UIImage(resource: .starOutline), color: .darkGray)
+        $0.set(image: UIImage(resource: .starOutline), color: UIColor(resource: .Text.secondary))
         $0.title = L10n.Stub.title
     }
 

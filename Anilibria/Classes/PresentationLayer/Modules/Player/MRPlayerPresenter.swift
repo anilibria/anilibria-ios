@@ -55,7 +55,7 @@ extension PlayerPresenter: PlayerEventHandler {
         let items = self.playlist.enumerated().map { value in
             ChoiceItem(
                 value: value.element,
-                title: value.element.title,
+                title: value.element.fullName,
                 isSelected: value.offset == playItemIndex,
                 didSelect: didSelect
             )

@@ -64,10 +64,11 @@ extension SeriesPresenter: SeriesEventHandler {
     }
 
     func select(genre: String) {
-//        var filter = SeriesFilter()
-//        filter.genres = [genre]
-//        let command = FilterRouteCommand(value: filter)
-//        self.router.execute(command)
+        guard let genreID = Int(genre) else { return }
+        var filter = SeriesFilter()
+        filter.genres = [genreID]
+        let command = FilterRouteCommand(value: filter)
+        self.router.execute(command)
     }
 
     func select(url: URL) {
@@ -100,7 +101,7 @@ extension SeriesPresenter: SeriesEventHandler {
     }
 
     func donate() {
-        self.router.execute(UrlCommand(url: URLS.donate))
+        self.router.open(url: .web(URLS.donate))
     }
 
     private func load(code: String) {
@@ -151,7 +152,3 @@ public struct SeriesCommand: RouteCommand {
 }
 
 public struct ScheduleCommand: RouteCommand {}
-
-public struct UrlCommand: RouteCommand {
-    let url: URL?
-}

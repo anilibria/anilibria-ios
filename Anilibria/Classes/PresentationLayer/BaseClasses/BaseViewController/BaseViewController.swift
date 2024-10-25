@@ -27,6 +27,7 @@ class BaseViewController: UIViewController, WaitingBehavior, Loggable {
         super.viewDidLoad()
         self.setupBackButton()
         self.setupStrings()
+        view.backgroundColor = UIColor(resource: .Surfaces.base)
     }
 
     func initialize() {

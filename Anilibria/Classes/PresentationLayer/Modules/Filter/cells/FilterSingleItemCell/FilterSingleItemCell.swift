@@ -23,7 +23,6 @@ public final class FilterSingleItemCell: RippleViewCell {
         selectionView.clipsToBounds = true
         selectionView.layer.cornerRadius = 8
         selectionImageView.image = UIImage(resource: .iconArrowDown).withRenderingMode(.alwaysTemplate)
-        rippleManager.rippleColor = UIColor(resource: .Tint.main)
     }
 
     func configure(with model: FilterSingleItem) {
@@ -41,7 +40,7 @@ public final class FilterSingleItemCell: RippleViewCell {
 
     private func apply(selected: Bool) {
         if selected {
-            let color = UIColor(resource: .Text.reversedMain)
+            let color = UIColor(resource: .Text.monoLight)
             selectionLabel.textColor = color
             selectionImageView.tintColor = color
             selectionView.backgroundColor = UIColor(resource: .Buttons.selected)

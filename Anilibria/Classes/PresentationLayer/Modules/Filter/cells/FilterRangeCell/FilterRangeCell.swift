@@ -51,7 +51,7 @@ public final class FilterRangeCell: UICollectionViewCell {
 
     private func apply(selected: Bool) {
         if selected {
-            valueLabel.textColor = UIColor(resource: .Text.reversedMain)
+            valueLabel.textColor = UIColor(resource: .Text.monoLight)
             valueBackView.backgroundColor = UIColor(resource: .Buttons.selected)
         } else {
             valueLabel.textColor = UIColor(resource: .Text.main)

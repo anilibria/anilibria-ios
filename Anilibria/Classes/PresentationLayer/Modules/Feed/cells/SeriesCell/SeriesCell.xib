@@ -70,20 +70,6 @@
                             <constraint firstItem="4O1-CK-OMT" firstAttribute="trailing" secondItem="t3z-jX-0vy" secondAttribute="trailing" constant="16" id="J3C-p2-hqT"/>
                             <constraint firstAttribute="height" priority="999" constant="140" id="jm3-XL-ISe"/>
                         </constraints>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="number" keyPath="shadowX">
-                                <real key="value" value="0.0"/>
-                            </userDefinedRuntimeAttribute>
-                            <userDefinedRuntimeAttribute type="number" keyPath="shadowY">
-                                <real key="value" value="5"/>
-                            </userDefinedRuntimeAttribute>
-                            <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
-                                <real key="value" value="0.14999999999999999"/>
-                            </userDefinedRuntimeAttribute>
-                            <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
-                                <real key="value" value="8"/>
-                            </userDefinedRuntimeAttribute>
-                        </userDefinedRuntimeAttributes>
                     </view>
                 </subviews>
             </view>
@@ -101,6 +87,7 @@
                 </userDefinedRuntimeAttribute>
             </userDefinedRuntimeAttributes>
             <connections>
+                <outlet property="containerView" destination="t3z-jX-0vy" id="yMf-yH-ZgS"/>
                 <outlet property="descLabel" destination="VaE-ZG-edn" id="xiM-bV-Rov"/>
                 <outlet property="imageView" destination="rFX-nv-5rb" id="STs-Kw-gJz"/>
                 <outlet property="rippleContainerView" destination="t3z-jX-0vy" id="RK4-nl-qvK"/>

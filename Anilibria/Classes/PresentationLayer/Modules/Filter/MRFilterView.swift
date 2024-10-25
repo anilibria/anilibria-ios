@@ -3,6 +3,7 @@ import UIKit
 // MARK: - View Controller
 
 final class FilterViewController: BaseCollectionViewController {
+    @IBOutlet var backView: UIView!
     @IBOutlet var scrollView: UIScrollView!
     @IBOutlet var collectionHeightConstraint: NSLayoutConstraint!
     @IBOutlet var buttonsContainer: ShadowView!
@@ -19,6 +20,9 @@ final class FilterViewController: BaseCollectionViewController {
     override func viewDidLoad() {
         self.defaultBottomInset = 0
         super.viewDidLoad()
+        self.view.backgroundColor = .clear
+        self.backView.backgroundColor = UIColor(resource: .Surfaces.background)
+        self.backView.smoothCorners(with: 5, maskedCorners: .topCorners)
         self.collectionView.frame = UIApplication.getWindow()?.frame ?? .zero
         self.handler.didLoad()
 

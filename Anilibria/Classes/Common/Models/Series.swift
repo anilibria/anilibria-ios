@@ -16,7 +16,7 @@ public struct Series: Codable, Hashable {
     let publishDay: DescribedValue<WeekDay>?
     let desc: String
     let notification: String
-    let episodesTotal: Int
+    let episodesTotal: Int?
     let isInProduction: Bool
     let isBlockedByGeo: Bool
     let episodesAreUnknown: Bool
@@ -50,7 +50,7 @@ public struct Series: Codable, Hashable {
         publishDay = container.decode("publish_day")
         desc = container.decode("description") ?? ""
         notification = container.decode("notification") ?? ""
-        episodesTotal = container.decode("episodes_total") ?? 0
+        episodesTotal = container.decode("episodes_total")
         isInProduction = container.decode("is_in_production") ?? false
         isBlockedByGeo = container.decode("is_blocked_by_geo") ?? false
         episodesAreUnknown = container.decode("episodes_are_unknown") ?? false
@@ -100,7 +100,7 @@ struct SeriesName: Codable, Hashable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeyString.self)
         main = container.decode("main") ?? ""
-        english = container.decode("name") ?? ""
+        english = container.decode("english") ?? ""
         alternative = container.decode("alternative") ?? ""
     }
 }
@@ -149,7 +149,7 @@ struct Member: Decodable, Hashable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeyString.self)
         id = try container.decode(required: "id")
-        name = container.decode("name") ?? ""
+        name = container.decode("nickname") ?? ""
         role = container.decode("role")
         user = container.decode("user")
     }

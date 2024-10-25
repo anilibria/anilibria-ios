@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina3_5" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -34,7 +35,7 @@
                                     </userDefinedRuntimeAttributes>
                                 </imageView>
                             </subviews>
-                            <color key="backgroundColor" red="0.70742018399999995" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="backgroundColor" name="buttons/selected"/>
                             <constraints>
                                 <constraint firstItem="aZ1-i8-btX" firstAttribute="centerY" secondItem="ptt-rL-sw8" secondAttribute="centerY" id="3xE-87-jOv"/>
                                 <constraint firstAttribute="height" constant="50" id="cc9-Ni-LWz"/>
@@ -53,7 +54,7 @@
                         <constraint firstItem="ptt-rL-sw8" firstAttribute="leading" secondItem="dmk-dj-otg" secondAttribute="leading" id="iiu-Ny-FCl"/>
                     </constraints>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x6C-7H-r4b" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x6C-7H-r4b" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="260"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
@@ -81,7 +82,7 @@
                     </userDefinedRuntimeAttributes>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" name="surfaces/content"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="0s3-Uv-qmH" secondAttribute="bottom" id="7Lz-lK-RcU"/>
                 <constraint firstItem="x6C-7H-r4b" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="D15-bC-CHI"/>
@@ -106,6 +107,12 @@
         </view>
     </objects>
     <resources>
-        <image name="icon_play" width="18" height="18"/>
+        <image name="icon_play" width="28" height="28"/>
+        <namedColor name="buttons/selected">
+            <color red="0.70588235294117652" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="surfaces/content">
+            <color red="0.99607843137254903" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -65,7 +66,7 @@
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fca-Sy-DOy">
                                                                     <rect key="frame" x="46" y="20" width="320" height="0.0"/>
                                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
-                                                                    <nil key="textColor"/>
+                                                                    <color key="textColor" name="text/main"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h6b-3t-J77" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
@@ -80,7 +81,7 @@
                                                                     </connections>
                                                                 </button>
                                                             </subviews>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
                                                                 <constraint firstItem="h6b-3t-J77" firstAttribute="leading" secondItem="n7x-2Y-gdd" secondAttribute="leading" id="4HO-8g-oqT"/>
                                                                 <constraint firstAttribute="trailing" secondItem="h6b-3t-J77" secondAttribute="trailing" id="5Ho-FE-3N7"/>
@@ -111,7 +112,7 @@
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zzf-sV-SGr">
                                                                     <rect key="frame" x="46" y="20" width="320" height="0.0"/>
                                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
-                                                                    <nil key="textColor"/>
+                                                                    <color key="textColor" name="text/main"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dcc-R5-rCa" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
@@ -126,7 +127,7 @@
                                                                     </connections>
                                                                 </button>
                                                             </subviews>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
                                                                 <constraint firstItem="dcc-R5-rCa" firstAttribute="top" secondItem="wXq-zj-kgL" secondAttribute="top" id="3ai-Wq-8nL"/>
                                                                 <constraint firstAttribute="bottom" secondItem="dcc-R5-rCa" secondAttribute="bottom" id="Hg6-9s-Ing"/>
@@ -157,7 +158,7 @@
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yce-rf-kRd">
                                                                     <rect key="frame" x="46" y="20" width="320" height="0.0"/>
                                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
-                                                                    <nil key="textColor"/>
+                                                                    <color key="textColor" name="text/main"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IiL-10-ooF" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
@@ -172,7 +173,7 @@
                                                                     </connections>
                                                                 </button>
                                                             </subviews>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
                                                                 <constraint firstItem="yce-rf-kRd" firstAttribute="centerY" secondItem="NZz-a4-KfU" secondAttribute="centerY" id="8m9-ch-1lq"/>
                                                                 <constraint firstAttribute="trailing" secondItem="IiL-10-ooF" secondAttribute="trailing" id="D8q-Wo-dyx"/>
@@ -189,7 +190,7 @@
                                                     </subviews>
                                                 </stackView>
                                             </subviews>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="backgroundColor" name="surfaces/content"/>
                                             <constraints>
                                                 <constraint firstItem="yIY-Qr-zWM" firstAttribute="top" secondItem="UBz-cX-sMs" secondAttribute="top" id="EvJ-pV-xg3"/>
                                                 <constraint firstItem="yIY-Qr-zWM" firstAttribute="leading" secondItem="UBz-cX-sMs" secondAttribute="leading" id="HAl-hJ-8fo"/>
@@ -225,7 +226,7 @@
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Настройки" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yIP-4y-s4K">
                                                                     <rect key="frame" x="46" y="11.5" width="320" height="17"/>
                                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
-                                                                    <nil key="textColor"/>
+                                                                    <color key="textColor" name="text/main"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VG9-14-JFe" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
@@ -240,7 +241,7 @@
                                                                     </connections>
                                                                 </button>
                                                             </subviews>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="40" id="2ar-a2-7v2"/>
                                                                 <constraint firstItem="VG9-14-JFe" firstAttribute="leading" secondItem="FfB-yM-8U7" secondAttribute="leading" id="2zP-rH-dpK"/>
@@ -257,7 +258,7 @@
                                                     </subviews>
                                                 </stackView>
                                             </subviews>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="backgroundColor" name="surfaces/content"/>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="ir8-rK-5w0" secondAttribute="trailing" id="Ifg-9E-O00"/>
                                                 <constraint firstItem="ir8-rK-5w0" firstAttribute="top" secondItem="onC-Uw-SN6" secondAttribute="top" id="U5N-zz-Pwg"/>
@@ -280,7 +281,7 @@
                                                     </constraints>
                                                 </stackView>
                                             </subviews>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="backgroundColor" name="surfaces/content"/>
                                             <constraints>
                                                 <constraint firstItem="ZrU-yx-N20" firstAttribute="leading" secondItem="BGu-GH-ieP" secondAttribute="leading" id="25q-rY-xyI"/>
                                                 <constraint firstAttribute="trailing" secondItem="ZrU-yx-N20" secondAttribute="trailing" id="HAi-Fq-2Vu"/>
@@ -321,20 +322,6 @@
                         <constraint firstAttribute="bottom" secondItem="DpG-Aa-mCd" secondAttribute="bottom" id="kyb-lL-mhC"/>
                         <constraint firstItem="R3G-kp-Dbk" firstAttribute="width" secondItem="tXR-Br-u8V" secondAttribute="width" id="xIV-Ir-rR0"/>
                     </constraints>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="number" keyPath="shadowX">
-                            <real key="value" value="0.0"/>
-                        </userDefinedRuntimeAttribute>
-                        <userDefinedRuntimeAttribute type="number" keyPath="shadowY">
-                            <real key="value" value="5"/>
-                        </userDefinedRuntimeAttribute>
-                        <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
-                            <real key="value" value="0.14999999999999999"/>
-                        </userDefinedRuntimeAttribute>
-                        <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
-                            <real key="value" value="8"/>
-                        </userDefinedRuntimeAttribute>
-                    </userDefinedRuntimeAttributes>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FNO-cS-reU">
                     <rect key="frame" x="0.0" y="48" width="414" height="60"/>
@@ -352,7 +339,7 @@
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OuO-Q2-EIi">
                             <rect key="frame" x="80" y="30" width="254" height="0.0"/>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                            <nil key="textColor"/>
+                            <color key="textColor" name="text/main"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xdv-mt-B69" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
@@ -361,7 +348,7 @@
                                 <constraint firstAttribute="width" constant="50" id="AAM-dX-hAl"/>
                             </constraints>
                             <state key="normal">
-                                <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="titleColor" name="text/main"/>
                             </state>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -376,7 +363,7 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" name="surfaces/background"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="OuO-Q2-EIi" secondAttribute="trailing" constant="80" id="DTO-MX-g3Y"/>
                         <constraint firstAttribute="bottom" secondItem="IPX-KG-Lfj" secondAttribute="bottom" constant="8" id="Fxe-6M-8Bq"/>
@@ -391,7 +378,7 @@
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0QZ-VR-nGh">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="48"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" name="surfaces/background"/>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wzi-Cl-YtJ" customClass="GradientView" customModule="Anilibria" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="108" width="414" height="5"/>
@@ -438,5 +425,14 @@
         <image name="icon_history" width="18" height="18"/>
         <image name="icon_people" width="18" height="18"/>
         <image name="icon_settings" width="18" height="18"/>
+        <namedColor name="surfaces/background">
+            <color red="0.99607843137254903" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="surfaces/content">
+            <color red="0.99607843137254903" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="text/main">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

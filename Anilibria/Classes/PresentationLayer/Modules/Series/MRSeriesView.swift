@@ -7,7 +7,7 @@ final class SeriesViewController: BaseViewController {
     @IBOutlet var scrollView: UIScrollView!
     @IBOutlet var headerContainerView: UIView!
     @IBOutlet var titleLabel: UILabel!
-    @IBOutlet var seconTitleLabel: UILabel!
+    @IBOutlet var secondTitleLabel: UILabel!
     @IBOutlet var favoriteCountLabel: UILabel!
     @IBOutlet var favoriteStarView: UIImageView!
     @IBOutlet var favoriteButton: RippleButton!
@@ -18,6 +18,7 @@ final class SeriesViewController: BaseViewController {
     @IBOutlet var anonceLabel: UILabel!
     @IBOutlet var separatorView: UIView!
     @IBOutlet var supportLabel: UILabel!
+    @IBOutlet var supportLabelContainer: BorderedView!
     @IBOutlet var supportButton: UIButton!
     @IBOutlet var torrentsStackView: UIStackView!
 
@@ -27,9 +28,11 @@ final class SeriesViewController: BaseViewController {
     var handler: SeriesEventHandler!
 
     private let boldTextBuilder = AttributeStringBuilder()
+        .set(color: UIColor(resource: .Text.secondary))
         .set(font: UIFont.font(ofSize: 13, weight: .bold))
 
     private let regularTextBuilder = AttributeStringBuilder()
+        .set(color: UIColor(resource: .Text.main))
         .set(font: UIFont.font(ofSize: 13, weight: .regular))
 
     // MARK: - Life cycle
@@ -49,19 +52,23 @@ final class SeriesViewController: BaseViewController {
             self?.handler.select(url: url)
         }
 
-        self.paramsTextView.setTapLink(handler: action)
-        self.descTextView.setTapLink(handler: action)
+        paramsTextView.setTapLink(handler: action)
+        descTextView.setTapLink(handler: action)
 
         let color = UIColor(resource: .Tint.active)
-        self.paramsTextView.linkTextAttributes = [
+        paramsTextView.linkTextAttributes = [
             .foregroundColor: color,
             .underlineColor: color
         ]
 
-        self.descTextView.linkTextAttributes = [
+        descTextView.linkTextAttributes = [
             .foregroundColor: color,
             .underlineColor: color
         ]
+
+        descTextView.font = .font(ofSize: 14, weight: .regular)
+        descTextView.textColor = UIColor(resource: .Text.main)
+        supportLabelContainer.cornerRadius = 6
     }
 
     override func setupStrings() {
@@ -174,7 +181,10 @@ extension SeriesViewController: SeriesViewBehavior {
         self.titleLabel.text = name?.main
 
         if name?.english.isEmpty == false {
-            self.seconTitleLabel.text = name?.english
+            secondTitleLabel.isHidden = false
+            secondTitleLabel.text = name?.english
+        } else {
+            secondTitleLabel.isHidden = true
         }
     }
 
@@ -182,36 +192,36 @@ extension SeriesViewController: SeriesViewBehavior {
         let strings = L10n.Screen.Series.self
         var result: NSMutableAttributedString = .init()
 
-        if let year = series.year {
-            let title = self.boldTextBuilder.build(strings.year)
-            let value = self.regularTextBuilder.build("\(year)\n")
-            result = result + title + value
-        }
-
-        if  series.members.isEmpty != false {
-            let members = Dictionary(grouping: series.members) { member in
-                member.role?.value
-            }
-
-            members.forEach { _, values in
-                let role = values.first?.role?.description ?? ""
-                let title = self.boldTextBuilder.build("\(role):")
-                let value = self.regularTextBuilder.build("\(values.lazy.map { $0.name }.joined(separator: ", "))\n")
-                result = result + title + value
-            }
-        }
-
         if let type = series.type {
             let title = self.boldTextBuilder.build(strings.type)
             let value = self.regularTextBuilder.build("\(type.description)\n")
             result = result + title + value
         }
 
-//        if series.status.isEmpty == false {
-//            let title = self.boldTextBuilder.build(strings.status)
-//            let value = self.regularTextBuilder.build("\(series.status)\n")
-//            result = result + title + value
-//        }
+        if let year = series.year {
+            let title = self.boldTextBuilder.build(strings.year)
+            let value = self.regularTextBuilder.build("\(year)\n")
+            result = result + title + value
+        }
+
+        if let season = series.season {
+            let title = self.boldTextBuilder.build(strings.season)
+            let value = self.regularTextBuilder.build("\(season.description)\n")
+            result = result + title + value
+        }
+
+        if let duration = series.averageDurationOfEpisode {
+            let title = self.boldTextBuilder.build(strings.duration)
+            let time = L10n.Screen.Series.approximalMinutes("\(duration)")
+            let value = self.regularTextBuilder.build("\(time)\n")
+            result = result + title + value
+        }
+
+        if let episodes = series.episodesTotal {
+            let title = self.boldTextBuilder.build(strings.episodes)
+            let value = self.regularTextBuilder.build("\(episodes)\n")
+            result = result + title + value
+        }
 
         if series.genres.isEmpty == false {
             var data = self.boldTextBuilder.build(strings.genres)
@@ -232,6 +242,25 @@ extension SeriesViewController: SeriesViewBehavior {
             }
 
             result = result + data
+        }
+
+        if series.members.isEmpty == false {
+            let items = Dictionary(grouping: series.members, by: { $0.role })
+            items.forEach { (role, members) in
+                guard let role else { return }
+                var data = self.boldTextBuilder.build("\(role.description): ")
+
+                let last = members.last
+                for member in members {
+                    data = data + regularTextBuilder.build(member.name)
+                    if member == last {
+                        data = data + self.regularTextBuilder.build("\n")
+                    } else {
+                        data = data + self.regularTextBuilder.build(", ")
+                    }
+                }
+                result = result + data
+            }
         }
 
         self.paramsTextView.attributedText = result
@@ -267,7 +296,7 @@ public final class WeekDayView: CircleView {
     
     private func setup() {
         addSubview(titleLabel)
-        borderColor = .lightGray
+        borderColor = UIColor(resource: .Tint.separator)
         borderThickness = 1
         backgroundColor = .clear
         
@@ -288,11 +317,11 @@ public final class WeekDayView: CircleView {
         didSet {
             if self.isSelected {
                 self.backgroundColor = UIColor(resource: .Buttons.selected)
-                self.titleLabel.textColor = UIColor(resource: .Text.reversedMain)
+                self.titleLabel.textColor = UIColor(resource: .Text.monoLight)
                 self.borderThickness = 0
             } else {
                 self.backgroundColor = .clear
-                self.titleLabel.textColor = .darkGray
+                self.titleLabel.textColor = UIColor(resource: .Text.secondary)
                 self.borderThickness = 1
             }
         }

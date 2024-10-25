@@ -42,6 +42,14 @@ public struct PlaylistItem: Decodable, Hashable {
     let skips: Skips
     let duration: TimeInterval
 
+    var fullName: String {
+        let items: [String?] = [
+            ordinal.map { "\(NSNumber(value: $0))" },
+            title
+        ]
+        return items.compactMap({ $0 }).joined(separator: ". ")
+    }
+
     public func supportedQualities() -> [VideoQuality] {
         return self.video.keys.sorted(by: { $0.rawValue < $1.rawValue })
     }

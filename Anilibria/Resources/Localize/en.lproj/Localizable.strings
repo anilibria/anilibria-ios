@@ -90,10 +90,14 @@
 "screen.series.year" = "Year: ";
 "screen.series.voices" = "Voices: ";
 "screen.series.type" = "Type: ";
+"screen.series.season" = "Season: ";
 "screen.series.status" = "Status: ";
+"screen.series.episodes" = "Episodes: ";
+"screen.series.duration" = "Duration: ";
 "screen.series.genres" = "Genres: ";
 "screen.series.added_date" = "Added ";
 "screen.series.downloaded" = "File %@ saved into\n~/Downloads/%@";
+"screen.series.approximal_minutes" = "~ %@ min";
 
 //COMMENTS SCREEN
 "screen.comments.title" = "Comments";

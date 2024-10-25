@@ -90,10 +90,14 @@
 "screen.series.year" = "Год: ";
 "screen.series.voices" = "Голоса: ";
 "screen.series.type" = "Тип: ";
+"screen.series.season" = "Сезон: ";
 "screen.series.status" = "Состояние релиза: ";
+"screen.series.episodes" = "Всего эпизодов: ";
+"screen.series.duration" = "Длительность: ";
 "screen.series.genres" = "Жанр: ";
 "screen.series.added_date" = "Добавлен ";
 "screen.series.downloaded" = "Файл %@ сохранен в папку\n~/Downloads/%@";
+"screen.series.approximal_minutes" = "~ %@ мин";
 
 //COMMENTS SCREEN
 "screen.comments.title" = "Комментарии";

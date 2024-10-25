@@ -101,3 +101,20 @@ public protocol LayoutSource: AnyObject {
 
 extension UIView: LayoutSource {}
 extension UILayoutGuide: LayoutSource {}
+
+extension UIView {
+    func smoothCorners(with radius: CGFloat,
+                       maskedCorners: CACornerMask? = nil) {
+        layer.cornerRadius = radius
+        layer.masksToBounds = true
+        layer.cornerCurve = .continuous
+        if let maskedCorners {
+            layer.maskedCorners = maskedCorners
+        }
+    }
+}
+
+public extension CACornerMask {
+    static let topCorners: CACornerMask = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+    static let bottomCorners: CACornerMask = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+}

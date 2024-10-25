@@ -30,7 +30,7 @@ public final class FilterTagCell: RippleViewCell {
         func apply() {
             if selected {
                 backView.backgroundColor = UIColor(resource: .Buttons.selected)
-                titleLabel.textColor = UIColor(resource: .Text.reversedMain)
+                titleLabel.textColor = UIColor(resource: .Text.monoLight)
             } else {
                 backView.backgroundColor = UIColor(resource: .Buttons.unselected)
                 titleLabel.textColor = UIColor(resource: .Text.main)

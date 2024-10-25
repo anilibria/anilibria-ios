@@ -90,7 +90,7 @@ final class CatalogServiceImp: CatalogService {
                 .zip(self.fetchProductionStatuses(), { data, value in
                     var result = data
                     result.productionStatuses = value
-                    return data
+                    return result
                 })
                 .zip(self.fetchPublishStatuses(), { data, value in
                     var result = data

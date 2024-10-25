@@ -14,6 +14,7 @@ final class ChoiceSheetViewController: BaseCollectionViewController {
     override func viewDidLoad() {
         self.defaultBottomInset = 0
         super.viewDidLoad()
+        self.view.backgroundColor = .clear
         self.handler.didLoad()
 
         self.bag = self.collectionView.observe(\UICollectionView.contentSize) { [weak self] _, _ in

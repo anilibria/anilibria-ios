@@ -11,7 +11,7 @@ protocol BackendResponseConverter: AnyObject {
     /// - parameter data: Response from NetworkService
     /// - returns: (ResponseData?, Error?)
     func convert<T: BackendAPIRequest>(_ type: T.Type,
-                                       response data: NetworkResponse) -> (T.ResponseObject?, Error?)
+                                       response: NetworkResponse) -> (T.ResponseObject?, Error?)
 }
 
 public class JsonResponseConverter: BackendResponseConverter, Loggable {
@@ -20,21 +20,13 @@ public class JsonResponseConverter: BackendResponseConverter, Loggable {
     }
 
     func convert<T: BackendAPIRequest>(_ type: T.Type,
-                                       response data: NetworkResponse) -> (T.ResponseObject?, Error?) {
-        if (data.0 as NSData).length == 0 {
+                                       response: NetworkResponse) -> (T.ResponseObject?, Error?) {
+        if (response.data as NSData).length == 0 {
             return (nil, AppError.responseError(code: MRKitErrorCode.emptyResponse))
         }
 
-        if let fields = data.2?.allHeaderFields as? [String : String],
-            let url = data.2?.url {
-            let coockies = HTTPCookie.cookies(withResponseHeaderFields: fields, for: url)
-            for cookie in coockies {
-                HTTPCookieStorage.shared.setCookie(cookie)
-            }
-        }
-
         do {
-            let responseData = try JSONDecoder().decode(T.ResponseObject.self, from: data.0)
+            let responseData = try JSONDecoder().decode(T.ResponseObject.self, from: response.data)
             return (responseData, nil)
         } catch {
             if let type = T.ResponseObject.self as? ExpressibleByNilLiteral.Type,

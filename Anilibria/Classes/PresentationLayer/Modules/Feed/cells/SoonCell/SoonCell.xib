@@ -51,11 +51,6 @@
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RKb-bD-WfM" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
-                                                <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="leftAction:" destination="Hyf-nN-9HK" eventType="touchUpInside" id="Kt6-bR-vJq"/>
                                         </connections>
@@ -98,11 +93,6 @@
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nDu-9C-dUw" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
-                                                <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="rightAction:" destination="Hyf-nN-9HK" eventType="touchUpInside" id="44z-Xm-tel"/>
                                         </connections>

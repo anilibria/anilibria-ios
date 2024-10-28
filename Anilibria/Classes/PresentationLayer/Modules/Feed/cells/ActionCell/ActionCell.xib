@@ -64,11 +64,6 @@
                 <constraint firstItem="gei-IG-kfO" firstAttribute="leading" secondItem="iU2-5f-z9x" secondAttribute="leading" id="k7t-Re-GBl"/>
             </constraints>
             <size key="customSize" width="320" height="247"/>
-            <userDefinedRuntimeAttributes>
-                <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
-                    <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                </userDefinedRuntimeAttribute>
-            </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="rippleContainerView" destination="W7f-EV-pZc" id="dwu-Tp-NfE"/>
                 <outlet property="titleLabel" destination="bYg-fA-KUG" id="nlo-rq-UXU"/>

@@ -81,11 +81,6 @@
                 <constraint firstAttribute="bottom" secondItem="jol-C7-qHy" secondAttribute="bottom" id="WDN-CO-OWb"/>
             </constraints>
             <size key="customSize" width="320" height="247"/>
-            <userDefinedRuntimeAttributes>
-                <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
-                    <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                </userDefinedRuntimeAttribute>
-            </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="containerView" destination="t3z-jX-0vy" id="yMf-yH-ZgS"/>
                 <outlet property="descLabel" destination="VaE-ZG-edn" id="xiM-bV-Rov"/>

@@ -100,11 +100,6 @@
                 <constraint firstAttribute="bottom" secondItem="aNo-sx-Vwr" secondAttribute="bottom" id="gJO-uH-dd4"/>
             </constraints>
             <size key="customSize" width="320" height="247"/>
-            <userDefinedRuntimeAttributes>
-                <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
-                    <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                </userDefinedRuntimeAttribute>
-            </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="imageView" destination="pNj-Ol-tSE" id="jpg-ic-l4c"/>
                 <outlet property="releaseTitleLabel" destination="dk5-Jf-Vqx" id="tj5-Hj-vO6"/>

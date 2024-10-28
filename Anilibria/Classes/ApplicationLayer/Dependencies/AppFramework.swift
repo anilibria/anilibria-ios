@@ -16,6 +16,7 @@ private class RepositoriesPart: DIPart {
         HistoryRepositoryPart.self,
         PlayerSettingsRepositoryPart.self,
         UserRepositoryPart.self,
+        TokenRepositoryPart.self,
         LinksRepositoryPart.self,
         BackendRepositoryPart.self
     ]
@@ -60,7 +61,6 @@ private class PersentersPart: DIPart {
         HistoryPart.self,
         SettingsPart.self,
         FavoritePart.self,
-        SocialAuthPart.self,
         SignInPart.self,
         OtherPart.self,
         ChoiceSheetPart.self,
@@ -86,8 +86,8 @@ private class SomePart: DIPart {
     static func load(container: DIContainer) {
         container.register {
             BackendConfiguration(converter: JsonResponseConverter(),
-                                 interceptor: nil,
-                                 retrier: $0)
+                                 interceptor: MainRequestModifier(tokenRepository: $0),
+                                 retrier: $1)
         }
         .lifetime(.single)
 

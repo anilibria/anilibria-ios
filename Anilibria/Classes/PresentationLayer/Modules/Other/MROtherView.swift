@@ -78,7 +78,9 @@ final class OtherViewController: BaseViewController {
 }
 
 extension OtherViewController: OtherViewBehavior {
-    func set(user: User?) {
+    func set(user: User?, loading: Bool) {
+        self.userNameLabel.isHidden = loading
+        self.authButton.isHidden = loading
         self.userNameLabel.text = user?.name ?? L10n.Common.guest
         let title = user == nil ? L10n.Buttons.signIn : L10n.Buttons.signOut
         self.authButton.setTitle(title, for: .normal)

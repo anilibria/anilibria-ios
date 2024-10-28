@@ -106,11 +106,6 @@
                 <constraint firstItem="4VD-MH-csd" firstAttribute="top" secondItem="qSz-5k-d6j" secondAttribute="top" id="rB1-4G-AJo"/>
             </constraints>
             <size key="customSize" width="320" height="247"/>
-            <userDefinedRuntimeAttributes>
-                <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
-                    <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                </userDefinedRuntimeAttribute>
-            </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="commentsCountLabel" destination="p5o-Ce-Vpt" id="9rb-UV-oa6"/>
                 <outlet property="commentsIconView" destination="amC-vl-Apl" id="62S-mk-P0t"/>

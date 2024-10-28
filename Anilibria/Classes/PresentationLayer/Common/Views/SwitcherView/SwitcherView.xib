@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -26,7 +26,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gsN-nq-dXI">
-                    <rect key="frame" x="0.0" y="71" width="320" height="30"/>
+                    <rect key="frame" x="0.0" y="37" width="320" height="30"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Ow-R9-8xS" customClass="CircleView" customModule="Anilibria" customModuleProvider="target">
                             <rect key="frame" x="124" y="0.0" width="72" height="30"/>
@@ -128,9 +128,6 @@
                                 <constraint firstAttribute="width" constant="72" id="GOl-PB-gRs"/>
                             </constraints>
                             <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
-                                    <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </userDefinedRuntimeAttribute>
                                 <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                     <real key="value" value="5"/>
                                 </userDefinedRuntimeAttribute>
@@ -157,11 +154,6 @@
                             <constraints>
                                 <constraint firstAttribute="width" constant="70" id="AcV-ep-gHl"/>
                             </constraints>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
-                                    <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
                             <connections>
                                 <action selector="previosTapped:" destination="-1" eventType="touchUpInside" id="rUH-2d-zfS"/>
                                 <outlet property="rippleContainerView" destination="QeL-vs-d7d" id="L37-OR-xtR"/>
@@ -172,11 +164,6 @@
                             <constraints>
                                 <constraint firstAttribute="width" constant="70" id="Lhe-IY-80R"/>
                             </constraints>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
-                                    <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
                             <connections>
                                 <action selector="nextTapped:" destination="-1" eventType="touchUpInside" id="LFt-OP-0UQ"/>
                                 <outlet property="rippleContainerView" destination="13x-kM-7xx" id="ILR-gW-ybe"/>

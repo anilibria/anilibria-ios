@@ -37,11 +37,6 @@
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jzC-6R-ifU" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
-                                                <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="deleteAction:" destination="8oi-jf-8Gk" eventType="touchUpInside" id="qwS-wb-fLC"/>
                                         </connections>

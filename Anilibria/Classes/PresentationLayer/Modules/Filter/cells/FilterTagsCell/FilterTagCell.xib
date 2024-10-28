@@ -53,11 +53,6 @@
                 <constraint firstItem="L1h-th-x3c" firstAttribute="top" secondItem="3kf-62-BcA" secondAttribute="top" constant="4" id="TMK-mf-6X3"/>
             </constraints>
             <size key="customSize" width="96" height="98"/>
-            <userDefinedRuntimeAttributes>
-                <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
-                    <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                </userDefinedRuntimeAttribute>
-            </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="backView" destination="L1h-th-x3c" id="dth-xT-zDM"/>
                 <outlet property="rippleContainerView" destination="L1h-th-x3c" id="i0d-4O-4e9"/>

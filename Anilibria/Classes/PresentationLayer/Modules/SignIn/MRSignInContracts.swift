@@ -3,7 +3,7 @@ import UIKit
 // MARK: - Contracts
 
 protocol SignInViewBehavior: WaitingBehavior {
-    func set(socialLogin avaible: Bool)
+    func set(providers: [AuthProvider])
 }
 
 protocol SignInEventHandler: ViewControllerEventHandler {
@@ -12,6 +12,6 @@ protocol SignInEventHandler: ViewControllerEventHandler {
     func back()
     func register()
 
-    func login(login: String, password: String, code: String)
-    func socialLogin()
+    func login(login: String, password: String)
+    func login(with provider: AuthProvider)
 }

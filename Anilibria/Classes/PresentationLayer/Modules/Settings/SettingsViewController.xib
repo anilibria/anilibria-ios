@@ -84,11 +84,6 @@
                                                                 </label>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J2z-Ou-tur" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="382" height="40"/>
-                                                                    <userDefinedRuntimeAttributes>
-                                                                        <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
-                                                                            <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                        </userDefinedRuntimeAttribute>
-                                                                    </userDefinedRuntimeAttributes>
                                                                     <connections>
                                                                         <action selector="languageAction:" destination="-1" eventType="touchUpInside" id="3eK-cz-nXd"/>
                                                                     </connections>
@@ -124,11 +119,6 @@
                                                                 </label>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QEz-rf-vhz" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="382" height="40"/>
-                                                                    <userDefinedRuntimeAttributes>
-                                                                        <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
-                                                                            <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                        </userDefinedRuntimeAttribute>
-                                                                    </userDefinedRuntimeAttributes>
                                                                     <connections>
                                                                         <action selector="qualityAction:" destination="-1" eventType="touchUpInside" id="ADV-UO-qjX"/>
                                                                     </connections>

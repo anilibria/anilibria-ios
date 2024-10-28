@@ -56,11 +56,6 @@
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x6C-7H-r4b" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="260"/>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
-                            <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        </userDefinedRuntimeAttribute>
-                    </userDefinedRuntimeAttributes>
                     <connections>
                         <action selector="playAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="u5y-Xk-qsW"/>
                     </connections>

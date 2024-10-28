@@ -12,6 +12,7 @@ class BackendRepositoryPart: DIPart {
 
 protocol BackendRepository {
     func request<T: BackendAPIRequest>(_ request: T) -> AnyPublisher<T.ResponseObject, Error>
+    func request<T: BackendAPIRequest>(_ request: T, retrier: LoadRetrier) -> AnyPublisher<T.ResponseObject, Error>
     func apply(_ settings: AniSettings)
 }
 
@@ -42,12 +43,26 @@ final class BackendRepositoryImp: BackendRepository, Loggable {
             .eraseToAnyPublisher()
     }
 
-    private func defaultRequest<T: BackendAPIRequest>(_ request: T) -> AnyPublisher<NetworkResponse, Error> {
-        return self.networkManager.request(url: request.buildUrl(),
-                                           method: request.method,
-                                           body: request.body,
-                                           params: request.parameters,
-                                           headers: request.headers)
+    func request<T: BackendAPIRequest>(_ request: T, retrier: LoadRetrier) -> AnyPublisher<T.ResponseObject, Error> {
+        return self.defaultRequest(request, retrier: retrier)
+            .tryMap { [unowned self] data in
+                try self.convertResponse(request: request, data: data)
+            }
+            .eraseToAnyPublisher()
+    }
+
+    private func defaultRequest<T: BackendAPIRequest>(
+        _ request: T,
+        retrier: LoadRetrier? = nil
+    ) -> AnyPublisher<NetworkResponse, Error> {
+        return self.networkManager.request(
+            url: request.buildUrl(),
+            method: request.method,
+            body: request.body,
+            params: request.parameters,
+            headers: request.headers,
+            retrier: retrier
+        )
     }
 
     private func convertResponse<T: BackendAPIRequest>(request: T,

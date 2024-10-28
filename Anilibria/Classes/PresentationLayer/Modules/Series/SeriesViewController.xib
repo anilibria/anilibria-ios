@@ -80,11 +80,6 @@
                                         </imageView>
                                         <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2K1-Xt-21R" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="0.0" width="44" height="22"/>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
-                                                    <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </userDefinedRuntimeAttribute>
-                                            </userDefinedRuntimeAttributes>
                                             <connections>
                                                 <action selector="favoriteAction:" destination="-1" eventType="touchUpInside" id="6q3-G7-59q"/>
                                             </connections>
@@ -211,11 +206,6 @@
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eXk-os-Vg9" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
                                                     <rect key="frame" x="0.0" y="0.0" width="57.666666666666664" height="37"/>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
-                                                            <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
                                                     <connections>
                                                         <action selector="donateAction:" destination="-1" eventType="touchUpInside" id="Bdr-82-Ypz"/>
                                                     </connections>

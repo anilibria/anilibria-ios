@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina3_5" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,7 +15,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aXS-hM-ECg">
-                    <rect key="frame" x="15" y="8" width="397" height="96"/>
+                    <rect key="frame" x="15" y="67" width="397.33333333333331" height="37"/>
                     <string key="text">Серия 133-144 [WEBRip 1080p HEVC] 
 Добавлен 23.02.2020 00:00</string>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -23,25 +23,20 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dwP-dc-YWg">
-                    <rect key="frame" x="15" y="111" width="470" height="1"/>
+                    <rect key="frame" x="15" y="77" width="470" height="1"/>
                     <color key="backgroundColor" red="0.93333333330000001" green="0.93333333330000001" blue="0.93333333330000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="iKY-CC-JrK"/>
                     </constraints>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UlW-ye-Zxg" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
-                    <rect key="frame" x="0.0" y="0.0" width="500" height="112"/>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
-                            <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        </userDefinedRuntimeAttribute>
-                    </userDefinedRuntimeAttributes>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UlW-ye-Zxg" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="59" width="500" height="53"/>
                     <connections>
                         <action selector="tapAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="XII-gI-jkb"/>
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sbc-V4-00K">
-                    <rect key="frame" x="422" y="8" width="63" height="96"/>
+                    <rect key="frame" x="422.33333333333331" y="67" width="62.666666666666686" height="37"/>
                     <string key="text">113.91 GB
 ↑ 8
 ↓ 9
@@ -51,6 +46,7 @@
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="Sbc-V4-00K" firstAttribute="leading" secondItem="aXS-hM-ECg" secondAttribute="trailing" constant="10" id="3T6-UZ-08k"/>
@@ -69,7 +65,6 @@
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="dwP-dc-YWg" secondAttribute="trailing" constant="15" id="vfe-XS-ybE"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
                 <outlet property="infoLabel" destination="Sbc-V4-00K" id="lFA-9d-drr"/>
                 <outlet property="mainLabel" destination="aXS-hM-ECg" id="QxQ-zy-kQP"/>

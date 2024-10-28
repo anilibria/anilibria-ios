@@ -11,4 +11,6 @@ public struct MRKitErrorCode {
     public static let emptyResponse = 10400
     /// Error parsing response
     public static let parsingError = 10401
+    /// unexpected
+    public static let unexpected = 10500
 }

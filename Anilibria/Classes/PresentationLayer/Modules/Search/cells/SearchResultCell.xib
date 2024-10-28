@@ -73,11 +73,6 @@
                 <constraint firstItem="xfx-8L-QRy" firstAttribute="leading" secondItem="Iqt-2O-7bU" secondAttribute="leading" id="FOk-LV-7L6"/>
                 <constraint firstAttribute="trailing" secondItem="xfx-8L-QRy" secondAttribute="trailing" id="ol5-dp-125"/>
             </constraints>
-            <userDefinedRuntimeAttributes>
-                <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
-                    <color key="value" red="0.086274509799999996" green="0.14901960780000001" blue="0.21960784310000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                </userDefinedRuntimeAttribute>
-            </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="backView" destination="xfx-8L-QRy" id="zXw-aZ-fQK"/>
                 <outlet property="iconView" destination="aZM-Jy-hzz" id="C2T-3r-gXx"/>
@@ -91,7 +86,7 @@
     <resources>
         <image name="menu_item_search" width="30" height="30"/>
         <namedColor name="surfaces/content">
-            <color red="0.99999994039535522" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.99607843137254903" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="text/main">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

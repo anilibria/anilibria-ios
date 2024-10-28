@@ -54,7 +54,7 @@ extension SeriesPresenter: SeriesEventHandler {
             .fetchState()
             .sink(onNext: { [weak self] state in
                 switch state {
-                case .guest:
+                case .guest, nil:
                     self?.view.can(favorite: false)
                 case .user:
                     self?.view.can(favorite: true)

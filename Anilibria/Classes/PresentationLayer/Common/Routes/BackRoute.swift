@@ -15,8 +15,10 @@ extension BackRoute where Self: RouterProtocol {
     func backToRoot() {
         if let nc = self.controller.navigationController, nc.viewControllers.first != self.controller {
             nc.popToRootViewController(animated: true)
+        } else if let controller = self.controller.presentingViewController {
+            controller.dismiss(animated: true)
         } else {
-            self.controller.dismiss(animated: true)
+            controller.dismiss(animated: true)
         }
     }
 

@@ -15,6 +15,8 @@ final class SignInViewController: BaseViewController {
 
     var handler: SignInEventHandler!
 
+    override var isNavigationBarVisible: Bool { false }
+
     // MARK: - Life cycle
 
     override func viewDidLoad() {
@@ -35,26 +37,6 @@ final class SignInViewController: BaseViewController {
         logInButton.enabledColor = UIColor(resource: .Buttons.selected)
         logInButton.disabledColor = UIColor(resource: .Buttons.unselected)
         logInButton.cornerRadius = 6
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
 
     private func subscribes() {
@@ -80,10 +62,6 @@ final class SignInViewController: BaseViewController {
 
     @IBAction func closeAction(_ sender: Any) {
         self.handler.back()
-    }
-
-    @IBAction func registerAction(_ sender: Any) {
-        self.handler.register()
     }
 
     @IBAction func loginAction(_ sender: Any) {

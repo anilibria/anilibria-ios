@@ -13,8 +13,10 @@ public struct AuthProviderDataRequest: BackendAPIRequest {
     
     let endpoint: String
     let method: NetworkManager.Method = .GET
+    let parameters: [String: Any]
 
     init(provider: AuthProvider) {
         endpoint = "/accounts/users/auth/social/\(provider.rawValue)/login"
+        parameters = ["host": Configuration.server]
     }
 }

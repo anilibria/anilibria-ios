@@ -15,6 +15,8 @@ final class OtherViewController: BaseViewController {
 
     var handler: OtherEventHandler!
 
+    override var isNavigationBarVisible: Bool { false }
+
     // MARK: - Life cycle
 
     override func viewDidLoad() {
@@ -32,26 +34,6 @@ final class OtherViewController: BaseViewController {
         teamTitleLabel.text = L10n.Screen.Other.team
         donateTitleLabel.text = L10n.Screen.Other.donate
         settingsTitleLabel.text = L10n.Screen.Settings.title
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
 
     // MARK: - Actions

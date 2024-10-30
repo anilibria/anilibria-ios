@@ -35,11 +35,7 @@ extension SignInPresenter: SignInEventHandler {
     }
 
     func back() {
-        self.router.back()
-    }
-
-    func register() {
-//        self.router.open(url: .web(URLS.register))
+        self.router.backToRoot()
     }
 
     func login(login: String, password: String) {

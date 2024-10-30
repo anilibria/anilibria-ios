@@ -67,8 +67,8 @@ extension SeriesPresenter: SeriesEventHandler {
         guard let genreID = Int(genre) else { return }
         var filter = SeriesFilter()
         filter.genres = [genreID]
-        let command = FilterRouteCommand(value: filter)
-        self.router.execute(command)
+
+        self.router.openCatalog(filter: filter)
     }
 
     func select(url: URL) {

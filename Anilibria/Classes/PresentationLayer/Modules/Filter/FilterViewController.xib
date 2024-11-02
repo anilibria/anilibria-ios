@@ -134,6 +134,7 @@
                     <color key="backgroundColor" name="surfaces/content"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="DPj-7u-1wt" secondAttribute="trailing" constant="20" id="2rv-CI-ihm"/>
+                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="DPj-7u-1wt" secondAttribute="bottom" constant="16" id="BXU-zr-VZp"/>
                         <constraint firstItem="DPj-7u-1wt" firstAttribute="top" secondItem="V1D-DW-wjf" secondAttribute="top" constant="8" id="WNz-Xl-Qt5"/>
                         <constraint firstItem="DPj-7u-1wt" firstAttribute="leading" secondItem="V1D-DW-wjf" secondAttribute="leading" constant="20" id="fBZ-bL-i1f"/>
                     </constraints>
@@ -172,7 +173,7 @@
                 <constraint firstItem="e7e-S3-8Eo" firstAttribute="top" secondItem="FRj-Yd-6CF" secondAttribute="bottom" id="WYn-32-bMd"/>
                 <constraint firstItem="utT-W8-Ny9" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="XSB-lR-XVy"/>
                 <constraint firstItem="XHX-RV-cHC" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="fiW-J3-3Vm"/>
-                <constraint firstItem="DPj-7u-1wt" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="lns-TF-gS3"/>
+                <constraint firstItem="DPj-7u-1wt" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" priority="999" id="lns-TF-gS3"/>
                 <constraint firstItem="hji-Na-PPg" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="nLQ-8Y-uKx"/>
                 <constraint firstItem="e7e-S3-8Eo" firstAttribute="trailing" secondItem="hji-Na-PPg" secondAttribute="trailing" id="seh-0e-VaU"/>
                 <constraint firstAttribute="bottom" secondItem="hac-IT-FJi" secondAttribute="bottom" id="teI-Iz-MfP"/>

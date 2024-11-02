@@ -207,6 +207,7 @@
                                 <constraint firstAttribute="height" constant="40" id="C4t-PY-a82"/>
                                 <constraint firstAttribute="width" constant="40" id="uj9-85-tIX"/>
                             </constraints>
+                            <color key="tintColor" name="text/main"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <state key="normal" image="icon_close"/>
                             <connections>

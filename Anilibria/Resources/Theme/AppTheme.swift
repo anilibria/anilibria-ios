@@ -37,6 +37,7 @@ public struct MainTheme: AppTheme {
     func configureTextView() {
         UITextView.appearance().tintColor = UIColor(resource: .Tint.main)
         UITextField.appearance().tintColor = UIColor(resource: .Tint.main)
+        UICollectionView.appearance().backgroundColor = .clear
     }
 
     func configureCollectionView() {

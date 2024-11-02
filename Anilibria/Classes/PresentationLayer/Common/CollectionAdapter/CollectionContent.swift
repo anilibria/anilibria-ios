@@ -61,55 +61,6 @@ class CollectionContent {
     }
 }
 
-class SectionAdapter: SectionAdapterProtocol {
-    let uid = UUID()
-    var insets: NSDirectionalEdgeInsets = .zero
-    var minimumLineSpacing: CGFloat = 0
-    var minimumInteritemSpacing: CGFloat = 0
-    private(set) var items: [any CellAdapterProtocol] = []
-
-    init(_ items: [any CellAdapterProtocol]) {
-        self.set(items)
-    }
-
-    func set(_ items: [any CellAdapterProtocol]) {
-        self.items = items
-        self.items.forEach {
-            $0.section = self
-        }
-    }
-
-    func getIdentifier() -> AnyHashable {
-        uid
-    }
-
-    func getItems() -> [any CellAdapterProtocol] {
-        items
-    }
-
-    func getSectionLayout(environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(50)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(50)
-        )
-        let group = NSCollectionLayoutGroup.horizontal(
-            layoutSize: groupSize,
-            subitems: [item]
-        )
-        group.interItemSpacing = .flexible(minimumInteritemSpacing)
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = insets
-        section.interGroupSpacing = minimumLineSpacing
-        return section
-    }
-}
-
 protocol CellAdaptersProvider {
     func getItems() -> [any CellAdapterProtocol]
 }

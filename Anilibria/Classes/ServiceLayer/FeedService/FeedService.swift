@@ -14,7 +14,7 @@ protocol FeedService {
     func fetchRandom() -> AnyPublisher<Series, Error>
     func fetchSchedule() -> AnyPublisher<[Schedule], Error>
     func fetchFeed(page: Int) -> AnyPublisher<[Feed], Error>
-    func fetchNews(page: Int) -> AnyPublisher<[News], Error>
+    func fetchNews(limit: Int) -> AnyPublisher<[News], Error>
     func fetchCatalog(page: Int, filter: SeriesFilter) -> AnyPublisher<[Series], Error>
     func search(query: String) -> AnyPublisher<[Series], Error>
     func series(with code: String) -> AnyPublisher<Series, Error>
@@ -42,12 +42,11 @@ final class FeedServiceImp: FeedService {
         .eraseToAnyPublisher()
     }
 
-    func fetchNews(page: Int) -> AnyPublisher<[News], Error> {
+    func fetchNews(limit: Int) -> AnyPublisher<[News], Error> {
         return Deferred { [unowned self] in
-            let request = NewsRequest(page: page)
+            let request = NewsRequest(limit: limit)
             return self.backendRepository
                 .request(request)
-                .map { $0.items }
         }
         .subscribe(on: DispatchQueue.global())
         .receive(on: DispatchQueue.main)

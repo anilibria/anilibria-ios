@@ -138,6 +138,7 @@ extension SeriesViewController: SeriesViewBehavior {
 
     func set(series: Series) {
         self.header.configure(series)
+        self.navigationItem.backButtonTitle = series.name?.main
 
         self.set(name: series.name)
         self.setParams(from: series)

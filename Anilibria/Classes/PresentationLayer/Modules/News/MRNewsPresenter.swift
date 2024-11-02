@@ -21,11 +21,6 @@ final class NewsPresenter {
     private var bag = Set<AnyCancellable>()
     private var activity: ActivityDisposable?
     private var pageSubscriber: AnyCancellable?
-    private var nextPage: Int = 1
-
-    private lazy var pagination = PaginationViewModel { [weak self] completion in
-        self?.loadPage(completion: completion)
-    }
 
     init(newsService: FeedService) {
         self.feedService = newsService
@@ -53,10 +48,8 @@ extension NewsPresenter: NewsEventHandler {
     }
     
     private func load() {
-        nextPage = 1
-        pageSubscriber = feedService.fetchNews(page: nextPage)
+        pageSubscriber = feedService.fetchNews(limit: 30)
             .sink(onNext: { [weak self] items in
-                self?.nextPage += 1
                 self?.set(items: items)
                 self?.activity = nil
             }, onError: { [weak self] error in
@@ -65,25 +58,7 @@ extension NewsPresenter: NewsEventHandler {
             })
     }
     
-    private func loadPage(completion: @escaping Action<Bool>) {
-        pageSubscriber = feedService.fetchNews(page: nextPage)
-            .sink(onNext: { [weak self] items in
-                self?.nextPage += 1
-                self?.append(items: items)
-                completion(items.isEmpty)
-                self?.activity = nil
-            }, onError: { [weak self] error in
-                self?.router.show(error: error)
-                completion(false)
-                self?.activity = nil
-            })
-    }
-    
     private func set(items: [News]) {
-        self.view.set(items: items + [pagination])
-    }
-    
-    private func append(items: [News]) {
-        self.view.append(items: items + [pagination])
+        self.view.set(items: items)
     }
 }

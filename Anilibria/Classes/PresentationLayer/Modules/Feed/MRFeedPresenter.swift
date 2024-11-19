@@ -21,11 +21,6 @@ final class FeedPresenter {
 
     private var bag = Set<AnyCancellable>()
     private var activity: ActivityDisposable?
-    private var schedules: [Schedule] = []
-    private let updates = TitleItem(L10n.Screen.Feed.updatesTitle)
-   
-    private var nextPage: Int = 1
-    private var pageSubscriber: AnyCancellable?
 
     private lazy var randomSeries = ActionItem(L10n.Screen.Feed.randomRelease) { [weak self] in
         self?.selectRandom()
@@ -33,10 +28,6 @@ final class FeedPresenter {
 
     private lazy var history = ActionItem(L10n.Screen.Feed.history) { [weak self] in
         self?.selectHistory()
-    }
-
-    private lazy var pagination = PaginationViewModel { [weak self] completion in
-        self?.loadPage(completion: completion)
     }
 
     init(feedService: FeedService,
@@ -115,20 +106,12 @@ extension FeedPresenter: FeedEventHandler {
     }
 
     func allSchedule() {
-        if !self.schedules.isEmpty {
-            self.router.open(schedules: self.schedules)
-        }
+        router.openWeekSchedule()
     }
 
     private func load() {
-        nextPage = 1
-        
-        Publishers.Zip(
-            self.feedService.fetchSchedule(),
-            self.feedService.fetchFeed(page: nextPage)
-        ).sink(onNext: { [weak self] schedules, feeds in
-            self?.nextPage += 1
-            self?.create(schedules: schedules, feeds: feeds)
+        self.feedService.fetchTodaySchedule().sink(onNext: { [weak self] schedule in
+            self?.create(schedule: schedule, feeds: [])
             self?.activity = nil
         }, onError: { [weak self] error in
             self?.router.show(error: error)
@@ -136,49 +119,23 @@ extension FeedPresenter: FeedEventHandler {
         })
         .store(in: &bag)
     }
-    
-    private func loadPage(completion: @escaping Action<Bool>) {
-        pageSubscriber = self.feedService.fetchFeed(page: nextPage)
-            .sink(onNext: { [weak self] feeds in
-                self?.nextPage += 1
-                self?.append(feeds)
-                completion(feeds.isEmpty)
-            }, onError: { [weak self] error in
-                self?.router.show(error: error)
-                completion(false)
-            })
-    }
 
-    private func create(schedules: [Schedule], feeds: [Feed]) {
-        self.schedules = schedules
-        var scheduleBlock = [NSObject]()
-        if !schedules.isEmpty {
-            let scheduleAction = ActionItem(L10n.Screen.Feed.schedule) { [weak self] in
-                self?.allSchedule()
-            }
-
-            let mskDay = WeekDay.getMsk()
-            if let currentSchedule = schedules.first(where: { $0.day == mskDay }) {
-                if currentSchedule.items.isEmpty == false {
-                    scheduleBlock.append(currentSchedule)
-                }
-            }
-            scheduleBlock.append(scheduleAction)
+    private func create(schedule: Schedule, feeds: [Feed]) {
+        var scheduleBlock = [any Hashable]()
+        let scheduleAction = ActionItem(L10n.Screen.Feed.schedule) { [weak self] in
+            self?.allSchedule()
         }
-       
+        if schedule.items.isEmpty == false {
+            scheduleBlock.append(schedule)
+        }
+        scheduleBlock.append(scheduleAction)
+
 
         var items: [any Hashable] = []
         items.append(contentsOf: scheduleBlock)
         items.append(randomSeries)
         items.append(history)
-        items.append(updates)
         items.append(contentsOf: feeds.compactMap { $0.value })
-        items.append(pagination)
         self.view.set(items: items)
-    }
-
-    private func append(_ feeds: [Feed]) {
-        let items: [any Hashable] = feeds.compactMap { $0.value }
-        self.view.append(items: items + [pagination])
     }
 }

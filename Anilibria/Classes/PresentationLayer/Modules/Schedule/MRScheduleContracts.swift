@@ -8,8 +8,7 @@ protocol ScheduleViewBehavior: WaitingBehavior {
 
 protocol ScheduleEventHandler: ViewControllerEventHandler {
     func bind(view: ScheduleViewBehavior,
-              router: ScheduleRoutable,
-              schedules: [Schedule])
+              router: ScheduleRoutable)
 
     func select(series: Series)
 }

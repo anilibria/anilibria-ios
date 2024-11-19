@@ -15,30 +15,12 @@ protocol LinksRepository {
 
 final class LinksRepositoryImp: LinksRepository {
     let items: [LinkData] = [
-        LinkData(
-            linkType: .vk,
-            url: URL(string: "https://vk.com/anilibria")
-        ),
-        LinkData(
-            linkType: .telegram,
-            url: URL(string: "https://t.me/anilibria")
-        ),
-        LinkData(
-            linkType: .discord,
-            url: URL(string: "https://discord.gg/M6yCGeGN9B")
-        ),
-        LinkData(
-            linkType: .youtube,
-            url: URL(string: "https://www.youtube.com/user/anilibriatv")
-        ),
-        LinkData(
-            linkType: .patreon,
-            url: URL(string: "https://www.patreon.com/anilibria")
-        ),
-        LinkData(
-            linkType: .boosty,
-            url: URL(string: "https://boosty.to/anilibriatv")
-        )
+        LinkData(linkType: .vk, url: URLS.vk),
+        LinkData(linkType: .telegram, url: URLS.telegram),
+        LinkData(linkType: .discord, url: URLS.discord),
+        LinkData(linkType: .youtube, url: URLS.youtube),
+        LinkData(linkType: .patreon, url: URLS.patreon),
+        LinkData(linkType: .boosty, url: URLS.boosty)
     ]
 
     func getItems() -> [LinkData] {

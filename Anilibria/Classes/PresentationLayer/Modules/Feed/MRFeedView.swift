@@ -82,8 +82,4 @@ extension FeedViewController: FeedViewBehavior {
     func append(items: [any Hashable]) {
         append(sections: [SectionAdapter(items.compactMap(self.map(item:)))])
     }
-
-    func loadPageProgress() -> ActivityDisposable? {
-        return nil
-    }
 }

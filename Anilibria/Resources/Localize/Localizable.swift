@@ -342,7 +342,7 @@ internal enum L10n {
       internal static var soonTitle: String {
           return L10n.tr("Localizable", "screen.feed.soon_title")
       }
-      /// Лента
+      /// Главная
       internal static var title: String {
           return L10n.tr("Localizable", "screen.feed.title")
       }

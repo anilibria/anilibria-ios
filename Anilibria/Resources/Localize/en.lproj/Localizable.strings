@@ -78,7 +78,7 @@
 "screen.catalog.title" = "Search";
 
 //FEED SCREEN
-"screen.feed.title" = "Feed";
+"screen.feed.title" = "Main";
 "screen.feed.soon_title" = "Coming soon";
 "screen.feed.schedule" = "Schedule";
 "screen.feed.updates_title" = "Updates";

@@ -3,8 +3,8 @@ import Combine
 
 final class SoonCell: BaseCollectionCell {
     @IBOutlet var titleLabel: UILabel!
-    @IBOutlet var leftView: UIView!
-    @IBOutlet var rightView: UIView!
+    @IBOutlet var leftButton: RippleButton!
+    @IBOutlet var rightButton: RippleButton!
 
     private var langSubscriber: AnyCancellable?
     private var sizeSubscriber: AnyCancellable?
@@ -12,7 +12,19 @@ final class SoonCell: BaseCollectionCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        let conf = UICollectionViewCompositionalLayoutConfiguration()
+        conf.scrollDirection = .horizontal
+        self.adapter.layout?.configuration = conf
         self.collectionView.contentInset.right = 16
+        leftButton.cornerRadius = 8
+        leftButton.clipsToBounds = true
+        rightButton.cornerRadius = 8
+        rightButton.clipsToBounds = true
+
+        #if targetEnvironment(macCatalyst)
+        leftButton.isHidden = false
+        rightButton.isHidden = false
+        #endif
     }
     
     override func prepareForReuse() {
@@ -23,8 +35,8 @@ final class SoonCell: BaseCollectionCell {
     }
 
     func configure(_ item: Schedule, handler: ((Series) -> Void)?) {
-        self.leftView.alpha = 0
-        self.rightView.alpha = 0
+        self.leftButton.alpha = 0
+        self.leftButton.alpha = 0
         self.collectionView.contentOffset = .zero
         
         langSubscriber = Language.languageChanged.sink { [weak self] in
@@ -33,7 +45,7 @@ final class SoonCell: BaseCollectionCell {
         self.titleLabel.text = self.generateTitle(item.day)
 
         self.reload(sections: [
-            ScheduleSeriesSectionAdapter(
+            SoonSectionAdapter(
                 item.items.map { ScheduleSeriesCellAdapter(viewModel: $0, seclect: handler) }
             )
         ])
@@ -89,14 +101,14 @@ final class SoonCell: BaseCollectionCell {
         let offset = self.collectionView.contentOffset.x
         let endOffset = self.getEndOffset()
         if offset <= 0 {
-            self.visible(view: self.leftView, value: false)
-            self.visible(view: self.rightView, value: true)
+            self.visible(view: self.leftButton, value: false)
+            self.visible(view: self.rightButton, value: true)
         } else if floor(offset) >= floor(endOffset) {
-            self.visible(view: self.leftView, value: true)
-            self.visible(view: self.rightView, value: false)
+            self.visible(view: self.leftButton, value: true)
+            self.visible(view: self.rightButton, value: false)
         } else {
-            self.visible(view: self.leftView, value: true)
-            self.visible(view: self.rightView, value: true)
+            self.visible(view: self.leftButton, value: true)
+            self.visible(view: self.rightButton, value: true)
         }
     }
 
@@ -121,12 +133,6 @@ final class SoonCell: BaseCollectionCell {
         }
         let msk = L10n.Common.mskTimeZone
         return "\(soonTitle) \(weekDay.onDay) \(msk)"
-    }
-
-    static func height(with width: CGFloat) -> CGFloat {
-        let width = Sizes.adapt(width)
-        let height = (((width - 64)/3) * 10) / 7
-        return height + 70
     }
 
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {

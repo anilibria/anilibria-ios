@@ -4,12 +4,13 @@ final class ScheduleSeriesCell: RippleViewCell {
     @IBOutlet var imageView: UIImageView!
     @IBOutlet var releaseIndicatorView: [UIView]!
     @IBOutlet var releaseTitleLabel: UILabel!
+    
 
-    func configure(_ item: Series) {
-        self.releaseTitleLabel.text = item.name?.main
+    func configure(_ schedule: ScheduleItem) {
+        self.releaseTitleLabel.text = schedule.item.name?.main
         self.releaseTitleLabel.superview?.isHidden = true
 
-        self.imageView.setImage(from: item.poster,
+        self.imageView.setImage(from: schedule.item.poster,
                                 placeholder: UIImage(resource: .imgPlaceholder)) { result in
             switch result {
             case .failure:
@@ -19,19 +20,12 @@ final class ScheduleSeriesCell: RippleViewCell {
                 self.releaseTitleLabel.superview?.isHidden = true
             }
         }
-        self.renderIndicator(item)
+        self.renderIndicator(schedule)
     }
 
-    private func renderIndicator(_ item: Series) {
-//        let hasUpdates = item.hasUpdates()
-        self.releaseIndicatorView.forEach { $0.isHidden = true }
-    }
-
-    static func size(with width: CGFloat, gap: CGFloat) -> CGSize {
-        let width = (width > 500 ? 500 : width)
-        let cellWidth = (width - gap * 4)/3
-        let cellHeight = (cellWidth * 10) / 7
-        return CGSize(width: cellWidth, height: cellHeight)
+    private func renderIndicator(_ schedule: ScheduleItem) {
+        let hasUpdates = schedule.newEpisode != nil
+        self.releaseIndicatorView.forEach { $0.isHidden = !hasUpdates }
     }
 
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {

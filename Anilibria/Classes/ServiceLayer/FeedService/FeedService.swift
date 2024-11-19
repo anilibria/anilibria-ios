@@ -12,6 +12,7 @@ final class FeedServicePart: DIPart {
 
 protocol FeedService {
     func fetchRandom() -> AnyPublisher<Series, Error>
+    func fetchTodaySchedule() -> AnyPublisher<Schedule, Error>
     func fetchSchedule() -> AnyPublisher<[Schedule], Error>
     func fetchFeed(page: Int) -> AnyPublisher<[Feed], Error>
     func fetchNews(limit: Int) -> AnyPublisher<[News], Error>
@@ -28,7 +29,44 @@ final class FeedServiceImp: FeedService {
     }
 
     func fetchSchedule() -> AnyPublisher<[Schedule], Error> {
-        return .just([])
+        return Deferred { [unowned self] in
+            let request = ScheduleWeekRequest()
+            return self.backendRepository
+                .request(request)
+        }
+        .map { items in
+            Dictionary(grouping: items, by: { $0.item.publishDay?.value })
+                .sorted(by: { first, second in
+                    switch (first.key, second.key) {
+                    case (_, nil):
+                        return true
+                    case (nil, _):
+                        return false
+                    case (let firstKey?, let secondKey?):
+                        return firstKey.rawValue < secondKey.rawValue
+                    }
+                }).map {
+                    Schedule(day: $0, items: $1)
+                }
+        }
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
+    }
+
+    func fetchTodaySchedule() -> AnyPublisher<Schedule, any Error> {
+        return Deferred { [unowned self] in
+            let request = ScheduleNowRequest()
+            return self.backendRepository
+                .request(request)
+        }
+        .map { items in
+            let values = items["today"] ?? []
+            return Schedule(day: values.first?.item.publishDay?.value, items: values)
+        }
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
     func fetchFeed(page: Int) -> AnyPublisher<[Feed], Error> {

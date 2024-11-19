@@ -19,13 +19,14 @@ class CollectionViewAdapter: NSObject {
     private var content: CollectionContent?
 
     weak var scrollViewDelegate: UIScrollViewDelegate?
+    weak var layout: UICollectionViewCompositionalLayout?
 
     init(collectionView: UICollectionView) {
         self.collectionView = collectionView
         self.context = CollectionContext(collectionView)
         super.init()
         self.dataSource = makeDataSource()
-        collectionView.collectionViewLayout = UICollectionViewCompositionalLayout(
+        let layout = UICollectionViewCompositionalLayout(
             sectionProvider: { [weak self] sectionIndex, environment in
                 guard
                     let self,
@@ -37,6 +38,9 @@ class CollectionViewAdapter: NSObject {
                 return data.section.getSectionLayout(environment: environment)
             }
         )
+
+        collectionView.collectionViewLayout = layout
+        self.layout = layout
         self.collectionView.delegate = self
     }
 

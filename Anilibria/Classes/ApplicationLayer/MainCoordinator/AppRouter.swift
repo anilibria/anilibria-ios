@@ -8,7 +8,9 @@ public class AppRouter {
     private func createWindow() -> UIWindow {
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window.backgroundColor = .black
+        #if targetEnvironment(macCatalyst)
         window.windowScene?.titlebar?.titleVisibility = .hidden
+        #endif
 
         return self.window
     }

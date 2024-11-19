@@ -10,31 +10,38 @@ final class LinksRepositoryPart: DIPart {
 }
 
 protocol LinksRepository {
-    func set(items: [LinkData])
     func getItems() -> [LinkData]
 }
 
 final class LinksRepositoryImp: LinksRepository {
-    private let key: String = "LINKS_KEY"
-
-    private var buffered: LinksHolder?
-
-    func set(items: [LinkData]) {
-        self.buffered = LinksHolder(date: Date(), items: items)
-        UserDefaults.standard[key] = self.buffered
-    }
+    let items: [LinkData] = [
+        LinkData(
+            linkType: .vk,
+            url: URL(string: "https://vk.com/anilibria")
+        ),
+        LinkData(
+            linkType: .telegram,
+            url: URL(string: "https://t.me/anilibria")
+        ),
+        LinkData(
+            linkType: .discord,
+            url: URL(string: "https://discord.gg/M6yCGeGN9B")
+        ),
+        LinkData(
+            linkType: .youtube,
+            url: URL(string: "https://www.youtube.com/user/anilibriatv")
+        ),
+        LinkData(
+            linkType: .patreon,
+            url: URL(string: "https://www.patreon.com/anilibria")
+        ),
+        LinkData(
+            linkType: .boosty,
+            url: URL(string: "https://boosty.to/anilibriatv")
+        )
+    ]
 
     func getItems() -> [LinkData] {
-        if let data = self.buffered, data.date?.isToday == true {
-            return data.items
-        }
-
-        self.buffered = UserDefaults.standard[key] ?? LinksHolder(items: [])
-        return self.buffered!.items
+        items
     }
-}
-
-private struct LinksHolder: Codable {
-    var date: Date?
-    var items: [LinkData]
 }

@@ -36,6 +36,7 @@
                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="500" id="39I-DI-VU1"/>
                                     <constraint firstItem="bYg-fA-KUG" firstAttribute="centerY" secondItem="W7f-EV-pZc" secondAttribute="centerY" id="NGl-id-IbG"/>
                                     <constraint firstAttribute="trailing" secondItem="bYg-fA-KUG" secondAttribute="trailing" constant="16" id="WgR-jn-RjS"/>
+                                    <constraint firstAttribute="height" constant="40" id="v1R-ee-D1e"/>
                                     <constraint firstItem="bYg-fA-KUG" firstAttribute="leading" secondItem="W7f-EV-pZc" secondAttribute="leading" constant="16" id="xIV-rk-3uW"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>

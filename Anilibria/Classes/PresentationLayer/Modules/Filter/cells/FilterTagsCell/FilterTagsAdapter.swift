@@ -88,8 +88,8 @@ final class FilterTagAdapter: BaseCellAdapter<FilterTag> {
 class FilterTagsSectionAdapter: SectionAdapterProtocol {
     private let headerKind = "FilterTagsTitle"
     private let title: String
-    let uid = UUID()
-    private(set) var items: [any CellAdapterProtocol] = []
+    private let uid: AnyHashable = UUID()
+    private(set) var items: [AnyCellAdapter] = []
 
     init(item: FilterTagsItem) {
         self.title = item.title
@@ -100,12 +100,15 @@ class FilterTagsSectionAdapter: SectionAdapterProtocol {
         }
     }
 
-    func getIdentifier() -> AnyHashable {
-        uid
+    func getIdentifiers() -> [AnyHashable] {
+        [uid]
     }
 
-    func getItems() -> [any CellAdapterProtocol] {
-        items
+    func getItems(for identifier: AnyHashable?) -> [AnyCellAdapter] {
+        if identifier == uid {
+            return items
+        }
+        return []
     }
 
     func getSectionLayout(environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {

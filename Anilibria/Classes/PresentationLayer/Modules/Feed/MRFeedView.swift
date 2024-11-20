@@ -48,26 +48,14 @@ final class FeedViewController: BaseCollectionViewController {
         self.navigationItem.setRightBarButtonItems(items, animated: false)
     }
 
-    private func map(item: any Hashable) -> (any CellAdapterProtocol)? {
+    private func map(item: any Hashable) -> (any SectionAdapterProtocol)? {
         switch item {
-        case let model as Series:
-            return SeriesCellAdapter(viewModel: model) { [weak self] item in
-                self?.handler.select(series: item)
-            }
-        case let model as News:
-            return NewsCellAdapter(viewModel: model) { [weak self] item in
-                self?.handler.select(news: item)
-            }
-        case let model as Schedule:
-            return SoonCellAdapter(viewModel: model) { [weak self] item in
-                self?.handler.select(series: item)
-            }
+        case let model as SoonViewModel:
+            return SoonSectionsAdapter(model)
         case let model as TitleItem:
-            return TitleCellAdapter(viewModel: model)
-        case let model as ActionItem:
-            return ActionCellAdapter(viewModel: model)
-        case let model as PaginationViewModel:
-            return PaginationAdapter(viewModel: model)
+            return SectionAdapter([TitleCellAdapter(viewModel: model)])
+        case let items as [ActionItem]:
+            return SectionAdapter(items.map(ActionCellAdapter.init))
         default:
             return nil
         }
@@ -76,10 +64,6 @@ final class FeedViewController: BaseCollectionViewController {
 
 extension FeedViewController: FeedViewBehavior {
     func set(items: [any Hashable]) {
-        reload(sections: [SectionAdapter(items.compactMap(self.map(item:)))])
-    }
-
-    func append(items: [any Hashable]) {
-        append(sections: [SectionAdapter(items.compactMap(self.map(item:)))])
+        set(sections: items.compactMap(map))
     }
 }

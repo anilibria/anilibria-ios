@@ -26,6 +26,8 @@
 
 //COMMON
 "common.today" = "Today";
+"common.tomorrow" = "Tomorrow";
+"common.yesterday" = "Yesterday";
 "common.msk_time_zone" = "(MSK)";
 "common.week_day.mon" = "Monday";
 "common.week_day.tue" = "Tuesday";

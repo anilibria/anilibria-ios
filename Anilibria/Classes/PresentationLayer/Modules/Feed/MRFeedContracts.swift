@@ -4,7 +4,6 @@ import UIKit
 
 protocol FeedViewBehavior: WaitingBehavior, RefreshBehavior {
     func set(items: [any Hashable])
-    func append(items: [any Hashable])
 }
 
 protocol FeedEventHandler: ViewControllerEventHandler, RefreshEventHandler {

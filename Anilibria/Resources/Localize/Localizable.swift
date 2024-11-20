@@ -91,6 +91,14 @@ internal enum L10n {
     internal static var today: String {
         return L10n.tr("Localizable", "common.today")
     }
+    /// Завтра
+    internal static var tomorrow: String {
+        return L10n.tr("Localizable", "common.tomorrow")
+    }
+    /// Вчера
+    internal static var yesterday: String {
+        return L10n.tr("Localizable", "common.yesterday")
+    }
 
     internal enum FilterSearch {
       /// Искать по жанрам и годам

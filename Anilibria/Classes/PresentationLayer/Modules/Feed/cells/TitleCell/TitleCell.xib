@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,19 +18,20 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EZk-EA-UKZ">
-                        <rect key="frame" x="16" y="18" width="170" height="18"/>
+                        <rect key="frame" x="16" y="18" width="170" height="16"/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
             </view>
+            <viewLayoutGuide key="safeArea" id="mkX-1A-YxS"/>
             <constraints>
+                <constraint firstItem="EZk-EA-UKZ" firstAttribute="top" secondItem="QKo-0M-ITU" secondAttribute="top" constant="18" id="Aj1-ps-ysq"/>
                 <constraint firstAttribute="trailing" secondItem="EZk-EA-UKZ" secondAttribute="trailing" constant="15" id="gSE-FF-VEY"/>
-                <constraint firstAttribute="bottom" secondItem="EZk-EA-UKZ" secondAttribute="bottom" constant="8" id="k20-Qf-m6H"/>
+                <constraint firstAttribute="bottom" secondItem="EZk-EA-UKZ" secondAttribute="bottom" constant="10" id="k20-Qf-m6H"/>
                 <constraint firstItem="EZk-EA-UKZ" firstAttribute="leading" secondItem="QKo-0M-ITU" secondAttribute="leading" constant="16" id="kUK-jS-nbV"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="mkX-1A-YxS"/>
             <size key="customSize" width="201" height="50"/>
             <connections>
                 <outlet property="titleLabel" destination="EZk-EA-UKZ" id="y46-6s-fN7"/>

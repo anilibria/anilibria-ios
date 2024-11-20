@@ -26,6 +26,8 @@
 
 //COMMON
 "common.today" = "Сегодня";
+"common.tomorrow" = "Завтра";
+"common.yesterday" = "Вчера";
 "common.msk_time_zone" = "(по МСК)";
 "common.week_day.mon" = "Понедельник";
 "common.week_day.tue" = "Вторник";

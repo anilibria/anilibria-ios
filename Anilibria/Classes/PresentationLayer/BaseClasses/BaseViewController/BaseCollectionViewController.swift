@@ -80,14 +80,9 @@ class BaseCollectionViewController: BaseViewController {
 
     // MARK: - Methods
 
-    public func reload(sections: [any SectionAdapterProtocol], animated: Bool = true, completion: (() -> Void)? = nil) {
-        self.adapter.reload(content: .init(sections), animated: animated, completion: completion)
+    public func set(sections: [any SectionAdapterProtocol], animated: Bool = true, completion: (() -> Void)? = nil) {
+        self.adapter.set(sections: sections, animated: animated, completion: completion)
     }
-
-    public func append(sections: [any SectionAdapterProtocol], animated: Bool = true, completion: (() -> Void)? = nil) {
-        self.adapter.append(content: .init(sections), animated: animated, completion: completion)
-    }
-
 }
 
 extension BaseCollectionViewController: RefreshBehavior {

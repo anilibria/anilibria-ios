@@ -25,7 +25,7 @@
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ktM-M0-vDh">
-                        <rect key="frame" x="16" y="14.5" width="262" height="21"/>
+                        <rect key="frame" x="16" y="14" width="262" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
@@ -47,11 +47,12 @@
             <constraints>
                 <constraint firstItem="uDb-UA-PfK" firstAttribute="leading" secondItem="9hs-ar-Vmr" secondAttribute="leading" id="48y-gq-6hU"/>
                 <constraint firstAttribute="trailing" secondItem="uDb-UA-PfK" secondAttribute="trailing" id="5G4-Cx-1vG"/>
-                <constraint firstItem="ktM-M0-vDh" firstAttribute="centerY" secondItem="9hs-ar-Vmr" secondAttribute="centerY" id="5J9-r7-VSA"/>
                 <constraint firstItem="A5X-3e-5Nr" firstAttribute="leading" secondItem="ktM-M0-vDh" secondAttribute="trailing" constant="8" id="JuK-vz-UVc"/>
                 <constraint firstItem="ktM-M0-vDh" firstAttribute="leading" secondItem="9hs-ar-Vmr" secondAttribute="leading" constant="16" id="STX-x8-Kwd"/>
                 <constraint firstItem="A5X-3e-5Nr" firstAttribute="centerY" secondItem="9hs-ar-Vmr" secondAttribute="centerY" id="aU1-rt-F5Q"/>
+                <constraint firstItem="ktM-M0-vDh" firstAttribute="top" secondItem="9hs-ar-Vmr" secondAttribute="top" constant="14" id="gKW-AZ-8gC"/>
                 <constraint firstAttribute="trailing" secondItem="A5X-3e-5Nr" secondAttribute="trailing" constant="16" id="otX-bI-7aD"/>
+                <constraint firstItem="uDb-UA-PfK" firstAttribute="top" secondItem="ktM-M0-vDh" secondAttribute="bottom" constant="14" id="pYZ-Vz-8Za"/>
                 <constraint firstAttribute="bottom" secondItem="uDb-UA-PfK" secondAttribute="bottom" id="qQn-vi-3Uv"/>
             </constraints>
             <size key="customSize" width="257" height="50"/>
@@ -60,7 +61,7 @@
                 <outlet property="separatorView" destination="uDb-UA-PfK" id="RSh-Uu-wJm"/>
                 <outlet property="titleLabel" destination="ktM-M0-vDh" id="f73-Uo-d7o"/>
             </connections>
-            <point key="canvasLocation" x="65.94202898550725" y="34.821428571428569"/>
+            <point key="canvasLocation" x="65.217391304347828" y="34.821428571428569"/>
         </collectionViewCell>
     </objects>
     <resources>

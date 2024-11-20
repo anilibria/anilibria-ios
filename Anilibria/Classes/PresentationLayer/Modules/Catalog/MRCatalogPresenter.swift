@@ -17,26 +17,23 @@ final class CatalogPresenter {
     private var router: CatalogRoutable!
 
     private let catalogService: CatalogService
-
-    private var activity: ActivityDisposable?
     private var bag = Set<AnyCancellable>()
-    private var pageSubscriber: AnyCancellable?
-    private var filter: SeriesFilter = SeriesFilter()
-    private var nextPage: Int = 1
 
-    private lazy var pagination = PaginationViewModel { [weak self] completion in
-        self?.loadPage(completion: completion)
-    }
+    let viewModel: CatalogViewModel
 
     init(catalogService: CatalogService) {
         self.catalogService = catalogService
+        self.viewModel = CatalogViewModel(catalogService: catalogService)
+        viewModel.seclect = { [weak self] item in
+            self?.select(series: item)
+        }
     }
 }
 
 extension CatalogPresenter: RouterCommandResponder {
     func respond(command: RouteCommand) -> Bool {
         if let filterCommand = command as? FilterRouteCommand {
-            if self.filter != filterCommand.value {
+            if viewModel.filter != filterCommand.value {
                 self.update(filter: filterCommand.value)
             }
             return true
@@ -63,19 +60,19 @@ extension CatalogPresenter: CatalogEventHandler {
               filter: SeriesFilter) {
         self.view = view
         self.router = router
-        self.filter = filter
         self.router.responder = self
+        viewModel.router = router
+        viewModel.filter = filter
     }
 
     func didLoad() {
-        self.update(filter: self.filter)
-        self.activity = self.view.showLoading(fullscreen: false)
-        self.load()
+        self.view.set(model: viewModel)
+        self.view.setFilter(active: viewModel.filter != SeriesFilter())
+        viewModel.load(activity: view.showLoading(fullscreen: false))
     }
 
     func refresh() {
-        self.activity = self.view.showRefreshIndicator()
-        self.load()
+        viewModel.load(activity: self.view.showRefreshIndicator())
     }
 
     func select(series: Series) {
@@ -97,7 +94,8 @@ extension CatalogPresenter: CatalogEventHandler {
         self.catalogService.fetchFiltedData()
             .manageActivity(self.view.showLoading(fullscreen: false))
             .sink(onNext: { [weak self] data in
-                self?.router.open(filter: self!.filter, data: data)
+                guard let self else { return }
+                router.open(filter: viewModel.filter, data: data)
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })
@@ -107,45 +105,11 @@ extension CatalogPresenter: CatalogEventHandler {
     func search() {
         self.router.openSearchScreen()
     }
-    
-    private func load() {
-        nextPage = 1
-        pageSubscriber = catalogService.fetchCatalog(page: nextPage, filter: filter)
-            .sink(onNext: { [weak self] feeds in
-                self?.nextPage += 1
-                self?.set(items: feeds)
-                self?.activity = nil
-            }, onError: { [weak self] error in
-                self?.router.show(error: error)
-                self?.activity = nil
-            })
-    }
-    
-    private func loadPage(completion: @escaping Action<Bool>) {
-        pageSubscriber = catalogService.fetchCatalog(page: nextPage, filter: filter)
-            .sink(onNext: { [weak self] feeds in
-                self?.nextPage += 1
-                self?.append(items: feeds)
-                completion(feeds.isEmpty)
-                self?.activity = nil
-            }, onError: { [weak self] error in
-                self?.router.show(error: error)
-                completion(false)
-                self?.activity = nil
-            })
-    }
-    
-    private func set(items: [Series]) {
-        self.view.set(items: items + [pagination])
-    }
-    
-    private func append(items: [Series]) {
-        self.view.append(items: items + [pagination])
-    }
 
     private func update(filter: SeriesFilter) {
-        self.filter = filter
-        self.view.setFilter(active: self.filter != SeriesFilter())
-        self.refresh()
+        view.scrollToTop()
+        viewModel.filter = filter
+        view.setFilter(active: viewModel.filter != SeriesFilter())
+        refresh()
     }
 }

@@ -97,6 +97,6 @@ extension FavoriteViewController: FavoriteViewBehavior {
         sectionAdapter.set(items.map {
             RemovableSeriesCellAdapter(viewModel: $0, handler: seriesHandler)
         })
-        self.reload(sections: [sectionAdapter])
+        self.set(sections: [sectionAdapter])
     }
 }

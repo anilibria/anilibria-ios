@@ -17,7 +17,7 @@ final class CatalogViewController: BaseCollectionViewController {
     #if targetEnvironment(macCatalyst)
     private lazy var refreshButton = BarButton(image: UIImage(resource: .iconRefresh)) { [weak self] in
         _ = self?.showRefreshIndicator()
-        self?.collectionView.setContentOffset(.init(x: 0, y: -10), animated: false)
+        self?.scrollToTop()
         self?.handler.refresh()
     }
     #endif
@@ -49,29 +49,16 @@ final class CatalogViewController: BaseCollectionViewController {
         #endif
         self.navigationItem.setRightBarButtonItems(items ,animated: false)
     }
-
-    private func createAdapter(for model: any Hashable) -> (any CellAdapterProtocol)? {
-        switch model {
-        case let item as Series:
-            return SeriesCellAdapter(viewModel: item, seclect: { [weak self] item in
-                self?.handler.select(series: item)
-            })
-        case let item as PaginationViewModel:
-            return PaginationAdapter(viewModel: item)
-        default:
-            return nil
-        }
-    }
 }
 
 extension CatalogViewController: CatalogViewBehavior {
-    func set(items: [any Hashable]) {
+    func scrollToTop() {
         self.collectionView.contentOffset = CGPoint(x: 0, y: -collectionView.contentInset.top)
-        self.reload(sections: [SectionAdapter(items.compactMap(createAdapter))])
     }
 
-    func append(items: [any Hashable]) {
-        append(sections: [SectionAdapter(items.compactMap(createAdapter))])
+    func set(model: CatalogViewModel) {
+        scrollToTop()
+        self.set(sections: [CatalogSectionsAdapter(model)])
     }
 
     func setFilter(active: Bool) {
@@ -80,9 +67,5 @@ extension CatalogViewController: CatalogViewBehavior {
         } else {
             UIColor(resource: .Tint.main)
         }
-    }
-
-    func loadPageProgress() -> ActivityDisposable? {
-        return nil
     }
 }

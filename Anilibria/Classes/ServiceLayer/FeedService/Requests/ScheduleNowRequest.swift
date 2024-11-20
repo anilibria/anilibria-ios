@@ -9,7 +9,7 @@
 import Foundation
 
 public struct ScheduleNowRequest: BackendAPIRequest {
-    typealias ResponseObject = [String: [ScheduleItem]]
+    typealias ResponseObject = ShortSchedule
 
     let endpoint: String = "/anime/schedule/now"
     let method: NetworkManager.Method = .GET

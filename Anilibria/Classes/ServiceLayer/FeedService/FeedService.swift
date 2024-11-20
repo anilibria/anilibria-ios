@@ -12,7 +12,7 @@ final class FeedServicePart: DIPart {
 
 protocol FeedService {
     func fetchRandom() -> AnyPublisher<Series, Error>
-    func fetchTodaySchedule() -> AnyPublisher<Schedule, Error>
+    func fetchTodaySchedule() -> AnyPublisher<ShortSchedule, Error>
     func fetchSchedule() -> AnyPublisher<[Schedule], Error>
     func fetchFeed(page: Int) -> AnyPublisher<[Feed], Error>
     func fetchNews(limit: Int) -> AnyPublisher<[News], Error>
@@ -54,15 +54,11 @@ final class FeedServiceImp: FeedService {
         .eraseToAnyPublisher()
     }
 
-    func fetchTodaySchedule() -> AnyPublisher<Schedule, any Error> {
+    func fetchTodaySchedule() -> AnyPublisher<ShortSchedule, any Error> {
         return Deferred { [unowned self] in
             let request = ScheduleNowRequest()
             return self.backendRepository
                 .request(request)
-        }
-        .map { items in
-            let values = items["today"] ?? []
-            return Schedule(day: values.first?.item.publishDay?.value, items: values)
         }
         .subscribe(on: DispatchQueue.global())
         .receive(on: DispatchQueue.main)

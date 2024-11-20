@@ -21,26 +21,29 @@ final class ScheduleSeriesCellAdapter: BaseCellAdapter<ScheduleItem> {
 }
 
 final class ScheduleSeriesSectionAdapter: SectionAdapterProtocol {
-    let uid = UUID()
-    private(set) var items: [any CellAdapterProtocol] = []
+    let uid: AnyHashable = UUID()
+    private(set) var items: [AnyCellAdapter] = []
 
-    init(_ items: [any CellAdapterProtocol]) {
+    init(_ items: [AnyCellAdapter]) {
         self.set(items)
     }
 
-    func set(_ items: [any CellAdapterProtocol]) {
+    func set(_ items: [AnyCellAdapter]) {
         self.items = items
         self.items.forEach {
             $0.section = self
         }
     }
 
-    func getIdentifier() -> AnyHashable {
-        uid
+    func getIdentifiers() -> [AnyHashable] {
+        [uid]
     }
 
-    func getItems() -> [any CellAdapterProtocol] {
-        items
+    func getItems(for identifier: AnyHashable?) -> [AnyCellAdapter] {
+        if uid == identifier {
+            return items
+        }
+        return []
     }
 
     func getSectionLayout(environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {

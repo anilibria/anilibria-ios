@@ -6,7 +6,6 @@
 //  Copyright © 2024 Иван Морозов. All rights reserved.
 //
 
-
 import UIKit
 
 class SectionAdapter: SectionAdapterProtocol {
@@ -23,53 +22,64 @@ class SectionAdapter: SectionAdapterProtocol {
         }
     }
 
-    let uid = UUID()
+    let uid: AnyHashable = UUID()
     var insets: NSDirectionalEdgeInsets = .zero
     var minimumLineSpacing: CGFloat = 0
     var minimumInteritemSpacing: CGFloat = 0
     var ipad: Configuration?
-    private(set) var items: [any CellAdapterProtocol] = []
+    private(set) var items: [AnyCellAdapter] = []
 
 
-    init(_ items: [any CellAdapterProtocol]) {
+    init(_ items: [AnyCellAdapter]) {
         self.set(items)
     }
 
-    func set(_ items: [any CellAdapterProtocol]) {
+    func set(_ items: [AnyCellAdapter]) {
         self.items = items
         self.items.forEach {
             $0.section = self
         }
     }
 
-    func getIdentifier() -> AnyHashable {
-        uid
+    func append(_ items: [AnyCellAdapter]) {
+        self.items.append(contentsOf: items)
+        items.forEach {
+            $0.section = self
+        }
     }
 
-    func getItems() -> [any CellAdapterProtocol] {
-        items
+    func getIdentifiers() -> [AnyHashable] {
+        [uid]
+    }
+
+    func getItems(for identifier: AnyHashable?) -> [AnyCellAdapter] {
+        if identifier == uid {
+            return items
+        }
+        return []
     }
 
     func getSectionLayout(environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
         if UIDevice.current.userInterfaceIdiom == .pad {
             if let configuration = ipad {
-                return getIPadLayout(configuration: configuration)
+                return getIPadLayout(environment, configuration: configuration)
             }
         }
-        return getDefaultLayout()
+        return getDefaultLayout(environment)
     }
 
-    private func getIPadLayout(configuration: Configuration) -> NSCollectionLayoutSection? {
+    private func getIPadLayout(_ environment: NSCollectionLayoutEnvironment,
+                               configuration: Configuration) -> NSCollectionLayoutSection? {
         let itemsPerLine = CGFloat(configuration.itemsPerLine)
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1 / itemsPerLine),
-            heightDimension: .estimated(50)
+            heightDimension: .estimated(1)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(50)
+            heightDimension: .estimated(1)
         )
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,
@@ -82,16 +92,16 @@ class SectionAdapter: SectionAdapterProtocol {
         return section
     }
 
-    private func getDefaultLayout() -> NSCollectionLayoutSection? {
+    private func getDefaultLayout(_ environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(50)
+            heightDimension: .estimated(1)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(50)
+            heightDimension: .estimated(1)
         )
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,

@@ -29,6 +29,6 @@ extension ScheduleViewController: ScheduleViewBehavior {
                       )]
         }
 
-        self.reload(sections: sections)
+        self.set(sections: sections)
     }
 }

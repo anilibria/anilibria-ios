@@ -60,6 +60,6 @@ extension ChoiceSheetViewController: ChoiceSheetViewBehavior {
         let section = ChoiceCellAdapterSectionFactory.create(for: items) { [weak self] item in
             self?.handler.select(item: item)
         }
-        self.reload(sections: [section])
+        self.set(sections: [section])
     }
 }

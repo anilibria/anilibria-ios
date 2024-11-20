@@ -12,14 +12,14 @@ import Combine
 class PaginationViewModel: NSObject {
     private(set) var isLoading: Bool = false
     private let loadAction: Action<Action<Bool>>
-    @Published private(set) var isLast: Bool = false
+    @Published var isLast: Bool = false
     
     init(_ action: @escaping Action<Action<Bool>>) {
         self.loadAction = action
     }
     
     func load() {
-        if isLoading { return }
+        if isLoading || isLast { return }
         isLoading = true
         loadAction({ [weak self] isLast in
             self?.isLoading = false

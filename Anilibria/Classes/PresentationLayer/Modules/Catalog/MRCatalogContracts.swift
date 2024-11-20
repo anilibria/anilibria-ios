@@ -3,8 +3,8 @@ import UIKit
 // MARK: - Contracts
 
 protocol CatalogViewBehavior: WaitingBehavior, RefreshBehavior {
-    func set(items: [any Hashable])
-    func append(items: [any Hashable])
+    func set(model: CatalogViewModel)
+    func scrollToTop()
     func setFilter(active: Bool)
 }
 

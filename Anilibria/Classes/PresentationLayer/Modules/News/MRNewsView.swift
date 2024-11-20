@@ -52,7 +52,7 @@ final class NewsViewController: BaseCollectionViewController {
 
     // MARK: - Adapter creators
 
-    private func createAdapter(for model: any Hashable) -> (any CellAdapterProtocol)? {
+    private func createAdapter(for model: any Hashable) -> AnyCellAdapter? {
         switch model {
         case let item as News:
             return NewsCellAdapter(viewModel: item, seclect: { [weak self] item in
@@ -65,12 +65,8 @@ final class NewsViewController: BaseCollectionViewController {
 }
 
 extension NewsViewController: NewsViewBehavior {
-    func loadPageProgress() -> ActivityDisposable? {
-        return nil
-    }
-
     func set(items: [any Hashable]) {
         sectionAdapter.set(items.compactMap(createAdapter))
-        reload(sections: [sectionAdapter])
+        set(sections: [sectionAdapter])
     }
 }

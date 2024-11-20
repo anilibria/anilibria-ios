@@ -79,6 +79,6 @@ extension FilterViewController: FilterViewBehavior {
 
         sections += items.map { FilterTagsSectionAdapter(item: $0) }
 
-        reload(sections: sections, animated: false)
+        set(sections: sections, animated: false)
     }
 }

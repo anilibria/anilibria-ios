@@ -30,6 +30,8 @@ final class FeedPresenter {
         self?.selectHistory()
     }
 
+    private var soonViewModel: SoonViewModel?
+
     init(feedService: FeedService,
          menuService: MenuService) {
         self.feedService = feedService
@@ -111,7 +113,7 @@ extension FeedPresenter: FeedEventHandler {
 
     private func load() {
         self.feedService.fetchTodaySchedule().sink(onNext: { [weak self] schedule in
-            self?.create(schedule: schedule, feeds: [])
+            self?.create(schedule: schedule)
             self?.activity = nil
         }, onError: { [weak self] error in
             self?.router.show(error: error)
@@ -120,22 +122,21 @@ extension FeedPresenter: FeedEventHandler {
         .store(in: &bag)
     }
 
-    private func create(schedule: Schedule, feeds: [Feed]) {
-        var scheduleBlock = [any Hashable]()
-        let scheduleAction = ActionItem(L10n.Screen.Feed.schedule) { [weak self] in
-            self?.allSchedule()
-        }
-        if schedule.items.isEmpty == false {
-            scheduleBlock.append(schedule)
-        }
-        scheduleBlock.append(scheduleAction)
-
-
+    private func create(schedule: ShortSchedule) {
         var items: [any Hashable] = []
-        items.append(contentsOf: scheduleBlock)
-        items.append(randomSeries)
-        items.append(history)
-        items.append(contentsOf: feeds.compactMap { $0.value })
-        self.view.set(items: items)
+        items.append([randomSeries, history])
+
+        if schedule.items.isEmpty == false {
+            soonViewModel = SoonViewModel(schedule)
+            soonViewModel?.selectSeries = { [weak self] series in
+                self?.select(series: series)
+            }
+            soonViewModel?.seeAllAction = { [weak self] in
+                self?.allSchedule()
+            }
+            items.append(soonViewModel)
+        }
+
+        view.set(items: items)
     }
 }

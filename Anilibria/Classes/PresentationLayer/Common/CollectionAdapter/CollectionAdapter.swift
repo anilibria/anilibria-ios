@@ -10,13 +10,14 @@ import UIKit
 
 class CollectionViewAdapter: NSObject {
 
-    typealias DataSource = UICollectionViewDiffableDataSource<Int, CellAdapterWrapper>
-    typealias Snapshot = NSDiffableDataSourceSnapshot<Int, CellAdapterWrapper>
+    typealias DataSource = UICollectionViewDiffableDataSource<Int, AnyCellAdapter>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Int, AnyCellAdapter>
 
     private let collectionView: UICollectionView
     private var dataSource: DataSource!
     private let context: CollectionContext
-    private var content: CollectionContent?
+    private var sectionsHolder: Any?
+    private var adapterContext: AdapterContext!
 
     weak var scrollViewDelegate: UIScrollViewDelegate?
     weak var layout: UICollectionViewCompositionalLayout?
@@ -26,16 +27,16 @@ class CollectionViewAdapter: NSObject {
         self.context = CollectionContext(collectionView)
         super.init()
         self.dataSource = makeDataSource()
+        self.adapterContext = AdapterContext(dataSource: dataSource)
         let layout = UICollectionViewCompositionalLayout(
             sectionProvider: { [weak self] sectionIndex, environment in
                 guard
                     let self,
-                    let data = self.content?.sections[safe: sectionIndex]
+                    let section = dataSource.itemIdentifier(for: IndexPath(item: 0, section: sectionIndex))?.section
                 else {
-                    assertionFailure("layout is not found for section \(sectionIndex)")
                     return nil
                 }
-                return data.section.getSectionLayout(environment: environment)
+                return section.getSectionLayout(environment: environment)
             }
         )
 
@@ -44,60 +45,45 @@ class CollectionViewAdapter: NSObject {
         self.collectionView.delegate = self
     }
 
-    func reload(content: CollectionContent, animated: Bool = true, completion: (() -> Void)? = nil) {
+    func set(sections: [any SectionAdapterProtocol], animated: Bool = true, completion: (() -> Void)? = nil) {
+        self.sectionsHolder = sections
         var snapshot = Snapshot()
 
-        snapshot.appendSections(content.sections.compactMap { $0.sectionId })
-        for section in content.sections {
-            snapshot.appendItems(section.items, toSection: section.sectionId)
+        let sectionIds = sections.flatMap {
+            $0.set(context: adapterContext)
+            return $0.getIdentifiers().map(\.hashValue)
         }
 
-        self.content = content
-        dataSource.apply(snapshot, animatingDifferences: animated, completion: completion)
-    }
-
-    func append(content: CollectionContent, animated: Bool = true, completion: (() -> Void)? = nil) {
-        var snapshot = dataSource.snapshot()
-
-        snapshot.appendSections(content.sections.compactMap {
-            if self.content?.contains($0) == true {
-                return nil
+        snapshot.appendSections(sectionIds)
+        for section in sections {
+            section.getIdentifiers().forEach { id in
+                snapshot.appendItems(section.getItems(for: id), toSection: id.hashValue)
             }
-            return $0.sectionId
-        })
-        for section in content.sections {
-            let currentItems = snapshot.itemIdentifiers
-            let toDelete = section.items.filter { currentItems.contains($0) }
-            if !toDelete.isEmpty {
-                snapshot.deleteItems(toDelete)
-            }
-            
-            snapshot.appendItems(section.items, toSection: section.sectionId)
         }
-        self.content?.append(content)
+
         dataSource.apply(snapshot, animatingDifferences: animated, completion: completion)
     }
 
     private func makeDataSource() -> DataSource {
-        let dataSource = DataSource(collectionView: collectionView) { [weak self] _, indexPath, wrapper in
+        let dataSource = DataSource(collectionView: collectionView) { [weak self] _, indexPath, item in
             guard let self = self else { return nil }
-            return wrapper.item.cellForItem(at: indexPath, context: self.context)
+            return item.cellForItem(at: indexPath, context: self.context)
         }
 
         dataSource.supplementaryViewProvider = { [weak self] _, kind, indexPath in
-            guard let self, let data = content?.sections[safe: indexPath.section] else { return nil }
-            return data.section.supplementaryFor(elementKind: kind, index: indexPath, context: context)
+            guard let self, let section = dataSource.itemIdentifier(for: indexPath)?.section else { return nil }
+            return section.supplementaryFor(elementKind: kind, index: indexPath, context: context)
         }
 
         return dataSource
     }
 
-    private func item(for index: IndexPath) -> (any CellAdapterProtocol)? {
-        dataSource.itemIdentifier(for: index)?.item
+    private func item(for index: IndexPath) -> AnyCellAdapter? {
+        dataSource.itemIdentifier(for: index)
     }
 
-    private func item(for section: Int) -> (any CellAdapterProtocol)? {
-        dataSource.itemIdentifier(for: IndexPath(item: 0, section: section))?.item
+    private func item(for section: Int) -> AnyCellAdapter? {
+        dataSource.itemIdentifier(for: IndexPath(item: 0, section: section))
     }
 }
 
@@ -145,5 +131,28 @@ extension CollectionViewAdapter {
 
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         scrollViewDelegate?.scrollViewDidEndScrollingAnimation?(scrollView)
+    }
+}
+
+final class AdapterContext {
+    private weak var dataSource: UICollectionViewDiffableDataSource<Int, AnyCellAdapter>?
+
+    init(
+        dataSource: UICollectionViewDiffableDataSource<Int, AnyCellAdapter>?
+    ) {
+        self.dataSource = dataSource
+    }
+
+    func reload(section: (any SectionAdapterProtocol)?, animated: Bool = true) {
+        guard let section, let dataSource else { return }
+        var snapshot = dataSource.snapshot()
+
+        section.getIdentifiers().forEach { id in
+            let current = snapshot.itemIdentifiers(inSection: id.hashValue)
+            snapshot.deleteItems(current)
+            snapshot.appendItems(section.getItems(for: id), toSection: id.hashValue)
+        }
+
+        dataSource.apply(snapshot, animatingDifferences: animated)
     }
 }

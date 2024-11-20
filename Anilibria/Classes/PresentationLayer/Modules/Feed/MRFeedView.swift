@@ -50,6 +50,8 @@ final class FeedViewController: BaseCollectionViewController {
 
     private func map(item: any Hashable) -> (any SectionAdapterProtocol)? {
         switch item {
+        case let model as PromoViewModel:
+            return SectionAdapter([PromoCellAdapter(viewModel: model)])
         case let model as SoonViewModel:
             return SoonSectionsAdapter(model)
         case let model as TitleItem:

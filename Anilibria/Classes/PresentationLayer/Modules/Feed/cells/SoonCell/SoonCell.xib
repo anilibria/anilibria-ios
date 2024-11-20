@@ -55,7 +55,7 @@
                             <segment title="Завтра"/>
                         </segments>
                         <color key="tintColor" name="text/main"/>
-                        <color key="selectedSegmentTintColor" name="tint/active"/>
+                        <color key="selectedSegmentTintColor" name="buttons/selected"/>
                     </segmentedControl>
                 </subviews>
             </view>
@@ -83,11 +83,11 @@
     </objects>
     <resources>
         <image name="icon_arrow_right" width="18" height="18"/>
+        <namedColor name="buttons/selected">
+            <color red="0.70588235294117652" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="text/main">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="tint/active">
-            <color red="1" green="0.23100002110004425" blue="0.18799999356269836" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

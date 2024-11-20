@@ -68,6 +68,7 @@
 "common.guest" = "Гость";
 
 "common.default" = "По умолчанию";
+"common.ad" = "Реклама";
 
 //PERMISSION
 "permission.title" = "Разрешение";

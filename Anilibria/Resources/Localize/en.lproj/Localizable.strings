@@ -68,6 +68,7 @@
 "common.guest" = "Guest";
 
 "common.default" = "Default";
+"common.ad" = "Ad";
 
 //PERMISSION
 "permission.title" = "Permission";

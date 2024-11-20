@@ -113,9 +113,23 @@ extension FeedPresenter: FeedEventHandler {
         router.openWeekSchedule()
     }
 
+    func open(promo: PromoItem) {
+        switch promo.content {
+        case .ad(let ad):
+            router.open(url: .web(ad.url))
+        case .release(let series):
+            select(series: series)
+        case nil:
+            break
+        }
+    }
+
     private func load() {
-        self.feedService.fetchTodaySchedule().sink(onNext: { [weak self] schedule in
-            self?.create(schedule: schedule)
+        Publishers.Zip(
+            feedService.fetchPromo(),
+            feedService.fetchTodaySchedule()
+        ).sink(onNext: { [weak self] promo, schedule in
+            self?.create(promo: promo, schedule: schedule)
             self?.activity = nil
         }, onError: { [weak self] error in
             self?.router.show(error: error)
@@ -124,8 +138,14 @@ extension FeedPresenter: FeedEventHandler {
         .store(in: &bag)
     }
 
-    private func create(schedule: ShortSchedule) {
+    private func create(promo: [PromoItem], schedule: ShortSchedule) {
         var items: [any Hashable] = []
+
+        let promoModel = PromoViewModel(items: promo) { [weak self] item in
+            self?.open(promo: item)
+        }
+
+        items.append(promoModel)
         items.append([randomSeries, history])
 
         if schedule.items.isEmpty == false {

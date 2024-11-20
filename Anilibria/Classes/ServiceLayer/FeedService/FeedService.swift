@@ -19,6 +19,7 @@ protocol FeedService {
     func fetchCatalog(page: Int, filter: SeriesFilter) -> AnyPublisher<[Series], Error>
     func search(query: String) -> AnyPublisher<[Series], Error>
     func series(with code: String) -> AnyPublisher<Series, Error>
+    func fetchPromo() -> AnyPublisher<[PromoItem], Error>
 }
 
 final class FeedServiceImp: FeedService {
@@ -123,6 +124,17 @@ final class FeedServiceImp: FeedService {
                     self.randomSeries = ArraySlice($0)
                     return self.randomSeries?.popFirst()
                 }
+        }
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
+    }
+
+    func fetchPromo() -> AnyPublisher<[PromoItem], any Error> {
+        return Deferred { [unowned self] in
+            let request = PromoRequest()
+            return self.backendRepository
+                .request(request)
         }
         .subscribe(on: DispatchQueue.global())
         .receive(on: DispatchQueue.main)

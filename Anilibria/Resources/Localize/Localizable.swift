@@ -71,6 +71,10 @@ internal enum L10n {
   }
 
   internal enum Common {
+    /// Реклама
+    internal static var ad: String {
+        return L10n.tr("Localizable", "common.ad")
+    }
     /// По умолчанию
     internal static var `default`: String {
         return L10n.tr("Localizable", "common.default")

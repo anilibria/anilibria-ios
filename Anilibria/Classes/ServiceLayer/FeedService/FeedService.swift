@@ -11,7 +11,7 @@ final class FeedServicePart: DIPart {
 }
 
 protocol FeedService {
-    func fetchRandom() -> AnyPublisher<Series, Error>
+    func fetchRandom() -> AnyPublisher<Series?, Error>
     func fetchTodaySchedule() -> AnyPublisher<ShortSchedule, Error>
     func fetchSchedule() -> AnyPublisher<[Schedule], Error>
     func fetchFeed(page: Int) -> AnyPublisher<[Feed], Error>
@@ -23,6 +23,7 @@ protocol FeedService {
 
 final class FeedServiceImp: FeedService {
     let backendRepository: BackendRepository
+    private var randomSeries: ArraySlice<Series>?
 
     init(backendRepository: BackendRepository) {
         self.backendRepository = backendRepository
@@ -110,13 +111,17 @@ final class FeedServiceImp: FeedService {
         .eraseToAnyPublisher()
     }
 
-    func fetchRandom() -> AnyPublisher<Series, Error> {
+    func fetchRandom() -> AnyPublisher<Series?, Error> {
+        if let series = randomSeries?.popFirst() {
+            return .just(series)
+        }
         return Deferred { [unowned self] in
-            let request = RandomSeriesRequest()
+            let request = RandomSeriesRequest(limit: 20)
             return self.backendRepository
                 .request(request)
-                .flatMap { [unowned self] in
-                    self.series(with: $0.alias)
+                .map {
+                    self.randomSeries = ArraySlice($0)
+                    return self.randomSeries?.popFirst()
                 }
         }
         .subscribe(on: DispatchQueue.global())

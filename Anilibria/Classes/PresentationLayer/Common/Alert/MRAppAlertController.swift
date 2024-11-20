@@ -149,15 +149,6 @@ private final class MRAlertController: UIAlertController {
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return .portrait
     }
-
-//    deinit {
-//        MacOSHelper.shared.fullscreenButtonEnabled = false
-//    }
-//
-//    override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
-//        MacOSHelper.shared.fullscreenButtonEnabled = false
-//    }
 }
 
 // MARK: - Support extensions

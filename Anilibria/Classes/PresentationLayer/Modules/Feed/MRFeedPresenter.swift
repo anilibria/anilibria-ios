@@ -92,7 +92,9 @@ extension FeedPresenter: FeedEventHandler {
         self.feedService.fetchRandom()
             .manageActivity(self.view.showLoading(fullscreen: false))
             .sink(onNext: { [weak self] item in
-                self?.router.open(series: item)
+                if let item {
+                    self?.router.open(series: item)
+                }
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })

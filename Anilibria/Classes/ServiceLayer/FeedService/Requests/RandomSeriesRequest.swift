@@ -1,13 +1,13 @@
 public struct RandomSeriesRequest: BackendAPIRequest {
-    typealias ResponseObject = Series
+    typealias ResponseObject = [Series]
 
-    private(set) var endpoint: String = "/public/api/index.php"
-    private(set) var method: NetworkManager.Method = .POST
-    private(set) var parameters: [String: Any]
+    let endpoint: String = "/anime/releases/random"
+    let method: NetworkManager.Method = .GET
+    let parameters: [String: Any]
 
-    init() {
+    init(limit: Int) {
         self.parameters = [
-            "query":"random_release"
+            "limit": limit
         ]
     }
 }

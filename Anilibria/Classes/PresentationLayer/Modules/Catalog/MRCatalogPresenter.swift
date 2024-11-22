@@ -24,7 +24,7 @@ final class CatalogPresenter {
     init(catalogService: CatalogService) {
         self.catalogService = catalogService
         self.viewModel = CatalogViewModel(catalogService: catalogService)
-        viewModel.seclect = { [weak self] item in
+        viewModel.select = { [weak self] item in
             self?.select(series: item)
         }
     }
@@ -91,7 +91,7 @@ extension CatalogPresenter: CatalogEventHandler {
     }
 
     func openFilter() {
-        self.catalogService.fetchFiltedData()
+        self.catalogService.fetchFilterData()
             .manageActivity(self.view.showLoading(fullscreen: false))
             .sink(onNext: { [weak self] data in
                 guard let self else { return }

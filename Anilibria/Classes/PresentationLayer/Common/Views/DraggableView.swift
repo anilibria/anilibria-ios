@@ -196,7 +196,9 @@ open class DraggableView: UIView {
                 update(position: -translation)
                 progress = abs(translation / swipeOffset)
             }
-            setNeeedsCall(abs(translation / self.bounds.width) >= threshold)
+            if translation < 0 {
+                setNeeedsCall(abs(translation / self.bounds.width) >= threshold)
+            }
         case .ended, .failed, .cancelled:
             locationX = ceil(gesture.location(in: nil).x)
             if needsCallAction {

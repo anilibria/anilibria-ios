@@ -102,7 +102,7 @@
                                         <constraints>
                                             <constraint firstItem="t3z-jX-0vy" firstAttribute="top" secondItem="jol-C7-qHy" secondAttribute="top" constant="4" id="2aM-yD-dU9"/>
                                             <constraint firstItem="t3z-jX-0vy" firstAttribute="leading" secondItem="4O1-CK-OMT" secondAttribute="leading" constant="16" id="3D4-5J-Suc"/>
-                                            <constraint firstAttribute="bottom" secondItem="t3z-jX-0vy" secondAttribute="bottom" constant="16" id="3vn-yF-XsG"/>
+                                            <constraint firstAttribute="bottom" secondItem="t3z-jX-0vy" secondAttribute="bottom" priority="999" constant="16" id="3vn-yF-XsG"/>
                                             <constraint firstAttribute="trailing" secondItem="t3z-jX-0vy" secondAttribute="trailing" constant="16" id="cmf-uN-oK9"/>
                                         </constraints>
                                         <userDefinedRuntimeAttributes>

@@ -21,10 +21,6 @@ public class JsonResponseConverter: BackendResponseConverter, Loggable {
 
     func convert<T: BackendAPIRequest>(_ type: T.Type,
                                        response: NetworkResponse) -> (T.ResponseObject?, Error?) {
-        if (response.data as NSData).length == 0 {
-            return (nil, AppError.responseError(code: MRKitErrorCode.emptyResponse))
-        }
-
         do {
             let responseData = try JSONDecoder().decode(T.ResponseObject.self, from: response.data)
             return (responseData, nil)

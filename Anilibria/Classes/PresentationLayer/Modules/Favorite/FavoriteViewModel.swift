@@ -1,38 +1,43 @@
 //
-//  CatalogViewModel.swift
+//  FavoriteViewModel.swift
 //  Anilibria
 //
-//  Created by Ivan Morozov on 20.11.2024.
+//  Created by Ivan Morozov on 22.11.2024.
 //  Copyright © 2024 Иван Морозов. All rights reserved.
 //
 
 import Combine
 import Foundation
 
-final class CatalogViewModel: SeriesViewModelProtocol {
+final class FavoriteViewModel: SeriesViewModelProtocol {
+    private let limit: Int = 25
     private var nextPage: Int = 1
     private var pageSubscriber: AnyCancellable?
-    private let catalogService: CatalogService
+    private let service: FavoriteService
 
     let items = CurrentValueSubject<[Series], Never>([])
+    private var currentItems: [Series] {
+        items.value
+    }
 
-    var router: CatalogRoutable?
+    var router: FavoriteRoutable?
     var filter: SeriesFilter = SeriesFilter()
 
     var select: ((Series) -> Void)?
+    var delete: ((Series) -> Void)?
 
     private(set) lazy var pagination = PaginationViewModel { [weak self] completion in
         self?.loadPage(completion: completion)
     }
 
-    init(catalogService: CatalogService) {
-        self.catalogService = catalogService
+    init(service: FavoriteService) {
+        self.service = service
     }
 
     func load(activity: ActivityDisposable?) {
         nextPage = 1
         pagination.isReady.send(false)
-        pageSubscriber = catalogService.fetchCatalog(page: nextPage, filter: filter)
+        pageSubscriber = service.fetchSeries(limit: limit, page: nextPage, filter: filter)
             .sink(onNext: { [weak self] items in
                 self?.nextPage += 1
                 self?.items.send(items)
@@ -44,11 +49,23 @@ final class CatalogViewModel: SeriesViewModelProtocol {
             })
     }
 
+    func remove(series: Series) {
+        var newItems = currentItems
+        newItems.removeAll(where: { $0.id == series.id })
+        items.send(newItems)
+    }
+
+    func append(series: Series) {
+        var newItems = currentItems
+        newItems.insert(series, at: 0)
+        items.send(newItems)
+    }
+
     private func loadPage(completion: @escaping Action<Bool>) {
-        pageSubscriber = catalogService.fetchCatalog(page: nextPage, filter: filter)
+        pageSubscriber = service.fetchSeries(limit: limit, page: nextPage, filter: filter)
             .sink(onNext: { [weak self] items in
                 self?.nextPage += 1
-                if var currentItems = self?.items.value {
+                if var currentItems = self?.currentItems {
                     currentItems.append(contentsOf: items)
                     self?.items.send(currentItems)
                 }

@@ -11,6 +11,10 @@ final class FavoriteViewController: BaseCollectionViewController {
         $0.title = L10n.Stub.title
     }
 
+    private lazy var filterButton = BarButton(image: UIImage(resource: .iconFilter)) { [weak self] in
+        self?.handler.openFilter()
+    }
+
     #if targetEnvironment(macCatalyst)
     private lazy var refreshButton = BarButton(image: UIImage(resource: .iconRefresh)) { [weak self] in
         _ = self?.showRefreshIndicator()
@@ -20,16 +24,6 @@ final class FavoriteViewController: BaseCollectionViewController {
     #endif
 
     private var currentQuery: String = ""
-    private var sectionAdapter = SectionAdapter([])
-    private lazy var seriesHandler = RemovableSeriesCellAdapterHandler(
-        select: { [weak self] item in
-            self?.searchView?.resignFirstResponder()
-            self?.handler.select(series: item)
-        },
-        delete: { [weak self] item in
-            self?.handler.unfavorite(series: item)
-        }
-    )
 
     // MARK: - Life cycle
 
@@ -51,17 +45,18 @@ final class FavoriteViewController: BaseCollectionViewController {
         if let value = self.searchView {
             self.navigationItem.titleView = value
             value.querySequence()
+                .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
                 .sink(onNext: { [weak self] text in
                     self?.currentQuery = text
                     self?.handler.search(query: text)
                 })
                 .store(in: &subscribers)
         }
+        var items = [self.filterButton]
         #if targetEnvironment(macCatalyst)
-        self.navigationItem.setRightBarButtonItems([
-            self.refreshButton
-        ], animated: false)
+        items.append(self.refreshButton)
         #endif
+        self.navigationItem.setRightBarButtonItems(items ,animated: false)
     }
 
     override func keyBoardWillShow(keyboardHeight: CGFloat) {
@@ -86,17 +81,33 @@ final class FavoriteViewController: BaseCollectionViewController {
 }
 
 extension FavoriteViewController: FavoriteViewBehavior {
-    func set(items: [Series]) {
-        if items.isEmpty {
-            self.updateEmptyView()
-            self.collectionView.backgroundView = self.stubView
-        } else {
-            self.collectionView.backgroundView = nil
-        }
+    func seriesSelected() {
+        searchView?.resignFirstResponder()
+    }
 
-        sectionAdapter.set(items.map {
-            RemovableSeriesCellAdapter(viewModel: $0, handler: seriesHandler)
-        })
-        self.set(sections: [sectionAdapter])
+    func scrollToTop() {
+        self.collectionView.contentOffset = CGPoint(x: 0, y: -collectionView.contentInset.top)
+    }
+
+    func set(model: FavoriteViewModel) {
+        scrollToTop()
+        model.items.dropFirst().sink { [weak self] items in
+            if items.isEmpty {
+                self?.updateEmptyView()
+                self?.collectionView.backgroundView = self?.stubView
+            } else {
+                self?.collectionView.backgroundView = nil
+            }
+        }.store(in: &subscribers)
+
+        self.set(sections: [SeriesSectionsAdapter(model)])
+    }
+
+    func setFilter(active: Bool) {
+        self.filterButton.tintColor = if active {
+            UIColor(resource: .Tint.active)
+        } else {
+            UIColor(resource: .Tint.main)
+        }
     }
 }

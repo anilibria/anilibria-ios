@@ -4,7 +4,7 @@ import UIKit
 
 protocol SeriesViewBehavior: WaitingBehavior {
     func set(series: Series)
-    func set(favorite: Bool, count: Int)
+    func set(favorite: Bool?, count: Int)
     func can(favorite: Bool)
     func can(watch: Bool)
 }

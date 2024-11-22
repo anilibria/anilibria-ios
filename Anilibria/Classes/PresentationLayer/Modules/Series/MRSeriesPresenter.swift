@@ -22,6 +22,8 @@ final class SeriesPresenter {
     private let favoriteService: FavoriteService
     private let downloadService: DownloadService
 
+    private var favoriteState: Bool?
+    private var favoritesCount: Int = 0
     private var bag = Set<AnyCancellable>()
 
     init(feedService: FeedService,
@@ -42,25 +44,51 @@ extension SeriesPresenter: SeriesEventHandler {
         self.view = view
         self.router = router
         self.series = series
+        self.favoritesCount = series.addedInUsersFavorites
     }
 
     func didLoad() {
         bag.removeAll()
         self.view.set(series: self.series)
-        self.view.set(favorite: false, count: self.series.addedInUsersFavorites)
+        self.view.set(favorite: favoriteState, count: favoritesCount)
 
         self.view.can(watch: self.series.playlist.isEmpty == false)
         self.sessionService
             .fetchState()
             .sink(onNext: { [weak self] state in
+                guard let self else { return }
                 switch state {
                 case .guest, nil:
-                    self?.view.can(favorite: false)
+                    view.can(favorite: false)
+                    view.set(favorite: favoriteState, count: favoritesCount)
                 case .user:
-                    self?.view.can(favorite: true)
+                    view.can(favorite: true)
+                    loadFavorite()
                 }
             })
             .store(in: &bag)
+
+        self.favoriteService.favoritesUpdates().sink { [weak self] update in
+            switch update {
+            case .added(let series) where series.id == self?.series.id:
+                self?.updateFavoriteState(true)
+            case .deleted(let series) where series.id == self?.series.id:
+                self?.updateFavoriteState(false)
+            default: break
+            }
+        }
+        .store(in: &bag)
+    }
+
+    private func loadFavorite() {
+        self.favoriteService.getFavoriteState(for: series.id).sink { [weak self] state in
+            guard let self else { return }
+            favoriteState = state
+            view.set(favorite: state, count: favoritesCount)
+        } onError: { [weak self] _ in
+            self?.view.can(favorite: false)
+        }
+        .store(in: &bag)
     }
 
     func select(genre: String) {
@@ -80,24 +108,21 @@ extension SeriesPresenter: SeriesEventHandler {
     }
 
     func favorite() {
-//        if let favorite = self.series.favorite {
-//            let added = !favorite.added
-//            let command = FavoriteCommand(added: added,
-//                                          value: self.series)
-//            self.favoriteService
-//                .favorite(add: added, series: self.series)
-//                .manageActivity(self.view.showLoading(fullscreen: false))
-//                .sink(onNext: { [weak self] _ in
-//                    favorite.added = added
-//                    let value = added ? 1 : -1
-//                    favorite.rating += value
-//                    self?.view.set(favorite: added, count: favorite.rating)
-//                    self?.router.execute(command)
-//                }, onError: { [weak self] error in
-//                    self?.router.show(error: error)
-//                })
-//                .store(in: &bag)
-//        }
+        guard let favoriteState else { return }
+        self.favoriteService
+            .favorite(add: !favoriteState, series: series)
+            .manageActivity(self.view.showLoading(fullscreen: false))
+            .sink(onError: { [weak self] error in
+                self?.router.show(error: error)
+            })
+            .store(in: &bag)
+    }
+
+    private func updateFavoriteState(_ newState: Bool) {
+        self.favoriteState = newState
+        let value = newState ? 1 : -1
+        favoritesCount += value
+        view.set(favorite: newState, count: favoritesCount)
     }
 
     func donate() {

@@ -15,27 +15,44 @@ final class FavoritePart: DIPart {
 final class FavoritePresenter {
     private weak var view: FavoriteViewBehavior!
     private var router: FavoriteRoutable!
-    private var items: [Series] = []
-    private var query: String = ""
     private var bag = Set<AnyCancellable>()
 
     let favoriteService: FavoriteService
     let feedService: FeedService
 
+    let viewModel: FavoriteViewModel
+
     init(favoriteService: FavoriteService,
          feedService: FeedService) {
         self.favoriteService = favoriteService
         self.feedService = feedService
+        self.viewModel = FavoriteViewModel(service: favoriteService)
+
+        viewModel.select = { [weak self] item in
+            self?.view.seriesSelected()
+            self?.select(series: item)
+        }
+
+        viewModel.delete = { [weak self] item in
+            self?.unfavorite(series: item)
+        }
+
+        favoriteService.favoritesUpdates().sink { [weak self] updates in
+            switch updates {
+            case .added(let series):
+                self?.viewModel.append(series: series)
+            case .deleted(let series):
+                self?.viewModel.remove(series: series)
+            }
+        }.store(in: &bag)
     }
 }
 
 extension FavoritePresenter: RouterCommandResponder {
     func respond(command: RouteCommand) -> Bool {
-        if let command = command as? FavoriteCommand {
-            if command.added {
-                self.append(series: command.value)
-            } else {
-                self.remove(series: command.value)
+        if let filterCommand = command as? FilterRouteCommand {
+            if viewModel.filter != filterCommand.value {
+                self.update(filter: filterCommand.value)
             }
             return true
         }
@@ -48,9 +65,11 @@ extension FavoritePresenter: FavoriteEventHandler {
         self.view = view
         self.router = router
         self.router.responder = self
+        viewModel.router = router
     }
 
     func didLoad() {
+        self.view.set(model: viewModel)
         self.load(with: self.view.showLoading(fullscreen: false))
     }
 
@@ -59,26 +78,20 @@ extension FavoritePresenter: FavoriteEventHandler {
     }
 
     func search(query: String) {
-        self.query = query.lowercased()
-        self.showItems()
+        viewModel.filter.search = query.lowercased()
+        refresh()
     }
 
-    private func showItems() {
-        DispatchQueue.global().async { [weak self] in
-            guard var result = self?.items, let query = self?.query else {
-                return
-            }
-
-            if query.isEmpty == false {
-                result = result.filter {
-                    ($0.name?.main ?? "").contains(where: { $0.lowercased().contains(query) })
-                }
-            }
-
-            DispatchQueue.main.async { [weak self] in
-                self?.view.set(items: result)
-            }
-        }
+    func openFilter() {
+        self.favoriteService.fetchFilterData()
+            .manageActivity(self.view.showLoading(fullscreen: false))
+            .sink(onNext: { [weak self] data in
+                guard let self else { return }
+                router.open(filter: viewModel.filter, data: data)
+            }, onError: { [weak self] error in
+                self?.router.show(error: error)
+            })
+            .store(in: &bag)
     }
 
     func unfavorite(series: Series) {
@@ -86,7 +99,7 @@ extension FavoritePresenter: FavoriteEventHandler {
             .favorite(add: false, series: series)
             .manageActivity(self.view.showLoading(fullscreen: false))
             .sink(onNext: { [weak self] _ in
-                self?.remove(series: series)
+                self?.viewModel.remove(series: series)
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })
@@ -105,30 +118,13 @@ extension FavoritePresenter: FavoriteEventHandler {
     }
 
     private func load(with activity: ActivityDisposable?) {
-        self.favoriteService
-            .fetchSeries()
-            .manageActivity(activity)
-            .sink(onNext: { [weak self] items in
-                self?.items = items
-                self?.showItems()
-            }, onError: { [weak self] error in
-                self?.router.show(error: error)
-            })
-            .store(in: &bag)
+        viewModel.load(activity: activity)
     }
 
-    private func remove(series: Series) {
-        self.items.removeAll(where: { $0.id == series.id })
-        self.showItems()
+    private func update(filter: SeriesFilter) {
+        view.scrollToTop()
+        viewModel.filter = filter
+        view.setFilter(active: viewModel.filter != SeriesFilter())
+        refresh()
     }
-
-    private func append(series: Series) {
-        self.items.insert(series, at: 0)
-        self.showItems()
-    }
-}
-
-struct FavoriteCommand: RouteCommand {
-    let added: Bool
-    let value: Series
 }

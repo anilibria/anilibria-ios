@@ -12,7 +12,6 @@ final class PaginationAdapter: BaseCellAdapter<PaginationViewModel> {
 
     override func cellForItem(at index: IndexPath, context: CollectionContext) -> UICollectionViewCell? {
         let cell = context.dequeueReusableNibCell(type: PaginationCell.self, for: index)
-        cell.configure(viewModel)
         return cell
     }
     

@@ -58,7 +58,7 @@ extension CatalogViewController: CatalogViewBehavior {
 
     func set(model: CatalogViewModel) {
         scrollToTop()
-        self.set(sections: [CatalogSectionsAdapter(model)])
+        self.set(sections: [SeriesSectionsAdapter(model)])
     }
 
     func setFilter(active: Bool) {

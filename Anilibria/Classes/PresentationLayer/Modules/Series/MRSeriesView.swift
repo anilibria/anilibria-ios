@@ -11,6 +11,7 @@ final class SeriesViewController: BaseViewController {
     @IBOutlet var favoriteCountLabel: UILabel!
     @IBOutlet var favoriteStarView: UIImageView!
     @IBOutlet var favoriteButton: RippleButton!
+    @IBOutlet var favoriteShimmerView: ShimmerView!
     @IBOutlet var paramsTextView: AttributeLinksView!
     @IBOutlet var descTextView: AttributeLinksView!
     @IBOutlet var weekDayStackView: UIStackView!
@@ -69,6 +70,10 @@ final class SeriesViewController: BaseViewController {
         descTextView.font = .font(ofSize: 14, weight: .regular)
         descTextView.textColor = UIColor(resource: .Text.main)
         supportLabelContainer.cornerRadius = 6
+
+        favoriteShimmerView.backgroundColor = UIColor(resource: .Surfaces.base)
+        favoriteShimmerView.shimmerColor = UIColor(resource: .Surfaces.content)
+        favoriteShimmerView.isHidden = true
     }
 
     override func setupStrings() {
@@ -131,8 +136,19 @@ extension SeriesViewController: SeriesViewBehavior {
         self.header.setPlayVisible(value: watch)
     }
 
-    func set(favorite: Bool, count: Int) {
-        self.favoriteStarView.tintColor = .darkGray
+    func set(favorite: Bool?, count: Int) {
+        favoriteShimmerView.isHidden = true
+        favoriteShimmerView.stop()
+        switch favorite {
+        case true?:
+            favoriteStarView.tintColor = UIColor(resource: .Buttons.selected)
+        case false?:
+            favoriteStarView.tintColor = UIColor(resource: .Buttons.unselected)
+        case nil:
+            favoriteShimmerView.isHidden = false
+            favoriteShimmerView.run()
+        }
+
         self.favoriteCountLabel.text = "\(count)"
     }
 

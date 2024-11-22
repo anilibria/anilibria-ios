@@ -22,7 +22,7 @@ protocol CatalogService {
     func fetchSeries(id: Int) -> AnyPublisher<Series, Error>
     func fetchSeries(alias: String) -> AnyPublisher<Series, Error>
     func fetchCatalog(page: Int, filter: SeriesFilter) -> AnyPublisher<[Series], Error>
-    func fetchFiltedData() -> AnyPublisher<FilterData, Error>
+    func fetchFilterData() -> AnyPublisher<FilterData, Error>
 }
 
 final class CatalogServiceImp: CatalogService {
@@ -75,7 +75,7 @@ final class CatalogServiceImp: CatalogService {
         .eraseToAnyPublisher()
     }
 
-    func fetchFiltedData() -> AnyPublisher<FilterData, Error> {
+    func fetchFilterData() -> AnyPublisher<FilterData, Error> {
         return Deferred { [unowned self] in
             if let data = self.filterData {
                 return AnyPublisher<FilterData, Error>.just(data)
@@ -209,6 +209,7 @@ final class CatalogServiceImp: CatalogService {
             let request = YearsRequest()
             return self.backendRepository
                 .request(request)
+                .map { $0.sorted(by: <) }
         }
         .subscribe(on: DispatchQueue.global())
         .receive(on: DispatchQueue.main)

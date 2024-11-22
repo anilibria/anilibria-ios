@@ -36,6 +36,7 @@ public struct SeriesFilter: Encodable, Hashable {
     var ageRatings: Set<String> = []
     var publishStatuses: Set<String> = []
     var productionStatuses: Set<String> = []
+    var search: String?
 
     enum CodingKeys: String, CodingKey {
         case genres
@@ -43,6 +44,7 @@ public struct SeriesFilter: Encodable, Hashable {
         case seasons
         case years
         case sorting
+        case search
         case ageRatings = "age_ratings"
         case publishStatuses = "publish_statuses"
         case productionStatuses = "production_statuses"
@@ -74,6 +76,9 @@ public struct SeriesFilter: Encodable, Hashable {
         }
         if !productionStatuses.isEmpty {
             result["f[production_statuses]"] = productionStatuses.joined(separator: ",")
+        }
+        if let search, !search.isEmpty {
+            result["f[search]"] = search
         }
         return result
     }

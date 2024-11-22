@@ -22,6 +22,9 @@ public class JsonResponseConverter: BackendResponseConverter, Loggable {
     func convert<T: BackendAPIRequest>(_ type: T.Type,
                                        response: NetworkResponse) -> (T.ResponseObject?, Error?) {
         do {
+            if T.ResponseObject.self == Data.self {
+                return (response.data as? T.ResponseObject, nil)
+            }
             let responseData = try JSONDecoder().decode(T.ResponseObject.self, from: response.data)
             return (responseData, nil)
         } catch {

@@ -22,7 +22,15 @@ final class DownloadServiceImp: DownloadService {
     }
 
     func download(torrent: Torrent, fileName: String) -> AnyPublisher<Void, Error> {
-        .fail(AppError.unexpectedError(message: "not supported"))
+        return Deferred { [unowned self] in
+            let request = GetTorrentRequest(id: torrent.id)
+            return self.backendRepository
+                .request(request)
+        }
+        .flatMap { [unowned self] in self.save(data: $0, name: fileName)}
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
     private func save(data: Data, name: String) -> AnyPublisher<Void, Error> {

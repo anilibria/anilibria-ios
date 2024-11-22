@@ -153,16 +153,19 @@ extension SeriesPresenter: SeriesEventHandler {
     }
 
     func download(torrent: Torrent) {
-//        var name = self.series.names.last ?? self.series.code
-//        name.removingRegexMatches(pattern: "[^A-Za-z0-9]+", replaceWith: "_")
-//        self.downloadService.download(torrent: torrent, fileName: name)
-//            .manageActivity(self.view.showLoading(fullscreen: false))
-//            .sink(onNext: { [weak self] in
-//                self?.router.openAlert(message: L10n.Screen.Series.downloaded(name, Constants.downloadFolder))
-//            }, onError: { [weak self] error in
-//                self?.router.show(error: error)
-//            })
-//            .store(in: &bag)
+        var name = self.series.name?.english ?? ""
+        if name.isEmpty {
+            name = series.alias
+        }
+        name.removingRegexMatches(pattern: "[^A-Za-z0-9]+", replaceWith: "_")
+        self.downloadService.download(torrent: torrent, fileName: name)
+            .manageActivity(self.view.showLoading(fullscreen: false))
+            .sink(onNext: { [weak self] in
+                self?.router.openAlert(message: L10n.Screen.Series.downloaded(name, Constants.downloadFolder))
+            }, onError: { [weak self] error in
+                self?.router.show(error: error)
+            })
+            .store(in: &bag)
     }
 
     func share() {

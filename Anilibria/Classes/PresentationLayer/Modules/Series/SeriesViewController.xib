@@ -282,15 +282,19 @@
                         </view>
                     </subviews>
                     <constraints>
-                        <constraint firstAttribute="trailing" secondItem="8Hg-c2-dS8" secondAttribute="trailing" id="5RQ-p7-2Dq"/>
-                        <constraint firstAttribute="trailing" secondItem="Tck-c2-HNR" secondAttribute="trailing" id="9OF-2Y-0Ar"/>
-                        <constraint firstItem="8Hg-c2-dS8" firstAttribute="top" secondItem="Tck-c2-HNR" secondAttribute="bottom" id="Cal-Xb-R2U"/>
-                        <constraint firstItem="8Hg-c2-dS8" firstAttribute="top" secondItem="VTk-KK-TSM" secondAttribute="top" id="beq-yg-odk"/>
-                        <constraint firstItem="8Hg-c2-dS8" firstAttribute="leading" secondItem="VTk-KK-TSM" secondAttribute="leading" id="miA-Jd-PeJ"/>
-                        <constraint firstAttribute="bottom" secondItem="8Hg-c2-dS8" secondAttribute="bottom" id="sK1-xr-PET"/>
-                        <constraint firstItem="Tck-c2-HNR" firstAttribute="leading" secondItem="VTk-KK-TSM" secondAttribute="leading" id="sOZ-BT-YKq"/>
-                        <constraint firstItem="8Hg-c2-dS8" firstAttribute="width" secondItem="VTk-KK-TSM" secondAttribute="width" id="wbb-al-fMa"/>
+                        <constraint firstItem="8Hg-c2-dS8" firstAttribute="bottom" secondItem="yID-yS-zIb" secondAttribute="bottom" id="5Uf-mD-rg6"/>
+                        <constraint firstItem="8Hg-c2-dS8" firstAttribute="top" secondItem="yID-yS-zIb" secondAttribute="top" id="BlY-H2-YVs"/>
+                        <constraint firstItem="8Hg-c2-dS8" firstAttribute="top" secondItem="Tck-c2-HNR" secondAttribute="bottom" priority="999" id="Cal-Xb-R2U"/>
+                        <constraint firstItem="8Hg-c2-dS8" firstAttribute="trailing" secondItem="yID-yS-zIb" secondAttribute="trailing" id="M2C-TB-tv4"/>
+                        <constraint firstItem="8Hg-c2-dS8" firstAttribute="leading" secondItem="yID-yS-zIb" secondAttribute="leading" id="YcQ-Lb-oGl"/>
+                        <constraint firstItem="Tck-c2-HNR" firstAttribute="leading" secondItem="gEf-OG-6xV" secondAttribute="leading" id="ZdA-fD-8fW"/>
+                        <constraint firstItem="Tck-c2-HNR" firstAttribute="trailing" secondItem="gEf-OG-6xV" secondAttribute="trailing" id="bV9-uY-oAn"/>
+                        <constraint firstItem="8Hg-c2-dS8" firstAttribute="leading" secondItem="gEf-OG-6xV" secondAttribute="leading" id="gjb-Wy-66f"/>
+                        <constraint firstItem="8Hg-c2-dS8" firstAttribute="trailing" secondItem="gEf-OG-6xV" secondAttribute="trailing" id="jQY-NF-5tt"/>
+                        <constraint firstItem="Tck-c2-HNR" firstAttribute="top" secondItem="gEf-OG-6xV" secondAttribute="top" id="qyf-CM-c16"/>
                     </constraints>
+                    <viewLayoutGuide key="contentLayoutGuide" id="yID-yS-zIb"/>
+                    <viewLayoutGuide key="frameLayoutGuide" id="gEf-OG-6xV"/>
                 </scrollView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ROA-Jq-GvY" customClass="GradientView" customModule="Anilibria" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="44" width="414" height="5"/>
@@ -318,7 +322,6 @@
                 <constraint firstItem="VTk-KK-TSM" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="Jeh-cl-Doz"/>
                 <constraint firstItem="ROA-Jq-GvY" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="QpP-gi-PGX"/>
                 <constraint firstAttribute="bottom" secondItem="VTk-KK-TSM" secondAttribute="bottom" id="alM-Ok-ZL0"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="top" secondItem="Tck-c2-HNR" secondAttribute="top" id="g3C-Yp-jrA"/>
                 <constraint firstItem="ROA-Jq-GvY" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="veF-B4-BXK"/>
                 <constraint firstItem="ROA-Jq-GvY" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="yby-Nb-4mN"/>
             </constraints>

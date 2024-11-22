@@ -41,7 +41,7 @@ private class ServicesPart: DIPart {
         FavoriteServicePart.self,
         SessionServicePart.self,
         MenuServicePart.self,
-        FeedServicePart.self,
+        MainServicePart.self,
         LinksServicePart.self,
         DownloadServicePart.self,
         CatalogServicePart.self

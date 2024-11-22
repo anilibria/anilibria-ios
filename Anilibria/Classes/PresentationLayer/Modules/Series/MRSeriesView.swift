@@ -23,6 +23,10 @@ final class SeriesViewController: BaseViewController {
     @IBOutlet var supportLabelContainer: BorderedView!
     @IBOutlet var supportButton: UIButton!
     @IBOutlet var torrentsStackView: UIStackView!
+    @IBOutlet var relatedView: UIView!
+    @IBOutlet var relatedStackView: UIStackView!
+    @IBOutlet var relatedTitleLabel: UILabel!
+    @IBOutlet var relatedShimmerView: ShimmerView!
 
     private var header: SeriesHeaderView!
     private var weekDayViews: [WeekDayView] = []
@@ -76,12 +80,18 @@ final class SeriesViewController: BaseViewController {
         favoriteShimmerView.backgroundColor = UIColor(resource: .Surfaces.base)
         favoriteShimmerView.shimmerColor = UIColor(resource: .Surfaces.content)
         favoriteShimmerView.isHidden = true
+
+        relatedShimmerView.smoothCorners(with: 8)
+        relatedShimmerView.backgroundColor = UIColor(resource: .Surfaces.base)
+        relatedShimmerView.shimmerColor = UIColor(resource: .Surfaces.content)
+        relatedShimmerView.run()
     }
 
     override func setupStrings() {
         super.setupStrings()
         self.navigationItem.title = L10n.Screen.Series.title
         self.supportLabel.text = L10n.Common.donatePls
+        self.relatedTitleLabel.text = L10n.Common.related
         self.handler.didLoad()
     }
 
@@ -180,6 +190,27 @@ extension SeriesViewController: SeriesViewBehavior {
         #if targetEnvironment(macCatalyst)
         self.set(torrents: series.torrents)
         #endif
+    }
+
+    func set(series: [Series], current: Series) {
+        relatedShimmerView.isHidden = true
+        relatedShimmerView.stop()
+        if series.isEmpty {
+            relatedView.isHidden = true
+            return
+        }
+        relatedView.isHidden = false
+        let views = series.lazy.compactMap { item -> RelatedSeriesView? in
+            let view = RelatedSeriesView.fromNib()
+            view?.configure(item, selected: item.id == current.id)
+            view?.setTap { [weak self] in
+                self?.handler.select(series: $0)
+            }
+            return view
+        }
+        for view in views {
+            self.relatedStackView.addArrangedSubview(view)
+        }
     }
 
     func set(torrents: [Torrent]) {

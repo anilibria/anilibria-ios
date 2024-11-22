@@ -18,16 +18,16 @@ final class MainContainerPresenter {
 
     private let menuService: MenuService
     private let sessionService: SessionService
-    private let feedService: FeedService
+    private let mainService: MainService
 
     private var bag = Set<AnyCancellable>()
 
     init(menuService: MenuService,
          sessionService: SessionService,
-         feedService: FeedService) {
+         mainService: MainService) {
         self.menuService = menuService
         self.sessionService = sessionService
-        self.feedService = feedService
+        self.mainService = mainService
     }
 }
 

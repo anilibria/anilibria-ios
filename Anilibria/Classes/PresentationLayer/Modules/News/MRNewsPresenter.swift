@@ -16,14 +16,14 @@ final class NewsPresenter {
     private weak var view: NewsViewBehavior!
     private var router: NewsRoutable!
 
-    private let feedService: FeedService
+    private let mainService: MainService
 
     private var bag = Set<AnyCancellable>()
     private var activity: ActivityDisposable?
     private var pageSubscriber: AnyCancellable?
 
-    init(newsService: FeedService) {
-        self.feedService = newsService
+    init(newsService: MainService) {
+        self.mainService = newsService
     }
 }
 
@@ -48,7 +48,7 @@ extension NewsPresenter: NewsEventHandler {
     }
     
     private func load() {
-        pageSubscriber = feedService.fetchNews(limit: 30)
+        pageSubscriber = mainService.fetchNews(limit: 30)
             .sink(onNext: { [weak self] items in
                 self?.set(items: items)
                 self?.activity = nil

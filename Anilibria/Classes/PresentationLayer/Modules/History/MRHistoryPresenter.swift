@@ -20,12 +20,12 @@ final class HistoryPresenter {
     private var bag = Set<AnyCancellable>()
 
     let playerService: PlayerService
-    let feedService: FeedService
+    let mainService: MainService
 
     init(playerService: PlayerService,
-         feedService: FeedService) {
+         mainService: MainService) {
         self.playerService = playerService
-        self.feedService = feedService
+        self.mainService = mainService
     }
 }
 
@@ -57,7 +57,7 @@ extension HistoryPresenter: HistoryEventHandler {
     }
 
     func select(series: Series) {
-        self.feedService.series(with: series.alias)
+        self.mainService.series(with: series.alias)
             .manageActivity(self.view.showLoading(fullscreen: false))
             .sink(onNext: { [weak self] item in
                 self?.router.open(series: item)

@@ -91,6 +91,10 @@ internal enum L10n {
     internal static var mskTimeZone: String {
         return L10n.tr("Localizable", "common.msk_time_zone")
     }
+    /// Связанное
+    internal static var related: String {
+        return L10n.tr("Localizable", "common.related")
+    }
     /// Сегодня
     internal static var today: String {
         return L10n.tr("Localizable", "common.today")

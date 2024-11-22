@@ -55,22 +55,6 @@ final class AppConfigurationServiceImp: AppConfigurationService {
         self.statusRelay.send(.completed)
     }
 
-    private func applySettingsAndCheck(_ settings: AniSettings) -> AnyPublisher<AniSettings, Error> {
-        self.backendRepository.apply(settings)
-        self.currentProxy = settings.proxy
-
-        return self.backendRepository
-            .request(CheckRequest())
-            .map { _ in settings }
-            .catch({ [unowned self] _ in
-                if let next = settings.next {
-                    return self.applySettingsAndCheck(next)
-                }
-                return .fail(AppConfigError.notFound)
-            })
-            .eraseToAnyPublisher()
-    }
-
     func loadConfig() -> AnyPublisher<AniSettings, Error> {
         return Deferred { [unowned self] in
             let request = JustURLRequest<AniConfig>(url: URLS.config)

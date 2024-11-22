@@ -2,27 +2,26 @@ import DITranquillity
 import Foundation
 import Combine
 
-final class FeedServicePart: DIPart {
+final class MainServicePart: DIPart {
     static func load(container: DIContainer) {
-        container.register(FeedServiceImp.init)
-            .as(FeedService.self)
+        container.register(MainServiceImp.init)
+            .as(MainService.self)
             .lifetime(.perRun(.weak))
     }
 }
 
-protocol FeedService {
+protocol MainService {
     func fetchRandom() -> AnyPublisher<Series?, Error>
     func fetchTodaySchedule() -> AnyPublisher<ShortSchedule, Error>
     func fetchSchedule() -> AnyPublisher<[Schedule], Error>
-    func fetchFeed(page: Int) -> AnyPublisher<[Feed], Error>
     func fetchNews(limit: Int) -> AnyPublisher<[News], Error>
-    func fetchCatalog(page: Int, filter: SeriesFilter) -> AnyPublisher<[Series], Error>
     func search(query: String) -> AnyPublisher<[Series], Error>
     func series(with code: String) -> AnyPublisher<Series, Error>
     func fetchPromo() -> AnyPublisher<[PromoItem], Error>
+    func fetchFranchise(for seriesID: Int) -> AnyPublisher<[Franchise], Error>
 }
 
-final class FeedServiceImp: FeedService {
+final class MainServiceImp: MainService {
     let backendRepository: BackendRepository
     private var randomSeries: ArraySlice<Series>?
 
@@ -67,34 +66,11 @@ final class FeedServiceImp: FeedService {
         .eraseToAnyPublisher()
     }
 
-    func fetchFeed(page: Int) -> AnyPublisher<[Feed], Error> {
-        return Deferred { [unowned self] in
-            let request = FeedRequest(page: page)
-            return self.backendRepository
-                .request(request)
-        }
-        .subscribe(on: DispatchQueue.global())
-        .receive(on: DispatchQueue.main)
-        .eraseToAnyPublisher()
-    }
-
     func fetchNews(limit: Int) -> AnyPublisher<[News], Error> {
         return Deferred { [unowned self] in
             let request = NewsRequest(limit: limit)
             return self.backendRepository
                 .request(request)
-        }
-        .subscribe(on: DispatchQueue.global())
-        .receive(on: DispatchQueue.main)
-        .eraseToAnyPublisher()
-    }
-
-    func fetchCatalog(page: Int, filter: SeriesFilter) -> AnyPublisher<[Series], Error> {
-        return Deferred { [unowned self] in
-            let request = CatalogRequest(filter: filter, page: page)
-            return self.backendRepository
-                .request(request)
-                .map { $0.items }
         }
         .subscribe(on: DispatchQueue.global())
         .receive(on: DispatchQueue.main)
@@ -144,6 +120,17 @@ final class FeedServiceImp: FeedService {
     func series(with code: String) -> AnyPublisher<Series, Error> {
         return Deferred { [unowned self] in
             let request = SeriesRequest(alias: code)
+            return self.backendRepository
+                .request(request)
+        }
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
+    }
+
+    func fetchFranchise(for seriesID: Int) -> AnyPublisher<[Franchise], Error> {
+        return Deferred { [unowned self] in
+            let request = FranchiseRequest(seriesID: seriesID)
             return self.backendRepository
                 .request(request)
         }

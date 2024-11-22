@@ -16,7 +16,7 @@ final class FeedPresenter {
     private weak var view: FeedViewBehavior!
     private var router: FeedRoutable!
 
-    private let feedService: FeedService
+    private let mainService: MainService
     private var menuService: MenuService
 
     private var bag = Set<AnyCancellable>()
@@ -32,9 +32,9 @@ final class FeedPresenter {
 
     private var soonViewModel: SoonViewModel?
 
-    init(feedService: FeedService,
+    init(mainService: MainService,
          menuService: MenuService) {
-        self.feedService = feedService
+        self.mainService = mainService
         self.menuService = menuService
     }
 }
@@ -78,7 +78,7 @@ extension FeedPresenter: FeedEventHandler {
     }
 
     func select(series: Series) {
-        self.feedService.series(with: series.alias)
+        self.mainService.series(with: series.alias)
             .manageActivity(self.view.showLoading(fullscreen: false))
             .sink(onNext: { [weak self] item in
                 self?.router.open(series: item)
@@ -89,7 +89,7 @@ extension FeedPresenter: FeedEventHandler {
     }
 
     func selectRandom() {
-        self.feedService.fetchRandom()
+        self.mainService.fetchRandom()
             .manageActivity(self.view.showLoading(fullscreen: false))
             .sink(onNext: { [weak self] item in
                 if let item {
@@ -126,8 +126,8 @@ extension FeedPresenter: FeedEventHandler {
 
     private func load() {
         Publishers.Zip(
-            feedService.fetchPromo(),
-            feedService.fetchTodaySchedule()
+            mainService.fetchPromo(),
+            mainService.fetchTodaySchedule()
         ).sink(onNext: { [weak self] promo, schedule in
             self?.create(promo: promo, schedule: schedule)
             self?.activity = nil

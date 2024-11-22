@@ -7,6 +7,7 @@ protocol SeriesViewBehavior: WaitingBehavior {
     func set(favorite: Bool?, count: Int)
     func can(favorite: Bool)
     func can(watch: Bool)
+    func set(series: [Series], current: Series)
 }
 
 protocol SeriesEventHandler: ViewControllerEventHandler {
@@ -15,6 +16,7 @@ protocol SeriesEventHandler: ViewControllerEventHandler {
               series: Series)
 
     func select(genre: String)
+    func select(series: Series)
     func select(url: URL)
     func schedule()
     func back()

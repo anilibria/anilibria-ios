@@ -8,6 +8,7 @@ protocol SeriesRoutable: BaseRoutable,
                          AppUrlRoute,
                          AlertRoute,
                          ShareRoute,
-                         CatalogRoute {}
+                         CatalogRoute,
+                         SeriesRoute{}
 
 final class SeriesRouter: BaseRouter, SeriesRoutable {}

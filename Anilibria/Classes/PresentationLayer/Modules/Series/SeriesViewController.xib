@@ -21,6 +21,10 @@
                 <outlet property="favoriteStarView" destination="Rql-Gn-hbn" id="uLx-Ws-X6d"/>
                 <outlet property="headerContainerView" destination="Tck-c2-HNR" id="PVH-gj-daq"/>
                 <outlet property="paramsTextView" destination="Vw4-G6-Mqn" id="dhb-IU-lpE"/>
+                <outlet property="relatedShimmerView" destination="HIO-pR-qAQ" id="Ose-6E-By5"/>
+                <outlet property="relatedStackView" destination="Q3z-X5-eq0" id="YD7-1C-eCV"/>
+                <outlet property="relatedTitleLabel" destination="Ssl-3N-BDw" id="tZo-6R-pih"/>
+                <outlet property="relatedView" destination="WVf-K4-TmT" id="6W3-xH-wbX"/>
                 <outlet property="scrollView" destination="VTk-KK-TSM" id="Akn-xM-clU"/>
                 <outlet property="secondTitleLabel" destination="YZb-MF-Wl4" id="wgM-Eb-vwd"/>
                 <outlet property="separatorView" destination="wdH-VI-hKU" id="yEU-65-WaH"/>
@@ -28,7 +32,7 @@
                 <outlet property="supportLabel" destination="9c0-4r-RCo" id="hc0-sZ-Ewp"/>
                 <outlet property="supportLabelContainer" destination="ffy-n0-jv6" id="5dJ-gU-zgp"/>
                 <outlet property="titleLabel" destination="JFd-xw-0Ok" id="ajx-CL-jed"/>
-                <outlet property="torrentsStackView" destination="Rfz-hF-F2o" id="hXj-MD-5m5"/>
+                <outlet property="torrentsStackView" destination="hd6-nc-urY" id="tQj-08-Rhh"/>
                 <outlet property="view" destination="iN0-l3-epB" id="dz8-Bh-UUE"/>
                 <outlet property="weekDayStackView" destination="hGA-mx-iMn" id="rw1-g8-BfT"/>
                 <outlet property="weekDaysContainer" destination="3zb-ch-ENz" id="Xbt-sV-jLq"/>
@@ -47,7 +51,7 @@
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Hg-c2-dS8">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="337.33333333333331"/>
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="683.33333333333337"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JFd-xw-0Ok">
                                     <rect key="frame" x="16" y="16" width="322" height="21.666666666666671"/>
@@ -233,8 +237,57 @@
                                         <constraint firstItem="ffy-n0-jv6" firstAttribute="centerX" secondItem="qZK-Ye-Nr9" secondAttribute="centerX" id="suu-Wr-Y4A"/>
                                     </constraints>
                                 </view>
-                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Rfz-hF-F2o">
-                                    <rect key="frame" x="0.0" y="337.33333333333331" width="414" height="0.0"/>
+                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="Rfz-hF-F2o">
+                                    <rect key="frame" x="0.0" y="337.33333333333331" width="414" height="345.99999999999994"/>
+                                    <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WVf-K4-TmT">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="130"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ssl-3N-BDw">
+                                                    <rect key="frame" x="16" y="8" width="39" height="18"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                    <color key="textColor" name="text/main"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Q3z-X5-eq0">
+                                                    <rect key="frame" x="0.0" y="42" width="414" height="80"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" priority="100" constant="80" id="uG2-zd-mj1"/>
+                                                    </constraints>
+                                                </stackView>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vtF-tJ-1o5">
+                                                    <rect key="frame" x="16" y="129" width="382" height="1"/>
+                                                    <color key="backgroundColor" name="tint/separator"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="1" id="csx-KA-1a8"/>
+                                                    </constraints>
+                                                </view>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HIO-pR-qAQ" customClass="ShimmerView" customModule="Anilibria" customModuleProvider="target">
+                                                    <rect key="frame" x="16" y="42" width="382" height="80"/>
+                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                </view>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="vtF-tJ-1o5" secondAttribute="bottom" id="0Bn-Bv-Q1s"/>
+                                                <constraint firstAttribute="trailing" secondItem="vtF-tJ-1o5" secondAttribute="trailing" constant="16" id="4Hn-yl-IdF"/>
+                                                <constraint firstAttribute="trailing" secondItem="Q3z-X5-eq0" secondAttribute="trailing" id="DhF-dX-4jE"/>
+                                                <constraint firstItem="HIO-pR-qAQ" firstAttribute="bottom" secondItem="Q3z-X5-eq0" secondAttribute="bottom" id="Emo-AF-r6S"/>
+                                                <constraint firstItem="HIO-pR-qAQ" firstAttribute="trailing" secondItem="Q3z-X5-eq0" secondAttribute="trailing" constant="-16" id="LFx-Ak-lSK"/>
+                                                <constraint firstItem="Ssl-3N-BDw" firstAttribute="leading" secondItem="WVf-K4-TmT" secondAttribute="leading" constant="16" id="TPk-0o-0xA"/>
+                                                <constraint firstItem="vtF-tJ-1o5" firstAttribute="leading" secondItem="WVf-K4-TmT" secondAttribute="leading" constant="16" id="Xr3-iS-wEl"/>
+                                                <constraint firstItem="Ssl-3N-BDw" firstAttribute="top" secondItem="WVf-K4-TmT" secondAttribute="top" constant="8" id="ahe-rQ-5nZ"/>
+                                                <constraint firstItem="HIO-pR-qAQ" firstAttribute="leading" secondItem="Q3z-X5-eq0" secondAttribute="leading" constant="16" id="b4U-Ag-65n"/>
+                                                <constraint firstItem="Q3z-X5-eq0" firstAttribute="top" secondItem="Ssl-3N-BDw" secondAttribute="bottom" constant="16" id="kFf-rW-Pwo"/>
+                                                <constraint firstAttribute="bottom" secondItem="Q3z-X5-eq0" secondAttribute="bottom" constant="8" id="kNk-e8-LeQ"/>
+                                                <constraint firstItem="Q3z-X5-eq0" firstAttribute="leading" secondItem="WVf-K4-TmT" secondAttribute="leading" id="nSf-nh-vQa"/>
+                                                <constraint firstItem="HIO-pR-qAQ" firstAttribute="top" secondItem="Q3z-X5-eq0" secondAttribute="top" id="yRh-dL-y6y"/>
+                                            </constraints>
+                                        </view>
+                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="hd6-nc-urY">
+                                            <rect key="frame" x="0.0" y="146.00000000000006" width="414" height="200"/>
+                                        </stackView>
+                                    </subviews>
                                     <constraints>
                                         <constraint firstAttribute="height" priority="1" id="496-pH-pVw"/>
                                     </constraints>
@@ -322,6 +375,9 @@
         <image name="star-outline" width="18" height="18"/>
         <namedColor name="buttons/selected">
             <color red="0.70588235294117652" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="text/main">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="text/monoLight">
             <color red="0.99607843137254903" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

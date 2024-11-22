@@ -17,7 +17,7 @@ final class SeriesPresenter {
     private var router: SeriesRoutable!
     private var series: Series!
 
-    private let feedService: FeedService
+    private let mainService: MainService
     private let sessionService: SessionService
     private let favoriteService: FavoriteService
     private let downloadService: DownloadService
@@ -26,11 +26,11 @@ final class SeriesPresenter {
     private var favoritesCount: Int = 0
     private var bag = Set<AnyCancellable>()
 
-    init(feedService: FeedService,
+    init(mainService: MainService,
          sessionService: SessionService,
          favoriteService: FavoriteService,
          downloadService: DownloadService) {
-        self.feedService = feedService
+        self.mainService = mainService
         self.sessionService = sessionService
         self.favoriteService = favoriteService
         self.downloadService = downloadService
@@ -78,6 +78,15 @@ extension SeriesPresenter: SeriesEventHandler {
             }
         }
         .store(in: &bag)
+
+        self.mainService.fetchFranchise(for: series.id).sink(onNext: { [weak self] franchises in
+            guard let self else { return }
+            let items = franchises.flatMap { $0.releases.compactMap { $0.series } }
+            view.set(series: items, current: series)
+        }, onError: { [weak self] _ in
+            guard let self else { return }
+            view.set(series: [], current: series)
+        }).store(in: &bag)
     }
 
     private func loadFavorite() {
@@ -107,6 +116,12 @@ extension SeriesPresenter: SeriesEventHandler {
         }
     }
 
+    func select(series: Series) {
+        if series.id != self.series.id {
+            load(code: series.alias)
+        }
+    }
+
     func favorite() {
         guard let favoriteState else { return }
         self.favoriteService
@@ -130,10 +145,10 @@ extension SeriesPresenter: SeriesEventHandler {
     }
 
     private func load(code: String) {
-        self.feedService.series(with: code)
+        self.mainService.series(with: code)
             .manageActivity(self.view.showLoading(fullscreen: false))
             .sink(onNext: { [weak self] item in
-                self?.router.execute(SeriesCommand(value: item))
+                self?.router.open(series: item)
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })
@@ -175,8 +190,5 @@ extension SeriesPresenter: SeriesEventHandler {
     }
 }
 
-public struct SeriesCommand: RouteCommand {
-    let value: Series
-}
 
 public struct ScheduleCommand: RouteCommand {}

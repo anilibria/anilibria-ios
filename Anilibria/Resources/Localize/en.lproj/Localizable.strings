@@ -69,6 +69,7 @@
 
 "common.default" = "Default";
 "common.ad" = "Ad";
+"common.related" = "Related";
 
 //PERMISSION
 "permission.title" = "Permission";

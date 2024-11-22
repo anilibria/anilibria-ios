@@ -18,14 +18,14 @@ final class FavoritePresenter {
     private var bag = Set<AnyCancellable>()
 
     let favoriteService: FavoriteService
-    let feedService: FeedService
+    let mainService: MainService
 
     let viewModel: FavoriteViewModel
 
     init(favoriteService: FavoriteService,
-         feedService: FeedService) {
+         mainService: MainService) {
         self.favoriteService = favoriteService
-        self.feedService = feedService
+        self.mainService = mainService
         self.viewModel = FavoriteViewModel(service: favoriteService)
 
         viewModel.select = { [weak self] item in
@@ -107,7 +107,7 @@ extension FavoritePresenter: FavoriteEventHandler {
     }
 
     func select(series: Series) {
-        self.feedService.series(with: series.alias)
+        self.mainService.series(with: series.alias)
             .manageActivity(self.view.showLoading(fullscreen: false))
             .sink(onNext: { [weak self] item in
                 self?.router.open(series: item)

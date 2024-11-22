@@ -69,6 +69,7 @@
 
 "common.default" = "По умолчанию";
 "common.ad" = "Реклама";
+"common.related" = "Связанное";
 
 //PERMISSION
 "permission.title" = "Разрешение";

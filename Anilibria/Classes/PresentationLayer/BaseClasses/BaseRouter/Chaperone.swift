@@ -43,6 +43,7 @@ public class ModalRouter: NSObject, ChaperoneRouter {
         let mainWindow = UIApplication.getWindow()
         let tempController = MRViewController()
         mainWindow?.addSubview(tempController.view)
+        mainWindow?.rootViewController?.addChild(tempController)
         tempController.didMove(toParent: mainWindow?.rootViewController)
         controller.storeLink(tempController)
         DispatchQueue.main.async {

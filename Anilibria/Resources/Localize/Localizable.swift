@@ -75,6 +75,10 @@ internal enum L10n {
     internal static var ad: String {
         return L10n.tr("Localizable", "common.ad")
     }
+    /// Тема
+    internal static var appearance: String {
+        return L10n.tr("Localizable", "common.appearance")
+    }
     /// По умолчанию
     internal static var `default`: String {
         return L10n.tr("Localizable", "common.default")
@@ -106,6 +110,21 @@ internal enum L10n {
     /// Вчера
     internal static var yesterday: String {
         return L10n.tr("Localizable", "common.yesterday")
+    }
+
+    internal enum Appearance {
+      /// Темная
+      internal static var dark: String {
+          return L10n.tr("Localizable", "common.appearance.dark")
+      }
+      /// Светлая
+      internal static var light: String {
+          return L10n.tr("Localizable", "common.appearance.light")
+      }
+      /// Системная
+      internal static var system: String {
+          return L10n.tr("Localizable", "common.appearance.system")
+      }
     }
 
     internal enum FilterSearch {

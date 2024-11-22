@@ -22,6 +22,10 @@ public class MainAppCoordinator: Loggable {
     private let appService: AppConfigurationService
     private var bag = Set<AnyCancellable>()
 
+    public var window: UIWindow? {
+        return router.window
+    }
+
     init(configuration: DependenciesConfiguration) {
         self.configuration = configuration
         self.configuration.setup()

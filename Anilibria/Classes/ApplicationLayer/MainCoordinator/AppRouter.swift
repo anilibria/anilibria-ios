@@ -1,7 +1,7 @@
 import UIKit
 
 public class AppRouter {
-    private var window: UIWindow!
+    private(set) var window: UIWindow!
 
     init() {}
 
@@ -12,6 +12,9 @@ public class AppRouter {
         window.windowScene?.titlebar?.titleVisibility = .hidden
         #endif
 
+        defer {
+            InterfaceAppearance.current.apply()
+        }
         return self.window
     }
 

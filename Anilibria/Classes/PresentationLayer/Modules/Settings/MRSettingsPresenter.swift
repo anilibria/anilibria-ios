@@ -40,6 +40,7 @@ extension SettingsPresenter: SettingsEventHandler {
     func didLoad() {
         self.view.set(quality: self.playerSettings.quality)
         self.view.set(language: Language.current)
+        self.view.set(appearance: InterfaceAppearance.current)
         self.view.set(name: Bundle.main.displayName ?? "",
                       version: Bundle.main.releaseVersionNumber ?? "")
     }
@@ -77,6 +78,25 @@ extension SettingsPresenter: SettingsEventHandler {
             )
         }
         
+        self.router.openSheet(with: items)
+    }
+
+    func selectAppearance() {
+        let current = InterfaceAppearance.current
+        let items = InterfaceAppearance.allCases.map {
+            ChoiceItem(
+                value: $0,
+                title: $0.title,
+                isSelected: current == $0,
+                didSelect: { [weak self] item in
+                    item.save()
+                    item.apply()
+                    self?.view.set(appearance: item)
+                    return true
+                }
+            )
+        }
+
         self.router.openSheet(with: items)
     }
 

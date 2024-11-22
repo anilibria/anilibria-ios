@@ -70,6 +70,10 @@
 "common.default" = "По умолчанию";
 "common.ad" = "Реклама";
 "common.related" = "Связанное";
+"common.appearance" = "Тема";
+"common.appearance.dark" = "Темная";
+"common.appearance.light" = "Светлая";
+"common.appearance.system" = "Системная";
 
 //PERMISSION
 "permission.title" = "Разрешение";

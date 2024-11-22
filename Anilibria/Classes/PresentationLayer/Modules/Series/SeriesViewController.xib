@@ -15,6 +15,7 @@
                 <outlet property="anonceLabel" destination="ocU-HM-Qgc" id="fBA-9C-84x"/>
                 <outlet property="descTextView" destination="4LL-2m-eCb" id="nSP-fl-FmB"/>
                 <outlet property="favoriteButton" destination="2K1-Xt-21R" id="r3U-QH-z5U"/>
+                <outlet property="favoriteContainerView" destination="ke8-ep-Qva" id="ITu-bM-hfo"/>
                 <outlet property="favoriteCountLabel" destination="agv-tY-JC3" id="hPR-BK-5rk"/>
                 <outlet property="favoriteShimmerView" destination="9RF-91-ywf" id="cok-xq-1he"/>
                 <outlet property="favoriteStarView" destination="Rql-Gn-hbn" id="uLx-Ws-X6d"/>
@@ -60,7 +61,7 @@
                                     <color key="textColor" name="text/secondary"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ke8-ep-Qva" customClass="BorderedView" customModule="Anilibria" customModuleProvider="target">
+                                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ke8-ep-Qva">
                                     <rect key="frame" x="354" y="15" width="44" height="22"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="agv-tY-JC3">
@@ -108,17 +109,6 @@
                                         <constraint firstItem="9RF-91-ywf" firstAttribute="leading" secondItem="ke8-ep-Qva" secondAttribute="leading" id="w7r-RG-klF"/>
                                         <constraint firstAttribute="trailing" secondItem="Rql-Gn-hbn" secondAttribute="trailing" constant="8" id="yeQ-fM-UDv"/>
                                     </constraints>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                            <real key="value" value="11"/>
-                                        </userDefinedRuntimeAttribute>
-                                        <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                            <color key="value" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </userDefinedRuntimeAttribute>
-                                        <userDefinedRuntimeAttribute type="number" keyPath="borderThickness">
-                                            <real key="value" value="1"/>
-                                        </userDefinedRuntimeAttribute>
-                                    </userDefinedRuntimeAttributes>
                                 </view>
                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="params" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Vw4-G6-Mqn" customClass="AttributeLinksView" customModule="Anilibria" customModuleProvider="target">
                                     <rect key="frame" x="12" y="59.333333333333336" width="390" height="30.333333333333336"/>

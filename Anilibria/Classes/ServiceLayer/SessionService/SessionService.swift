@@ -117,7 +117,6 @@ final class SessionServiceImp: SessionService, Loggable {
                 .request(request, retrier: SimpleRetrier { error, _, completion in
                     if case let .network(code) = error as? AppError, code == 404 {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
-                            print("TEST> retry")
                             completion(true)
                         })
                     } else {

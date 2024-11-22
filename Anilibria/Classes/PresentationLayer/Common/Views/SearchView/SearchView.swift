@@ -5,7 +5,7 @@ public final class SearchView: UIView {
     @IBOutlet var cancelButton: UIButton!
     @IBOutlet var searchField: UITextField! {
         didSet {
-            self.layer.zPosition = CGFloat.greatestFiniteMagnitude
+            self.layer.zPosition = 1000
             self.setupSearchField()
         }
     }

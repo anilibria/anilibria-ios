@@ -8,6 +8,7 @@ final class SeriesViewController: BaseViewController {
     @IBOutlet var headerContainerView: UIView!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var secondTitleLabel: UILabel!
+    @IBOutlet var favoriteContainerView: UIView!
     @IBOutlet var favoriteCountLabel: UILabel!
     @IBOutlet var favoriteStarView: UIImageView!
     @IBOutlet var favoriteButton: RippleButton!
@@ -71,6 +72,7 @@ final class SeriesViewController: BaseViewController {
         descTextView.textColor = UIColor(resource: .Text.main)
         supportLabelContainer.cornerRadius = 6
 
+        favoriteContainerView.smoothCorners(with: 11)
         favoriteShimmerView.backgroundColor = UIColor(resource: .Surfaces.base)
         favoriteShimmerView.shimmerColor = UIColor(resource: .Surfaces.content)
         favoriteShimmerView.isHidden = true

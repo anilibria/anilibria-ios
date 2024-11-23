@@ -13,5 +13,7 @@ public class DraggableRippleCell: RippleViewCell, DraggableViewDelegate {
         self.draggableView.delegate = self
     }
 
+    public func willCallPrimaryAction() {}
     public func callPrimaryAction() {}
+    public func cancelCallPrimaryAction() {}
 }

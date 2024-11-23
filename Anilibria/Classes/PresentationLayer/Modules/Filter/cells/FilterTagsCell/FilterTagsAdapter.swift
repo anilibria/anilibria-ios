@@ -67,13 +67,6 @@ public final class FilterTagsItem: NSObject {
 }
 
 final class FilterTagAdapter: BaseCellAdapter<FilterTag> {
-    private let size: CGSize
-
-    override init(viewModel: FilterTag) {
-        self.size = FilterTagCell.size(for: viewModel)
-        super.init(viewModel: viewModel)
-    }
-
     override func cellForItem(at index: IndexPath, context: CollectionContext) -> UICollectionViewCell? {
         let cell = context.dequeueReusableNibCell(type: FilterTagCell.self, for: index)
         cell.configure(viewModel)

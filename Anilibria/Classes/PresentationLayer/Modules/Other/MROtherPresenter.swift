@@ -65,7 +65,7 @@ extension OtherPresenter: OtherEventHandler {
     }
 
     func team() {
-        self.router.open(url: URLS.team)
+        self.router.openTeam()
     }
 
     func donate() {

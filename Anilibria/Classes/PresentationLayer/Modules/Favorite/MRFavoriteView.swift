@@ -45,6 +45,15 @@ final class FavoriteViewController: BaseCollectionViewController {
         if let value = self.searchView {
             self.navigationItem.titleView = value
             value.querySequence()
+                .dropFirst()
+                .map {
+                    let result = $0.trim()
+                    if result.count > 1 {
+                        return result
+                    }
+                    return ""
+                }
+                .removeDuplicates()
                 .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
                 .sink(onNext: { [weak self] text in
                     self?.currentQuery = text

@@ -156,6 +156,7 @@
             <size key="customSize" width="320" height="247"/>
             <connections>
                 <outlet property="containerView" destination="t3z-jX-0vy" id="SK9-G7-WgF"/>
+                <outlet property="deleteIconView" destination="NAc-Wj-Ycb" id="WlA-rb-YNf"/>
                 <outlet property="descLabel" destination="VaE-ZG-edn" id="xiM-bV-Rov"/>
                 <outlet property="draggableView" destination="VyW-WE-XoO" id="BVI-zE-wIn"/>
                 <outlet property="imageView" destination="rFX-nv-5rb" id="STs-Kw-gJz"/>

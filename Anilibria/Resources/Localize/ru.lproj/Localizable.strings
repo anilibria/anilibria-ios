@@ -76,6 +76,9 @@
 "common.appearance.light" = "Светлая";
 "common.appearance.system" = "Системная";
 
+"common.intern" = "Стажер";
+"common.vacation" = "В отпуске";
+
 //PERMISSION
 "permission.title" = "Разрешение";
 "permission.push" = "Для работы уведомлений вы должны разрешить \"Допуск уведомлений\".\nРазрешение можно установить через \"Настройки\"";

@@ -91,6 +91,10 @@ internal enum L10n {
     internal static var guest: String {
         return L10n.tr("Localizable", "common.guest")
     }
+    /// Стажер
+    internal static var intern: String {
+        return L10n.tr("Localizable", "common.intern")
+    }
     /// (по МСК)
     internal static var mskTimeZone: String {
         return L10n.tr("Localizable", "common.msk_time_zone")
@@ -110,6 +114,10 @@ internal enum L10n {
     /// Завтра
     internal static var tomorrow: String {
         return L10n.tr("Localizable", "common.tomorrow")
+    }
+    /// В отпуске
+    internal static var vacation: String {
+        return L10n.tr("Localizable", "common.vacation")
     }
     /// Вчера
     internal static var yesterday: String {

@@ -55,4 +55,11 @@ extension BaseNavigationController: UIGestureRecognizerDelegate {
         }
         return false
     }
+
+    public func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer
+    ) -> Bool {
+        true
+    }
 }

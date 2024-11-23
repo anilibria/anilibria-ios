@@ -1,14 +1,18 @@
 import UIKit
 
 public protocol DraggableViewDelegate: AnyObject {
+    func willCallPrimaryAction()
     func callPrimaryAction()
+    func cancelCallPrimaryAction()
     func didStart()
     func didEnd(_ isOpen: Bool)
     func progressChanged(value: CGFloat)
 }
 
 public extension DraggableViewDelegate {
+    func willCallPrimaryAction() {}
     func callPrimaryAction() {}
+    func cancelCallPrimaryAction() {}
     func didStart() {}
     func didEnd(_ isOpen: Bool) {}
     func progressChanged(value: CGFloat) {}
@@ -221,6 +225,11 @@ open class DraggableView: UIView {
     private func setNeeedsCall(_ value: Bool) {
         if needsCallAction != value {
             needsCallAction = value
+            if value {
+                delegate?.willCallPrimaryAction()
+            } else {
+                delegate?.cancelCallPrimaryAction()
+            }
             FeedbackGenerator.default.produce()
         }
     }

@@ -5,6 +5,7 @@ public final class RemovableSeriesCell: DraggableRippleCell {
     @IBOutlet var imageView: UIImageView!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var descLabel: UILabel!
+    @IBOutlet var deleteIconView: UIView!
 
     private var deleteHandler: ActionFunc?
 
@@ -43,5 +44,26 @@ public final class RemovableSeriesCell: DraggableRippleCell {
 
     public override func callPrimaryAction() {
         self.deleteHandler?()
+    }
+
+    public override func willCallPrimaryAction() {
+        apply(transform: .init(scaleX: 1.5, y: 1.5))
+    }
+
+    public override func cancelCallPrimaryAction() {
+        apply(transform: .identity)
+    }
+
+    private func apply(transform: CGAffineTransform) {
+        UIView.animate(
+            withDuration: 0.5,
+            delay: 0,
+            usingSpringWithDamping: 0.7,
+            initialSpringVelocity: 0,
+            options: .curveEaseInOut,
+            animations: { [weak self] in
+                self?.deleteIconView.transform = transform
+            }
+        )
     }
 }

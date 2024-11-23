@@ -76,6 +76,9 @@
 "common.appearance.light" = "Light";
 "common.appearance.system" = "Light";
 
+"common.intern" = "Intern";
+"common.vacation" = "Vacation";
+
 //PERMISSION
 "permission.title" = "Permission";
 "permission.push" = "To recieve push notifications you should enable it on the iOS Settings.";

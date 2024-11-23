@@ -78,12 +78,13 @@ final class SeriesViewController: BaseViewController {
 
         favoriteContainerView.smoothCorners(with: 11)
         favoriteShimmerView.backgroundColor = UIColor(resource: .Surfaces.base)
-        favoriteShimmerView.shimmerColor = UIColor(resource: .Surfaces.content)
-        favoriteShimmerView.isHidden = true
+        favoriteShimmerView.shimmerColor = UIColor(resource: .Tint.shimmer)
+        favoriteShimmerView.isHidden = false
+        favoriteShimmerView.run()
 
         relatedShimmerView.smoothCorners(with: 8)
         relatedShimmerView.backgroundColor = UIColor(resource: .Surfaces.base)
-        relatedShimmerView.shimmerColor = UIColor(resource: .Surfaces.content)
+        relatedShimmerView.shimmerColor = UIColor(resource: .Tint.shimmer)
         relatedShimmerView.run()
     }
 
@@ -162,6 +163,7 @@ extension SeriesViewController: SeriesViewBehavior {
         }
 
         self.favoriteCountLabel.text = "\(count)"
+        favoriteContainerView.fadeTransition()
     }
 
     func set(series: Series) {
@@ -211,6 +213,7 @@ extension SeriesViewController: SeriesViewBehavior {
         for view in views {
             self.relatedStackView.addArrangedSubview(view)
         }
+        relatedView.fadeTransition()
     }
 
     func set(torrents: [Torrent]) {

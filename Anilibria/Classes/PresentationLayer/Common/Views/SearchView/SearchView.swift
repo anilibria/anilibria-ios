@@ -51,6 +51,7 @@ public final class SearchView: UIView {
         self.isSearching = false
         self.searchField.text = ""
         self.queryRelay.send("")
+        self.cancelIsHidden = true
     }
 
     public override var intrinsicContentSize: CGSize {

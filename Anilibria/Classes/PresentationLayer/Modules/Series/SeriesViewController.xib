@@ -59,8 +59,8 @@
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YZb-MF-Wl4">
-                                    <rect key="frame" x="16" y="40.666666666666671" width="33" height="15.666666666666664"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YZb-MF-Wl4">
+                                    <rect key="frame" x="16" y="40.666666666666671" width="382" height="15.666666666666664"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                     <color key="textColor" name="text/secondary"/>
                                     <nil key="highlightedColor"/>
@@ -321,6 +321,7 @@
                                 <constraint firstAttribute="trailing" secondItem="Vw4-G6-Mqn" secondAttribute="trailing" constant="12" id="TO5-AN-67f"/>
                                 <constraint firstItem="4LL-2m-eCb" firstAttribute="leading" secondItem="8Hg-c2-dS8" secondAttribute="leading" constant="12" id="W2j-fu-reE"/>
                                 <constraint firstItem="Fgb-FF-ldk" firstAttribute="leading" secondItem="8Hg-c2-dS8" secondAttribute="leading" id="Ysf-ZH-zT3"/>
+                                <constraint firstAttribute="trailing" secondItem="YZb-MF-Wl4" secondAttribute="trailing" constant="16" id="YuQ-gt-hb1"/>
                                 <constraint firstItem="JFd-xw-0Ok" firstAttribute="top" secondItem="8Hg-c2-dS8" secondAttribute="top" constant="16" id="aNP-fB-6vF"/>
                                 <constraint firstAttribute="trailing" secondItem="qZK-Ye-Nr9" secondAttribute="trailing" id="amT-M9-UMN"/>
                                 <constraint firstItem="qZK-Ye-Nr9" firstAttribute="top" secondItem="riE-gi-vWv" secondAttribute="bottom" id="eub-ux-fWW"/>

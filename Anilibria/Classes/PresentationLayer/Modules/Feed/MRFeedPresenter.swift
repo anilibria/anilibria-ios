@@ -91,10 +91,12 @@ extension FeedPresenter: FeedEventHandler {
     func selectRandom() {
         self.mainService.fetchRandom()
             .manageActivity(self.view.showLoading(fullscreen: false))
+            .flatMap { [weak self] item -> AnyPublisher<Series, Error> in
+                guard let self, let item else { return .empty() }
+                return self.mainService.series(with: item.alias)
+            }
             .sink(onNext: { [weak self] item in
-                if let item {
-                    self?.router.open(series: item)
-                }
+                self?.router.open(series: item)
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })

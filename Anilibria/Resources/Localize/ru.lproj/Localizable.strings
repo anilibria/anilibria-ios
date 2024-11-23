@@ -56,6 +56,7 @@
 "common.seasons.summer" = "Лето";
 "common.seasons.fall" = "Осень";
 
+"common.quality" = "Качество видео";
 "common.quality.sd" = "480p";
 "common.quality.hd" = "720p";
 "common.quality.full_hd" = "1080p";

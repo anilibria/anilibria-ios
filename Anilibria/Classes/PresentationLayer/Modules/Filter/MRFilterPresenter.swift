@@ -268,7 +268,7 @@ extension FilterPresenter: FilterEventHandler {
             )
         }
 
-        router.openSheet(with: [simple] + items)
+        router.openSheet(with: [ChoiceGroup(items: [simple] + items)])
     }
 
     private func getYears() -> FilterTagsItem? {

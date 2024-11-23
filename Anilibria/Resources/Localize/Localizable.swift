@@ -95,6 +95,10 @@ internal enum L10n {
     internal static var mskTimeZone: String {
         return L10n.tr("Localizable", "common.msk_time_zone")
     }
+    /// Качество видео
+    internal static var quality: String {
+        return L10n.tr("Localizable", "common.quality")
+    }
     /// Связанное
     internal static var related: String {
         return L10n.tr("Localizable", "common.related")

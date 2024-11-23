@@ -61,7 +61,7 @@ extension PlayerPresenter: PlayerEventHandler {
             )
         }
 
-        self.router.openSheet(with: items)
+        self.router.openSheet(with: [ChoiceGroup(items: items)])
     }
 
     func settings(quality: VideoQuality, for item: PlaylistItem) {
@@ -79,7 +79,7 @@ extension PlayerPresenter: PlayerEventHandler {
             )
         }
 
-        self.router.openSheet(with: items)
+        self.router.openSheet(with: [ChoiceGroup(title: L10n.Common.quality, items: items)])
     }
 
     func back() {

@@ -60,7 +60,7 @@ extension SettingsPresenter: SettingsEventHandler {
             )
         }
 
-        self.router.openSheet(with: items)
+        self.router.openSheet(with: [ChoiceGroup(items: items)])
     }
     
     func selectLanguage() {
@@ -78,7 +78,7 @@ extension SettingsPresenter: SettingsEventHandler {
             )
         }
         
-        self.router.openSheet(with: items)
+        self.router.openSheet(with: [ChoiceGroup(items: items)])
     }
 
     func selectAppearance() {
@@ -97,7 +97,7 @@ extension SettingsPresenter: SettingsEventHandler {
             )
         }
 
-        self.router.openSheet(with: items)
+        self.router.openSheet(with: [ChoiceGroup(items: items)])
     }
 
     private func update(_ quality: VideoQuality) {

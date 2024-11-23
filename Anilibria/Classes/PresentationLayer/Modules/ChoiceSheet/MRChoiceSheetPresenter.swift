@@ -43,18 +43,28 @@ public final class ChoiceItem: NSObject {
     }
 }
 
+public final class ChoiceGroup: NSObject {
+    let title: String?
+    let items: [ChoiceItem]
+
+    init(title: String? = nil, items: [ChoiceItem]) {
+        self.title = title
+        self.items = items
+    }
+}
+
 // MARK: - Presenter
 
 final class ChoiceSheetPresenter {
     private weak var view: ChoiceSheetViewBehavior!
     private var router: ChoiceSheetRoutable!
-    private var items: [ChoiceItem] = []
+    private var items: [ChoiceGroup] = []
 }
 
 extension ChoiceSheetPresenter: ChoiceSheetEventHandler {
     func bind(view: ChoiceSheetViewBehavior,
               router: ChoiceSheetRoutable,
-              items: [ChoiceItem]) {
+              items: [ChoiceGroup]) {
         self.view = view
         self.router = router
         self.items = items

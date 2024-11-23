@@ -43,6 +43,10 @@ extension SettingsPresenter: SettingsEventHandler {
         self.view.set(appearance: InterfaceAppearance.current)
         self.view.set(name: Bundle.main.displayName ?? "",
                       version: Bundle.main.releaseVersionNumber ?? "")
+
+        Language.languageChanged.sink { [weak self] in
+            self?.view.set(appearance: InterfaceAppearance.current)
+        }.store(in: &bag)
     }
 
     func selectQuality() {

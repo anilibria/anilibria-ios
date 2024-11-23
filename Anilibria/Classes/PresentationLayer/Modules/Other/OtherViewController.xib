@@ -325,16 +325,13 @@
                                     </userDefinedRuntimeAttributes>
                                 </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OuO-Q2-EIi">
-                                    <rect key="frame" x="80" y="30" width="254" height="0.0"/>
+                                    <rect key="frame" x="80" y="30" width="283" height="0.0"/>
                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                     <color key="textColor" name="text/main"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xdv-mt-B69" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
-                                    <rect key="frame" x="351" y="15" width="50" height="30"/>
-                                    <constraints>
-                                        <constraint firstAttribute="width" constant="50" id="AAM-dX-hAl"/>
-                                    </constraints>
+                                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xdv-mt-B69" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
+                                    <rect key="frame" x="371" y="15" width="30" height="30"/>
                                     <state key="normal">
                                         <color key="titleColor" name="text/main"/>
                                     </state>
@@ -350,13 +347,13 @@
                             </subviews>
                             <color key="backgroundColor" name="surfaces/background"/>
                             <constraints>
-                                <constraint firstAttribute="trailing" secondItem="OuO-Q2-EIi" secondAttribute="trailing" constant="80" id="DTO-MX-g3Y"/>
                                 <constraint firstAttribute="bottom" secondItem="IPX-KG-Lfj" secondAttribute="bottom" constant="8" id="Fxe-6M-8Bq"/>
                                 <constraint firstItem="OuO-Q2-EIi" firstAttribute="leading" secondItem="FNO-cS-reU" secondAttribute="leading" constant="80" id="Rnv-Ls-P3W"/>
                                 <constraint firstItem="OuO-Q2-EIi" firstAttribute="centerY" secondItem="FNO-cS-reU" secondAttribute="centerY" id="WBc-G5-jso"/>
                                 <constraint firstItem="IPX-KG-Lfj" firstAttribute="leading" secondItem="FNO-cS-reU" secondAttribute="leading" constant="16" id="gqB-f8-BGD"/>
                                 <constraint firstItem="IPX-KG-Lfj" firstAttribute="top" secondItem="FNO-cS-reU" secondAttribute="top" constant="8" id="j2i-bd-Hle"/>
                                 <constraint firstAttribute="height" constant="60" id="jEH-EX-mBq"/>
+                                <constraint firstItem="Xdv-mt-B69" firstAttribute="leading" secondItem="OuO-Q2-EIi" secondAttribute="trailing" constant="8" id="jbp-CQ-WzM"/>
                                 <constraint firstItem="Xdv-mt-B69" firstAttribute="centerY" secondItem="FNO-cS-reU" secondAttribute="centerY" id="ohi-YT-BlM"/>
                                 <constraint firstAttribute="trailing" secondItem="Xdv-mt-B69" secondAttribute="trailing" constant="13" id="vfs-Jt-Szs"/>
                             </constraints>

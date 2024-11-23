@@ -71,7 +71,7 @@
 "common.default" = "Default";
 "common.ad" = "Ad";
 "common.related" = "Related";
-"common.appearance" = "Appearance";;
+"common.appearance" = "Appearance";
 "common.appearance.dark" = "Dark";
 "common.appearance.light" = "Light";
 "common.appearance.system" = "Light";

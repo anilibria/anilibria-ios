@@ -31,6 +31,7 @@ final class SettingsViewController: BaseViewController {
         self.languageTitleLabel.text = L10n.Screen.Settings.language
         self.qaualityTitleLabel.text = L10n.Screen.Settings.videoQuality
         self.aboutTitleLabel.text = L10n.Screen.Settings.aboutApp
+        self.appearanceTitleLabel.text = L10n.Common.appearance
     }
 
     @IBAction func qualityAction(_ sender: Any) {

@@ -15,6 +15,7 @@ final class SignInPart: DIPart {
 final class SignInPresenter {
     private weak var view: SignInViewBehavior!
     private var router: SignInRoutable!
+    private var activity: ActivityDisposable?
 
     private let sessionService: SessionService
     private var bag = Set<AnyCancellable>()
@@ -39,6 +40,7 @@ extension SignInPresenter: SignInEventHandler {
     }
 
     func login(login: String, password: String) {
+        bag.removeAll()
         self.sessionService
             .signIn(login: login, password: password)
             .manageActivity(self.view.showLoading(fullscreen: false))
@@ -50,30 +52,35 @@ extension SignInPresenter: SignInEventHandler {
             .store(in: &bag)
     }
 
+    func cancel() {
+        activity?.dispose()
+    }
+
     func login(with provider: AuthProvider) {
-        let activity = view.showLoading(fullscreen: false)
+        bag.removeAll()
+        activity = view.showLoading(fullscreen: false)
         self.sessionService.getDataFor(provider: provider)
             .sink(onNext: { [weak self] data in
                 self?.router.open(url: data.url)
                 let item = DispatchWorkItem {
-                    self?.tryLogin(with: data, activity: activity)
+                    self?.tryLogin(with: data)
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: item)
                 self?.bag.insert(AnyCancellable { item.cancel() })
 
             }, onError: { [weak self] error in
+                self?.activity?.dispose()
                 self?.router.show(error: error)
             })
             .store(in: &bag)
     }
 
-    private func tryLogin(with data: AuthProviderData, activity: ActivityDisposable?) {
+    private func tryLogin(with data: AuthProviderData) {
         self.sessionService.signIn(with: data)
             .sink(onNext: { [weak self] _ in
-                activity?.dispose()
                 self?.back()
             }, onError: { [weak self] error in
-                activity?.dispose()
+                self?.activity?.dispose()
                 self?.router.show(error: error)
             })
             .store(in: &bag)

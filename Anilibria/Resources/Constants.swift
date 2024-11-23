@@ -36,7 +36,6 @@ struct Css {
 }
 
 struct URLS {
-    static let team: URL? = URL(string: "https://www.anilibria.tv/pages/team.php")
     static let donate: URL? = URL(string: "https://anilibria.top/support")
 
     static let vk: URL? = URL(string: "https://vk.com/anilibria")
@@ -45,8 +44,6 @@ struct URLS {
     static let telegram: URL? = URL(string: "https://t.me/anilibria")
     static let discord: URL? = URL(string: "https://discord.gg/M6yCGeGN9B")
     static let boosty: URL? = URL(string: "https://boosty.to/anilibriatv")
-
-    static let register: URL? = URL(string: "https://www.anilibria.tv/pages/login.php")
     
     static let config: URL! = URL(string: "https://raw.githubusercontent.com/anilibria/anilibria-app/master/config.json")
 }

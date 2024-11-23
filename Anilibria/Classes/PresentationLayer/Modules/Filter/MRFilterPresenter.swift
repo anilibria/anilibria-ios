@@ -59,6 +59,10 @@ extension FilterPresenter: FilterEventHandler {
     private func configure() {
         var results: [FilterTagsItem] = []
 
+        if let items = getYears() {
+            results.append(items)
+        }
+
         if let items = generatePublishStatuses() {
             results.append(items)
         }
@@ -84,10 +88,10 @@ extension FilterPresenter: FilterEventHandler {
         }
 
         let sorting = getSorting()
-        let years = getYears()
+        let yearsRange = getYearsRange()
 
         self.view.set(sorting: sorting,
-                      years: years,
+                      years: yearsRange,
                       items: results)
     }
 
@@ -267,15 +271,37 @@ extension FilterPresenter: FilterEventHandler {
         router.openSheet(with: [simple] + items)
     }
 
-    private func getYears() -> FilterRangeItem? {
-        if data.years.count <= 1 {
+    private func getYears() -> FilterTagsItem? {
+        if data.years.isEmpty {
             return nil
         }
 
-        let minIndex = (filter.years?.fromYear).flatMap { data.years.firstIndex(of: $0) }
-        let maxIndex = (filter.years?.toYear).flatMap { data.years.firstIndex(of: $0) }
+        let results = data.years.map { item in
+            let item = FilterTagData(
+                value: item,
+                displayValue: "\(item)",
+                selected: filter.years.contains(item),
+                select: { [weak self] in self?.filter.years.insert($0) },
+                deselect: { [weak self] in self?.filter.years.remove($0) }
+            )
+            return item
+        }
 
-        let count = data.years.count
+        return FilterTagsItem(
+            title: L10n.Screen.Filter.years,
+            items: results
+        )
+    }
+
+    private func getYearsRange() -> FilterRangeItem? {
+        if data.yearsRange.count <= 1 {
+            return nil
+        }
+
+        let minIndex = (filter.yearsRange?.fromYear).flatMap { data.yearsRange.firstIndex(of: $0) }
+        let maxIndex = (filter.yearsRange?.toYear).flatMap { data.yearsRange.firstIndex(of: $0) }
+
+        let count = data.yearsRange.count
         return FilterRangeItem(
             title: L10n.Screen.Filter.years,
             itemsCount: count,
@@ -285,8 +311,8 @@ extension FilterPresenter: FilterEventHandler {
                 guard let self else { return "" }
                 let min = item.selectedMinIndex ?? 0
                 let max = item.selectedMaxIndex ?? count - 1
-                let fromYear = data.years[min]
-                let toYear = data.years[max]
+                let fromYear = data.yearsRange[min]
+                let toYear = data.yearsRange[max]
                 return "\(fromYear) - \(toYear)"
             },
             updateRange: { [weak self] item in
@@ -295,9 +321,9 @@ extension FilterPresenter: FilterEventHandler {
                     let min = item.selectedMinIndex,
                     let max = item.selectedMaxIndex
                 else { return }
-                filter.years = .init(
-                    fromYear: data.years[min],
-                    toYear: data.years[max]
+                filter.yearsRange = .init(
+                    fromYear: data.yearsRange[min],
+                    toYear: data.yearsRange[max]
                 )
             }
         )

@@ -40,15 +40,8 @@ public class ModalRouter: NSObject, ChaperoneRouter {
     }
 
     private func presentModal(_ controller: UIViewController) {
-        let mainWindow = UIApplication.getWindow()
-        let tempController = MRViewController()
-        mainWindow?.addSubview(tempController.view)
-        mainWindow?.rootViewController?.addChild(tempController)
-        tempController.didMove(toParent: mainWindow?.rootViewController)
-        controller.storeLink(tempController)
-        DispatchQueue.main.async {
-            tempController.present(controller, animated: true)
-        }
+        guard let current = UIApplication.getWindow() else { return }
+        current.topControllerInHierarchy()?.present(controller, animated: true)
     }
 }
 
@@ -242,5 +235,30 @@ private final class HolderHelper: UILayoutGuide {
             value.close()
         }
         storedObject = nil
+    }
+}
+
+private extension UIWindow {
+
+    func topControllerInHierarchy() -> UIViewController? {
+        var topController = self.rootViewController
+
+        while topController?.presentedViewController != nil {
+            topController = topController?.presentedViewController
+        }
+
+        guard let topViewController: UIViewController = topController else {
+            return topController
+        }
+
+        if let tabBarController = topViewController as? UITabBarController {
+            if let navController = tabBarController.selectedViewController as? UINavigationController {
+                topController = navController.visibleViewController
+            }
+        } else if let topNavController = topViewController as? UINavigationController {
+            topController = topNavController.visibleViewController
+        }
+
+        return topController
     }
 }

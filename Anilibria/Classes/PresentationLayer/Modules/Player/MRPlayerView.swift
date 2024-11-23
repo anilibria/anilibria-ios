@@ -57,6 +57,7 @@ final class PlayerViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .black
         self.handler.didLoad()
         self.addTermenateAppObserver()
         self.setupPlayer()

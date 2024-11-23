@@ -114,7 +114,7 @@ final class CatalogServiceImp: CatalogService {
                 })
                 .zip(self.fetchYears(), { data, value in
                     var result = data
-                    result.years = value
+                    result.yearsRange = value
                     return result
                 })
                 .do(onNext: { [weak self] in

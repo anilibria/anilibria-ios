@@ -27,37 +27,29 @@ public enum SeriesSorting: String {
     case newest = "2"
 }
 
-public struct SeriesFilter: Encodable, Hashable {
+public struct SeriesFilter: Hashable {
     var genres: Set<Int> = []
     var types: Set<String> = []
     var seasons: Set<String> = []
-    var years: YearsRange?
+    var yearsRange: YearsRange?
+    var years:  Set<Int> = []
     var sorting: String?
     var ageRatings: Set<String> = []
     var publishStatuses: Set<String> = []
     var productionStatuses: Set<String> = []
     var search: String?
 
-    enum CodingKeys: String, CodingKey {
-        case genres
-        case types
-        case seasons
-        case years
-        case sorting
-        case search
-        case ageRatings = "age_ratings"
-        case publishStatuses = "publish_statuses"
-        case productionStatuses = "production_statuses"
-    }
-
     var parameters: [String: Any] {
         var result: [String: Any] = [:]
         if let sorting {
             result["f[sorting]"] = sorting
         }
-        if let years {
-            result["f[years][from_year]"] = years.fromYear
-            result["f[years][to_year]"] = years.toYear
+        if let yearsRange {
+            result["f[years][from_year]"] = yearsRange.fromYear
+            result["f[years][to_year]"] = yearsRange.toYear
+        }
+        if !years.isEmpty {
+            result["f[years]"] = years.lazy.map { "\($0)" }.joined(separator: ",")
         }
         if !genres.isEmpty {
             result["f[genres]"] = genres.lazy.map { "\($0)" }.joined(separator: ",")

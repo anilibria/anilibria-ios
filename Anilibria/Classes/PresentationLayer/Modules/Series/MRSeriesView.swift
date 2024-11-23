@@ -155,7 +155,7 @@ extension SeriesViewController: SeriesViewBehavior {
         case true?:
             favoriteStarView.tintColor = UIColor(resource: .Buttons.selected)
         case false?:
-            favoriteStarView.tintColor = UIColor(resource: .Buttons.unselected)
+            favoriteStarView.tintColor = UIColor(resource: .Text.secondary)
         case nil:
             favoriteShimmerView.isHidden = false
             favoriteShimmerView.run()

@@ -17,7 +17,12 @@ class PaginationViewModel: NSObject {
     init(_ action: @escaping Action<Action<Bool>>) {
         self.loadAction = action
     }
-    
+
+    func reset() {
+        isReady.send(false)
+        isLoading = false
+    }
+
     func load() {
         if isLoading || !isReady.value { return }
         isLoading = true

@@ -31,7 +31,7 @@ final class CatalogViewModel: SeriesViewModelProtocol {
 
     func load(activity: ActivityDisposable?) {
         nextPage = 1
-        pagination.isReady.send(false)
+        pagination.reset()
         pageSubscriber = catalogService.fetchCatalog(page: nextPage, filter: filter)
             .sink(onNext: { [weak self] items in
                 self?.nextPage += 1

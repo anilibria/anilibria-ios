@@ -20,7 +20,7 @@
                     <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="7IH-dY-4tx">
                         <rect key="frame" x="20" y="8" width="280" height="34"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UQ7-FS-25c">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UQ7-FS-25c">
                                 <rect key="frame" x="0.0" y="0.0" width="177" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
@@ -32,7 +32,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="cJX-1K-Hf4">
                                         <rect key="frame" x="12" y="8" width="75" height="18"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z12-QC-ELb">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="251" horizontalCompressionResistancePriority="999" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z12-QC-ELb">
                                                 <rect key="frame" x="0.0" y="0.0" width="49" height="18"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <nil key="textColor"/>
@@ -65,7 +65,7 @@
                 <constraints>
                     <constraint firstItem="7IH-dY-4tx" firstAttribute="leading" secondItem="JlD-eb-dHU" secondAttribute="leading" constant="20" id="Tu7-Ol-Jeh"/>
                     <constraint firstItem="7IH-dY-4tx" firstAttribute="top" secondItem="JlD-eb-dHU" secondAttribute="top" constant="8" id="ZZV-vF-UdN"/>
-                    <constraint firstAttribute="trailing" secondItem="7IH-dY-4tx" secondAttribute="trailing" priority="999" constant="20" id="ex8-E4-7Dh"/>
+                    <constraint firstAttribute="trailing" secondItem="7IH-dY-4tx" secondAttribute="trailing" constant="20" id="ex8-E4-7Dh"/>
                     <constraint firstAttribute="bottom" secondItem="7IH-dY-4tx" secondAttribute="bottom" priority="999" constant="8" id="onc-pe-9Ti"/>
                 </constraints>
             </collectionViewCellContentView>

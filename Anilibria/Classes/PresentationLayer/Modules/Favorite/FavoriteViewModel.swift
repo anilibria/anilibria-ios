@@ -36,7 +36,7 @@ final class FavoriteViewModel: SeriesViewModelProtocol {
 
     func load(activity: ActivityDisposable?) {
         nextPage = 1
-        pagination.isReady.send(false)
+        pagination.reset()
         pageSubscriber = service.fetchSeries(limit: limit, page: nextPage, filter: filter)
             .sink(onNext: { [weak self] items in
                 self?.nextPage += 1
@@ -56,9 +56,11 @@ final class FavoriteViewModel: SeriesViewModelProtocol {
     }
 
     func append(series: Series) {
-        var newItems = currentItems
-        newItems.insert(series, at: 0)
-        items.send(newItems)
+        if filter.sorting == nil {
+            var newItems = currentItems
+            newItems.insert(series, at: 0)
+            items.send(newItems)
+        }
     }
 
     private func loadPage(completion: @escaping Action<Bool>) {

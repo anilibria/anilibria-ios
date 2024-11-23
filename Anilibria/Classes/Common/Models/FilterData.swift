@@ -15,5 +15,6 @@ public struct FilterData {
     var seasons: [DescribedValue<String>] = []
     var sortings: [Sorting] = []
     var releaseTypes: [DescribedValue<String>] = []
+    var yearsRange: [Int] = []
     var years: [Int] = []
 }

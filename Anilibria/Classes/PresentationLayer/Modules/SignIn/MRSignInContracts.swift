@@ -10,6 +10,7 @@ protocol SignInEventHandler: ViewControllerEventHandler {
     func bind(view: SignInViewBehavior, router: SignInRoutable)
 
     func back()
+    func cancel()
 
     func login(login: String, password: String)
     func login(with provider: AuthProvider)

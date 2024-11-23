@@ -25,7 +25,12 @@ final class SignInViewController: BaseViewController {
         self.addKeyboardObservers()
         self.subscribes()
     }
-    
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.handler.cancel()
+    }
+
     override func setupStrings() {
         super.setupStrings()
         loginField.placeholder = L10n.Screen.Auth.login
@@ -69,6 +74,7 @@ final class SignInViewController: BaseViewController {
             login: loginField.text ?? "",
             password: passwordField.text ?? ""
         )
+        view.endEditing(true)
     }
 }
 

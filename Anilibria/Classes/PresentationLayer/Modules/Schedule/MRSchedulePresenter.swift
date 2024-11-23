@@ -15,28 +15,25 @@ final class SchedulePart: DIPart {
 final class SchedulePresenter {
     private weak var view: ScheduleViewBehavior!
     private var router: ScheduleRoutable!
-    private var schedules: [Schedule] = []
 
-    private let feedService: FeedService
+    private let mainService: MainService
 
     private var bag = Set<AnyCancellable>()
 
-    init(feedService: FeedService) {
-        self.feedService = feedService
+    init(mainService: MainService) {
+        self.mainService = mainService
     }
 }
 
 extension SchedulePresenter: ScheduleEventHandler {
     func bind(view: ScheduleViewBehavior,
-              router: ScheduleRoutable,
-              schedules: [Schedule]) {
+              router: ScheduleRoutable) {
         self.view = view
         self.router = router
-        self.schedules = schedules
     }
 
     func select(series: Series) {
-        self.feedService.series(with: series.code)
+        self.mainService.series(with: series.alias)
             .manageActivity(self.view.showLoading(fullscreen: false))
             .sink(onNext: { [weak self] item in
                 self?.router.open(series: item)
@@ -47,6 +44,13 @@ extension SchedulePresenter: ScheduleEventHandler {
     }
 
     func didLoad() {
-        self.view.set(items: self.schedules)
+        self.mainService.fetchSchedule()
+            .manageActivity(view.showLoading(fullscreen: false))
+            .sink(onNext: { [weak self] schedules in
+                self?.view.set(items: schedules)
+            }, onError: { [weak self] error in
+                self?.router.show(error: error)
+            })
+            .store(in: &bag)
     }
 }

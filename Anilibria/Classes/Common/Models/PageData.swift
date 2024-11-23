@@ -1,27 +1,21 @@
 import Foundation
 
-public final class PageData<T: Decodable>: NSObject, Decodable {
-    var items: [T] = []
-    var pagination: PaginationData?
+public struct PageData<T: Decodable>: Decodable {
+    let items: [T]
+    let pagination: PaginationData?
 
-    public init(from decoder: Decoder) throws {
-        super.init()
-		self.items <- decoder["items"]
-		self.pagination <- decoder["pagination"]
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeyString.self)
+        self.items = container.decode("data") ?? []
+        self.pagination = container.decode("meta", "pagination")
     }
 }
 
-public final class PaginationData: NSObject, Decodable {
-    var page: Int = 0
-    var perPage: Int = 0
-    var allPages: Int = 0
-    var allItems: Int = 0
+public struct PaginationData: Decodable {
+    let page: Int
 
-    public init(from decoder: Decoder) throws {
-        super.init()
-		self.page <- decoder["page"]
-		self.perPage <- decoder["perPage"]
-		self.allPages <- decoder["allPages"]
-		self.allItems <- decoder["allItems"]
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeyString.self)
+        self.page = container.decode("current_page") ?? 0
     }
 }

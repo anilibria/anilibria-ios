@@ -21,12 +21,15 @@ protocol BackendAPIRequest {
     /// Network method like GET, POST and etc
     var method: NetworkManager.Method { get }
 
-    /// Parameters passed to equest
+    /// Query parameters passed to request
     /// Default: empty
     var parameters: [String: Any] { get }
 
+    /// Body passed to request
+    /// Default: nil
+    var body: (any Encodable)? { get }
+
     /// Headers passed to equest
-    /// Default: empty
     var headers: [String: String] { get }
 
     /// Converter for processing the response, if the default converter for this request does inappropriate
@@ -44,15 +47,19 @@ extension BackendAPIRequest {
     }
 
     var apiVersion: String {
-        return ""
+        return "api/v1"
     }
 
     var parameters: [String: Any] {
         return [:]
     }
 
+    var body: (any Encodable)? {
+        return nil
+    }
+
     var headers: [String: String] {
-        return [:]
+        return ["Content-Type": "application/json"]
     }
 
     var customResponseConverter: BackendResponseConverter? {

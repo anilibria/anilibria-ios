@@ -7,7 +7,6 @@ public struct JustURLRequest<T: Decodable>: BackendAPIRequest {
     private(set) var endpoint: String = ""
     private(set) var method: NetworkManager.Method = .GET
     private(set) var parameters: [String: Any] = [:]
-    var customResponseConverter: BackendResponseConverter? = FullDataResponseConverter()
 
     init(url: URL) {
         self.baseUrl = [url.scheme, url.host]

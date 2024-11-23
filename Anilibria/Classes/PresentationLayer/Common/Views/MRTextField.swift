@@ -1,7 +1,7 @@
 import UIKit
 
 public class MRTextField: UITextField {
-    @IBInspectable var nonActiveAlpha: CGFloat = 0.1
+    @IBInspectable var nonActiveAlpha: CGFloat = 0.3
     @IBOutlet var targetView: UIView? {
         didSet {
             self.targetView?.alpha = self.nonActiveAlpha

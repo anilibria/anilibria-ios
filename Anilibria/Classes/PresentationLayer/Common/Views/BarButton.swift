@@ -29,10 +29,13 @@ final class BarButton: UIBarButtonItem {
                      image: UIImage,
                      activeImage: UIImage? = nil,
                      size: CGSize = .init(width: 30, height: 30),
-                     tintColor: UIColor = MainTheme.shared.black,
-                     rippleColor: UIColor = MainTheme.shared.black,
+                     tintColor: UIColor? = nil,
+                     rippleColor: UIColor? = nil,
                      imageEdge: UIEdgeInsets = .zero,
                      action: ActionFunc?) {
+        let tintColor = tintColor ?? UIColor(resource: .Tint.main)
+        let rippleColor = rippleColor ?? UIColor(resource: .Tint.main)
+
         let button = RippleButton(type: type)
         button.frame = CGRect(origin: .zero, size: CGSize(width: size.width, height: 44))
         button.tintColor = tintColor
@@ -58,7 +61,7 @@ final class BarButton: UIBarButtonItem {
 
     convenience init(text: String,
                      font: UIFont = UIFont.systemFont(ofSize: 15, weight: .bold),
-                     textColor: UIColor = MainTheme.shared.black,
+                     textColor: UIColor? = nil,
                      action: ActionFunc?) {
         let button = BarRippleButton(frame: .init(x: 0,
                                                   y: 0,
@@ -66,9 +69,9 @@ final class BarButton: UIBarButtonItem {
                                                   height: 44))
 
         button.titleLabel?.font = font
-        button.rippleColor = MainTheme.shared.black
+        button.rippleColor = UIColor(resource: .Tint.main)
         button.setTitle(text, for: .normal)
-        button.setTitleColor(textColor, for: .normal)
+        button.setTitleColor(textColor ?? UIColor(resource: .Text.main), for: .normal)
         self.init(customView: button)
         self.didTapAction = action
         self.button = button

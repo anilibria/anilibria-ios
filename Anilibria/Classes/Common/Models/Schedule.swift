@@ -1,15 +1,9 @@
 import Foundation
 
-public final class Schedule: NSObject, Decodable {
-    var day: WeekDay?
-    var items: [Series] = []
+public struct Schedule: Hashable {
+    let day: WeekDay?
+    let items: [ScheduleItem]
     var title: TitleItem {
-        TitleItem({ [weak self] in self?.day?.name ?? "" }())
-    }
-
-    public init(from decoder: Decoder) throws {
-        super.init()
-		self.day <- decoder["day"]
-		self.items <- decoder["items"]
+        TitleItem({ self.day?.name ?? "" }())
     }
 }

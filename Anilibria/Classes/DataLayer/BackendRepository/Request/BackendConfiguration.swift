@@ -7,7 +7,7 @@ final class BackendConfiguration {
 
     /// It intercept all requests before execute
     /// Example, you can pass token here
-    var interceptor: RequestModifier?
+    var interceptor: AsyncRequestModifier?
 
     /// It intercept error for retry request
     var retrier: LoadRetrier?
@@ -18,7 +18,7 @@ final class BackendConfiguration {
     /// - parameter interceptor: It intercept all requests before execute
     /// - parameter retrier: It intercept error for retry request
     public init(converter: BackendResponseConverter,
-                interceptor: RequestModifier? = nil,
+                interceptor: AsyncRequestModifier? = nil,
                 retrier: LoadRetrier? = nil) {
         self.converter = converter
         self.interceptor = interceptor

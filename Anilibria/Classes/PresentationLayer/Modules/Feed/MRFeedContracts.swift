@@ -3,8 +3,7 @@ import UIKit
 // MARK: - Contracts
 
 protocol FeedViewBehavior: WaitingBehavior, RefreshBehavior {
-    func set(items: [NSObject])
-    func append(items: [NSObject])
+    func set(items: [any Hashable])
 }
 
 protocol FeedEventHandler: ViewControllerEventHandler, RefreshEventHandler {

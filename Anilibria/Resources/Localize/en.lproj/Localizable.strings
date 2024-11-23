@@ -26,6 +26,8 @@
 
 //COMMON
 "common.today" = "Today";
+"common.tomorrow" = "Tomorrow";
+"common.yesterday" = "Yesterday";
 "common.msk_time_zone" = "(MSK)";
 "common.week_day.mon" = "Monday";
 "common.week_day.tue" = "Tuesday";
@@ -54,6 +56,7 @@
 "common.seasons.summer" = "Summer";
 "common.seasons.fall" = "Fall";
 
+"common.quality" = "Quality";
 "common.quality.sd" = "480p";
 "common.quality.hd" = "720p";
 "common.quality.full_hd" = "1080p";
@@ -64,6 +67,17 @@
 
 "common.donate_pls" = "Do you like our voice acting?\nPlease support our project :3";
 "common.guest" = "Guest";
+
+"common.default" = "Default";
+"common.ad" = "Ad";
+"common.related" = "Related";
+"common.appearance" = "Appearance";
+"common.appearance.dark" = "Dark";
+"common.appearance.light" = "Light";
+"common.appearance.system" = "Light";
+
+"common.intern" = "Intern";
+"common.vacation" = "Vacation";
 
 //PERMISSION
 "permission.title" = "Permission";
@@ -76,27 +90,26 @@
 "screen.catalog.title" = "Search";
 
 //FEED SCREEN
-"screen.feed.title" = "Feed";
+"screen.feed.title" = "Main";
 "screen.feed.soon_title" = "Coming soon";
 "screen.feed.schedule" = "Schedule";
 "screen.feed.updates_title" = "Updates";
 "screen.feed.random_release" = "Randome release";
 "screen.feed.history" = "History";
 
-//FILTER SCREEN
-"screen.filter.genres" = "Genres";
-"screen.filter.years" = "Years";
-"screen.filter.seasons" = "Seasons";
-
 //SERIES SCREEN
 "screen.series.title" = "Description";
 "screen.series.year" = "Year: ";
 "screen.series.voices" = "Voices: ";
 "screen.series.type" = "Type: ";
+"screen.series.season" = "Season: ";
 "screen.series.status" = "Status: ";
+"screen.series.episodes" = "Episodes: ";
+"screen.series.duration" = "Duration: ";
 "screen.series.genres" = "Genres: ";
 "screen.series.added_date" = "Added ";
 "screen.series.downloaded" = "File %@ saved into\n~/Downloads/%@";
+"screen.series.approximal_minutes" = "~ %@ min";
 
 //COMMENTS SCREEN
 "screen.comments.title" = "Comments";
@@ -114,6 +127,7 @@
 "screen.settings.language" = "Language";
 "screen.settings.video_quality" = "Video quality";
 "screen.settings.about_app" = "About";
+
 //STUB VIEW
 "stub.title" = "Empty";
 "stub.favorite.message" = "Your favorite series will be here";
@@ -129,6 +143,13 @@
 "screen.filter.sotring" = "Sorting";
 "screen.filter.Sotring.popularity" = "Popularity";
 "screen.filter.Sotring.newest" = "Newest";
+"screen.filter.genres" = "Genres";
+"screen.filter.years" = "Years";
+"screen.filter.seasons" = "Seasons";
+"screen.filter.publish_statuses" = "Publish statuses";
+"screen.filter.production_statuses" = "Production statuses";
+"screen.filter.types" = "Types";
+"screen.filter.age_ratings" = "Age ratings";
 
 //OTHER SCREEN
 "screen.other.team" = "Our team";

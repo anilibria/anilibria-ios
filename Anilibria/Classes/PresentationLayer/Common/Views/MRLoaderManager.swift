@@ -262,6 +262,6 @@ private final class ActivityViewHolder {
 
 extension UIApplication {
     static func getWindow() -> UIWindow? {
-        return UIApplication.shared.windows.first(where: { $0.isKeyWindow })
+        return MainAppCoordinator.shared.window
     }
 }

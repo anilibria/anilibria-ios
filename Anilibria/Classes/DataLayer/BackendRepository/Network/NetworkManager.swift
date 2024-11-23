@@ -1,7 +1,7 @@
 import Foundation
 import Combine
 
-public typealias NetworkResponse = (Data, Int, HTTPURLResponse?, URLRequest)
+public typealias NetworkResponse = (data: Data, code: Int, httpResponse: HTTPURLResponse?, request: URLRequest)
 open class NetworkManager: Loggable {
 
     public var defaultLoggingTag: LogTag {
@@ -10,14 +10,14 @@ open class NetworkManager: Loggable {
 
     private static let requestTimeout: Double = 10
     private var session: URLSession!
-    private let adapter: RequestModifier?
+    private let adapter: AsyncRequestModifier?
     private let retrier: LoadRetrier?
 
     public enum Method: String {
         case OPTIONS, GET, HEAD, POST, PUT, PATCH, DELETE, TRACE, CONNECT
     }
 
-    init(adapter: RequestModifier?,
+    init(adapter: AsyncRequestModifier?,
          retrier: LoadRetrier?) {
         self.adapter = adapter
         self.retrier = retrier
@@ -46,21 +46,53 @@ open class NetworkManager: Loggable {
         return configuration
     }
 
-    func request(url: URL,
-                 method: Method,
-                 params: [String: Any]? = nil,
-                 headers: [String: String]? = nil) -> AnyPublisher<NetworkResponse, Error> {
+    func request(
+        url: URL,
+        method: Method,
+        body: (any Encodable)? = nil,
+        params: [String: Any]? = nil,
+        headers: [String: String]? = nil,
+        retrier: LoadRetrier? = nil
+    ) -> AnyPublisher<NetworkResponse, Error> {
+        return Deferred<Future<URLRequest, Error>> {
+            Future<URLRequest, Error> { [weak self] promise in
+                self?.createRequest(
+                    url: url,
+                    method: method,
+                    params: params,
+                    body: body,
+                    headers: headers
+                ) { request in
+                    self?.log(.debug, request.curl)
+                    promise(.success(request))
+                }
+            }
+        }
+        .flatMap { [weak self] request in
+            guard let self else {
+                return AnyPublisher<NetworkResponse, Error>
+                    .fail(AppError.responseError(code: MRKitErrorCode.unexpected))
+            }
+            return send(
+                request: request,
+                retrier: retrier ?? self.retrier,
+                retryNumber: 0
+            )
+        }
+        .eraseToAnyPublisher()
+    }
 
-        let request = self.createRequest(url: url, method: method, params: params, headers: headers)
-        self.log(.debug, request.curl)
-
-        var retryNumber = 0
+    private func send(
+        request: URLRequest,
+        retrier: LoadRetrier?,
+        retryNumber: Int
+    ) -> AnyPublisher<NetworkResponse, Error> {
         return send(request: request)
             .catch { [unowned self] error -> AnyPublisher<NetworkResponse, Error> in
-                guard let retrier = self.retrier else { return .fail(error) }
-                defer { retryNumber += 1 }
+                guard let retrier = retrier ?? self.retrier else { return .fail(error) }
                 return self.retry(with: retrier, request: request, error: error, retryNumber: retryNumber)
-            }.eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
     }
 
     private func send(request: URLRequest) -> AnyPublisher<NetworkResponse, Error> {
@@ -90,49 +122,44 @@ open class NetworkManager: Loggable {
             }
         }
         .flatMap { [unowned self] in
-            self.send(request: request)
+            self.send(
+                request: request,
+                retrier: retrier,
+                retryNumber: retryNumber + 1
+            )
         }
         .eraseToAnyPublisher()
     }
 
-    private func createRequest(url: URL,
-                               method: Method,
-                               params: [String: Any]?,
-                               headers: [String: String]?) -> URLRequest {
+    private func createRequest(
+        url: URL,
+        method: Method,
+        params: [String: Any]?,
+        body: (any Encodable)?,
+        headers: [String: String]?,
+        completion: @escaping (URLRequest) -> Void
+    ) {
         var requestURL: URL = url
         let parameterString = params?.stringFromHttpParameters()
-        var bodyData: Data?
         if let values = parameterString {
-            if method == .GET {
-                requestURL = URL(string: "\(url)?\(values)")!
-            } else {
-                bodyData = values.data(using: .utf8)
-            }
+            requestURL = URL(string: "\(url)?\(values)")!
         }
 
         var request = URLRequest(url: requestURL,
                                  cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
                                  timeoutInterval: NetworkManager.requestTimeout)
-        let cookies = HTTPCookieStorage.shared.cookies
-        let cookieHeaders = HTTPCookie.requestHeaderFields(with: cookies!)
-
-        let result = headers?.merging(cookieHeaders, uniquingKeysWith: { (_, b) -> String in
-            b
-        })
-
-        request.allHTTPHeaderFields = result
+        request.allHTTPHeaderFields = headers
         request.httpMethod = method.rawValue
-        request.httpShouldHandleCookies = true
 
-        if let data = bodyData {
+        if let item = body, let data = try? JSONEncoder().encode(item) {
             request.httpBody = data
         }
 
         if let modifier = self.adapter {
-            request = modifier.modify(request)
+            modifier.modify(request, completion: completion)
+        } else {
+            completion(request)
         }
-
-        return request
     }
 }
 
@@ -142,14 +169,14 @@ extension URLRequest {
         let complement = "\\\n"
         let method = "-X \(self.httpMethod ?? "GET") \(complement)"
         let urlAbsoluteString: String = url?.absoluteString ?? ""
-        let url = "\"\(urlAbsoluteString)\""
+        let url = "'\(urlAbsoluteString)'"
 
         let header = self.allHTTPHeaderFields?.reduce("", { (result, data) -> String in
-            return result + "-H \"\(data.key): \(data.value)\" \(complement)"
+            return result + "-H '\(data.key): \(data.value)' \(complement)"
         }) ?? ""
 
-        if let bodyData = self.httpBody, let bodyString = String(data:bodyData, encoding:.utf8) {
-            data = "-d \"\(bodyString)\" \(complement)"
+        if let bodyData = self.httpBody, let bodyString = String(data: bodyData, encoding: .utf8) {
+            data = "-d '\(bodyString)' \(complement)"
         }
 
         let command = "curl -i " + complement + method + header + data + url

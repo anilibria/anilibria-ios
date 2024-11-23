@@ -15,14 +15,11 @@ protocol LinksService: AnyObject {
 }
 
 final class LinksServiceImp: LinksService {
-    private let backendRepository: BackendRepository
     private let linksRepository: LinksRepository
 
     private var bag = Set<AnyCancellable>()
 
-    init(backendRepository: BackendRepository,
-         linksRepository: LinksRepository) {
-        self.backendRepository = backendRepository
+    init(linksRepository: LinksRepository) {
         self.linksRepository = linksRepository
     }
 
@@ -30,17 +27,7 @@ final class LinksServiceImp: LinksService {
         return Deferred { [unowned self] in
             let items = self.linksRepository.getItems()
 
-            if !items.isEmpty {
-                return AnyPublisher<[LinkData], Error>.just(items)
-            }
-
-            let request = LinksRequest()
-            return self.backendRepository
-                .request(request)
-                .do(onNext: { [weak self] (items) in
-                    self?.linksRepository.set(items: items)
-                })
-                .eraseToAnyPublisher()
+            return AnyPublisher<[LinkData], Error>.just(items)
         }
         .subscribe(on: DispatchQueue.global())
         .receive(on: DispatchQueue.main)

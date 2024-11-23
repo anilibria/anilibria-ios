@@ -17,8 +17,6 @@ final class SignInPresenter {
     private var router: SignInRoutable!
 
     private let sessionService: SessionService
-
-    private var socialData: SocialOAuthData?
     private var bag = Set<AnyCancellable>()
 
     init(sessionService: SessionService) {
@@ -33,39 +31,49 @@ extension SignInPresenter: SignInEventHandler {
     }
 
     func didLoad() {
-        self.sessionService
-            .fetchSocialData()
-            .manageActivity(self.view.showLoading(fullscreen: false))
-            .sink(onNext: { [weak self] data in
-                self?.socialData = data
-                self?.view.set(socialLogin: true)
-            }, onError: { [weak self] _ in
-                self?.view.set(socialLogin: false)
-            })
-            .store(in: &bag)
+        self.view.set(providers: AuthProvider.allCases)
     }
 
     func back() {
-        self.router.back()
+        self.router.backToRoot()
     }
 
-    func register() {
-        self.router.open(url: .web(URLS.register))
-    }
-
-    func socialLogin() {
-        if let data = self.socialData {
-            self.router.socialAuth(with: data)
-        }
-    }
-
-    func login(login: String, password: String, code: String) {
+    func login(login: String, password: String) {
         self.sessionService
-            .signIn(login: login, password: password, code: code)
+            .signIn(login: login, password: password)
             .manageActivity(self.view.showLoading(fullscreen: false))
             .sink(onNext: { [weak self] _ in
                 self?.back()
             }, onError: { [weak self] error in
+                self?.router.show(error: error)
+            })
+            .store(in: &bag)
+    }
+
+    func login(with provider: AuthProvider) {
+        let activity = view.showLoading(fullscreen: false)
+        self.sessionService.getDataFor(provider: provider)
+            .sink(onNext: { [weak self] data in
+                self?.router.open(url: data.url)
+                let item = DispatchWorkItem {
+                    self?.tryLogin(with: data, activity: activity)
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: item)
+                self?.bag.insert(AnyCancellable { item.cancel() })
+
+            }, onError: { [weak self] error in
+                self?.router.show(error: error)
+            })
+            .store(in: &bag)
+    }
+
+    private func tryLogin(with data: AuthProviderData, activity: ActivityDisposable?) {
+        self.sessionService.signIn(with: data)
+            .sink(onNext: { [weak self] _ in
+                activity?.dispose()
+                self?.back()
+            }, onError: { [weak self] error in
+                activity?.dispose()
                 self?.router.show(error: error)
             })
             .store(in: &bag)

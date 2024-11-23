@@ -8,7 +8,9 @@ final class SettingsViewController: BaseViewController {
     @IBOutlet var selectedLanguageLabel: UILabel!
     @IBOutlet var qaualityTitleLabel: UILabel!
     @IBOutlet var selectedQualityLabel: UILabel!
-    
+    @IBOutlet var appearanceTitleLabel: UILabel!
+    @IBOutlet var selectedAppearanceLabel: UILabel!
+
     @IBOutlet var aboutTitleLabel: UILabel!
     @IBOutlet var appNameLabel: UILabel!
     @IBOutlet var appVersionLabel: UILabel!
@@ -29,6 +31,7 @@ final class SettingsViewController: BaseViewController {
         self.languageTitleLabel.text = L10n.Screen.Settings.language
         self.qaualityTitleLabel.text = L10n.Screen.Settings.videoQuality
         self.aboutTitleLabel.text = L10n.Screen.Settings.aboutApp
+        self.appearanceTitleLabel.text = L10n.Common.appearance
     }
 
     @IBAction func qualityAction(_ sender: Any) {
@@ -37,6 +40,10 @@ final class SettingsViewController: BaseViewController {
     
     @IBAction func languageAction(_ sender: Any) {
         self.handler.selectLanguage()
+    }
+
+    @IBAction func appearanceAction(_ sender: Any) {
+        self.handler.selectAppearance()
     }
 }
 
@@ -52,5 +59,9 @@ extension SettingsViewController: SettingsViewBehavior {
     
     func set(language: Language) {
         self.selectedLanguageLabel.text = language.name
+    }
+
+    func set(appearance: InterfaceAppearance) {
+        self.selectedAppearanceLabel.text = appearance.title
     }
 }

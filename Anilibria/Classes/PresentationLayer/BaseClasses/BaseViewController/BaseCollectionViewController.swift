@@ -34,30 +34,26 @@ class BaseCollectionViewController: BaseViewController {
     }
     // MARK: - Setup
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(rotated),
-            name: UIDevice.orientationDidChangeNotification,
-            object: nil
-        )
-    }
-
     public override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         self.updateRefreshControlRect()
     }
 
+    public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
+        collectionView?.collectionViewLayout.invalidateLayout()
+    }
+
     // MARK: - Refresh
 
-    public func addRefreshControl(color: UIColor = MainTheme.shared.black) {
+    public func addRefreshControl(color: UIColor? = nil) {
         if self.refreshControl != nil {
             return
         }
         self.collectionView.alwaysBounceVertical = true
         self.refreshControl = RefreshIndicator(style: .prominent)
-        self.refreshControl?.indicator.lineColor = color
+        self.refreshControl?.indicator.lineColor = color ?? UIColor(resource: .Text.main)
         self.collectionView.addSubview(self.refreshControl!)
         self.refreshControl?.addTarget(self,
                                        action: #selector(self.refresh),
@@ -82,21 +78,11 @@ class BaseCollectionViewController: BaseViewController {
         // override me
     }
 
-    @objc
-    private func rotated() {
-        self.collectionView.reloadData()
-    }
-
     // MARK: - Methods
 
-    public func reload(sections: [any SectionAdapterProtocol], animated: Bool = true, completion: (() -> Void)? = nil) {
-        self.adapter.reload(content: .init(sections), animated: animated, completion: completion)
+    public func set(sections: [any SectionAdapterProtocol], animated: Bool = true, completion: (() -> Void)? = nil) {
+        self.adapter.set(sections: sections, animated: animated, completion: completion)
     }
-
-    public func append(sections: [any SectionAdapterProtocol], animated: Bool = true, completion: (() -> Void)? = nil) {
-        self.adapter.append(content: .init(sections), animated: animated, completion: completion)
-    }
-
 }
 
 extension BaseCollectionViewController: RefreshBehavior {

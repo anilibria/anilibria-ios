@@ -71,6 +71,18 @@ internal enum L10n {
   }
 
   internal enum Common {
+    /// Реклама
+    internal static var ad: String {
+        return L10n.tr("Localizable", "common.ad")
+    }
+    /// Тема
+    internal static var appearance: String {
+        return L10n.tr("Localizable", "common.appearance")
+    }
+    /// По умолчанию
+    internal static var `default`: String {
+        return L10n.tr("Localizable", "common.default")
+    }
     /// Понравилась озвучка?\nПоддержи проект :3
     internal static var donatePls: String {
         return L10n.tr("Localizable", "common.donate_pls")
@@ -79,13 +91,52 @@ internal enum L10n {
     internal static var guest: String {
         return L10n.tr("Localizable", "common.guest")
     }
+    /// Стажер
+    internal static var intern: String {
+        return L10n.tr("Localizable", "common.intern")
+    }
     /// (по МСК)
     internal static var mskTimeZone: String {
         return L10n.tr("Localizable", "common.msk_time_zone")
     }
+    /// Качество видео
+    internal static var quality: String {
+        return L10n.tr("Localizable", "common.quality")
+    }
+    /// Связанное
+    internal static var related: String {
+        return L10n.tr("Localizable", "common.related")
+    }
     /// Сегодня
     internal static var today: String {
         return L10n.tr("Localizable", "common.today")
+    }
+    /// Завтра
+    internal static var tomorrow: String {
+        return L10n.tr("Localizable", "common.tomorrow")
+    }
+    /// В отпуске
+    internal static var vacation: String {
+        return L10n.tr("Localizable", "common.vacation")
+    }
+    /// Вчера
+    internal static var yesterday: String {
+        return L10n.tr("Localizable", "common.yesterday")
+    }
+
+    internal enum Appearance {
+      /// Темная
+      internal static var dark: String {
+          return L10n.tr("Localizable", "common.appearance.dark")
+      }
+      /// Светлая
+      internal static var light: String {
+          return L10n.tr("Localizable", "common.appearance.light")
+      }
+      /// Системная
+      internal static var system: String {
+          return L10n.tr("Localizable", "common.appearance.system")
+      }
     }
 
     internal enum FilterSearch {
@@ -338,7 +389,7 @@ internal enum L10n {
       internal static var soonTitle: String {
           return L10n.tr("Localizable", "screen.feed.soon_title")
       }
-      /// Лента
+      /// Главная
       internal static var title: String {
           return L10n.tr("Localizable", "screen.feed.title")
       }
@@ -349,6 +400,10 @@ internal enum L10n {
     }
 
     internal enum Filter {
+      /// Возрастной рейтинг
+      internal static var ageRatings: String {
+          return L10n.tr("Localizable", "screen.filter.age_ratings")
+      }
       /// Релиз завершен
       internal static var complete: String {
           return L10n.tr("Localizable", "screen.filter.complete")
@@ -356,6 +411,14 @@ internal enum L10n {
       /// Жанры
       internal static var genres: String {
           return L10n.tr("Localizable", "screen.filter.genres")
+      }
+      /// Статус озвучки
+      internal static var productionStatuses: String {
+          return L10n.tr("Localizable", "screen.filter.production_statuses")
+      }
+      /// Статус выхода
+      internal static var publishStatuses: String {
+          return L10n.tr("Localizable", "screen.filter.publish_statuses")
       }
       /// Сезоны
       internal static var seasons: String {
@@ -365,9 +428,13 @@ internal enum L10n {
       internal static var sotring: String {
           return L10n.tr("Localizable", "screen.filter.sotring")
       }
-      /// Фильтер
+      /// Фильтр
       internal static var title: String {
           return L10n.tr("Localizable", "screen.filter.title")
+      }
+      /// Тип
+      internal static var types: String {
+          return L10n.tr("Localizable", "screen.filter.types")
       }
       /// Года
       internal static var years: String {
@@ -409,13 +476,29 @@ internal enum L10n {
       internal static var addedDate: String {
           return L10n.tr("Localizable", "screen.series.added_date")
       }
+      /// ~ %@ мин
+      internal static func approximalMinutes(_ p1: String) -> String {
+        return L10n.tr("Localizable", "screen.series.approximal_minutes", p1)
+      }
       /// Файл %@ сохранен в папку\n~/Downloads/%@
       internal static func downloaded(_ p1: String, _ p2: String) -> String {
         return L10n.tr("Localizable", "screen.series.downloaded", p1, p2)
       }
+      /// Длительность: 
+      internal static var duration: String {
+          return L10n.tr("Localizable", "screen.series.duration")
+      }
+      /// Всего эпизодов: 
+      internal static var episodes: String {
+          return L10n.tr("Localizable", "screen.series.episodes")
+      }
       /// Жанр: 
       internal static var genres: String {
           return L10n.tr("Localizable", "screen.series.genres")
+      }
+      /// Сезон: 
+      internal static var season: String {
+          return L10n.tr("Localizable", "screen.series.season")
       }
       /// Состояние релиза: 
       internal static var status: String {

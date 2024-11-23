@@ -16,6 +16,16 @@ protocol LoadRetrier {
               completion: @escaping RetryCompletion)
 }
 
-protocol RequestModifier {
+protocol AsyncRequestModifier {
+    func modify(_ urlRequest: URLRequest, completion: @escaping (URLRequest) -> Void)
+}
+
+protocol RequestModifier: AsyncRequestModifier {
     func modify(_ urlRequest: URLRequest) -> URLRequest
+}
+
+extension RequestModifier {
+    func modify(_ urlRequest: URLRequest, completion: @escaping (URLRequest) -> Void) {
+        completion(modify(urlRequest))
+    }
 }

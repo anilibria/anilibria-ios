@@ -16,28 +16,14 @@ class PaginationCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        indicatorView.lineColor = MainTheme.shared.black
+        indicatorView.lineColor = UIColor(resource: .Tint.main)
+        indicatorView.start()
+        indicatorView.isHidden = false
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         indicatorView.stop()
-    }
-    
-    func configure(_ model: PaginationViewModel) {
-        updateIndicator(isLast: model.isLast)
-        subscriber = model.$isLast.sink { [weak self] value in
-            self?.updateIndicator(isLast: value)
-        }
-    }
-    
-    private func updateIndicator(isLast: Bool) {
-        if isLast {
-            indicatorView.stop()
-            indicatorView.isHidden = true
-        } else {
-            indicatorView.start()
-            indicatorView.isHidden = false
-        }
+        indicatorView.start()
     }
 }

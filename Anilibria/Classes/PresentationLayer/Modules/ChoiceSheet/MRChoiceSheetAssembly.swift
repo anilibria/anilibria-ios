@@ -1,7 +1,7 @@
 import UIKit
 
 final class ChoiceSheetAssembly {
-    class func createModule(items: [ChoiceItem], parent: Router? = nil) -> ChoiceSheetViewController {
+    class func createModule(items: [ChoiceGroup], parent: Router? = nil) -> ChoiceSheetViewController {
         let module = ChoiceSheetViewController()
         let router = ChoiceSheetRouter(view: module, parent: parent)
         module.handler = MainAppCoordinator.shared.container.resolve()
@@ -13,11 +13,11 @@ final class ChoiceSheetAssembly {
 // MARK: - Route
 
 protocol ChoiceSheetRoute {
-    func openSheet(with items: [ChoiceItem])
+    func openSheet(with items: [ChoiceGroup])
 }
 
 extension ChoiceSheetRoute where Self: RouterProtocol {
-    func openSheet(with items: [ChoiceItem]) {
+    func openSheet(with items: [ChoiceGroup]) {
         let module = ChoiceSheetAssembly.createModule(items: items, parent: self)
         PresentRouter(target: module,
                       from: nil,

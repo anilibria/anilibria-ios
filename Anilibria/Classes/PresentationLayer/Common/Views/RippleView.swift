@@ -2,7 +2,7 @@ import UIKit
 
 public class RippleManager {
     public var isEnabled: Bool = true
-    public var rippleColor: UIColor?
+    public var rippleColor: UIColor = UIColor(resource: .Tint.main)
     public var rippleAlpha: CGFloat = 0.1
     public var mask: UIImage? {
         didSet {
@@ -31,9 +31,6 @@ public class RippleManager {
 
     private func setup(_ view: UIView) {
         self.rippleContainer = view
-        if self.rippleColor == nil {
-            self.rippleColor = self.rippleContainer.tintColor
-        }
         self.setupMask()
     }
 
@@ -139,13 +136,9 @@ open class RippleViewCell: UICollectionViewCell {
         }
     }
 
-    @IBInspectable public var rippleColor: UIColor? {
-        get {
-            return rippleManager.rippleColor
-        }
-        set {
-            rippleManager.rippleColor = newValue
-        }
+    open override func awakeFromNib() {
+        super.awakeFromNib()
+        rippleManager.rippleColor = UIColor(resource: .Tint.main)
     }
 
     open override func prepareForReuse() {
@@ -180,7 +173,7 @@ public class RippleButton: UIButton {
         }
     }
 
-    @IBInspectable public var cornerRadius: CGFloat {
+    public var cornerRadius: CGFloat {
         get {
             return layer.cornerRadius
         }
@@ -189,7 +182,7 @@ public class RippleButton: UIButton {
         }
     }
 
-    @IBInspectable public var borderThickness: CGFloat {
+    public var borderThickness: CGFloat {
         get {
             return layer.borderWidth
         }
@@ -207,7 +200,7 @@ public class RippleButton: UIButton {
         }
     }
 
-    @IBInspectable public var rippleColor: UIColor? {
+    public var rippleColor: UIColor {
         get {
             return self.rippleManager.rippleColor
         }

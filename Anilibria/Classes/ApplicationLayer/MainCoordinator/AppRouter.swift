@@ -1,14 +1,20 @@
 import UIKit
 
 public class AppRouter {
-    private var window: UIWindow!
+    private(set) var window: UIWindow!
 
     init() {}
 
     private func createWindow() -> UIWindow {
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window.backgroundColor = .black
+        #if targetEnvironment(macCatalyst)
+        window.windowScene?.titlebar?.titleVisibility = .hidden
+        #endif
 
+        defer {
+            InterfaceAppearance.current.apply()
+        }
         return self.window
     }
 
@@ -16,13 +22,5 @@ public class AppRouter {
         let module = MainContainerAssembly.createModule()
         ShowWindowRouter(target: module,
                          window: self.createWindow()).move()
-    }
-
-    public func openLoadingScene() {
-        let window = self.createWindow()
-        window.backgroundColor = .white
-        let module = ConfigurationAssembly.createModule()
-        ShowWindowRouter(target: module,
-                         window: window).move()
     }
 }

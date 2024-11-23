@@ -45,45 +45,14 @@ final class AppConfigurationServiceImp: AppConfigurationService {
     }
 
     func startConfiguration() -> AnyPublisher<ConfigurationState, Error> {
-        return self.loadConfig()
-            .flatMap { [unowned self] in
-                if let old = self.configRepository.getCurrentSettings() {
-                    old.next = $0
-                    return self.applySettingsAndCheck(old)
-                }
-                return self.applySettingsAndCheck($0)
-            }
-            .do(onNext: { [unowned self] settings in
-                self.configRepository.setCurrent(settings: settings)
-            })
-            .map { _ in ConfigurationState.completed }
-            .receive(on: DispatchQueue.main)
-            .do(onNext: { [weak self] state in
-                self?.statusRelay.send(state)
-            })
-            .eraseToAnyPublisher()
+        self.manualComplete()
+        return .just(.completed)
     }
 
     func manualComplete() {
         self.backendRepository.apply(.default)
         self.currentProxy = nil
         self.statusRelay.send(.completed)
-    }
-
-    private func applySettingsAndCheck(_ settings: AniSettings) -> AnyPublisher<AniSettings, Error> {
-        self.backendRepository.apply(settings)
-        self.currentProxy = settings.proxy
-
-        return self.backendRepository
-            .request(CheckRequest())
-            .map { _ in settings }
-            .catch({ [unowned self] _ in
-                if let next = settings.next {
-                    return self.applySettingsAndCheck(next)
-                }
-                return .fail(AppConfigError.notFound)
-            })
-            .eraseToAnyPublisher()
     }
 
     func loadConfig() -> AnyPublisher<AniSettings, Error> {

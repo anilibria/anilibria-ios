@@ -3,6 +3,7 @@ import UIKit
 // MARK: - View Controller
 
 final class FilterViewController: BaseCollectionViewController {
+    @IBOutlet var backView: UIView!
     @IBOutlet var scrollView: UIScrollView!
     @IBOutlet var collectionHeightConstraint: NSLayoutConstraint!
     @IBOutlet var buttonsContainer: ShadowView!
@@ -19,6 +20,9 @@ final class FilterViewController: BaseCollectionViewController {
     override func viewDidLoad() {
         self.defaultBottomInset = 0
         super.viewDidLoad()
+        self.view.backgroundColor = .clear
+        self.backView.backgroundColor = UIColor(resource: .Surfaces.background)
+        self.backView.smoothCorners(with: 5, maskedCorners: .topCorners)
         self.collectionView.frame = UIApplication.getWindow()?.frame ?? .zero
         self.handler.didLoad()
 
@@ -55,14 +59,26 @@ final class FilterViewController: BaseCollectionViewController {
 }
 
 extension FilterViewController: FilterViewBehavior {
-    func set(header: FilterHeaderItem, items: [FilterTagsItem]) {
-        reload(sections: [
-            SectionAdapter([FilterHeaderAdapter(viewModel: header, action: { [weak self] item in
-                self?.handler.change(filter: item)
-            })]),
-            CompositeSectionAdapter(
-                items.map { FilterTagsSectionAdapter(item: $0) }
-            )
-        ], animated: false)
+    func set(sorting: FilterSingleItem?, years: FilterRangeItem?, items: [FilterTagsItem]) {
+        var sections: [any SectionAdapterProtocol] = [
+            SectionAdapter([
+                FilterHeaderAdapter()
+            ])
+        ]
+        if let sorting {
+            sections.append(SectionAdapter([
+                FilterSingleItemAdapter(viewModel: sorting)
+            ]))
+        }
+
+        if let years {
+            sections.append(SectionAdapter([
+                FilterRangeItemAdapter(viewModel: years)
+            ]))
+        }
+
+        sections += items.map { FilterTagsSectionAdapter(item: $0) }
+
+        set(sections: sections, animated: false)
     }
 }

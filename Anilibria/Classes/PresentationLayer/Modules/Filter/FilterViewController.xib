@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -11,6 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FilterViewController" customModule="Anilibria" customModuleProvider="target">
             <connections>
                 <outlet property="applyButton" destination="tEQ-Ic-Ges" id="PAm-Ux-WuV"/>
+                <outlet property="backView" destination="e7e-S3-8Eo" id="MAh-dm-R7w"/>
                 <outlet property="buttonsContainer" destination="V1D-DW-wjf" id="wy1-Hp-iCG"/>
                 <outlet property="collectionHeightConstraint" destination="Tgm-Ml-E4z" id="cUi-Nd-HpT"/>
                 <outlet property="collectionView" destination="OoR-Kc-jFf" id="OBS-nF-22H"/>
@@ -24,14 +26,9 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e7e-S3-8Eo" customClass="BorderedView" customModule="Anilibria" customModuleProvider="target">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e7e-S3-8Eo">
                     <rect key="frame" x="0.0" y="330.5" width="414" height="575.5"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                            <real key="value" value="5"/>
-                        </userDefinedRuntimeAttribute>
-                    </userDefinedRuntimeAttributes>
+                    <color key="backgroundColor" name="surfaces/background"/>
                 </view>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XHX-RV-cHC">
                     <rect key="frame" x="0.0" y="48" width="414" height="848"/>
@@ -47,7 +44,7 @@
                                 </button>
                                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="OoR-Kc-jFf">
                                     <rect key="frame" x="0.0" y="282.5" width="414" height="565.5"/>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="backgroundColor" name="surfaces/background"/>
                                     <constraints>
                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" id="Tgm-Ml-E4z"/>
                                     </constraints>
@@ -77,54 +74,69 @@
                     </constraints>
                 </scrollView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V1D-DW-wjf">
-                    <rect key="frame" x="0.0" y="822" width="414" height="74"/>
+                    <rect key="frame" x="0.0" y="814" width="414" height="82"/>
                     <subviews>
-                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="DPj-7u-1wt">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="40"/>
+                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="DPj-7u-1wt">
+                            <rect key="frame" x="20" y="8" width="374" height="40"/>
                             <subviews>
-                                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qJy-oa-lb8" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="207" height="40"/>
-                                    <color key="backgroundColor" red="0.8784313725490196" green="0.8784313725490196" blue="0.8784313725490196" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
-                                    <state key="normal" title="Сброс">
-                                        <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </state>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
-                                            <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </userDefinedRuntimeAttribute>
-                                    </userDefinedRuntimeAttributes>
-                                    <connections>
-                                        <action selector="resetAction:" destination="-1" eventType="touchUpInside" id="T9A-OS-iMJ"/>
-                                    </connections>
-                                </button>
-                                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tEQ-Ic-Ges" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
-                                    <rect key="frame" x="207" y="0.0" width="207" height="40"/>
-                                    <color key="backgroundColor" red="0.70742018399999995" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
-                                    <state key="normal" title="Применить">
-                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </state>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
-                                            <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </userDefinedRuntimeAttribute>
-                                    </userDefinedRuntimeAttributes>
-                                    <connections>
-                                        <action selector="applyAction:" destination="-1" eventType="touchUpInside" id="hcX-ND-ROs"/>
-                                    </connections>
-                                </button>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k2x-Vb-PLd" customClass="CircleView" customModule="Anilibria" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="0.0" width="177" height="40"/>
+                                    <subviews>
+                                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qJy-oa-lb8" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="0.0" width="177" height="40"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                            <state key="normal" title="Сброс">
+                                                <color key="titleColor" name="text/main"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="resetAction:" destination="-1" eventType="touchUpInside" id="T9A-OS-iMJ"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <color key="backgroundColor" name="buttons/unselected"/>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="qJy-oa-lb8" secondAttribute="trailing" id="C4O-u0-oaA"/>
+                                        <constraint firstAttribute="bottom" secondItem="qJy-oa-lb8" secondAttribute="bottom" id="Tes-ZK-fUM"/>
+                                        <constraint firstItem="qJy-oa-lb8" firstAttribute="top" secondItem="k2x-Vb-PLd" secondAttribute="top" id="vaa-1K-pbc"/>
+                                        <constraint firstItem="qJy-oa-lb8" firstAttribute="leading" secondItem="k2x-Vb-PLd" secondAttribute="leading" id="xdw-7A-suS"/>
+                                    </constraints>
+                                </view>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IIk-3b-vQr" customClass="CircleView" customModule="Anilibria" customModuleProvider="target">
+                                    <rect key="frame" x="197" y="0.0" width="177" height="40"/>
+                                    <subviews>
+                                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tEQ-Ic-Ges" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="0.0" width="177" height="40"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                            <state key="normal" title="Применить">
+                                                <color key="titleColor" name="text/monoLight"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="applyAction:" destination="-1" eventType="touchUpInside" id="hcX-ND-ROs"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <color key="backgroundColor" name="buttons/selected"/>
+                                    <constraints>
+                                        <constraint firstItem="tEQ-Ic-Ges" firstAttribute="top" secondItem="IIk-3b-vQr" secondAttribute="top" id="64j-mM-7zf"/>
+                                        <constraint firstAttribute="trailing" secondItem="tEQ-Ic-Ges" secondAttribute="trailing" id="lZZ-Oo-Ucr"/>
+                                        <constraint firstItem="tEQ-Ic-Ges" firstAttribute="leading" secondItem="IIk-3b-vQr" secondAttribute="leading" id="zJc-iA-OPo"/>
+                                        <constraint firstAttribute="bottom" secondItem="tEQ-Ic-Ges" secondAttribute="bottom" id="zhW-bg-EKS"/>
+                                    </constraints>
+                                </view>
                             </subviews>
                             <constraints>
                                 <constraint firstAttribute="height" constant="40" id="Z7Z-Yy-Xai"/>
                             </constraints>
                         </stackView>
                     </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" name="surfaces/content"/>
                     <constraints>
-                        <constraint firstAttribute="trailing" secondItem="DPj-7u-1wt" secondAttribute="trailing" id="2rv-CI-ihm"/>
-                        <constraint firstItem="DPj-7u-1wt" firstAttribute="top" secondItem="V1D-DW-wjf" secondAttribute="top" id="WNz-Xl-Qt5"/>
-                        <constraint firstItem="DPj-7u-1wt" firstAttribute="leading" secondItem="V1D-DW-wjf" secondAttribute="leading" id="fBZ-bL-i1f"/>
+                        <constraint firstAttribute="trailing" secondItem="DPj-7u-1wt" secondAttribute="trailing" constant="20" id="2rv-CI-ihm"/>
+                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="DPj-7u-1wt" secondAttribute="bottom" constant="16" id="BXU-zr-VZp"/>
+                        <constraint firstItem="DPj-7u-1wt" firstAttribute="top" secondItem="V1D-DW-wjf" secondAttribute="top" constant="8" id="WNz-Xl-Qt5"/>
+                        <constraint firstItem="DPj-7u-1wt" firstAttribute="leading" secondItem="V1D-DW-wjf" secondAttribute="leading" constant="20" id="fBZ-bL-i1f"/>
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="utT-W8-Ny9">
@@ -161,7 +173,7 @@
                 <constraint firstItem="e7e-S3-8Eo" firstAttribute="top" secondItem="FRj-Yd-6CF" secondAttribute="bottom" id="WYn-32-bMd"/>
                 <constraint firstItem="utT-W8-Ny9" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="XSB-lR-XVy"/>
                 <constraint firstItem="XHX-RV-cHC" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="fiW-J3-3Vm"/>
-                <constraint firstItem="DPj-7u-1wt" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="lns-TF-gS3"/>
+                <constraint firstItem="DPj-7u-1wt" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" priority="999" id="lns-TF-gS3"/>
                 <constraint firstItem="hji-Na-PPg" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="nLQ-8Y-uKx"/>
                 <constraint firstItem="e7e-S3-8Eo" firstAttribute="trailing" secondItem="hji-Na-PPg" secondAttribute="trailing" id="seh-0e-VaU"/>
                 <constraint firstAttribute="bottom" secondItem="hac-IT-FJi" secondAttribute="bottom" id="teI-Iz-MfP"/>
@@ -170,4 +182,24 @@
             <point key="canvasLocation" x="47.4609375" y="35.13909224011713"/>
         </view>
     </objects>
+    <resources>
+        <namedColor name="buttons/selected">
+            <color red="0.70588235294117652" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="buttons/unselected">
+            <color red="0.92549019607843142" green="0.92156862745098034" blue="0.93725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="surfaces/background">
+            <color red="0.99607843137254903" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="surfaces/content">
+            <color red="0.99607843137254903" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="text/main">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="text/monoLight">
+            <color red="0.99607843137254903" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

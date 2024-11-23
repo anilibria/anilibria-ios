@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -27,7 +27,7 @@
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="Drs-6E-nIl" secondAttribute="bottom" constant="28" id="TLE-t2-lDz"/>
+                    <constraint firstAttribute="bottom" secondItem="Drs-6E-nIl" secondAttribute="bottom" priority="999" constant="28" id="TLE-t2-lDz"/>
                     <constraint firstItem="Drs-6E-nIl" firstAttribute="top" secondItem="Dcd-Nb-PDj" secondAttribute="top" constant="28" id="ec7-rH-jSS"/>
                     <constraint firstItem="Drs-6E-nIl" firstAttribute="centerX" secondItem="Dcd-Nb-PDj" secondAttribute="centerX" id="ti7-DA-Bh4"/>
                 </constraints>

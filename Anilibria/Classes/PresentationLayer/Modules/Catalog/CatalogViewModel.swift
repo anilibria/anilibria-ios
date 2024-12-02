@@ -10,6 +10,7 @@ import Combine
 import Foundation
 
 final class CatalogViewModel: SeriesViewModelProtocol {
+    private let limit: Int = 25
     private var nextPage: Int = 1
     private var pageSubscriber: AnyCancellable?
     private let catalogService: CatalogService
@@ -32,11 +33,11 @@ final class CatalogViewModel: SeriesViewModelProtocol {
     func load(activity: ActivityDisposable?) {
         nextPage = 1
         pagination.reset()
-        pageSubscriber = catalogService.fetchCatalog(page: nextPage, filter: filter)
-            .sink(onNext: { [weak self] items in
+        pageSubscriber = catalogService.fetchCatalog(page: nextPage, limit: limit, filter: filter)
+            .sink(onNext: { [weak self, limit] items in
                 self?.nextPage += 1
                 self?.items.send(items)
-                self?.pagination.isReady.send(true)
+                self?.pagination.isReady.send(items.count == limit)
                 activity?.dispose()
             }, onError: { [weak self] error in
                 self?.router?.show(error: error)
@@ -45,14 +46,14 @@ final class CatalogViewModel: SeriesViewModelProtocol {
     }
 
     private func loadPage(completion: @escaping Action<Bool>) {
-        pageSubscriber = catalogService.fetchCatalog(page: nextPage, filter: filter)
-            .sink(onNext: { [weak self] items in
+        pageSubscriber = catalogService.fetchCatalog(page: nextPage, limit: limit, filter: filter)
+            .sink(onNext: { [weak self, limit] items in
                 self?.nextPage += 1
                 if var currentItems = self?.items.value {
                     currentItems.append(contentsOf: items)
                     self?.items.send(currentItems)
                 }
-                completion(items.isEmpty)
+                completion(items.count < limit)
             }, onError: { [weak self] error in
                 self?.router?.show(error: error)
                 completion(false)

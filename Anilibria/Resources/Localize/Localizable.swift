@@ -40,6 +40,10 @@ internal enum L10n {
     internal static var no: String {
         return L10n.tr("Localizable", "buttons.no")
     }
+    /// ОК
+    internal static var ok: String {
+        return L10n.tr("Localizable", "buttons.ok")
+    }
     /// Сброс
     internal static var reset: String {
         return L10n.tr("Localizable", "buttons.reset")
@@ -306,6 +310,10 @@ internal enum L10n {
     internal static var configirationNotFound: String {
         return L10n.tr("Localizable", "error.configiration_not_found")
     }
+    /// OTP не найден
+    internal static var otpNotFound: String {
+        return L10n.tr("Localizable", "error.otp_not_found")
+    }
     /// Не найден связанный аккаунт
     internal static var socialAuthorizationFailed: String {
         return L10n.tr("Localizable", "error.social_authorization_failed")
@@ -450,6 +458,21 @@ internal enum L10n {
         internal static var popularity: String {
             return L10n.tr("Localizable", "screen.filter.Sotring.popularity")
         }
+      }
+    }
+
+    internal enum LinkDevice {
+      /// Код с устройства
+      internal static var codePlaceholder: String {
+          return L10n.tr("Localizable", "screen.link_device.code_placeholder")
+      }
+      /// Устройство успешно привязано
+      internal static var deviceLinked: String {
+          return L10n.tr("Localizable", "screen.link_device.device_linked")
+      }
+      /// Привязать устройство
+      internal static var title: String {
+          return L10n.tr("Localizable", "screen.link_device.title")
       }
     }
 

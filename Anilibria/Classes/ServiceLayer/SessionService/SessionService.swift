@@ -19,6 +19,8 @@ protocol SessionService: AnyObject {
 
     func fetchUser() -> AnyPublisher<User, Error>
 
+    func accept(otp code: String) -> AnyPublisher<Void, Error>
+
     func forceLogout()
     func logout()
 }
@@ -145,6 +147,18 @@ final class SessionServiceImp: SessionService, Loggable {
                 .do(onNext: { [unowned self] user in
                     self.userRepository.set(user: user)
                 })
+        }
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
+    }
+
+    func accept(otp code: String) -> AnyPublisher<Void, Error> {
+        return Deferred { [unowned self] in
+            let request = AcceptOTPRequest(code: code)
+            return self.backendRepository
+                .request(request)
+                .map { _ in }
         }
         .subscribe(on: DispatchQueue.global())
         .receive(on: DispatchQueue.main)

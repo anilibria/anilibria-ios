@@ -6,6 +6,7 @@
 "error.authorization_failed" = "Authorization failed :(";
 "error.social_authorization_failed" = "Linked account not found";
 "error.authorization_invailid" = "Authorization is invalid :(";
+"error.otp_not_found" = "OTP is not found";
 
 "error.configiration_empty" = "Loading configuration file failed :(";
 "error.configiration_broken" = "Configuration file is broken D:";
@@ -23,6 +24,7 @@
 "buttons.skip" = "Skip";
 "buttons.reset" = "Reset";
 "buttons.apply" = "Apply";
+"buttons.ok" = "OK";
 
 //COMMON
 "common.today" = "Today";
@@ -154,3 +156,8 @@
 //OTHER SCREEN
 "screen.other.team" = "Our team";
 "screen.other.donate" = "Donate";
+
+//LINK DEVICE SCREEN
+"screen.link_device.title" = "Link a device";
+"screen.link_device.code_placeholder" = "Code from a device";
+"screen.link_device.device_linked" = "The device has been successfully linked";

@@ -8,6 +8,7 @@ protocol OtherRoutable: BaseRoutable,
     SignInRoute,
     SettingsRoute,
     HistoryRoute,
+    LinkDeviceRoute,
     TeamRoute {}
 
 final class OtherRouter: BaseRouter, OtherRoutable {}

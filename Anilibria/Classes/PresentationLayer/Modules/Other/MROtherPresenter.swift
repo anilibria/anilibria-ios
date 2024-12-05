@@ -86,6 +86,10 @@ extension OtherPresenter: OtherEventHandler {
         }
     }
 
+    func linkDevice() {
+        router.openDeviceLinker()
+    }
+
     func loginOrLogout() {
         if self.isAuthorized {
             self.sessionService.logout()

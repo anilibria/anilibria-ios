@@ -44,31 +44,4 @@ public enum WeekDay: Int, Codable, CaseIterable {
         case .sun: L10n.Common.WeekDay.Short.sun
         }
     }
-
-    static func getMsk() -> WeekDay {
-        var calendar = Calendar(identifier: .gregorian)
-        if let timezone = TimeZone(secondsFromGMT: 3 * 60 * 60) {
-            calendar.timeZone = timezone
-        }
-
-        let weekDay = calendar.component(.weekday, from: Date()) - 1
-        return self.create(from: weekDay)
-    }
-
-    static func getCurrent() -> WeekDay {
-        let weekDay = Calendar(identifier: .gregorian)
-            .component(.weekday, from: Date()) - 1
-        return self.create(from: weekDay)
-    }
-
-    private static func create(from number: Int) -> WeekDay {
-        var weekDay = number
-        if weekDay == 0 {
-            weekDay = 7
-        }
-        if let day = WeekDay(rawValue: weekDay) {
-            return day
-        }
-        preconditionFailure("should not happen")
-    }
 }

@@ -24,17 +24,6 @@ struct Keys {
     static let yandexMetricaApiKey = "48d49aa0-6aad-407e-a738-717a6c77d603"
 }
 
-struct Css {
-    static func text(_ size: Double = 15, color: UIColor? = nil) -> String {
-        var cssColor = ""
-        if let hex = color?.toHexString() {
-            cssColor = "color: \(hex) !important;"
-        }
-        
-        return "<style type=\"text/css\"> * { font-size: \(size)px; font-family: -apple-system; \(cssColor)} </style>"
-    }
-}
-
 struct URLS {
     static let donate: URL? = URL(string: "https://anilibria.top/support")
 

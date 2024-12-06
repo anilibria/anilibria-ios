@@ -1,27 +1,6 @@
 import UIKit
 
 extension String {
-    static func pluralsString(number: Int,
-                              zero: String,
-                              one: String,
-                              two: String) -> String {
-        let num = number % 100
-        if num > 10 && num < 15 {
-            return zero
-        }
-
-        switch number % 10 {
-        case 1:
-            return one
-        case 2, 3, 4:
-            return two
-        default:
-            return zero
-        }
-    }
-}
-
-extension String {
     public func trim(_ charset: String? = nil) -> String {
         if charset == nil {
             return self.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
@@ -61,19 +40,6 @@ extension NSAttributedString {
                                       options: [.usesLineFragmentOrigin],
                                       context: nil)
         return actualSize.width
-    }
-}
-
-extension String {
-    func html2AttributedString(with cssStyle: String = "") -> NSAttributedString? {
-        let str = cssStyle + self
-        if let data = str.data(using: .unicode, allowLossyConversion: true) {
-            let result = try? NSAttributedString(data: data,
-                                                 options: [.documentType: NSAttributedString.DocumentType.html],
-                                                 documentAttributes: nil)
-            return result
-        }
-        return nil
     }
 }
 

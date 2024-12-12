@@ -5,7 +5,7 @@ import UIKit
 final class OtherViewController: BaseViewController {
     @IBOutlet var userNameLabel: UILabel!
     @IBOutlet var authButton: UIButton!
-    @IBOutlet var linksStakView: UIStackView!
+    @IBOutlet var linksStackView: UIStackView!
 
     @IBOutlet var linkDeviceLabel: UILabel!
     @IBOutlet var linkDeviceView: UIView!
@@ -73,10 +73,10 @@ extension OtherViewController: OtherViewBehavior {
         self.userNameLabel.text = user?.name ?? L10n.Common.guest
         if user == nil {
             self.authButton.setTitle(L10n.Buttons.signIn, for: .normal)
-            self.linksStakView.isHidden = true
+            self.linkDeviceView.isHidden = true
         } else {
             self.authButton.setTitle(L10n.Buttons.signOut, for: .normal)
-            self.linksStakView.isHidden = false
+            self.linkDeviceView.isHidden = false
         }
     }
 
@@ -89,11 +89,11 @@ extension OtherViewController: OtherViewBehavior {
             }
             return view
         }
-        self.linksStakView.arrangedSubviews.forEach {
+        self.linksStackView.arrangedSubviews.forEach {
             $0.removeFromSuperview()
         }
         for view in views {
-            self.linksStakView.addArrangedSubview(view)
+            self.linksStackView.addArrangedSubview(view)
         }
     }
 }

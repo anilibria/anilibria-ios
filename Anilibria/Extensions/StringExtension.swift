@@ -57,7 +57,7 @@ extension String {
 extension String {
     mutating func removingRegexMatches(pattern: String, replaceWith: String = "") {
         if let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive) {
-            let range = NSRange(location: 0, length: self.count)
+            let range = NSRange(location: 0, length: utf16.count)
             self = regex.stringByReplacingMatches(in: self, options: [], range: range, withTemplate: replaceWith)
         }
     }
@@ -72,9 +72,7 @@ extension String {
 }
 
 extension String {
-    static func ~= (lhs: String, rhs: String) -> Bool {
-        guard let regex = try? NSRegularExpression(pattern: rhs) else { return false }
-        let range = NSRange(location: 0, length: lhs.utf16.count)
-        return regex.firstMatch(in: lhs, options: [], range: range) != nil
+    func match(pattern: String) -> Bool {
+        NSPredicate(format: "SELF MATCHES %@", pattern).evaluate(with: self)
     }
 }

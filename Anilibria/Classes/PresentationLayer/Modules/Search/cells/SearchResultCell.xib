@@ -61,7 +61,7 @@
                             <constraint firstItem="zMv-0q-8EP" firstAttribute="leading" secondItem="0WA-yS-LvH" secondAttribute="trailing" constant="10" id="hY3-9O-pSi"/>
                             <constraint firstAttribute="bottom" secondItem="zMv-0q-8EP" secondAttribute="bottom" constant="5" id="j05-JQ-hkZ"/>
                             <constraint firstItem="0WA-yS-LvH" firstAttribute="top" secondItem="xfx-8L-QRy" secondAttribute="top" constant="5" id="py6-Zf-p6V"/>
-                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="0WA-yS-LvH" secondAttribute="bottom" constant="5" id="vaR-RB-ZQF"/>
+                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="0WA-yS-LvH" secondAttribute="bottom" priority="999" constant="5" id="vaR-RB-ZQF"/>
                         </constraints>
                     </view>
                 </subviews>

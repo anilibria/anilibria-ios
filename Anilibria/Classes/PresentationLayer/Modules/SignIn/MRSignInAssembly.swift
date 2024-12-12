@@ -20,6 +20,9 @@ extension SignInRoute where Self: RouterProtocol {
     func signInScreen() {
         let module = SignInAssembly.createModule(parent: self)
         let nc = BaseNavigationController(rootViewController: module)
-        ModalRouter(target: nc, parent: nil).move()
+        if UIDevice.current.userInterfaceIdiom != .pad {
+            nc.modalPresentationStyle = .overFullScreen
+        }
+        ModalRouter(target: nc, parent: controller).move()
     }
 }

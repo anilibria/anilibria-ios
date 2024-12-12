@@ -7,6 +7,7 @@
 "error.social_authorization_failed" = "Linked account not found";
 "error.authorization_invailid" = "Authorization is invalid :(";
 "error.otp_not_found" = "OTP is not found";
+"error.recovery_token_not_found" = "Recovery token is not correct";
 
 "error.configiration_empty" = "Loading configuration file failed :(";
 "error.configiration_broken" = "Configuration file is broken D:";
@@ -24,7 +25,10 @@
 "buttons.skip" = "Skip";
 "buttons.reset" = "Reset";
 "buttons.apply" = "Apply";
+"buttons.continue" = "Continue";
 "buttons.ok" = "OK";
+"buttons.signUp" = "Sign up";
+"buttons.reset_password" = "Reset password";
 
 //COMMON
 "common.today" = "Today";
@@ -161,3 +165,16 @@
 "screen.link_device.title" = "Link a device";
 "screen.link_device.code_placeholder" = "Code from a device";
 "screen.link_device.device_linked" = "The device has been successfully linked";
+
+//RESTORE PASSWORD
+"screen.restore_password.title" = "New password";
+"screen.restore_password.send_email_info" = "You will be able to set a new password.\n Please send us the email address you used to create your account. We will send you an email with instructions.";
+"screen.restore_password.new_password_info" = "You can set a new password.\nPlease check your email box, we sent you an email with a recovery token.";
+"screen.restore_password.email" = "Email";
+"screen.restore_password.token" = "Recovery token";
+"screen.restore_password.new_password" = "Password";
+"screen.restore_password.repeat_password" = "Repeat password";
+"screen.restore_password.buttons.resend_email" = "Resend email";
+"screen.restore_password.buttons.recovery" = "I have a recovery token";
+"screen.restore_password.success.title" = "New password set";
+"screen.restore_password.success.message" = "You can now use this password to log in";

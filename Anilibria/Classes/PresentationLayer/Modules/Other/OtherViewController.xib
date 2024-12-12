@@ -17,7 +17,7 @@
                 <outlet property="historyView" destination="n7x-2Y-gdd" id="myb-as-b0A"/>
                 <outlet property="linkDeviceLabel" destination="rVO-pg-PMt" id="icH-NY-w5y"/>
                 <outlet property="linkDeviceView" destination="Dse-9B-twv" id="3dV-Lk-Ltn"/>
-                <outlet property="linksStakView" destination="ZrU-yx-N20" id="gXy-Ym-Ybp"/>
+                <outlet property="linksStackView" destination="ZrU-yx-N20" id="xgc-yq-U6V"/>
                 <outlet property="settingsTitleLabel" destination="yIP-4y-s4K" id="cIx-Ud-Ip0"/>
                 <outlet property="teamTitleLabel" destination="Zzf-sV-SGr" id="FkX-sc-gAI"/>
                 <outlet property="userNameLabel" destination="OuO-Q2-EIi" id="PeN-lR-mn6"/>

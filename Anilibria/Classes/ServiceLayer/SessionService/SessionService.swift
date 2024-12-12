@@ -23,6 +23,9 @@ protocol SessionService: AnyObject {
 
     func forceLogout()
     func logout()
+
+    func forgetPassword(email: String) -> AnyPublisher<Void, Error>
+    func resetPassword(token: String, password: String) -> AnyPublisher<Void, Error>
 }
 
 final class SessionServiceImp: SessionService, Loggable {
@@ -181,5 +184,29 @@ final class SessionServiceImp: SessionService, Loggable {
         .store(in: &bag)
 
         self.forceLogout()
+    }
+
+    func forgetPassword(email: String) -> AnyPublisher<Void, Error> {
+        return Deferred { [unowned self] in
+            let request = ForgotPasswordRequest(email: email)
+            return self.backendRepository
+                .request(request)
+                .map { _ in }
+        }
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
+    }
+
+    func resetPassword(token: String, password: String) -> AnyPublisher<Void, Error> {
+        return Deferred { [unowned self] in
+            let request = ResetPasswordRequest(token: token, password: password)
+            return self.backendRepository
+                .request(request)
+                .map { _ in }
+        }
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 }

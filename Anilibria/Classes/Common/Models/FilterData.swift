@@ -6,6 +6,7 @@
 //  Copyright © 2024 Иван Морозов. All rights reserved.
 //
 
+import Foundation
 
 public struct FilterData {
     var ageRatings: [AgeRating] = []

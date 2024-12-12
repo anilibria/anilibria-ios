@@ -10,6 +10,8 @@ final class SignInViewController: BaseViewController {
     @IBOutlet var logInButton: RippleButton!
     @IBOutlet var closeButton: UIButton!
     @IBOutlet var scrollView: UIScrollView!
+    @IBOutlet var signUpButton: UIButton!
+    @IBOutlet var resetButton: UIButton!
 
     private var providersBag: Set<AnyCancellable> = []
 
@@ -42,6 +44,9 @@ final class SignInViewController: BaseViewController {
         logInButton.enabledColor = UIColor(resource: .Buttons.selected)
         logInButton.disabledColor = UIColor(resource: .Buttons.unselected)
         logInButton.cornerRadius = 6
+
+        signUpButton.setTitle(L10n.Buttons.signUp, for: .normal)
+        resetButton.setTitle(L10n.Buttons.resetPassword, for: .normal)
     }
 
     private func subscribes() {
@@ -75,6 +80,14 @@ final class SignInViewController: BaseViewController {
             password: passwordField.text ?? ""
         )
         view.endEditing(true)
+    }
+
+    @IBAction func signUpAction() {
+        handler.signUp()
+    }
+
+    @IBAction func resetAction() {
+        handler.resetPassword()
     }
 }
 

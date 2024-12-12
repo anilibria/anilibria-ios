@@ -73,7 +73,8 @@ private class PersentersPart: DIPart {
         FeedPart.self,
         NewsPart.self,
         TeamPart.self,
-        LinkDevicePart.self
+        LinkDevicePart.self,
+        RestorePasswordPart.self
     ]
 
     static func load(container: DIContainer) {

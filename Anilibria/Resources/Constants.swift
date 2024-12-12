@@ -33,7 +33,9 @@ struct URLS {
     static let telegram: URL? = URL(string: "https://t.me/anilibria")
     static let discord: URL? = URL(string: "https://discord.gg/M6yCGeGN9B")
     static let boosty: URL? = URL(string: "https://boosty.to/anilibriatv")
-    
+
+    static let signUp: URL? = URL(string: "https://anilibria.top/app/auth/registration/new")
+
     static let config: URL! = URL(string: "https://raw.githubusercontent.com/anilibria/anilibria-app/master/config.json")
 }
 
@@ -70,4 +72,8 @@ struct URLHelper {
         }
         return nil
     }
+}
+
+struct Regexp {
+    static let email = #"[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z0-9]{2,6}"#
 }

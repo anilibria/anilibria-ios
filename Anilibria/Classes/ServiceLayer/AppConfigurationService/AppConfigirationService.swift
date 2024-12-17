@@ -57,7 +57,7 @@ final class AppConfigurationServiceImp: AppConfigurationService {
 
     func loadConfig() -> AnyPublisher<AniSettings, Error> {
         return Deferred { [unowned self] in
-            let request = JustURLRequest<AniConfig>(url: URLS.config)
+            let request = PlainUrlRequest<AniConfig>(url: URLS.config)
             return self.backendRepository
                 .request(request)
                 .map { [unowned self] config in

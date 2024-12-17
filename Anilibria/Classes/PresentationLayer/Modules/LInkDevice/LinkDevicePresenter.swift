@@ -50,7 +50,7 @@ extension LinkDevicePresenter: LinkDeviceHandler {
     private func handle(error: Error) {
         switch (error as? AppError) {
         case .network(404):
-            router?.show(error: AppError.server(message: L10n.Error.otpNotFound))
+            router?.show(error: AppError.plain(message: L10n.Error.otpNotFound))
         default:
             router?.show(error: error)
         }

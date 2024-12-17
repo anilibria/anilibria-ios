@@ -9,27 +9,24 @@ public enum AppError: Error {
     private static let errorDomain: String = "MRKitErrorDomain"
 
     case error(code: Int)
-    case responseError(code: Int)
     case network(statusCode: Int)
-    case api(error: Error)
     case other(error: Error)
-    case unexpectedError(message: String)
-    case server(message: String)
+    case plain(message: String)
 }
 
 extension AppError: ErrorDisplayable {
     public var displayMessage: String? {
         switch self {
-        case let .api(error), let .other(error):
+        case let .other(error):
             return error.message
-        case let .error(code), let .responseError(code):
+        case let .error(code):
             return "Error: \(code)"
         case let .network(code):
             if code == 401 {
                 return L10n.Error.authorizationInvailid
             }
             return "Network Error: \(code)"
-        case let .unexpectedError(message), let .server(message):
+        case let .plain(message):
             return message
         }
     }

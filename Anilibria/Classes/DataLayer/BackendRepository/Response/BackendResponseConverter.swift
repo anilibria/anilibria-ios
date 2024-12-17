@@ -33,7 +33,7 @@ public class JsonResponseConverter: BackendResponseConverter, Loggable {
                 return (result, nil)
             } else {
                 self.log(.error, "Error parsing request: \(error)")
-                return (nil, AppError.responseError(code: MRKitErrorCode.parsingError))
+                return (nil, AppError.error(code: MRKitErrorCode.parsingError))
             }
         }
     }

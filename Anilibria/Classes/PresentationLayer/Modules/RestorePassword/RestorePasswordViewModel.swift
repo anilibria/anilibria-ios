@@ -73,7 +73,7 @@ final class RestorePasswordViewModel {
     private func handle(_ error: Error) {
         switch (error as? AppError) {
         case .network(404):
-            router?.show(error: AppError.server(message: L10n.Error.recoveryTokenNotFound))
+            router?.show(error: AppError.plain(message: L10n.Error.recoveryTokenNotFound))
         default:
             router?.show(error: error)
         }

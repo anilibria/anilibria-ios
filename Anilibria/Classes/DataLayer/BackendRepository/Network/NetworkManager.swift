@@ -71,7 +71,7 @@ open class NetworkManager: Loggable {
         .flatMap { [weak self] request in
             guard let self else {
                 return AnyPublisher<NetworkResponse, Error>
-                    .fail(AppError.responseError(code: MRKitErrorCode.unexpected))
+                    .fail(AppError.error(code: MRKitErrorCode.unexpected))
             }
             return send(
                 request: request,

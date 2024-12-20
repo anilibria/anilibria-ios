@@ -10,10 +10,10 @@ final class PlayerViewController: BaseViewController {
     @IBOutlet var pipButton: UIButton!
     @IBOutlet var playPauseButton: RippleButton!
     @IBOutlet var playPauseIconView: UIImageView!
-    @IBOutlet var switcherView: SwitcherView!
+    @IBOutlet var seriesSelectorLabel: UILabel!
     @IBOutlet var timeLeftLabel: UILabel!
     @IBOutlet var elapsedTimeLabel: UILabel!
-    @IBOutlet var videoSliderView: TouchableSlider!
+    @IBOutlet var videoSliderView: PlayerProgressView!
     @IBOutlet var playerContainer: UIView!
     @IBOutlet var loaderContainer: UIView!
     @IBOutlet var container: UIView!
@@ -27,10 +27,8 @@ final class PlayerViewController: BaseViewController {
     private let airplayView = AVRoutePickerView()
     private var pictureInPictureController: AVPictureInPictureController?
     private let timeFormatter = FormatterFactory.time.create()
-    private var canUpdateTime: Bool = true
     private var playlist: [PlaylistItem] = []
-    private var currentIndex: Int = 0
-    private var currentTime: Double = 0
+    private var currentTime: [Int: Double] = [:]
     private var bag: AnyCancellable?
     private var pipObservation: Any?
 
@@ -46,7 +44,13 @@ final class PlayerViewController: BaseViewController {
     }
     
     private let skipButtonShowingSeconds = 10
-    
+
+    private var currentIndex: Int = 0 {
+        didSet {
+            seriesSelectorLabel.text = currentListItem?.name ?? ""
+        }
+    }
+
     private var currentListItem: PlaylistItem? {
         playlist[safe: currentIndex]
     }
@@ -61,16 +65,13 @@ final class PlayerViewController: BaseViewController {
         self.handler.didLoad()
         self.addTermenateAppObserver()
         self.setupPlayer()
-        self.setupSwitcher()
         self.setupRewind()
         self.setupAirPlay()
         self.setupPictureInPicture()
-        self.videoSliderView.setThumbImage(UIImage(resource: .iconCircle), for: .normal)
 
         let font: UIFont = UIFont.monospacedDigitSystemFont(ofSize: 12, weight: .regular)
         self.timeLeftLabel.font = font
         self.elapsedTimeLabel.font = font
-        self.clearLabels()
 
         self.topShadowView.shadowY = 20
         self.topShadowView.shadowRadius = 40
@@ -136,14 +137,18 @@ final class PlayerViewController: BaseViewController {
 
         self.playerView.getCurrentTime()
             .filter { [weak self] _ in
-                self?.canUpdateTime ?? false
+                !(self?.videoSliderView.isDragging ?? true)
             }
             .sink(onNext: { [weak self] time in
-                let value = Float(time)
-                self?.currentTime = time
-                self?.videoSliderView.setValue(value, animated: true)
-                self?.updateLabels()
-                self?.updateSkipButton(time: Int(time))
+                guard let self else { return }
+                currentTime[currentIndex] = time
+                videoSliderView.set(progress: time)
+            })
+            .store(in: &subscribers)
+
+        self.playerView.getBufferTime()
+            .sink(onNext: { [weak self] time in
+                self?.videoSliderView.set(buffering: time)
             })
             .store(in: &subscribers)
 
@@ -162,7 +167,6 @@ final class PlayerViewController: BaseViewController {
                 case .pause:
                     break
                 default:
-                    self?.canUpdateTime = true
                     self?.setLoader(visible: false)
                 }
             })
@@ -172,6 +176,15 @@ final class PlayerViewController: BaseViewController {
         tap.numberOfTapsRequired = 1
         tap.numberOfTouchesRequired = 1
         self.playerContainer.addGestureRecognizer(tap)
+
+        videoSliderView.didSelectProgress = { [weak self] time in
+            self?.playerView.set(time: time)
+        }
+
+        videoSliderView.changeValue = { [weak self] progress, duration in
+            self?.updateLabels(progress: progress, duration: duration)
+            self?.updateSkipButton(time: Int(progress))
+        }
     }
 
     private func setupRewind() {
@@ -200,18 +213,15 @@ final class PlayerViewController: BaseViewController {
 
     private func apply(rewind time: Double) {
         guard playerView.duration != nil else { return }
-        let newTime = videoSliderView.value + Float(time)
+        let newTime = videoSliderView.progress + time
 
         let playing = playerView.isPlaying
         if playing { playerView.togglePlay() }
 
-        sliderTouchDown(self)
-        videoSliderView.setValue(newTime, animated: true)
-        sliderValueChanged(self)
-        sliderTouchUp(self)
+        videoSliderView.set(progress: newTime)
+        playerView.set(time: newTime)
 
         if playing { playerView.togglePlay() }
-        updateSkipButton(time: Int(newTime))
     }
 
     @objc private func rewindForward() {
@@ -228,17 +238,15 @@ final class PlayerViewController: BaseViewController {
         airplayView.constraintEdgesToSuperview()
     }
 
-    private func clearLabels() {
-        self.timeLeftLabel.text = "--:--"
-        self.elapsedTimeLabel.text = "--:--"
-    }
-
-    private func updateLabels() {
-        let value = self.videoSliderView.value
-        self.timeLeftLabel.text = self.timeFormatter.string(from: value)
-        let max = self.videoSliderView.maximumValue
-        let elapsed = self.timeFormatter.string(from: max - value) ?? ""
-        self.elapsedTimeLabel.text = "-\(elapsed)"
+    private func updateLabels(progress: Double, duration: Double) {
+        if duration == 0 {
+            timeLeftLabel.text = "--:--"
+            elapsedTimeLabel.text = "--:--"
+        } else {
+            timeLeftLabel.text = timeFormatter.string(from: progress)
+            let elapsed = self.timeFormatter.string(from: duration - progress) ?? ""
+            elapsedTimeLabel.text = "-\(elapsed)"
+        }
     }
     
     private func updateSkipButton(time: Int) {
@@ -253,35 +261,30 @@ final class PlayerViewController: BaseViewController {
     }
 
     private func saveState() {
-        self.handler.save(quality: self.currentQuality,
-                          number: self.currentIndex,
-                          time: self.currentTime)
+        self.handler.save(
+            quality: currentQuality,
+            number: currentIndex,
+            time: currentTime[currentIndex] ?? 0
+        )
     }
 
     private func set(playItem index: Int, seek time: Double) {
-        self.clearLabels()
+        videoSliderView.set(duration: 0)
         self.currentIndex = index
-        self.currentTime = time
-        let item = self.playlist[index]
-        let qualities = item.supportedQualities()
+        self.currentTime[index] = time
+        let qualities = currentListItem?.supportedQualities() ?? []
         guard let bestQuality = qualities.first else {
             return
         }
         if qualities.contains(self.currentQuality) == false {
             self.currentQuality = bestQuality
         }
-        if let url = item.video[self.currentQuality] {
+        if let url = currentListItem?.video[self.currentQuality] {
             self.bag = self.playerView.setVideo(url: url)
                 .filter { $0 != nil }
                 .map { $0! }
                 .sink(onNext: { [weak self] duration in
-                    self?.videoSliderView.minimumValue = Float(0)
-                    self?.videoSliderView.maximumValue = Float(duration)
-                    if duration == 0 {
-                        self?.clearLabels()
-                    } else {
-                        self?.updateLabels()
-                    }
+                    self?.videoSliderView.set(duration: duration)
                     self?.playerView.set(time: time)
                 })
         }
@@ -348,23 +351,10 @@ final class PlayerViewController: BaseViewController {
         }
     }
 
-    @IBAction func sliderValueChanged(_ sender: Any) {
-        self.updateLabels()
-    }
-
-    @IBAction func sliderTouchUp(_ sender: Any) {
-        let time = self.videoSliderView.value
-        self.playerView.set(time: Double(time))
-    }
-
-    @IBAction func sliderTouchDown(_ sender: Any) {
-        self.canUpdateTime = false
-    }
-
     @IBAction func settingAction(_ sender: Any) {
-        let index = self.switcherView.currentIndex
-        let item = self.playlist[index]
-        self.handler.settings(quality: self.currentQuality, for: item)
+        if let item = self.currentListItem {
+            self.handler.settings(quality: self.currentQuality, for: item)
+        }
     }
 
     @IBAction func togglePictureInPictureMode(_ sender: UIButton) {
@@ -375,9 +365,13 @@ final class PlayerViewController: BaseViewController {
             pipController.startPictureInPicture()
         }
     }
-    
+
+    @IBAction func selectVideoDidTap() {
+        handler.select(playItemIndex: currentIndex)
+    }
+
     @IBAction func skipDidTap() {
-        let currentTime = Int(videoSliderView.value)
+        let currentTime = Int(videoSliderView.progress)
         guard
             let currentListItem = currentListItem,
             let endTime = currentListItem.skips.upperBound(time: currentTime),
@@ -399,34 +393,19 @@ extension PlayerViewController: PlayerViewBehavior {
         self.titleLabel.text = name
         self.playlist = playlist
 
-        self.switcherView.set(items: self.playlist,
-                              index: playItemIndex,
-                              title: { $0.name })
-        self.switcherView.getSelectedSequence()
-            .do(onNext: { [weak self] _ in
-                self?.clearLabels()
-                self?.setLoader(visible: true)
-            })
-            .debounce(for: .seconds(1), scheduler: RunLoop.main)
-            .sink(onNext: { [weak self] index in
-                self?.currentQuality = quality
-                var seekTime = 0.0
-                if index == playItemIndex {
-                    seekTime = time
-                }
-                self?.set(playItem: index, seek: seekTime)
-            })
-            .store(in: &subscribers)
+        videoSliderView.set(duration: 0)
+        setLoader(visible: true)
+        currentQuality = quality
+        self.set(playItem: playItemIndex, seek: time)
     }
 
     func set(playItemIndex: Int) {
-        self.switcherView.set(current: playItemIndex)
+        self.set(playItem: playItemIndex, seek: currentTime[playItemIndex] ?? 0)
     }
 
     func set(quality: VideoQuality) {
-        let index = self.switcherView.currentIndex
         self.currentQuality = quality
-        self.set(playItem: index, seek: self.currentTime)
+        self.set(playItem: currentIndex, seek: currentTime[currentIndex] ?? 0)
     }
 }
 

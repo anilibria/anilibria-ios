@@ -37,6 +37,7 @@ public final class PlayerView: UIView {
     }
 
     private var secondsRelay: CurrentValueSubject<Double, Never> = CurrentValueSubject(0)
+    private var bufferingRelay: CurrentValueSubject<ClosedRange<Double>?, Never> = CurrentValueSubject(nil)
     private var playRelay: CurrentValueSubject<Bool, Never> = CurrentValueSubject(false)
     private var statusRelay: PassthroughSubject<Status, Never> = PassthroughSubject()
     private var bag = Set<AnyCancellable>()
@@ -86,6 +87,12 @@ public final class PlayerView: UIView {
             .eraseToAnyPublisher()
     }
 
+    func getBufferTime() -> AnyPublisher<ClosedRange<Double>?, Never> {
+        return self.bufferingRelay
+            .removeDuplicates()
+            .eraseToAnyPublisher()
+    }
+
     func getPlayChanges() -> AnyPublisher<Bool, Never> {
         return self.playRelay
             .removeDuplicates()
@@ -125,7 +132,15 @@ public final class PlayerView: UIView {
             }
         }
 
-        self.keyBag = [statusBag, timeBag]
+        let bufferingBag = item.observe(\AVPlayerItem.loadedTimeRanges) { [weak self] item, _ in
+            if let range = item.loadedTimeRanges.first as? CMTimeRange {
+                self?.bufferingRelay.send(range.start.seconds...range.end.seconds)
+            } else {
+                self?.bufferingRelay.send(nil)
+            }
+        }
+
+        self.keyBag = [statusBag, timeBag, bufferingBag]
 
         let interval = CMTime(seconds: 1, preferredTimescale: 1)
         self.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] in

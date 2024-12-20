@@ -342,7 +342,11 @@ final class PlayerViewController: BaseViewController {
         if #available(iOS 16.0, *) {
             self.setNeedsUpdateOfSupportedInterfaceOrientations()
         } else {
-            UIViewController.attemptRotationToDeviceOrientation()
+            if orientation != .all {
+                let value = UIInterfaceOrientation.from(mask: orientation)
+                UIDevice.current.setValue(value.rawValue, forKey: "orientation")
+                UIViewController.attemptRotationToDeviceOrientation()
+            }
         }
     }
 

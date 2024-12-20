@@ -47,6 +47,7 @@ final class SeriesViewController: BaseViewController {
         self.setupHeader()
         self.setupWeekView()
         super.viewDidLoad()
+        self.setupNavigationButtons()
 
         let action: Action<URL> = { [weak self] url in
             if url.isAttributeLink {

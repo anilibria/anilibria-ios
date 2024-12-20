@@ -47,26 +47,31 @@ final class ScheduleSeriesSectionAdapter: SectionAdapterProtocol {
     }
 
     func getSectionLayout(environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
+        let itemsCount: CGFloat = 3
+        let inset: CGFloat = 16
+        let horizontalInsets: CGFloat = inset * itemsCount + inset
+        let width = floor((environment.container.effectiveContentSize.width - horizontalInsets) / itemsCount)
+        let heightDimension: NSCollectionLayoutDimension = .absolute(280.0 * width / 195)
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0 / 3.0),
-            heightDimension: .fractionalWidth(280.0 / (3 * 195))
+            widthDimension: .absolute(width),
+            heightDimension: heightDimension
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .fractionalWidth(280.0 / (3 * 195))
+            heightDimension: heightDimension
         )
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,
             subitems: [item]
         )
 
-        group.interItemSpacing = .flexible(16)
+        group.interItemSpacing = .flexible(inset)
 
         let section = NSCollectionLayoutSection(group: group)
-        section.interGroupSpacing = 16
-        section.contentInsets = .init(top: 0, leading: 16, bottom: 0, trailing: 16)
+        section.interGroupSpacing = inset
+        section.contentInsets = .init(top: 0, leading: inset, bottom: 0, trailing: inset)
         return section
     }
 }

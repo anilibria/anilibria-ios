@@ -108,6 +108,22 @@ final class PlayerViewController: BaseViewController {
         #endif
     }
 
+    override var canBecomeFirstResponder: Bool { true }
+    override var keyCommands: [UIKeyCommand]? {
+        let back = UIKeyCommand(input: UIKeyCommand.inputLeftArrow, modifierFlags: [], action: #selector(self.rewindBack))
+        let forward = UIKeyCommand(input: UIKeyCommand.inputRightArrow, modifierFlags: [], action: #selector(self.rewindForward))
+        if #available(iOS 15.0, macCatalyst 15.0, *) {
+            back.wantsPriorityOverSystemBehavior = true
+            forward.wantsPriorityOverSystemBehavior = true
+        }
+
+        return [
+            UIKeyCommand(input: UIKeyCommand.inputSpace, modifierFlags: [], action: #selector(self.playPauseAction(_:))),
+            back,
+            forward,
+        ]
+    }
+
     private func setupSwitcher() {
         self.switcherView.didTapTitle { [weak self] in
             self?.handler.select(playItemIndex: $0)
@@ -196,6 +212,14 @@ final class PlayerViewController: BaseViewController {
 
         if playing { playerView.togglePlay() }
         updateSkipButton(time: Int(newTime))
+    }
+
+    @objc private func rewindForward() {
+        self.apply(rewind: 10.0)
+    }
+
+    @objc private func rewindBack() {
+        self.apply(rewind: -5.0)
     }
 
     private func setupAirPlay() {
@@ -466,6 +490,11 @@ final class RewindView: CircleView {
     @IBAction func tapAction(_ sender: Any) {
         self.tapHandler?(time)
     }
+}
+
+
+private extension UIKeyCommand {
+    static let inputSpace = " "
 }
 
 private extension PlaylistItem {

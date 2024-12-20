@@ -90,6 +90,8 @@
 "common.intern" = "Intern";
 "common.vacation" = "Vacation";
 
+"common.content_blocked" = "Content is blocked";
+
 //PERMISSION
 "permission.title" = "Permission";
 "permission.push" = "To recieve push notifications you should enable it on the iOS Settings.";

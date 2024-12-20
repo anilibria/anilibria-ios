@@ -29,6 +29,10 @@ public struct Series: Codable, Hashable {
     let torrents: [Torrent]
     let sponsor: Sponsor?
 
+    var isBlocked: Bool {
+        isBlockedByGeo || isBlockedByCopyrights
+    }
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeyString.self)
         let urlConverter = URLConverter(Configuration.imageServer)

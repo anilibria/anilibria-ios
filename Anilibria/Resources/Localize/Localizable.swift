@@ -95,6 +95,10 @@ internal enum L10n {
     internal static var appearance: String {
         return L10n.tr("Localizable", "common.appearance")
     }
+    /// Контент заблокирован
+    internal static var contentBlocked: String {
+        return L10n.tr("Localizable", "common.content_blocked")
+    }
     /// По умолчанию
     internal static var `default`: String {
         return L10n.tr("Localizable", "common.default")

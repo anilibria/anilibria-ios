@@ -62,6 +62,11 @@
 "common.seasons.summer" = "Лето";
 "common.seasons.fall" = "Осень";
 
+"common.orientation" = "Ориентация плеера";
+"common.orientation.portrait" = "Портретная";
+"common.orientation.landscape" = "Альбомная";
+"common.orientation.system" = "Системная";
+
 "common.quality" = "Качество видео";
 "common.quality.sd" = "480p";
 "common.quality.hd" = "720p";

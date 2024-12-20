@@ -62,6 +62,11 @@
 "common.seasons.summer" = "Summer";
 "common.seasons.fall" = "Fall";
 
+"common.orientation" = "Player orientation";
+"common.orientation.portrait" = "Portrait";
+"common.orientation.landscape" = "Landscape";
+"common.orientation.system" = "System";
+
 "common.quality" = "Quality";
 "common.quality.sd" = "480p";
 "common.quality.hd" = "720p";

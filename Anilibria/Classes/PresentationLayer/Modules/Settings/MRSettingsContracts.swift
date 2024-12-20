@@ -7,6 +7,7 @@ protocol SettingsViewBehavior: AnyObject {
     func set(quality: VideoQuality)
     func set(language: Language)
     func set(appearance: InterfaceAppearance)
+    func set(orientation: InterfaceOrientation)
 }
 
 protocol SettingsEventHandler: ViewControllerEventHandler {
@@ -15,4 +16,5 @@ protocol SettingsEventHandler: ViewControllerEventHandler {
     func selectQuality()
     func selectLanguage()
     func selectAppearance()
+    func selectOrientation()
 }

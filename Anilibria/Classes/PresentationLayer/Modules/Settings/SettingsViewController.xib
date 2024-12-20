@@ -17,9 +17,12 @@
                 <outlet property="appearanceTitleLabel" destination="jYR-jJ-Qte" id="BDF-64-WVc"/>
                 <outlet property="commonTitleLabel" destination="pc8-n4-FsJ" id="h4j-DZ-BFz"/>
                 <outlet property="languageTitleLabel" destination="WsG-PZ-9cG" id="Fxv-06-et5"/>
+                <outlet property="orientationContainerView" destination="Wkp-Gd-85g" id="fxV-sc-bbY"/>
+                <outlet property="orientationTitleLabel" destination="Hz3-Ua-TSf" id="gon-gi-YOK"/>
                 <outlet property="qaualityTitleLabel" destination="TB9-hk-EBC" id="bMx-Fj-8c1"/>
                 <outlet property="selectedAppearanceLabel" destination="FcR-cc-tHc" id="BYI-mh-tPU"/>
                 <outlet property="selectedLanguageLabel" destination="2UY-Ox-Ln3" id="FqR-f7-Hdd"/>
+                <outlet property="selectedOrientationLabel" destination="gMT-6R-Dx2" id="dm3-yT-suY"/>
                 <outlet property="selectedQualityLabel" destination="S78-Fi-YIU" id="w6a-ch-XQV"/>
                 <outlet property="view" destination="avC-q5-7uI" id="dPr-11-Xas"/>
             </connections>
@@ -36,7 +39,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="414" height="848"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="38f-9L-P5k">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="272"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="312"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sw5-29-Lhq">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="0.0"/>
@@ -46,10 +49,10 @@
                                             </constraints>
                                         </view>
                                         <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sFx-AO-C1H" customClass="BorderedView" customModule="Anilibria" customModuleProvider="target">
-                                            <rect key="frame" x="16" y="16" width="382" height="160"/>
+                                            <rect key="frame" x="16" y="16" width="382" height="200"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="lm1-g7-by5">
-                                                    <rect key="frame" x="0.0" y="0.0" width="382" height="160"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="382" height="200"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wmO-c9-gH9">
                                                             <rect key="frame" x="0.0" y="0.0" width="382" height="40"/>
@@ -157,7 +160,7 @@
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WUk-WC-Gli" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="382" height="40"/>
                                                                     <connections>
-                                                                        <action selector="appearanceAction:" destination="-1" eventType="touchUpInside" id="v4i-e9-JRl"/>
+                                                                        <action selector="appearanceAction:" destination="-1" eventType="touchUpInside" id="s4C-32-car"/>
                                                                     </connections>
                                                                 </button>
                                                             </subviews>
@@ -172,6 +175,41 @@
                                                                 <constraint firstItem="jYR-jJ-Qte" firstAttribute="leading" secondItem="yLe-sT-LJ4" secondAttribute="leading" constant="16" id="kEq-Yz-6SM"/>
                                                                 <constraint firstAttribute="height" constant="40" id="reQ-Hx-fbl"/>
                                                                 <constraint firstItem="WUk-WC-Gli" firstAttribute="leading" secondItem="yLe-sT-LJ4" secondAttribute="leading" id="sZ1-40-7n8"/>
+                                                            </constraints>
+                                                        </view>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wkp-Gd-85g">
+                                                            <rect key="frame" x="0.0" y="160" width="382" height="40"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ориентация плеера" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hz3-Ua-TSf">
+                                                                    <rect key="frame" x="16" y="11.5" width="140" height="17"/>
+                                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
+                                                                    <color key="textColor" name="text/main"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Системная" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gMT-6R-Dx2">
+                                                                    <rect key="frame" x="288.5" y="11.5" width="77.5" height="17"/>
+                                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
+                                                                    <color key="textColor" name="text/secondary"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gkc-qG-eho" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="382" height="40"/>
+                                                                    <connections>
+                                                                        <action selector="orientationAction:" destination="-1" eventType="touchUpInside" id="39L-nM-Tt9"/>
+                                                                    </connections>
+                                                                </button>
+                                                            </subviews>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="trailing" secondItem="Gkc-qG-eho" secondAttribute="trailing" id="BhM-iF-NmO"/>
+                                                                <constraint firstAttribute="trailing" secondItem="gMT-6R-Dx2" secondAttribute="trailing" constant="16" id="DFI-7X-d9T"/>
+                                                                <constraint firstAttribute="bottom" secondItem="Gkc-qG-eho" secondAttribute="bottom" id="FuD-pe-HOz"/>
+                                                                <constraint firstAttribute="height" constant="40" id="Nvb-uh-kpA"/>
+                                                                <constraint firstItem="Gkc-qG-eho" firstAttribute="leading" secondItem="Wkp-Gd-85g" secondAttribute="leading" id="TVT-pi-uZr"/>
+                                                                <constraint firstItem="Hz3-Ua-TSf" firstAttribute="centerY" secondItem="Wkp-Gd-85g" secondAttribute="centerY" id="gSX-58-Ard"/>
+                                                                <constraint firstItem="gMT-6R-Dx2" firstAttribute="centerY" secondItem="Wkp-Gd-85g" secondAttribute="centerY" id="iRC-CU-CxY"/>
+                                                                <constraint firstItem="Gkc-qG-eho" firstAttribute="top" secondItem="Wkp-Gd-85g" secondAttribute="top" id="nZZ-8c-sJH"/>
+                                                                <constraint firstItem="Hz3-Ua-TSf" firstAttribute="leading" secondItem="Wkp-Gd-85g" secondAttribute="leading" constant="16" id="qyP-Bf-uHB"/>
                                                             </constraints>
                                                         </view>
                                                     </subviews>
@@ -191,7 +229,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </view>
                                         <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GOa-WO-wbt" customClass="BorderedView" customModule="Anilibria" customModuleProvider="target">
-                                            <rect key="frame" x="16" y="192" width="382" height="80"/>
+                                            <rect key="frame" x="16" y="232" width="382" height="80"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="TQG-ru-Pzz">
                                                     <rect key="frame" x="0.0" y="0.0" width="382" height="80"/>

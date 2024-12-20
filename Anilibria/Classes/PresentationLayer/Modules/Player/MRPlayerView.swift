@@ -334,12 +334,16 @@ final class PlayerViewController: BaseViewController {
 
     @IBAction func closeAction(_ sender: Any) {
         self.orientation = .portrait
+        updateOrientation()
+        self.handler.back()
+    }
+
+    private func updateOrientation() {
         if #available(iOS 16.0, *) {
             self.setNeedsUpdateOfSupportedInterfaceOrientations()
         } else {
             UIViewController.attemptRotationToDeviceOrientation()
         }
-        self.handler.back()
     }
 
     @IBAction func downloadAction(_ sender: Any) {}
@@ -406,6 +410,11 @@ extension PlayerViewController: PlayerViewBehavior {
     func set(quality: VideoQuality) {
         self.currentQuality = quality
         self.set(playItem: currentIndex, seek: currentTime[currentIndex] ?? 0)
+    }
+
+    func set(orientation: InterfaceOrientation) {
+        self.orientation = orientation.mask
+        updateOrientation()
     }
 }
 

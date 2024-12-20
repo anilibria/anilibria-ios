@@ -115,6 +115,10 @@ internal enum L10n {
     internal static var mskTimeZone: String {
         return L10n.tr("Localizable", "common.msk_time_zone")
     }
+    /// Ориентация плеера
+    internal static var orientation: String {
+        return L10n.tr("Localizable", "common.orientation")
+    }
     /// Качество видео
     internal static var quality: String {
         return L10n.tr("Localizable", "common.quality")
@@ -166,6 +170,21 @@ internal enum L10n {
       /// Найти в гугле "%@"
       internal static func query(_ p1: String) -> String {
         return L10n.tr("Localizable", "common.google_search.query", p1)
+      }
+    }
+
+    internal enum Orientation {
+      /// Альбомная
+      internal static var landscape: String {
+          return L10n.tr("Localizable", "common.orientation.landscape")
+      }
+      /// Портретная
+      internal static var portrait: String {
+          return L10n.tr("Localizable", "common.orientation.portrait")
+      }
+      /// Системная
+      internal static var system: String {
+          return L10n.tr("Localizable", "common.orientation.system")
       }
     }
 

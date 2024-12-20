@@ -22,12 +22,10 @@ final class DownloadServiceImp: DownloadService {
     }
 
     func download(torrent: Torrent, fileName: String) -> AnyPublisher<Void, Error> {
-        return Deferred {
-            guard let url = torrent.url, let data = try? Data(contentsOf: url) else {
-                return AnyPublisher<Data, Error>.fail(AppError.server(message: L10n.Error.authorizationFailed))
-            }
-
-            return AnyPublisher<Data, Error>.just(data)
+        return Deferred { [unowned self] in
+            let request = GetTorrentRequest(id: torrent.id)
+            return self.backendRepository
+                .request(request)
         }
         .flatMap { [unowned self] in self.save(data: $0, name: fileName)}
         .subscribe(on: DispatchQueue.global())

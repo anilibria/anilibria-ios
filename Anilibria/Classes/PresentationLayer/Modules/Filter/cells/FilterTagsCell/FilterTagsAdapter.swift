@@ -1,66 +1,72 @@
 import UIKit
+import Combine
 
-public class FilterTag: NSObject {
-    let value: String
-    let displayValue: String
+public protocol FilterTagValue {
+    var displayValue: String { get }
+    var isSelected: CurrentValueSubject<Bool, Never> { get }
+    func select()
+}
 
-    @objc dynamic var isSelected: Bool = false
+public final class FilterTagData<T: Hashable>: FilterTagValue {
+    public let value: T
+    public let displayValue: String
 
-    init(value: String, displayValue: String? = nil) {
+    public let isSelected: CurrentValueSubject<Bool, Never>
+    private let didSelect: ((FilterTagData<T>) -> Void)
+
+    init(
+        value: T,
+        displayValue: String,
+        selected: Bool,
+        select: @escaping (T) -> Void,
+        deselect: @escaping (T) -> Void
+    ) {
         self.value = value
-        self.displayValue = displayValue ?? value
+        self.displayValue = displayValue
+        self.isSelected = .init(selected)
+        self.didSelect = { param in
+            let selected = !param.isSelected.value
+            if selected {
+                select(value)
+            } else {
+                deselect(value)
+            }
+            param.isSelected.send(selected)
+        }
+    }
+
+    public func select() {
+        didSelect(self)
     }
 }
 
+public class FilterTag: NSObject {
+    let value: any FilterTagValue
+    var displayValue: String {
+        value.displayValue
+    }
+
+    var isSelected: Bool {
+        value.isSelected.value
+    }
+
+    init(value: any FilterTagValue) {
+        self.value = value
+    }
+}
 
 public final class FilterTagsItem: NSObject {
     let title: String
     let items: [FilterTag]
 
-    fileprivate let changed: ((FilterTag) -> Void)?
-
     init(title: String,
-         items: [FilterTag],
-         changed: @escaping (FilterTag) -> Void) {
+         items: [any FilterTagValue]) {
         self.title = title
-        self.items = items
-        self.changed = changed
-    }
-}
-
-final class FilterTagsTitleAdapter: BaseCellAdapter<FilterTagsItem> {
-
-    override func sizeForItem(at index: IndexPath,
-                              collectionView: UICollectionView,
-                              layout collectionViewLayout: UICollectionViewLayout) -> CGSize {
-        var width: CGFloat = UIApplication.keyWindowSize.width
-        width = min(width, 414)
-        return CGSize(width: width, height: 40)
-    }
-
-    override func cellForItem(at index: IndexPath, context: CollectionContext) -> UICollectionViewCell? {
-        let cell = context.dequeueReusableNibCell(type: FilterTagTitleCell.self, for: index)
-        cell.configure(viewModel.title)
-        return cell
+        self.items = items.map({ FilterTag(value: $0) })
     }
 }
 
 final class FilterTagAdapter: BaseCellAdapter<FilterTag> {
-    private let size: CGSize
-    private var selectAction: ((FilterTag) -> Void)?
-
-    init(viewModel: FilterTag, seclect: ((FilterTag) -> Void)?) {
-        self.selectAction = seclect
-        self.size = FilterTagCell.size(for: viewModel)
-        super.init(viewModel: viewModel)
-    }
-
-    override func sizeForItem(at index: IndexPath,
-                              collectionView: UICollectionView,
-                              layout collectionViewLayout: UICollectionViewLayout) -> CGSize {
-        return size
-    }
-
     override func cellForItem(at index: IndexPath, context: CollectionContext) -> UICollectionViewCell? {
         let cell = context.dequeueReusableNibCell(type: FilterTagCell.self, for: index)
         cell.configure(viewModel)
@@ -68,24 +74,86 @@ final class FilterTagAdapter: BaseCellAdapter<FilterTag> {
     }
 
     override func didSelect(at index: IndexPath) {
-        self.selectAction?(viewModel)
+        viewModel.value.select()
     }
 }
 
-class FilterTagsSectionAdapter: SectionAdapter {
+class FilterTagsSectionAdapter: SectionAdapterProtocol {
+    private let headerKind = "FilterTagsTitle"
+    private let title: String
+    private let uid: AnyHashable = UUID()
+    private(set) var items: [AnyCellAdapter] = []
+
     init(item: FilterTagsItem) {
-        super.init(
-            [FilterTagsTitleAdapter(viewModel: item)] +
-            item.items.map { FilterTagAdapter(viewModel: $0, seclect: item.changed) }
-        )
-        self.insets = .init(top: 0, left: 11, bottom: 0, right: 12)
-        self.minimumInteritemSpacing = 1
-        self.minimumLineSpacing = 1
+        self.title = item.title
+        self.items = item.items.map {
+            let model = FilterTagAdapter(viewModel: $0)
+            model.section = self
+            return model
+        }
     }
 
-    override func collectionView(_ collectionView: UICollectionView,
-                                 layout collectionViewLayout: UICollectionViewLayout,
-                                 insetForSectionAt section: Int) -> UIEdgeInsets {
-        self.insets
+    func getIdentifiers() -> [AnyHashable] {
+        [uid]
+    }
+
+    func getItems(for identifier: AnyHashable?) -> [AnyCellAdapter] {
+        if identifier == uid {
+            return items
+        }
+        return []
+    }
+
+    func getSectionLayout(environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .estimated(50),
+            heightDimension: .estimated(50)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(50)
+        )
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: groupSize,
+            subitems: [item]
+        )
+
+        group.interItemSpacing = .fixed(1)
+        group.contentInsets = .init(top: 0, leading: 12, bottom: 0, trailing: 12)
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = 1
+
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: .init(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .estimated(50)
+            ),
+            elementKind: headerKind,
+            alignment: .top
+        )
+
+        header.pinToVisibleBounds = false
+
+        section.boundarySupplementaryItems = [header]
+        return section
+    }
+
+    func supplementaryFor(
+        elementKind: String,
+        index: IndexPath,
+        context: CollectionContext
+    ) -> UICollectionReusableView? {
+        if elementKind == headerKind {
+            let view = context.dequeueReusableNibSupplementaryView(
+                type: FilterTitleView.self,
+                ofKind: headerKind,
+                for: index
+            )
+            view.configure(title)
+            return view
+        }
+        return nil
     }
 }

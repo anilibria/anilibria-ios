@@ -18,15 +18,17 @@ final class SearchViewController: BaseCollectionViewController {
     override func viewDidLoad() {
         self.defaultBottomInset = 0
         super.viewDidLoad()
+        self.view.backgroundColor = .black.withAlphaComponent(0.5)
         self.addKeyboardObservers()
         self.handler.didLoad()
 
         self.scrollView.isScrollEnabled = false
         self.collectionView.layer.cornerRadius = 5
+        self.collectionHeightConstraint.constant = 1
         self.collectionView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         self.bag = self.collectionView.observe(\UICollectionView.contentSize) { [weak self] _, _ in
             if let height = self?.collectionView.contentSize.height {
-                self?.collectionHeightConstraint.constant = height
+                self?.collectionHeightConstraint.constant = max(height, 1)
                 UIView.animate(withDuration: 0.2) {
                     self?.view.layoutIfNeeded()
                 }
@@ -74,7 +76,7 @@ final class SearchViewController: BaseCollectionViewController {
     @IBAction func backAction(_ sender: Any) {
         self.searchField.resignFirstResponder()
         self.searchField.isUserInteractionEnabled = false
-        self.reload(sections: []) { [weak self] in
+        self.set(sections: []) { [weak self] in
             self?.searchContainerConstraint.constant = 35
             UIView.animate(withDuration: 0.3,
                            animations: { self?.view.layoutIfNeeded() },
@@ -86,7 +88,7 @@ final class SearchViewController: BaseCollectionViewController {
 extension SearchViewController: SearchViewBehavior {
     func set(items: [SearchValue]) {
         self.scrollView.isScrollEnabled = !items.isEmpty
-        self.reload(sections:[
+        self.set(sections:[
             SectionAdapter(
                 items.map {
                     SearchResultAdapter(viewModel: $0) { [weak self] item in

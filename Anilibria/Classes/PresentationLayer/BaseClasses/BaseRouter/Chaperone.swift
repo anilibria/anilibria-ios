@@ -40,12 +40,8 @@ public class ModalRouter: NSObject, ChaperoneRouter {
     }
 
     private func presentModal(_ controller: UIViewController) {
-        let windowLevel = self.windowLevel + CGFloat(UIApplication.shared.windows.count)
-        let window: UIWindow? = MRWindow.create(level: windowLevel)
-        controller.storeLink(window)
-        DispatchQueue.main.async {
-            window?.rootViewController?.present(controller, animated: true)
-        }
+        guard let current = UIApplication.getWindow() else { return }
+        current.topControllerInHierarchy()?.present(controller, animated: true)
     }
 }
 
@@ -216,59 +212,53 @@ public final class PresentRouter<T: UIPresentationController>: ModalRouter, UIVi
 
 // MARK: - Support classes
 
-private final class MRWindow: UIWindow {
-    class func create(level: UIWindow.Level? = nil,
-                      frame: CGRect = UIScreen.main.bounds,
-                      statusBarStyle: UIStatusBarStyle? = nil) -> UIWindow {
-        let windowLavel = level ?? UIWindow.Level.alert + 1
-        let alertWindow = MRWindow(frame: frame)
-        let controller = MRViewController()
-        let test = UIApplication.getWindow()
-        let root = test?.rootViewController
-        if let style = statusBarStyle {
-            controller.style = style
-        } else if let presented = root?.presentedViewController {
-            if let style = (presented as? UINavigationController)?.viewControllers.last?.preferredStatusBarStyle {
-                controller.style = style
-            } else {
-                controller.style = presented.preferredStatusBarStyle
-            }
-        } else if let style = (root as? UINavigationController)?.viewControllers.last?.preferredStatusBarStyle {
-            controller.style = style
-        } else if let style = root?.preferredStatusBarStyle {
-            controller.style = style
-        }
-
-        alertWindow.rootViewController = controller
-        alertWindow.windowLevel = windowLavel
-        alertWindow.makeKeyAndVisible()
-        return alertWindow
-    }
-}
-
 private class MRViewController: UIViewController {
-    var style: UIStatusBarStyle = .default
-
-    public override var preferredStatusBarStyle: UIStatusBarStyle {
-        return self.style
+    func close() {
+        view.removeFromSuperview()
+        removeFromParent()
     }
 }
 
 private extension UIViewController {
     func storeLink(_ item: Any?) {
-        let shit = ShitView()
-        shit.storedObject = item
-        self.view.addSubview(shit)
+        let holder = HolderHelper()
+        holder.storedObject = item
+        self.view.addLayoutGuide(holder)
     }
 }
 
-private final class ShitView: UIView {
+private final class HolderHelper: UILayoutGuide {
     var storedObject: Any?
 
     deinit {
-        if let value = storedObject as? UIWindow {
-            value.isHidden = true
+        if let value = storedObject as? MRViewController {
+            value.close()
         }
         storedObject = nil
+    }
+}
+
+private extension UIWindow {
+
+    func topControllerInHierarchy() -> UIViewController? {
+        var topController = self.rootViewController
+
+        while topController?.presentedViewController != nil {
+            topController = topController?.presentedViewController
+        }
+
+        guard let topViewController: UIViewController = topController else {
+            return topController
+        }
+
+        if let tabBarController = topViewController as? UITabBarController {
+            if let navController = tabBarController.selectedViewController as? UINavigationController {
+                topController = navController.visibleViewController
+            }
+        } else if let topNavController = topViewController as? UINavigationController {
+            topController = topNavController.visibleViewController
+        }
+
+        return topController
     }
 }

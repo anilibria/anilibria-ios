@@ -20,6 +20,8 @@ final class PlayerViewController: BaseViewController {
     @IBOutlet var rewindButtons: [RewindView] = []
     @IBOutlet var skipContainer: UIView!
     @IBOutlet var skipButtonLabel: UILabel!
+    @IBOutlet var topShadowView: ShadowView!
+    @IBOutlet var bottomShadowView: ShadowView!
 
     private let playerView = PlayerView()
     private let airplayView = AVRoutePickerView()
@@ -55,6 +57,7 @@ final class PlayerViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .black
         self.handler.didLoad()
         self.addTermenateAppObserver()
         self.setupPlayer()
@@ -68,6 +71,15 @@ final class PlayerViewController: BaseViewController {
         self.timeLeftLabel.font = font
         self.elapsedTimeLabel.font = font
         self.clearLabels()
+
+        self.topShadowView.shadowY = 20
+        self.topShadowView.shadowRadius = 40
+        self.topShadowView.shadowOpacity = 1
+        self.topShadowView.shadowColor = .black
+        self.bottomShadowView.shadowY = -50
+        self.bottomShadowView.shadowRadius = 80
+        self.bottomShadowView.shadowOpacity = 1
+        self.bottomShadowView.shadowColor = .black
 
         #if targetEnvironment(macCatalyst)
         let window = UIApplication.getWindow()
@@ -230,7 +242,7 @@ final class PlayerViewController: BaseViewController {
     }
     
     private func updateSkipButton(time: Int) {
-        if let canSkip = currentListItem?.skips?.canSkip(
+        if let canSkip = currentListItem?.skips.canSkip(
             time: time,
             length: skipButtonShowingSeconds
         ), canSkip {
@@ -368,8 +380,7 @@ final class PlayerViewController: BaseViewController {
         let currentTime = Int(videoSliderView.value)
         guard
             let currentListItem = currentListItem,
-            let skips = currentListItem.skips,
-            let endTime = skips.upperBound(time: currentTime),
+            let endTime = currentListItem.skips.upperBound(time: currentTime),
             endTime > currentTime
         else {
             return
@@ -390,7 +401,7 @@ extension PlayerViewController: PlayerViewBehavior {
 
         self.switcherView.set(items: self.playlist,
                               index: playItemIndex,
-                              title: { $0.title })
+                              title: { $0.name })
         self.switcherView.getSelectedSequence()
             .do(onNext: { [weak self] _ in
                 self?.clearLabels()
@@ -481,6 +492,16 @@ final class RewindView: CircleView {
     }
 }
 
+
 private extension UIKeyCommand {
     static let inputSpace = " "
+}
+
+private extension PlaylistItem {
+    var name: String {
+        if let ordinal  {
+            return "\(NSNumber(value: ordinal))"
+        }
+        return title
+    }
 }

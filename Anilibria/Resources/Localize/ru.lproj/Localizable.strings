@@ -26,6 +26,8 @@
 
 //COMMON
 "common.today" = "Сегодня";
+"common.tomorrow" = "Завтра";
+"common.yesterday" = "Вчера";
 "common.msk_time_zone" = "(по МСК)";
 "common.week_day.mon" = "Понедельник";
 "common.week_day.tue" = "Вторник";
@@ -54,6 +56,7 @@
 "common.seasons.summer" = "Лето";
 "common.seasons.fall" = "Осень";
 
+"common.quality" = "Качество видео";
 "common.quality.sd" = "480p";
 "common.quality.hd" = "720p";
 "common.quality.full_hd" = "1080p";
@@ -64,6 +67,17 @@
 
 "common.donate_pls" = "Понравилась озвучка?\nПоддержи проект :3";
 "common.guest" = "Гость";
+
+"common.default" = "По умолчанию";
+"common.ad" = "Реклама";
+"common.related" = "Связанное";
+"common.appearance" = "Тема";
+"common.appearance.dark" = "Темная";
+"common.appearance.light" = "Светлая";
+"common.appearance.system" = "Системная";
+
+"common.intern" = "Стажер";
+"common.vacation" = "В отпуске";
 
 //PERMISSION
 "permission.title" = "Разрешение";
@@ -76,27 +90,26 @@
 "screen.catalog.title" = "Поиск";
 
 //FEED SCREEN
-"screen.feed.title" = "Лента";
+"screen.feed.title" = "Главная";
 "screen.feed.soon_title" = "Ожидается";
 "screen.feed.schedule" = "Расписание";
 "screen.feed.updates_title" = "Обновления";
 "screen.feed.random_release" = "Случайный релиз";
 "screen.feed.history" = "История";
 
-//FILTER SCREEN
-"screen.filter.genres" = "Жанры";
-"screen.filter.years" = "Года";
-"screen.filter.seasons" = "Сезоны";
-
 //SERIES SCREEN
 "screen.series.title" = "Описание";
 "screen.series.year" = "Год: ";
 "screen.series.voices" = "Голоса: ";
 "screen.series.type" = "Тип: ";
+"screen.series.season" = "Сезон: ";
 "screen.series.status" = "Состояние релиза: ";
+"screen.series.episodes" = "Всего эпизодов: ";
+"screen.series.duration" = "Длительность: ";
 "screen.series.genres" = "Жанр: ";
 "screen.series.added_date" = "Добавлен ";
 "screen.series.downloaded" = "Файл %@ сохранен в папку\n~/Downloads/%@";
+"screen.series.approximal_minutes" = "~ %@ мин";
 
 //COMMENTS SCREEN
 "screen.comments.title" = "Комментарии";
@@ -125,11 +138,18 @@
 "screen.configuration.title" = "Обновление конфигурации";
 
 //FILTER SCREEN
-"screen.filter.title" = "Фильтер";
+"screen.filter.title" = "Фильтр";
 "screen.filter.complete" = "Релиз завершен";
 "screen.filter.sotring" = "Сортировка";
 "screen.filter.Sotring.popularity" = "Популярность";
 "screen.filter.Sotring.newest" = "Новизна";
+"screen.filter.genres" = "Жанры";
+"screen.filter.years" = "Года";
+"screen.filter.seasons" = "Сезоны";
+"screen.filter.publish_statuses" = "Статус выхода";
+"screen.filter.production_statuses" = "Статус озвучки";
+"screen.filter.types" = "Тип";
+"screen.filter.age_ratings" = "Возрастной рейтинг";
 
 //OTHER SCREEN
 "screen.other.team" = "Список команды";

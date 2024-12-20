@@ -17,7 +17,7 @@ protocol HistoryRepository {
 }
 
 final class HistoryRepositoryImp: HistoryRepository {
-    private let key: String = "HISTORY_KEY"
+    private let key: String = "HISTORY_KEY_2"
 
     private var buffered: HistoryHolder?
 

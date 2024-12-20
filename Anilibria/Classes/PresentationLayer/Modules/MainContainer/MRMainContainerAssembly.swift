@@ -58,13 +58,14 @@ public final class MenuItemsControllersFactory {
         splitview.preferredPrimaryColumnWidthFraction = 0.5
 
         #if targetEnvironment(macCatalyst)
-        splitview.maximumPrimaryColumnWidth = Sizes.minSize.width/2
-        splitview.minimumPrimaryColumnWidth = Sizes.minSize.width/2
+        splitview.maximumPrimaryColumnWidth = Sizes.minSize.width / 2
+        splitview.minimumPrimaryColumnWidth = Sizes.minSize.width / 2
         #else
         splitview.maximumPrimaryColumnWidth = 2000
         #endif
 
-        splitview.preferredDisplayMode = UISplitViewController.DisplayMode.allVisible
+        splitview.presentsWithGesture = true
+        splitview.preferredDisplayMode = .oneBesideSecondary
 
         if type == .other {
             let history = HistoryAssembly.createModule()

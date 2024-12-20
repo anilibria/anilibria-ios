@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="SeriesHeaderView" customModule="Anilibria" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="260"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0s3-Uv-qmH">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="260"/>
+                </imageView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dmk-dj-otg">
+                    <rect key="frame" x="135" y="105" width="50" height="50"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ptt-rL-sw8" customClass="CircleView" customModule="Anilibria" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                            <subviews>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aZ1-i8-btX">
+                                    <rect key="frame" x="10" y="10" width="30" height="30"/>
+                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="30" id="Ffd-u9-7zF"/>
+                                        <constraint firstAttribute="width" constant="30" id="YhX-v8-8Tu"/>
+                                    </constraints>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="image" keyPath="templateImage" value="icon_play"/>
+                                    </userDefinedRuntimeAttributes>
+                                </imageView>
+                            </subviews>
+                            <color key="backgroundColor" name="buttons/selected"/>
+                            <constraints>
+                                <constraint firstItem="aZ1-i8-btX" firstAttribute="centerY" secondItem="ptt-rL-sw8" secondAttribute="centerY" id="3xE-87-jOv"/>
+                                <constraint firstAttribute="height" constant="50" id="cc9-Ni-LWz"/>
+                                <constraint firstItem="aZ1-i8-btX" firstAttribute="centerX" secondItem="ptt-rL-sw8" secondAttribute="centerX" id="lW0-lT-nZ5"/>
+                                <constraint firstAttribute="width" constant="50" id="mpj-gK-2K4"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="ptt-rL-sw8" secondAttribute="trailing" id="Cl7-xe-9Hu"/>
+                        <constraint firstAttribute="bottom" secondItem="ptt-rL-sw8" secondAttribute="bottom" id="HxR-QL-Zgu"/>
+                        <constraint firstItem="ptt-rL-sw8" firstAttribute="centerX" secondItem="dmk-dj-otg" secondAttribute="centerX" id="LC0-VF-6AP"/>
+                        <constraint firstItem="ptt-rL-sw8" firstAttribute="top" secondItem="dmk-dj-otg" secondAttribute="top" id="asQ-7i-FDU"/>
+                        <constraint firstItem="ptt-rL-sw8" firstAttribute="centerY" secondItem="dmk-dj-otg" secondAttribute="centerY" id="bEA-EE-W3h"/>
+                        <constraint firstItem="ptt-rL-sw8" firstAttribute="leading" secondItem="dmk-dj-otg" secondAttribute="leading" id="iiu-Ny-FCl"/>
+                    </constraints>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x6C-7H-r4b" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="260"/>
+                    <connections>
+                        <action selector="playAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="u5y-Xk-qsW"/>
+                    </connections>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PXd-la-bhg" customClass="GradientView" customModule="Anilibria" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="255" width="320" height="5"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="5" id="Hqa-yV-NJt"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="color" keyPath="firstColor">
+                            <color key="value" red="0.0" green="0.0" blue="0.0" alpha="0.14999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="secondColor">
+                            <color key="value" red="0.0" green="0.0" blue="0.0" alpha="0.01" colorSpace="custom" customColorSpace="sRGB"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="string" keyPath="gradientTypeName" value="bottomTop"/>
+                    </userDefinedRuntimeAttributes>
+                </view>
+            </subviews>
+            <color key="backgroundColor" name="surfaces/content"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="0s3-Uv-qmH" secondAttribute="bottom" id="7Lz-lK-RcU"/>
+                <constraint firstItem="x6C-7H-r4b" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="D15-bC-CHI"/>
+                <constraint firstItem="0s3-Uv-qmH" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="D64-4Q-94v"/>
+                <constraint firstAttribute="trailing" secondItem="0s3-Uv-qmH" secondAttribute="trailing" id="FCR-in-9Uf"/>
+                <constraint firstAttribute="trailing" secondItem="x6C-7H-r4b" secondAttribute="trailing" id="TsP-XK-Ppp"/>
+                <constraint firstItem="0s3-Uv-qmH" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Wdo-It-2Ff"/>
+                <constraint firstItem="x6C-7H-r4b" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Y2r-9y-Od8"/>
+                <constraint firstAttribute="trailing" secondItem="PXd-la-bhg" secondAttribute="trailing" id="ZUZ-ki-vQn"/>
+                <constraint firstAttribute="bottom" secondItem="PXd-la-bhg" secondAttribute="bottom" id="ff7-KL-uvz"/>
+                <constraint firstItem="dmk-dj-otg" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="hw8-zv-D4f"/>
+                <constraint firstAttribute="bottom" secondItem="x6C-7H-r4b" secondAttribute="bottom" id="l6g-vT-3fE"/>
+                <constraint firstItem="dmk-dj-otg" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="rx4-Lj-NqN"/>
+                <constraint firstItem="PXd-la-bhg" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="xhD-Js-epM"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="imageView" destination="0s3-Uv-qmH" id="im3-bq-YJX"/>
+                <outlet property="playIconView" destination="ptt-rL-sw8" id="8oB-KM-Qtv"/>
+            </connections>
+            <point key="canvasLocation" x="136.875" y="127.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="icon_play" width="28" height="28"/>
+        <namedColor name="buttons/selected">
+            <color red="0.70588235294117652" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="surfaces/content">
+            <color red="0.99607843137254903" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

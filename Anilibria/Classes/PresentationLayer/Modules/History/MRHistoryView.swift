@@ -7,7 +7,7 @@ final class HistoryViewController: BaseCollectionViewController {
 
     private let searchView: SearchView? = SearchView.fromNib()
     private let stubView: StubView? = StubView.fromNib()?.apply {
-        $0.set(image: UIImage(resource: .iconHistory), color: .darkGray)
+        $0.set(image: UIImage(resource: .iconHistory), color: UIColor(resource: .Text.secondary))
         $0.title = L10n.Stub.title
     }
 
@@ -76,6 +76,6 @@ extension HistoryViewController: HistoryViewBehavior {
         sectionAdapter.set(items.map {
             RemovableSeriesCellAdapter(viewModel: $0, handler: seriesHandler)
         })
-        self.reload(sections: [sectionAdapter])
+        self.set(sections: [sectionAdapter])
     }
 }

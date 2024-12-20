@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -26,15 +27,16 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bYg-fA-KUG">
                                         <rect key="frame" x="16" y="11.5" width="256" height="17"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
-                                        <color key="textColor" red="0.70742018398268403" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="textColor" name="buttons/selected"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" name="surfaces/content"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="500" id="39I-DI-VU1"/>
                                     <constraint firstItem="bYg-fA-KUG" firstAttribute="centerY" secondItem="W7f-EV-pZc" secondAttribute="centerY" id="NGl-id-IbG"/>
                                     <constraint firstAttribute="trailing" secondItem="bYg-fA-KUG" secondAttribute="trailing" constant="16" id="WgR-jn-RjS"/>
+                                    <constraint firstAttribute="height" constant="40" id="v1R-ee-D1e"/>
                                     <constraint firstItem="bYg-fA-KUG" firstAttribute="leading" secondItem="W7f-EV-pZc" secondAttribute="leading" constant="16" id="xIV-rk-3uW"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
@@ -44,6 +46,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="5tY-qs-K6D"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="W7f-EV-pZc" firstAttribute="leading" secondItem="5tY-qs-K6D" secondAttribute="leading" priority="750" constant="16" id="5NB-Sf-9gd"/>
@@ -52,37 +55,17 @@
                             <constraint firstAttribute="bottom" secondItem="W7f-EV-pZc" secondAttribute="bottom" constant="16" id="rqm-cd-0yc"/>
                             <constraint firstItem="5tY-qs-K6D" firstAttribute="trailing" secondItem="W7f-EV-pZc" secondAttribute="trailing" priority="750" constant="16" id="x4S-75-tJG"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="5tY-qs-K6D"/>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="number" keyPath="shadowX">
-                                <real key="value" value="0.0"/>
-                            </userDefinedRuntimeAttribute>
-                            <userDefinedRuntimeAttribute type="number" keyPath="shadowY">
-                                <real key="value" value="5"/>
-                            </userDefinedRuntimeAttribute>
-                            <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
-                                <real key="value" value="0.14999999999999999"/>
-                            </userDefinedRuntimeAttribute>
-                            <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
-                                <real key="value" value="8"/>
-                            </userDefinedRuntimeAttribute>
-                        </userDefinedRuntimeAttributes>
                     </view>
                 </subviews>
             </view>
+            <viewLayoutGuide key="safeArea" id="Pso-py-h9N"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="gei-IG-kfO" secondAttribute="bottom" id="6kF-pf-tJO"/>
                 <constraint firstItem="gei-IG-kfO" firstAttribute="top" secondItem="iU2-5f-z9x" secondAttribute="top" id="VSU-VL-BYb"/>
                 <constraint firstAttribute="trailing" secondItem="gei-IG-kfO" secondAttribute="trailing" id="Yic-sf-XP2"/>
                 <constraint firstItem="gei-IG-kfO" firstAttribute="leading" secondItem="iU2-5f-z9x" secondAttribute="leading" id="k7t-Re-GBl"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="Pso-py-h9N"/>
             <size key="customSize" width="320" height="247"/>
-            <userDefinedRuntimeAttributes>
-                <userDefinedRuntimeAttribute type="color" keyPath="rippleColor">
-                    <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                </userDefinedRuntimeAttribute>
-            </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="rippleContainerView" destination="W7f-EV-pZc" id="dwu-Tp-NfE"/>
                 <outlet property="titleLabel" destination="bYg-fA-KUG" id="nlo-rq-UXU"/>
@@ -90,4 +73,12 @@
             <point key="canvasLocation" x="33.600000000000001" y="43.628185907046479"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <namedColor name="buttons/selected">
+            <color red="0.70588235294117652" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="surfaces/content">
+            <color red="0.99607843137254903" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

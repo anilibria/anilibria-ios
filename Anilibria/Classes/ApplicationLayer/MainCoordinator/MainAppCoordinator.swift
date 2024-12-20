@@ -22,6 +22,10 @@ public class MainAppCoordinator: Loggable {
     private let appService: AppConfigurationService
     private var bag = Set<AnyCancellable>()
 
+    public var window: UIWindow? {
+        return router.window
+    }
+
     init(configuration: DependenciesConfiguration) {
         self.configuration = configuration
         self.configuration.setup()
@@ -41,15 +45,6 @@ public class MainAppCoordinator: Loggable {
     // MARK: - Modules routing
 
     private func openMainModule() {
-        self.appService.fetchState()
-            .sink(onNext: { [weak self] state in
-                switch state {
-                case .started:
-                    self?.router.openLoadingScene()
-                case .completed:
-                    self?.router.openDefaultScene()
-                }
-            })
-            .store(in: &bag)
+        router.openDefaultScene()
     }
 }

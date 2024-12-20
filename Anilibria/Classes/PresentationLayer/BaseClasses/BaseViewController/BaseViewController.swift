@@ -27,6 +27,7 @@ class BaseViewController: UIViewController, WaitingBehavior, Loggable {
         super.viewDidLoad()
         self.setupBackButton()
         self.setupStrings()
+        view.backgroundColor = UIColor(resource: .Surfaces.base)
     }
 
     func initialize() {
@@ -49,10 +50,16 @@ class BaseViewController: UIViewController, WaitingBehavior, Loggable {
     }
 
     func setupBackButton() {
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "",
-                                                                style: .plain,
-                                                                target: nil,
-                                                                action: nil)
+        if #available(iOS 14.0, *) {
+            self.navigationItem.backButtonDisplayMode = .minimal
+        } else {
+            self.navigationItem.backBarButtonItem = UIBarButtonItem(
+                title: "",
+                style: .plain,
+                target: nil,
+                action: nil
+            )
+        }
     }
 
     // MARK: - App Terminated

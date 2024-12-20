@@ -16,16 +16,11 @@ final class FeedPresenter {
     private weak var view: FeedViewBehavior!
     private var router: FeedRoutable!
 
-    private let feedService: FeedService
+    private let mainService: MainService
     private var menuService: MenuService
 
     private var bag = Set<AnyCancellable>()
     private var activity: ActivityDisposable?
-    private var schedules: [Schedule] = []
-    private let updates = TitleItem(L10n.Screen.Feed.updatesTitle)
-   
-    private var nextPage: Int = 0
-    private var pageSubscriber: AnyCancellable?
 
     private lazy var randomSeries = ActionItem(L10n.Screen.Feed.randomRelease) { [weak self] in
         self?.selectRandom()
@@ -35,13 +30,11 @@ final class FeedPresenter {
         self?.selectHistory()
     }
 
-    private lazy var pagination = PaginationViewModel { [weak self] completion in
-        self?.loadPage(completion: completion)
-    }
+    private var soonViewModel: SoonViewModel?
 
-    init(feedService: FeedService,
+    init(mainService: MainService,
          menuService: MenuService) {
-        self.feedService = feedService
+        self.mainService = mainService
         self.menuService = menuService
     }
 }
@@ -85,7 +78,7 @@ extension FeedPresenter: FeedEventHandler {
     }
 
     func select(series: Series) {
-        self.feedService.series(with: series.code)
+        self.mainService.series(with: series.alias)
             .manageActivity(self.view.showLoading(fullscreen: false))
             .sink(onNext: { [weak self] item in
                 self?.router.open(series: item)
@@ -96,8 +89,12 @@ extension FeedPresenter: FeedEventHandler {
     }
 
     func selectRandom() {
-        self.feedService.fetchRandom()
+        self.mainService.fetchRandom()
             .manageActivity(self.view.showLoading(fullscreen: false))
+            .flatMap { [weak self] item -> AnyPublisher<Series, Error> in
+                guard let self, let item else { return .empty() }
+                return self.mainService.series(with: item.alias)
+            }
             .sink(onNext: { [weak self] item in
                 self?.router.open(series: item)
             }, onError: { [weak self] error in
@@ -115,20 +112,26 @@ extension FeedPresenter: FeedEventHandler {
     }
 
     func allSchedule() {
-        if !self.schedules.isEmpty {
-            self.router.open(schedules: self.schedules)
+        router.openWeekSchedule()
+    }
+
+    func open(promo: PromoItem) {
+        switch promo.content {
+        case .ad(let ad):
+            router.open(url: .web(ad.url))
+        case .release(let series):
+            select(series: series)
+        case nil:
+            break
         }
     }
 
     private func load() {
-        nextPage = 0
-        
         Publishers.Zip(
-            self.feedService.fetchSchedule(),
-            self.feedService.fetchFeed(page: nextPage)
-        ).sink(onNext: { [weak self] schedules, feeds in
-            self?.nextPage += 1
-            self?.create(schedules: schedules, feeds: feeds)
+            mainService.fetchPromo(),
+            mainService.fetchTodaySchedule()
+        ).sink(onNext: { [weak self] promo, schedule in
+            self?.create(promo: promo, schedule: schedule)
             self?.activity = nil
         }, onError: { [weak self] error in
             self?.router.show(error: error)
@@ -136,45 +139,28 @@ extension FeedPresenter: FeedEventHandler {
         })
         .store(in: &bag)
     }
-    
-    private func loadPage(completion: @escaping Action<Bool>) {
-        pageSubscriber = self.feedService.fetchFeed(page: nextPage)
-            .sink(onNext: { [weak self] feeds in
-                self?.nextPage += 1
-                self?.append(feeds)
-                completion(feeds.isEmpty)
-            }, onError: { [weak self] error in
-                self?.router.show(error: error)
-                completion(false)
-            })
-    }
 
-    private func create(schedules: [Schedule], feeds: [Feed]) {
-        self.schedules = schedules
-        var scheduleBlock = [NSObject]()
-        if !schedules.isEmpty {
-            let scheduleAction = ActionItem(L10n.Screen.Feed.schedule) { [weak self] in
+    private func create(promo: [PromoItem], schedule: ShortSchedule) {
+        var items: [any Hashable] = []
+
+        let promoModel = PromoViewModel(items: promo) { [weak self] item in
+            self?.open(promo: item)
+        }
+
+        items.append(promoModel)
+        items.append([randomSeries, history])
+
+        if schedule.items.isEmpty == false {
+            soonViewModel = SoonViewModel(schedule)
+            soonViewModel?.selectSeries = { [weak self] series in
+                self?.select(series: series)
+            }
+            soonViewModel?.seeAllAction = { [weak self] in
                 self?.allSchedule()
             }
-
-            let mskDay = WeekDay.getMsk()
-            if let currentSchedule = schedules.first(where: { $0.day == mskDay }) {
-                if currentSchedule.items.isEmpty == false {
-                    scheduleBlock.append(currentSchedule)
-                }
-            }
-            scheduleBlock.append(scheduleAction)
+            items.append(soonViewModel)
         }
-       
-        
-        let items = scheduleBlock + 
-            [randomSeries, history, updates] +
-            feeds.compactMap { $0.value } +
-            [pagination]
-        self.view.set(items: items)
-    }
 
-    private func append(_ feeds: [Feed]) {
-        self.view.append(items: feeds.compactMap { $0.value } + [pagination])
+        view.set(items: items)
     }
 }

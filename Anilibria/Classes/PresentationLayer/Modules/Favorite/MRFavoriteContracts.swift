@@ -3,13 +3,14 @@ import UIKit
 // MARK: - Contracts
 
 protocol FavoriteViewBehavior: WaitingBehavior, RefreshBehavior {
-    func set(items: [Series])
+    func scrollToTop()
+    func set(model: FavoriteViewModel)
+    func setFilter(active: Bool)
+    func seriesSelected()
 }
 
 protocol FavoriteEventHandler: ViewControllerEventHandler, RefreshEventHandler {
     func bind(view: FavoriteViewBehavior, router: FavoriteRoutable)
-
-    func unfavorite(series: Series)
-    func select(series: Series)
     func search(query: String)
+    func openFilter()
 }

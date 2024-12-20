@@ -1,25 +1,14 @@
 import Foundation
 
 public final class DateConverter: Converter {
-    public typealias FromValue = Int?
-    public typealias ToValue = Date?
-
-    public func convert(from item: Int?) -> Date? {
-        guard let timestamp = item else {
-            return nil
-        }
-        return Date(timeIntervalSince1970: TimeInterval(timestamp))
-    }
-}
-
-public final class StringDateConverter: Converter {
+    private let dateFormatter = ISO8601DateFormatter()
     public typealias FromValue = String?
     public typealias ToValue = Date?
 
     public func convert(from item: String?) -> Date? {
-        guard let timestamp = Double(item ?? "") else {
+        guard let item else {
             return nil
         }
-        return Date(timeIntervalSince1970: timestamp)
+        return dateFormatter.date(from: item)
     }
 }

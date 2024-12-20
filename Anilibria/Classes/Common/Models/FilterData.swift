@@ -1,10 +1,20 @@
-public final class FilterData {
-    var years: [String] = []
-    var genres: [String] = []
-    let seasons: [TextWithTranslation] = [
-        TextWithTranslation(original: "зима", translation: L10n.Common.Seasons.winter),
-        TextWithTranslation(original: "весна", translation: L10n.Common.Seasons.spring),
-        TextWithTranslation(original: "лето", translation: L10n.Common.Seasons.summer),
-        TextWithTranslation(original: "осень", translation: L10n.Common.Seasons.fall)
-    ]
+//
+//  FilterData.swift
+//  Anilibria
+//
+//  Created by Ivan Morozov on 05.10.2024.
+//  Copyright © 2024 Иван Морозов. All rights reserved.
+//
+
+
+public struct FilterData {
+    var ageRatings: [AgeRating] = []
+    var genres: [Genre] = []
+    var productionStatuses: [DescribedValue<String>] = []
+    var publishStatuses: [DescribedValue<String>] = []
+    var seasons: [DescribedValue<String>] = []
+    var sortings: [Sorting] = []
+    var releaseTypes: [DescribedValue<String>] = []
+    var yearsRange: [Int] = []
+    var years: [Int] = []
 }

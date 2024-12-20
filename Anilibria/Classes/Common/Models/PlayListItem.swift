@@ -28,45 +28,67 @@ public enum VideoQuality: Int, CaseIterable, Codable {
     }
 }
 
-struct Skips: Decodable {
+struct Skips: Hashable {
     let opening: Range<Int>?
     let ending: Range<Int>?
-    
-    public init(from decoder: Decoder) throws {
-        let rangeConverter = RangeConverter()
-        self.opening = (decoder["opening"] <- rangeConverter)
-        self.ending = (decoder["ending"] <- rangeConverter)
-    }
 }
 
-public final class PlaylistItem: NSObject, Decodable {
-    var id: Int = 0
-    var title: String = ""
-    var video: [VideoQuality: URL] = [:]
-    var skips: Skips?
+public struct PlaylistItem: Decodable, Hashable {
+    let id: String
+    let title: String
+    let preview: URL?
+    let ordinal: Double?
+    let video: [VideoQuality: URL]
+    let skips: Skips
+    let duration: TimeInterval
+
+    var fullName: String {
+        let items: [String?] = [
+            ordinal.map { "\(NSNumber(value: $0))" },
+            title
+        ]
+        return items.compactMap({ $0 }).joined(separator: ". ")
+    }
 
     public func supportedQualities() -> [VideoQuality] {
         return self.video.keys.sorted(by: { $0.rawValue < $1.rawValue })
     }
 
     public init(from decoder: Decoder) throws {
-        super.init()
+        let container = try decoder.container(keyedBy: CodingKeyString.self)
         let urlConverter = URLConverter(Configuration.server)
-		self.id <- decoder["id"]
-		self.title <- decoder["title"]
+        self.id = try container.decode(required: "id")
+        self.title = container.decode("name") ?? ""
+        self.ordinal = container.decode("ordinal")
+
+        let openingStart: Int? = container.decode("opening", "start")
+        let openingStop: Int? = container.decode("opening", "stop")
+        let endingStart: Int? = container.decode("ending", "start")
+        let endingStop: Int? = container.decode("ending", "stop")
+
+        let opening: Range<Int>? = if let openingStart, let openingStop {
+            .init(uncheckedBounds: (openingStart, openingStop))
+        } else { nil }
+
+        let ending: Range<Int>? = if let endingStart, let endingStop {
+            .init(uncheckedBounds: (endingStart, endingStop))
+        } else { nil }
+
+        skips = Skips(opening: opening, ending: ending)
 
 		var result: [VideoQuality: URL] = [:]
-		if let url: URL = decoder["fullhd"] <- urlConverter {
+        if let url: URL = urlConverter.convert(from: container.decode("hls_1080")) {
 			result[.fullHd] = url
 		}
-		if let url: URL = decoder["hd"] <- urlConverter {
+		if let url: URL = urlConverter.convert(from: container.decode("hls_720")) {
 			result[.hd] = url
 		}
-		if let url: URL = decoder["sd"] <- urlConverter {
+		if let url: URL = urlConverter.convert(from: container.decode("hls_480")) {
 			result[.sd] = url
 		}
 		self.video = result
-        self.skips <- decoder["skips"]
+        self.duration = container.decode("duration") ?? 0
+        self.preview = urlConverter.convert(from: container.decode("preview", "src"))
     }
 }
 

@@ -30,53 +30,78 @@ final class SettingsPresenter {
     }
 }
 
-extension SettingsPresenter: RouterCommandResponder {
-    func respond(command: RouteCommand) -> Bool {
-        if let quality = (command as? ChoiceResult)?.value as? VideoQuality {
-            self.update(quality)
-            return true
-        }
-        if let language = (command as? ChoiceResult)?.value as? Language {
-            Language.current = language
-            self.view.set(language: language)
-            return true
-        }
-        return false
-    }
-}
-
 extension SettingsPresenter: SettingsEventHandler {
     func bind(view: SettingsViewBehavior,
               router: SettingsRoutable) {
         self.view = view
         self.router = router
-        self.router.responder = self
     }
 
     func didLoad() {
         self.view.set(quality: self.playerSettings.quality)
         self.view.set(language: Language.current)
+        self.view.set(appearance: InterfaceAppearance.current)
         self.view.set(name: Bundle.main.displayName ?? "",
                       version: Bundle.main.releaseVersionNumber ?? "")
+
+        Language.languageChanged.sink { [weak self] in
+            self?.view.set(appearance: InterfaceAppearance.current)
+        }.store(in: &bag)
     }
 
     func selectQuality() {
         let qualities = VideoQuality.allCases
 
         let items = qualities.map {
-            ChoiceItem($0, title: $0.name, isSelected: playerSettings.quality == $0, isLast: qualities.last == $0)
+            ChoiceItem(
+                value: $0,
+                title: $0.name,
+                isSelected: playerSettings.quality == $0,
+                didSelect: { [weak self] item in
+                    self?.update(item)
+                    return true
+                }
+            )
         }
 
-        self.router.openSheet(with: items)
+        self.router.openSheet(with: [ChoiceGroup(items: items)])
     }
     
     func selectLanguage() {
         let languages = Language.allCases
         let items = languages.map {
-            ChoiceItem($0, title: $0.name, isSelected: Language.current == $0, isLast: languages.last == $0)
+            ChoiceItem(
+                value: $0,
+                title: $0.name,
+                isSelected: Language.current == $0,
+                didSelect: { [weak self] language in
+                    Language.current = language
+                    self?.view.set(language: language)
+                    return true
+                }
+            )
         }
         
-        self.router.openSheet(with: items)
+        self.router.openSheet(with: [ChoiceGroup(items: items)])
+    }
+
+    func selectAppearance() {
+        let current = InterfaceAppearance.current
+        let items = InterfaceAppearance.allCases.map {
+            ChoiceItem(
+                value: $0,
+                title: $0.title,
+                isSelected: current == $0,
+                didSelect: { [weak self] item in
+                    item.save()
+                    item.apply()
+                    self?.view.set(appearance: item)
+                    return true
+                }
+            )
+        }
+
+        self.router.openSheet(with: [ChoiceGroup(items: items)])
     }
 
     private func update(_ quality: VideoQuality) {

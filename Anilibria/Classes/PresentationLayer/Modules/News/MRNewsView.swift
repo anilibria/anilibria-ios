@@ -13,7 +13,14 @@ final class NewsViewController: BaseCollectionViewController {
     }
     #endif
 
-    private let sectionAdapter = SectionAdapter([])
+    private let sectionAdapter: SectionAdapter = {
+        let section = SectionAdapter([])
+        section.ipad = .init(
+            ladscapeItemsPerLine: 3,
+            portraitItemsPerLine: 2
+        )
+        return section
+    }()
 
     // MARK: - Life cycle
 
@@ -45,33 +52,21 @@ final class NewsViewController: BaseCollectionViewController {
 
     // MARK: - Adapter creators
 
-    private func createAdapter(for model: NSObject) -> (any CellAdapterProtocol)? {
+    private func createAdapter(for model: any Hashable) -> AnyCellAdapter? {
         switch model {
         case let item as News:
             return NewsCellAdapter(viewModel: item, seclect: { [weak self] item in
                 self?.handler.select(news: item)
             })
-        case let item as PaginationViewModel:
-            return PaginationAdapter(viewModel: item)
         default:
             return nil
         }
-        
     }
 }
 
 extension NewsViewController: NewsViewBehavior {
-    func loadPageProgress() -> ActivityDisposable? {
-        return nil
-    }
-
-    func set(items: [NSObject]) {
+    func set(items: [any Hashable]) {
         sectionAdapter.set(items.compactMap(createAdapter))
-        reload(sections: [sectionAdapter])
-    }
-
-    func append(items: [NSObject]) {
-        sectionAdapter.set(items.compactMap(createAdapter))
-        append(sections: [sectionAdapter])
+        set(sections: [sectionAdapter])
     }
 }

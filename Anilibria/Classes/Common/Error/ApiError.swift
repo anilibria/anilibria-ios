@@ -3,8 +3,8 @@ public final class ApiError: Decodable, Error, CustomStringConvertible {
     let message: String
 
     public init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: String.self)
-        self.message = values["message", default: "unknown"]
+        let container = try decoder.container(keyedBy: CodingKeyString.self)
+        self.message = container.decode("message") ?? "unknown"
     }
 
     public var description: String {

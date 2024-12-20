@@ -110,25 +110,32 @@ final class PlayerViewController: BaseViewController {
     }
 
     override var canBecomeFirstResponder: Bool { true }
+
     override var keyCommands: [UIKeyCommand]? {
-        let back = UIKeyCommand(input: UIKeyCommand.inputLeftArrow, modifierFlags: [], action: #selector(self.rewindBack))
-        let forward = UIKeyCommand(input: UIKeyCommand.inputRightArrow, modifierFlags: [], action: #selector(self.rewindForward))
+        let back = UIKeyCommand(
+            input: UIKeyCommand.inputLeftArrow,
+            modifierFlags: [],
+            action: #selector(self.rewindBack)
+        )
+
+        let forward = UIKeyCommand(
+            input: UIKeyCommand.inputRightArrow,
+            modifierFlags: [],
+            action: #selector(self.rewindForward)
+        )
+
+        let playPause = UIKeyCommand(
+            input: UIKeyCommand.inputSpace,
+            modifierFlags: [],
+            action: #selector(self.playPauseAction(_:))
+        )
+
         if #available(iOS 15.0, macCatalyst 15.0, *) {
             back.wantsPriorityOverSystemBehavior = true
             forward.wantsPriorityOverSystemBehavior = true
         }
 
-        return [
-            UIKeyCommand(input: UIKeyCommand.inputSpace, modifierFlags: [], action: #selector(self.playPauseAction(_:))),
-            back,
-            forward,
-        ]
-    }
-
-    private func setupSwitcher() {
-        self.switcherView.didTapTitle { [weak self] in
-            self?.handler.select(playItemIndex: $0)
-        }
+        return [playPause, back, forward]
     }
 
     private func setupPlayer() {

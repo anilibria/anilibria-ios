@@ -34,11 +34,17 @@ final class ChoiceSheetViewController: BaseCollectionViewController {
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        if let presentingViewController {
+            return presentingViewController.supportedInterfaceOrientations
+        }
         return .all
     }
 
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        return.portrait
+        if let presentingViewController {
+            return presentingViewController.preferredInterfaceOrientationForPresentation
+        }
+        return .portrait
     }
 
     override func willTransition(to newCollection: UITraitCollection,

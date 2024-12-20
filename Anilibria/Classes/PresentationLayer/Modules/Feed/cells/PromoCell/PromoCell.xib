@@ -25,7 +25,7 @@
                 <constraints>
                     <constraint firstItem="ZbU-Xl-pdN" firstAttribute="top" secondItem="xqf-Gx-QYr" secondAttribute="top" constant="16" id="4Zo-cL-ifP"/>
                     <constraint firstAttribute="trailing" secondItem="ZbU-Xl-pdN" secondAttribute="trailing" constant="8" id="Jgf-2N-7oU"/>
-                    <constraint firstAttribute="bottom" secondItem="ZbU-Xl-pdN" secondAttribute="bottom" constant="16" id="M0I-fM-Aze"/>
+                    <constraint firstAttribute="bottom" secondItem="ZbU-Xl-pdN" secondAttribute="bottom" priority="999" constant="16" id="M0I-fM-Aze"/>
                     <constraint firstItem="ZbU-Xl-pdN" firstAttribute="leading" secondItem="xqf-Gx-QYr" secondAttribute="leading" constant="8" id="azl-ZY-fDZ"/>
                 </constraints>
             </collectionViewCellContentView>

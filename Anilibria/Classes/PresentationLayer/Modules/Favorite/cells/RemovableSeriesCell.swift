@@ -25,7 +25,7 @@ public final class RemovableSeriesCell: DraggableRippleCell {
         self.imageView.setImage(from: item.poster,
                                 placeholder: UIImage(resource: .imgPlaceholder))
         self.titleLabel.text = item.name?.main ?? ""
-        self.descLabel.attributedText = Self.textBuilder.build(item.desc)
+        self.descLabel.attributedText = Self.textBuilder.build(item.desc?.string ?? "")
     }
 
     func setDelete(handler: ActionFunc?) {

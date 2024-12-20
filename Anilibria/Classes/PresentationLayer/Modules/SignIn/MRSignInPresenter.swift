@@ -75,6 +75,14 @@ extension SignInPresenter: SignInEventHandler {
             .store(in: &bag)
     }
 
+    func signUp() {
+        router.open(url: .web(URLS.signUp))
+    }
+
+    func resetPassword() {
+        router.showRestoreScreen()
+    }
+
     private func tryLogin(with data: AuthProviderData) {
         self.sessionService.signIn(with: data)
             .sink(onNext: { [weak self] _ in

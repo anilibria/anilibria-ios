@@ -47,6 +47,7 @@ final class SeriesViewController: BaseViewController {
         self.setupHeader()
         self.setupWeekView()
         super.viewDidLoad()
+        self.setupNavigationButtons()
 
         let action: Action<URL> = { [weak self] url in
             if url.isAttributeLink {
@@ -319,8 +320,8 @@ extension SeriesViewController: SeriesViewBehavior {
         self.paramsTextView.attributedText = result
     }
 
-    func set(desc: String) {
-        self.descTextView.text = desc
+    func set(desc: NSAttributedString?) {
+        self.descTextView.attributedText = desc
     }
 }
 

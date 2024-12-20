@@ -28,7 +28,7 @@ public final class SeriesCell: RippleViewCell {
         self.imageView.setImage(from: item.poster,
                                 placeholder: UIImage(resource: .imgPlaceholder))
         self.titleLabel.text = item.name?.main ?? ""
-        self.descLabel.attributedText = Self.textBuilder.build(item.desc)
+        self.descLabel.attributedText = Self.textBuilder.build(item.desc?.string ?? "")
     }
 
     public override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {

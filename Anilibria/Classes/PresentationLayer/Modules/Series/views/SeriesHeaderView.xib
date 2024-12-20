@@ -76,6 +76,24 @@
                         <userDefinedRuntimeAttribute type="string" keyPath="gradientTypeName" value="bottomTop"/>
                     </userDefinedRuntimeAttributes>
                 </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KUL-ZZ-db2" customClass="CircleView" customModule="Anilibria" customModuleProvider="target">
+                    <rect key="frame" x="60.333333333333329" y="205" width="199.66666666666669" height="34"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Контент заблокирован" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="97q-pe-VDC">
+                            <rect key="frame" x="15.999999999999986" y="8" width="167.66666666666663" height="18"/>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                            <color key="textColor" name="text/monoLight"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" name="buttons/selected"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="97q-pe-VDC" secondAttribute="bottom" constant="8" id="0xh-Zu-3Hp"/>
+                        <constraint firstItem="97q-pe-VDC" firstAttribute="leading" secondItem="KUL-ZZ-db2" secondAttribute="leading" constant="16" id="e3c-uY-Ivw"/>
+                        <constraint firstAttribute="trailing" secondItem="97q-pe-VDC" secondAttribute="trailing" constant="16" id="m6Q-Er-XR9"/>
+                        <constraint firstItem="97q-pe-VDC" firstAttribute="top" secondItem="KUL-ZZ-db2" secondAttribute="top" constant="8" id="mWp-ba-X19"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" name="surfaces/content"/>
             <constraints>
@@ -87,14 +105,18 @@
                 <constraint firstItem="0s3-Uv-qmH" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Wdo-It-2Ff"/>
                 <constraint firstItem="x6C-7H-r4b" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Y2r-9y-Od8"/>
                 <constraint firstAttribute="trailing" secondItem="PXd-la-bhg" secondAttribute="trailing" id="ZUZ-ki-vQn"/>
+                <constraint firstItem="PXd-la-bhg" firstAttribute="top" secondItem="KUL-ZZ-db2" secondAttribute="bottom" constant="16" id="bTd-hK-IOV"/>
                 <constraint firstAttribute="bottom" secondItem="PXd-la-bhg" secondAttribute="bottom" id="ff7-KL-uvz"/>
                 <constraint firstItem="dmk-dj-otg" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="hw8-zv-D4f"/>
                 <constraint firstAttribute="bottom" secondItem="x6C-7H-r4b" secondAttribute="bottom" id="l6g-vT-3fE"/>
                 <constraint firstItem="dmk-dj-otg" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="rx4-Lj-NqN"/>
+                <constraint firstItem="KUL-ZZ-db2" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="uX4-hV-Wyu"/>
                 <constraint firstItem="PXd-la-bhg" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="xhD-Js-epM"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="blockTitleLabel" destination="97q-pe-VDC" id="UvO-IU-z93"/>
+                <outlet property="blockView" destination="KUL-ZZ-db2" id="xbP-wK-kdK"/>
                 <outlet property="imageView" destination="0s3-Uv-qmH" id="im3-bq-YJX"/>
                 <outlet property="playIconView" destination="ptt-rL-sw8" id="8oB-KM-Qtv"/>
             </connections>
@@ -107,6 +129,9 @@
             <color red="0.70588235294117652" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="surfaces/content">
+            <color red="0.99607843137254903" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="text/monoLight">
             <color red="0.99607843137254903" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>

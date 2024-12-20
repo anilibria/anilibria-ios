@@ -14,7 +14,7 @@ public struct Series: Codable, Hashable {
     let isOngoing: Bool
     let ageRating: AgeRating?
     let publishDay: DescribedValue<WeekDay>?
-    let desc: String
+    let desc: NSAttributedString?
     let notification: String
     let episodesTotal: Int?
     let isInProduction: Bool
@@ -29,10 +29,17 @@ public struct Series: Codable, Hashable {
     let torrents: [Torrent]
     let sponsor: Sponsor?
 
+    var isBlocked: Bool {
+        isBlockedByGeo || isBlockedByCopyrights
+    }
+
+    private let originalDesc: String
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeyString.self)
         let urlConverter = URLConverter(Configuration.imageServer)
         let dateConverter = DateConverter()
+        let atributedContverter = AttributedConverter(css: Css.text())
         id = try container.decode(required: "id")
         type = container.decode("type")
         year = container.decode("year")
@@ -48,7 +55,8 @@ public struct Series: Codable, Hashable {
         isOngoing = container.decode("is_ongoing") ?? false
         ageRating = container.decode("age_rating")
         publishDay = container.decode("publish_day")
-        desc = container.decode("description") ?? ""
+        originalDesc = container.decode("description") ?? ""
+        desc = atributedContverter.convert(from: originalDesc)
         notification = container.decode("notification") ?? ""
         episodesTotal = container.decode("episodes_total")
         isInProduction = container.decode("is_in_production") ?? false
@@ -79,7 +87,7 @@ public struct Series: Codable, Hashable {
             container["is_ongoing"] = isOngoing
             container["age_rating"] = ageRating
             container["publish_day"] = publishDay
-            container["description"] = desc
+            container["description"] = originalDesc
             container["notification"] = notification
             container["episodes_total"] = episodesTotal
             container["is_in_production"] = isInProduction

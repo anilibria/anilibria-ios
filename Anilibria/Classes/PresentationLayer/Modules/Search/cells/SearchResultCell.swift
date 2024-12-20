@@ -27,14 +27,14 @@ public final class SearchResultCell: RippleViewCell {
     private func configure(query: String) {
         self.imageView.image = nil
         self.iconView.isHidden = false
-        self.iconView.image = UIImage(resource: .iconGoogle)
+        self.iconView.image = UIImage(resource: .iconGoogle).withRenderingMode(.alwaysTemplate)
         self.titleLabel.text = L10n.Common.GoogleSearch.query(query)
     }
 
     private func configure() {
         self.imageView.image = nil
         self.iconView.isHidden = false
-        self.iconView.image = UIImage(resource: .menuItemSearch)
+        self.iconView.image = UIImage(resource: .menuItemSearch).withRenderingMode(.alwaysTemplate)
         self.titleLabel.text = L10n.Common.FilterSearch.title
     }
 }

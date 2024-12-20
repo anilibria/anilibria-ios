@@ -13,4 +13,5 @@ protocol FeedEventHandler: ViewControllerEventHandler, RefreshEventHandler {
     func select(series: Series)
     func allSchedule()
     func search()
+    func refreshIfNeeded()
 }

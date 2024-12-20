@@ -15,6 +15,7 @@ protocol OtherEventHandler: ViewControllerEventHandler {
 
     func settings()
     func history()
+    func linkDevice()
 
     func loginOrLogout()
 

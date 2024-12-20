@@ -32,6 +32,10 @@ internal enum L10n {
     internal static var cancel: String {
         return L10n.tr("Localizable", "buttons.cancel")
     }
+    /// Продолжить
+    internal static var `continue`: String {
+        return L10n.tr("Localizable", "buttons.continue")
+    }
     /// Готово
     internal static var done: String {
         return L10n.tr("Localizable", "buttons.done")
@@ -40,9 +44,17 @@ internal enum L10n {
     internal static var no: String {
         return L10n.tr("Localizable", "buttons.no")
     }
+    /// ОК
+    internal static var ok: String {
+        return L10n.tr("Localizable", "buttons.ok")
+    }
     /// Сброс
     internal static var reset: String {
         return L10n.tr("Localizable", "buttons.reset")
+    }
+    /// Восстановить пароль
+    internal static var resetPassword: String {
+        return L10n.tr("Localizable", "buttons.reset_password")
     }
     /// Повторить
     internal static var retry: String {
@@ -59,6 +71,10 @@ internal enum L10n {
     /// Выйти
     internal static var signOut: String {
         return L10n.tr("Localizable", "buttons.signOut")
+    }
+    /// Регистрация
+    internal static var signUp: String {
+        return L10n.tr("Localizable", "buttons.signUp")
     }
     /// Пропустить
     internal static var skip: String {
@@ -79,6 +95,10 @@ internal enum L10n {
     internal static var appearance: String {
         return L10n.tr("Localizable", "common.appearance")
     }
+    /// Контент заблокирован
+    internal static var contentBlocked: String {
+        return L10n.tr("Localizable", "common.content_blocked")
+    }
     /// По умолчанию
     internal static var `default`: String {
         return L10n.tr("Localizable", "common.default")
@@ -98,6 +118,10 @@ internal enum L10n {
     /// (по МСК)
     internal static var mskTimeZone: String {
         return L10n.tr("Localizable", "common.msk_time_zone")
+    }
+    /// Ориентация плеера
+    internal static var orientation: String {
+        return L10n.tr("Localizable", "common.orientation")
     }
     /// Качество видео
     internal static var quality: String {
@@ -150,6 +174,21 @@ internal enum L10n {
       /// Найти в гугле "%@"
       internal static func query(_ p1: String) -> String {
         return L10n.tr("Localizable", "common.google_search.query", p1)
+      }
+    }
+
+    internal enum Orientation {
+      /// Альбомная
+      internal static var landscape: String {
+          return L10n.tr("Localizable", "common.orientation.landscape")
+      }
+      /// Портретная
+      internal static var portrait: String {
+          return L10n.tr("Localizable", "common.orientation.portrait")
+      }
+      /// Системная
+      internal static var system: String {
+          return L10n.tr("Localizable", "common.orientation.system")
       }
     }
 
@@ -306,6 +345,14 @@ internal enum L10n {
     internal static var configirationNotFound: String {
         return L10n.tr("Localizable", "error.configiration_not_found")
     }
+    /// OTP не найден
+    internal static var otpNotFound: String {
+        return L10n.tr("Localizable", "error.otp_not_found")
+    }
+    /// Неверный токен восстановления пароля
+    internal static var recoveryTokenNotFound: String {
+        return L10n.tr("Localizable", "error.recovery_token_not_found")
+    }
     /// Не найден связанный аккаунт
     internal static var socialAuthorizationFailed: String {
         return L10n.tr("Localizable", "error.social_authorization_failed")
@@ -453,6 +500,21 @@ internal enum L10n {
       }
     }
 
+    internal enum LinkDevice {
+      /// Код с устройства
+      internal static var codePlaceholder: String {
+          return L10n.tr("Localizable", "screen.link_device.code_placeholder")
+      }
+      /// Устройство успешно привязано
+      internal static var deviceLinked: String {
+          return L10n.tr("Localizable", "screen.link_device.device_linked")
+      }
+      /// Привязать устройство
+      internal static var title: String {
+          return L10n.tr("Localizable", "screen.link_device.title")
+      }
+    }
+
     internal enum News {
       /// YouTube
       internal static var title: String {
@@ -468,6 +530,59 @@ internal enum L10n {
       /// Список команды
       internal static var team: String {
           return L10n.tr("Localizable", "screen.other.team")
+      }
+    }
+
+    internal enum RestorePassword {
+      /// Email
+      internal static var email: String {
+          return L10n.tr("Localizable", "screen.restore_password.email")
+      }
+      /// Новый пароль
+      internal static var newPassword: String {
+          return L10n.tr("Localizable", "screen.restore_password.new_password")
+      }
+      /// Вы можете создать новый пароль для Вашей учетной записи.\nПроверьте Вашу почту и найдте письмо с токеном восстановления пароля.
+      internal static var newPasswordInfo: String {
+          return L10n.tr("Localizable", "screen.restore_password.new_password_info")
+      }
+      /// Подтверждение пароля
+      internal static var repeatPassword: String {
+          return L10n.tr("Localizable", "screen.restore_password.repeat_password")
+      }
+      /// Вы можете восстановить забытый пароль и сгенировать новый.\nВведите Вашу почту, на которую вы зарегистрировали аккаунт, мы пришлем Вам письмо с дальнейшими инструкциями.
+      internal static var sendEmailInfo: String {
+          return L10n.tr("Localizable", "screen.restore_password.send_email_info")
+      }
+      /// Новый пароль
+      internal static var title: String {
+          return L10n.tr("Localizable", "screen.restore_password.title")
+      }
+      /// Токен из письма
+      internal static var token: String {
+          return L10n.tr("Localizable", "screen.restore_password.token")
+      }
+
+      internal enum Buttons {
+        /// У меня уже есть токен
+        internal static var recovery: String {
+            return L10n.tr("Localizable", "screen.restore_password.buttons.recovery")
+        }
+        /// Повторно выслать письмо с токеном
+        internal static var resendEmail: String {
+            return L10n.tr("Localizable", "screen.restore_password.buttons.resend_email")
+        }
+      }
+
+      internal enum Success {
+        /// Теперь вы можете авторизоваться используя этот пароль
+        internal static var message: String {
+            return L10n.tr("Localizable", "screen.restore_password.success.message")
+        }
+        /// Пароль изменен
+        internal static var title: String {
+            return L10n.tr("Localizable", "screen.restore_password.success.title")
+        }
       }
     }
 

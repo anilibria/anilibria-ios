@@ -24,8 +24,10 @@ extension UITextContentType {
 public extension UITextField {
 
     var textPublisher: AnyPublisher<String?, Never> {
-        Just(text)
-            .merge(with:publisher(for: [.allEditingEvents, .valueChanged]).map { [weak self] in self?.text })
+        NotificationCenter.default
+            .publisher(for: UITextField.textDidChangeNotification, object: self)
+            .map { ($0.object as? UITextField)?.text }
+            .merge(with: publisher(for: \.text))
             .eraseToAnyPublisher()
     }
 

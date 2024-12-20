@@ -17,6 +17,10 @@ final class MainRequestModifier: AsyncRequestModifier {
     }
 
     func modify(_ urlRequest: URLRequest, completion: @escaping (URLRequest) -> Void) {
+        if urlRequest.url?.absoluteString.hasPrefix(Configuration.server) != true {
+            completion(urlRequest)
+            return
+        }
         var bag: AnyCancellable?
         bag = tokenRepository.getToken().sink { token in
             if let token {

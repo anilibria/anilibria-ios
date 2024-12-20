@@ -38,10 +38,10 @@ final class FavoriteViewModel: SeriesViewModelProtocol {
         nextPage = 1
         pagination.reset()
         pageSubscriber = service.fetchSeries(limit: limit, page: nextPage, filter: filter)
-            .sink(onNext: { [weak self] items in
+            .sink(onNext: { [weak self, limit] items in
                 self?.nextPage += 1
                 self?.items.send(items)
-                self?.pagination.isReady.send(true)
+                self?.pagination.isReady.send(items.count == limit)
                 activity?.dispose()
             }, onError: { [weak self] error in
                 self?.router?.show(error: error)
@@ -65,13 +65,13 @@ final class FavoriteViewModel: SeriesViewModelProtocol {
 
     private func loadPage(completion: @escaping Action<Bool>) {
         pageSubscriber = service.fetchSeries(limit: limit, page: nextPage, filter: filter)
-            .sink(onNext: { [weak self] items in
+            .sink(onNext: { [weak self, limit] items in
                 self?.nextPage += 1
                 if var currentItems = self?.currentItems {
                     currentItems.append(contentsOf: items)
                     self?.items.send(currentItems)
                 }
-                completion(items.isEmpty)
+                completion(items.count < limit)
             }, onError: { [weak self] error in
                 self?.router?.show(error: error)
                 completion(false)

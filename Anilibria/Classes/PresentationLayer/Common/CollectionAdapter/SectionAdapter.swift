@@ -71,8 +71,11 @@ class SectionAdapter: SectionAdapterProtocol {
     private func getIPadLayout(_ environment: NSCollectionLayoutEnvironment,
                                configuration: Configuration) -> NSCollectionLayoutSection? {
         let itemsPerLine = CGFloat(configuration.itemsPerLine)
+        let horizontalInsets: CGFloat = minimumInteritemSpacing * (itemsPerLine - 1) + insets.leading + insets.trailing
+        let width = floor((environment.container.effectiveContentSize.width - horizontalInsets) / itemsPerLine)
+
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1 / itemsPerLine),
+            widthDimension: .absolute(width),
             heightDimension: .estimated(1)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)

@@ -18,6 +18,7 @@ final class PlayerPresenter {
     private var series: Series!
     private var playlist: [PlaylistItem] = []
     private var bag = Set<AnyCancellable>()
+    private var selectedOrientation = InterfaceOrientation.current
 
     private let playerService: PlayerService
 
@@ -37,6 +38,7 @@ extension PlayerPresenter: PlayerEventHandler {
     }
 
     func didLoad() {
+        self.view.set(orientation: selectedOrientation)
         self.playerService
             .fetchPlayerContext(for: self.series)
             .sink(onNext: { [weak self] context in
@@ -65,9 +67,32 @@ extension PlayerPresenter: PlayerEventHandler {
     }
 
     func settings(quality: VideoQuality, for item: PlaylistItem) {
+        var groups: [ChoiceGroup] = []
+
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            let didSelectOrientation: (InterfaceOrientation) -> Bool = { [weak self] item in
+                self?.selectedOrientation = item
+                item.save()
+                self?.view.set(orientation: item)
+                return false
+            }
+
+            let orientations = InterfaceOrientation.allCases
+
+            let orientationItems = orientations.map {
+                ChoiceItem(
+                    value: $0,
+                    title: $0.title, isSelected: selectedOrientation == $0,
+                    didSelect: didSelectOrientation
+                )
+            }
+
+            groups.append(ChoiceGroup(title: L10n.Common.orientation, items: orientationItems))
+        }
+
         let didSelect: (VideoQuality) -> Bool = { [weak self] item in
             self?.view.set(quality: item)
-            return true
+            return false
         }
 
         let qualities = item.supportedQualities()
@@ -79,7 +104,9 @@ extension PlayerPresenter: PlayerEventHandler {
             )
         }
 
-        self.router.openSheet(with: [ChoiceGroup(title: L10n.Common.quality, items: items)])
+        groups.append(ChoiceGroup(title: L10n.Common.quality, items: items))
+
+        self.router.openSheet(with: groups)
     }
 
     func back() {
@@ -106,5 +133,17 @@ extension PlayerPresenter: PlayerEventHandler {
                       playItemIndex: index,
                       time: Double(context?.time ?? 0),
                       preffered: prefferedQualities)
+    }
+}
+
+
+extension UIInterfaceOrientationMask {
+    var name: String {
+        switch self {
+        case .portrait: return L10n.Common.Orientation.portrait
+        case .landscapeLeft: return L10n.Common.Orientation.landscape
+        case .all: return L10n.Common.Orientation.system
+        default: return ""
+        }
     }
 }

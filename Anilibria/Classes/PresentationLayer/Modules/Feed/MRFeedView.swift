@@ -35,6 +35,11 @@ final class FeedViewController: BaseCollectionViewController {
         self.navigationItem.title = L10n.Screen.Feed.title
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.handler.refreshIfNeeded()
+    }
+
     override func refresh() {
         super.refresh()
         self.handler.refresh()

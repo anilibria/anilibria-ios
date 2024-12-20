@@ -9,6 +9,7 @@ protocol PlayerViewBehavior: AnyObject {
              time: Double,
              preffered quality: VideoQuality)
     func set(quality: VideoQuality)
+    func set(orientation: InterfaceOrientation)
     func set(playItemIndex: Int)
 }
 

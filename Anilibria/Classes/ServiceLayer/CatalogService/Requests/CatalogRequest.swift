@@ -13,10 +13,10 @@ public struct CatalogRequest: BackendAPIRequest {
     let method: NetworkManager.Method = .GET
     let parameters: [String: Any]
 
-    init(filter: SeriesFilter, page: Int) {
+    init(filter: SeriesFilter, page: Int, limit: Int) {
         var results = filter.parameters
         results["page"] = page
-        results["limit"] = 25
+        results["limit"] = limit
 
         self.parameters = results
     }

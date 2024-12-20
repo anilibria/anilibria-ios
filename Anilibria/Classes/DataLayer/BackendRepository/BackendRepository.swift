@@ -78,7 +78,7 @@ final class BackendRepositoryImp: BackendRepository, Loggable {
         } else if let e = error {
             throw e
         } else {
-            throw AppError.unexpectedError(message: "empty")
+            throw AppError.plain(message: "empty")
         }
     }
 }
@@ -91,6 +91,9 @@ fileprivate extension BackendAPIRequest {
         if !apiVersion.isEmpty {
             url = url.appendingPathComponent(apiVersion)
         }
-        return url.appendingPathComponent(endpoint)
+        if !endpoint.isEmpty {
+            url = url.appendingPathComponent(endpoint)
+        }
+        return url
     }
 }

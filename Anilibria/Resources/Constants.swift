@@ -24,17 +24,6 @@ struct Keys {
     static let yandexMetricaApiKey = "48d49aa0-6aad-407e-a738-717a6c77d603"
 }
 
-struct Css {
-    static func text(_ size: Double = 15, color: UIColor? = nil) -> String {
-        var cssColor = ""
-        if let hex = color?.toHexString() {
-            cssColor = "color: \(hex) !important;"
-        }
-        
-        return "<style type=\"text/css\"> * { font-size: \(size)px; font-family: -apple-system; \(cssColor)} </style>"
-    }
-}
-
 struct URLS {
     static let donate: URL? = URL(string: "https://anilibria.top/support")
 
@@ -44,8 +33,16 @@ struct URLS {
     static let telegram: URL? = URL(string: "https://t.me/anilibria")
     static let discord: URL? = URL(string: "https://discord.gg/M6yCGeGN9B")
     static let boosty: URL? = URL(string: "https://boosty.to/anilibriatv")
-    
-    static let config: URL! = URL(string: "https://raw.githubusercontent.com/anilibria/anilibria-app/master/config.json")
+
+    static let signUp: URL? = URL(string: "https://anilibria.top/app/auth/registration/new")
+
+    static let config = "https://raw.githubusercontent.com/anilibria/anilibria-app/master/config.json"
+}
+
+struct Css {
+    static func text(_ size: Double = 15) -> String {
+        return "<style type=\"text/css\"> * { font-size: \(size)px; font-family: -apple-system; } </style>"
+    }
 }
 
 struct URLHelper {
@@ -81,4 +78,8 @@ struct URLHelper {
         }
         return nil
     }
+}
+
+struct Regexp {
+    static let email = #"[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z0-9]{2,6}"#
 }

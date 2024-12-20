@@ -60,7 +60,7 @@ extension SeriesPresenter: SeriesEventHandler {
                 switch state {
                 case .guest, nil:
                     view.can(favorite: false)
-                    view.set(favorite: favoriteState, count: favoritesCount)
+                    view.set(favorite: false, count: favoritesCount)
                 case .user:
                     view.can(favorite: true)
                     loadFavorite()

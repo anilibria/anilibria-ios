@@ -21,6 +21,8 @@ final class FeedPresenter {
 
     private var bag = Set<AnyCancellable>()
     private var activity: ActivityDisposable?
+    private var lastRefreshDate: Date?
+    private let refreshInterval: TimeInterval = 3600
 
     private lazy var randomSeries = ActionItem(L10n.Screen.Feed.randomRelease) { [weak self] in
         self?.selectRandom()
@@ -36,6 +38,13 @@ final class FeedPresenter {
          menuService: MenuService) {
         self.mainService = mainService
         self.menuService = menuService
+
+        NotificationCenter.default
+            .publisher(for: UIApplication.didBecomeActiveNotification)
+            .sink { [weak self] _ in
+                self?.refreshIfNeeded()
+            }
+            .store(in: &bag)
     }
 }
 
@@ -71,6 +80,15 @@ extension FeedPresenter: FeedEventHandler {
     func refresh() {
         self.activity = self.view.showRefreshIndicator()
         self.load()
+    }
+
+    func refreshIfNeeded() {
+        if let date = lastRefreshDate {
+            let duration = Date().timeIntervalSince1970 - date.timeIntervalSince1970
+            if duration >= refreshInterval {
+                refresh()
+            }
+        }
     }
 
     func select(news: News) {
@@ -133,6 +151,7 @@ extension FeedPresenter: FeedEventHandler {
         ).sink(onNext: { [weak self] promo, schedule in
             self?.create(promo: promo, schedule: schedule)
             self?.activity = nil
+            self?.lastRefreshDate = Date()
         }, onError: { [weak self] error in
             self?.router.show(error: error)
             self?.activity = nil

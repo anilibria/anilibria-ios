@@ -14,4 +14,6 @@ protocol SignInEventHandler: ViewControllerEventHandler {
 
     func login(login: String, password: String)
     func login(with provider: AuthProvider)
+    func signUp()
+    func resetPassword()
 }

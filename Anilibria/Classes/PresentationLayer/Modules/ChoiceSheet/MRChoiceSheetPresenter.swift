@@ -25,7 +25,8 @@ private struct SomeChoiceValue<T>: ChoiceValue {
 public final class ChoiceItem: NSObject {
     private let value: any ChoiceValue
     let title: String
-    let isSelected: Bool
+    @Published var isSelected: Bool
+    fileprivate var didSelect: ((ChoiceItem) -> Void)?
 
     init<T>(
         value: T,
@@ -39,17 +40,30 @@ public final class ChoiceItem: NSObject {
     }
 
     fileprivate func select() -> Bool {
-        value.select()
+        didSelect?(self)
+        return value.select()
     }
 }
 
 public final class ChoiceGroup: NSObject {
     let title: String?
     let items: [ChoiceItem]
+    private var selectedItem: ChoiceItem?
 
     init(title: String? = nil, items: [ChoiceItem]) {
         self.title = title
         self.items = items
+        super.init()
+
+        items.forEach {
+            $0.didSelect = { [weak self] item in
+                self?.selectedItem?.isSelected = false
+                item.isSelected = true
+                self?.selectedItem = item
+            }
+        }
+
+        selectedItem = items.first { $0.isSelected }
     }
 }
 

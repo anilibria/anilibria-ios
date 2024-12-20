@@ -36,17 +36,21 @@ final class KeychainManager {
     ]}
 
     func get<T: Codable>(key: String) -> AnyPublisher<T?, Never> {
-        if UIApplication.shared.isProtectedDataAvailable {
-            return .just(get(key: key))
+        return Deferred { [weak self] () -> AnyPublisher<T?, Never> in
+            if UIApplication.shared.isProtectedDataAvailable {
+                return .just(self?.getValue(key: key))
+            }
+            return NotificationCenter.default
+                .publisher(for: UIApplication.protectedDataDidBecomeAvailableNotification)
+                .first()
+                .map { _ in self?.getValue(key: key) }
+                .eraseToAnyPublisher()
         }
-        return NotificationCenter.default
-            .publisher(for: UIApplication.protectedDataDidBecomeAvailableNotification)
-            .first()
-            .map { [weak self] _ in self?.get(key: key) }
-            .eraseToAnyPublisher()
+        .subscribe(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 
-    private func get<T: Codable>(key: String) -> T?  {
+    private func getValue<T: Codable>(key: String) -> T?  {
         var query = searchQuery(for: key)
         query[kSecReturnData as String] = true
         query[kSecMatchLimit as String] = kSecMatchLimitOne

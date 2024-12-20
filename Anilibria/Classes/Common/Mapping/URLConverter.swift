@@ -25,20 +25,3 @@ public final class URLConverter: Converter {
         return "\(self.base)\(urlString)".toURL()
     }
 }
-
-public final class AnyURLConverter: Converter {
-    public typealias FromValue = Any?
-    public typealias ToValue = URL?
-
-    public func convert(from item: Any?) -> URL? {
-        guard let urlString = item as? String else {
-            return nil
-        }
-
-        if urlString.hasPrefix("http") {
-            return urlString.toURL()
-        }
-
-        return "\(Configuration.server)/\(urlString)".toURL()
-    }
-}

@@ -6,6 +6,8 @@
 "error.authorization_failed" = "Не удалось авторизоваться :(";
 "error.social_authorization_failed" = "Не найден связанный аккаунт";
 "error.authorization_invailid" = "Вы больше не авторизованы :(";
+"error.otp_not_found" = "OTP не найден";
+"error.recovery_token_not_found" = "Неверный токен восстановления пароля";
 
 "error.configiration_empty" = "Невозможно загрузить файл кофигурации :(";
 "error.configiration_broken" = "Файл кофигурации поврежден D:";
@@ -23,6 +25,10 @@
 "buttons.skip" = "Пропустить";
 "buttons.reset" = "Сброс";
 "buttons.apply" = "Применить";
+"buttons.continue" = "Продолжить";
+"buttons.ok" = "ОК";
+"buttons.signUp" = "Регистрация";
+"buttons.reset_password" = "Восстановить пароль";
 
 //COMMON
 "common.today" = "Сегодня";
@@ -56,6 +62,11 @@
 "common.seasons.summer" = "Лето";
 "common.seasons.fall" = "Осень";
 
+"common.orientation" = "Ориентация плеера";
+"common.orientation.portrait" = "Портретная";
+"common.orientation.landscape" = "Альбомная";
+"common.orientation.system" = "Системная";
+
 "common.quality" = "Качество видео";
 "common.quality.sd" = "480p";
 "common.quality.hd" = "720p";
@@ -78,6 +89,8 @@
 
 "common.intern" = "Стажер";
 "common.vacation" = "В отпуске";
+
+"common.content_blocked" = "Контент заблокирован";
 
 //PERMISSION
 "permission.title" = "Разрешение";
@@ -154,3 +167,21 @@
 //OTHER SCREEN
 "screen.other.team" = "Список команды";
 "screen.other.donate" = "Поддержать";
+
+//LINK DEVICE SCREEN
+"screen.link_device.title" = "Привязать устройство";
+"screen.link_device.code_placeholder" = "Код с устройства";
+"screen.link_device.device_linked" = "Устройство успешно привязано";
+
+//RESTORE PASSWORD
+"screen.restore_password.title" = "Новый пароль";
+"screen.restore_password.send_email_info" = "Вы можете восстановить забытый пароль и сгенировать новый.\nВведите Вашу почту, на которую вы зарегистрировали аккаунт, мы пришлем Вам письмо с дальнейшими инструкциями.";
+"screen.restore_password.new_password_info" = "Вы можете создать новый пароль для Вашей учетной записи.\nПроверьте Вашу почту и найдте письмо с токеном восстановления пароля.";
+"screen.restore_password.email" = "Email";
+"screen.restore_password.token" = "Токен из письма";
+"screen.restore_password.new_password" = "Новый пароль";
+"screen.restore_password.repeat_password" = "Подтверждение пароля";
+"screen.restore_password.buttons.resend_email" = "Повторно выслать письмо с токеном";
+"screen.restore_password.buttons.recovery" = "У меня уже есть токен";
+"screen.restore_password.success.title" = "Пароль изменен";
+"screen.restore_password.success.message" = "Теперь вы можете авторизоваться используя этот пароль";

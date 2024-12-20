@@ -11,12 +11,10 @@ iOS клиент для сайта [AniLibria.tv](https://anilibria.tv/)
 ## Установка
 Приложение вы можете собрать самостоятельно, либо скачать посдедний релиз [отсюда](https://github.com/anilibria/anilibria-ios/releases).
 
-Установить ipa на ваш девайс вы можете:
-* С помощью AltStore
+Установить ipa на ваш девайс вы можете c помощью AltStore
   - Офф сайт: [altstore.io](https://altstore.io/)
-  - Использование: [Видео](https://www.youtube.com/watch?v=Jj_IxOkz0gw)
 
-* С другими способами установки можно ознакомиться на сайте [4pda](https://4pda.ru/forum/index.php?showtopic=126555)
+Другие способы можете поискать в интернете.
 
 ## Планы на будущее
 - ~~Адаптация интерфейса для iPad~~.

@@ -39,6 +39,12 @@ struct URLS {
     static let config = "https://raw.githubusercontent.com/anilibria/anilibria-app/master/config.json"
 }
 
+struct Css {
+    static func text(_ size: Double = 15) -> String {
+        return "<style type=\"text/css\"> * { font-size: \(size)px; font-family: -apple-system; } </style>"
+    }
+}
+
 struct URLHelper {
     static func isRelease(url: URL?) -> String? {
         guard let url = url else {

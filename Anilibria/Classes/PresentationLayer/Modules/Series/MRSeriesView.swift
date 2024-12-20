@@ -320,8 +320,8 @@ extension SeriesViewController: SeriesViewBehavior {
         self.paramsTextView.attributedText = result
     }
 
-    func set(desc: String) {
-        self.descTextView.text = desc
+    func set(desc: NSAttributedString?) {
+        self.descTextView.attributedText = desc
     }
 }
 

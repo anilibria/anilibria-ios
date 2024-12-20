@@ -44,6 +44,19 @@ extension NSAttributedString {
 }
 
 extension String {
+    func html2AttributedString(with cssStyle: String = "") -> NSAttributedString? {
+        let str = cssStyle + self
+        if let data = str.data(using: .unicode, allowLossyConversion: true) {
+            let result = try? NSAttributedString(data: data,
+                                                 options: [.documentType: NSAttributedString.DocumentType.html],
+                                                 documentAttributes: nil)
+            return result
+        }
+        return nil
+    }
+}
+
+extension String {
     func toURL() -> URL? {
         var urlString = self
         if !(urlString.starts(with: "http://") || urlString.starts(with: "https://")) {

@@ -34,7 +34,7 @@ struct URLS {
     static let discord: URL? = URL(string: "https://discord.gg/M6yCGeGN9B")
     static let boosty: URL? = URL(string: "https://boosty.to/anilibriatv")
 
-    static let signUp: URL? = URL(string: "https://anilibria.top/app/auth/registration/new")
+    static let signUp: URL? = URL(string: "https://anilibria.top/app/auth/registration/newRegistration")
 
     static let config = "https://raw.githubusercontent.com/anilibria/anilibria-app/master/config.json"
 }

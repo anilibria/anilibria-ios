@@ -49,19 +49,18 @@ class CollectionViewAdapter: NSObject {
         self.sectionsHolder = sections
         var snapshot = Snapshot()
 
-        let sectionIds = sections.flatMap {
-            $0.set(context: adapterContext)
-            return $0.getIdentifiers().map(\.hashValue)
-        }
-
-        snapshot.appendSections(sectionIds)
         for section in sections {
+            section.set(context: adapterContext)
             section.getIdentifiers().forEach { id in
-                snapshot.appendItems(section.getItems(for: id), toSection: id.hashValue)
+                let sectionId = id.hashValue
+                snapshot.appendSections([sectionId])
+                snapshot.appendItems(section.getItems(for: id), toSection: sectionId)
             }
         }
-
         dataSource.apply(snapshot, animatingDifferences: animated, completion: completion)
+        if snapshot.itemIdentifiers.isEmpty {
+            collectionView.collectionViewLayout.invalidateLayout()
+        }
     }
 
     private func makeDataSource() -> DataSource {

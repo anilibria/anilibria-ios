@@ -75,6 +75,6 @@ final class AniSettings: Codable {
         self.next = nil
     }
 
-    static let `default`: AniSettings = AniSettings(server: "https://anilibria.top",
-                                                    images: "https://anilibria.top")
+    static let `default`: AniSettings = AniSettings(server: "https://api.anilibria.app",
+                                                    images: "https://api.anilibria.app")
 }

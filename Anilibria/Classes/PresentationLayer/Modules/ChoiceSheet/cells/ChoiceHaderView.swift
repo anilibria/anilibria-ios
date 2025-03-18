@@ -22,9 +22,10 @@ class ChoiceHaderView: UICollectionReusableView {
     }
 
     private func setup() {
+        self.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(titleLabel)
         titleLabel.constraintEdgesToSuperview(
-            .init(top: 16, left: 16, bottom: 16, right: 16)
+            .init(top: 16, left: 16, bottom: 0, right: 16)
         )
         titleLabel.font = UIFont.font(ofSize: 15, weight: .bold)
         titleLabel.textColor = UIColor.white

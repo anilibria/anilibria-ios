@@ -1,11 +1,14 @@
 import UIKit
 
 final class ChoiceSheetAssembly {
-    class func createModule(items: [ChoiceGroup], parent: Router? = nil) -> ChoiceSheetViewController {
+    class func createModule(
+        source: any ChoiceGroupSource,
+        parent: Router? = nil
+    ) -> ChoiceSheetViewController {
         let module = ChoiceSheetViewController()
         let router = ChoiceSheetRouter(view: module, parent: parent)
         module.handler = MainAppCoordinator.shared.container.resolve()
-        module.handler.bind(view: module, router: router, items: items)
+        module.handler.bind(view: module, router: router, source: source)
         return module
     }
 }
@@ -13,12 +16,12 @@ final class ChoiceSheetAssembly {
 // MARK: - Route
 
 protocol ChoiceSheetRoute {
-    func openSheet(with items: [ChoiceGroup])
+    func openSheet(with source: any ChoiceGroupSource)
 }
 
 extension ChoiceSheetRoute where Self: RouterProtocol {
-    func openSheet(with items: [ChoiceGroup]) {
-        let module = ChoiceSheetAssembly.createModule(items: items, parent: self)
+    func openSheet(with source: any ChoiceGroupSource) {
+        let module = ChoiceSheetAssembly.createModule(source: source, parent: self)
         PresentRouter(target: module,
                       from: nil,
                       use: BlurPresentationController.self,
@@ -26,5 +29,9 @@ extension ChoiceSheetRoute where Self: RouterProtocol {
                           $0.isBlured = true
                           $0.transformation = MoveUpTransformation()
         }).set(level: .statusBar).move()
+    }
+
+    func openSheet(with items: [ChoiceGroup]) {
+        openSheet(with: SimpleChoiceGroupSource(items: items))
     }
 }

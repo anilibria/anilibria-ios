@@ -72,20 +72,33 @@ public final class ChoiceGroup: NSObject {
 final class ChoiceSheetPresenter {
     private weak var view: ChoiceSheetViewBehavior!
     private var router: ChoiceSheetRoutable!
-    private var items: [ChoiceGroup] = []
+    private var source: ChoiceGroupSource?
+}
+
+protocol ChoiceGroupSource {
+    func fetchItems(_ handler: @escaping ([ChoiceGroup]) -> Void)
+}
+
+struct SimpleChoiceGroupSource: ChoiceGroupSource {
+    let items: [ChoiceGroup]
+    func fetchItems(_ handler: @escaping ([ChoiceGroup]) -> Void) {
+        handler(items)
+    }
 }
 
 extension ChoiceSheetPresenter: ChoiceSheetEventHandler {
     func bind(view: ChoiceSheetViewBehavior,
               router: ChoiceSheetRoutable,
-              items: [ChoiceGroup]) {
+              source: any ChoiceGroupSource) {
         self.view = view
         self.router = router
-        self.items = items
+        self.source = source
     }
 
     func didLoad() {
-        self.view.set(items: self.items)
+        source?.fetchItems { [weak self] items in
+            self?.view.set(items: items)
+        }
     }
 
     func back() {

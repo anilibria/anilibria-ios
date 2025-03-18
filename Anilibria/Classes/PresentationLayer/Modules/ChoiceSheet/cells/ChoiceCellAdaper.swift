@@ -81,6 +81,12 @@ class ChoiceCellSectionAdapter: SectionAdapterProtocol {
             header.pinToVisibleBounds = false
             section.boundarySupplementaryItems = [header]
         }
+        section.contentInsets = .init(top: 8, leading: 8, bottom: 8, trailing: 8)
+        section.decorationItems = [
+            NSCollectionLayoutDecorationItem.background(
+                elementKind: SectionBackgroundCollectionViewCompositionalLayout.backgroundViewKind
+            )
+        ]
 
         return section
     }

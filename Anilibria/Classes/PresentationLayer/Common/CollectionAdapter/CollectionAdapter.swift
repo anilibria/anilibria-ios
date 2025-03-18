@@ -20,7 +20,7 @@ class CollectionViewAdapter: NSObject {
     private var adapterContext: AdapterContext!
 
     weak var scrollViewDelegate: UIScrollViewDelegate?
-    weak var layout: UICollectionViewCompositionalLayout?
+    private(set) weak var layout: UICollectionViewCompositionalLayout?
 
     init(collectionView: UICollectionView) {
         self.collectionView = collectionView
@@ -28,7 +28,15 @@ class CollectionViewAdapter: NSObject {
         super.init()
         self.dataSource = makeDataSource()
         self.adapterContext = AdapterContext(dataSource: dataSource)
-        let layout = UICollectionViewCompositionalLayout(
+        self.collectionView.delegate = self
+        self.setLayout()
+    }
+
+    func setLayout<Layout: UICollectionViewCompositionalLayout>(
+        type: Layout.Type = UICollectionViewCompositionalLayout.self,
+        populator: ((Layout) -> Void)? = nil
+    ) {
+        let layout = Layout(
             sectionProvider: { [weak self] sectionIndex, environment in
                 guard
                     let self,
@@ -39,10 +47,10 @@ class CollectionViewAdapter: NSObject {
                 return section.getSectionLayout(environment: environment)
             }
         )
+        populator?(layout)
 
         collectionView.collectionViewLayout = layout
         self.layout = layout
-        self.collectionView.delegate = self
     }
 
     func set(sections: [any SectionAdapterProtocol], animated: Bool = true, completion: (() -> Void)? = nil) {

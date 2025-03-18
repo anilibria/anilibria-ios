@@ -9,7 +9,7 @@ protocol ChoiceSheetViewBehavior: AnyObject {
 protocol ChoiceSheetEventHandler: ViewControllerEventHandler {
     func bind(view: ChoiceSheetViewBehavior,
               router: ChoiceSheetRoutable,
-              items: [ChoiceGroup])
+              source: any ChoiceGroupSource)
     func select(item: ChoiceItem)
 
     func back()

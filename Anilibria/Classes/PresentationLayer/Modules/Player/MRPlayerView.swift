@@ -15,6 +15,8 @@ final class PlayerViewController: BaseViewController {
     @IBOutlet var elapsedTimeLabel: UILabel!
     @IBOutlet var videoSliderView: PlayerProgressView!
     @IBOutlet var playerContainer: UIView!
+    @IBOutlet var nextContainer: UIView!
+    @IBOutlet var previousContainer: UIView!
     @IBOutlet var loaderContainer: UIView!
     @IBOutlet var container: UIView!
     @IBOutlet var rewindButtons: [RewindView] = []
@@ -27,42 +29,36 @@ final class PlayerViewController: BaseViewController {
     private let airplayView = AVRoutePickerView()
     private var pictureInPictureController: AVPictureInPictureController?
     private let timeFormatter = FormatterFactory.time.create()
-    private var playlist: [PlaylistItem] = []
-    private var currentTime: [Int: Double] = [:]
     private var bag: AnyCancellable?
     private var pipObservation: Any?
 
-    private var currentQuality: VideoQuality = .fullHd
     private var orientation: UIInterfaceOrientationMask = .all
 
     private let rewindTimes: [Double] = [-15, -5, 5, 15]
 
     private var uiIsVisible: Bool = true {
         didSet {
-            self.setUI(visible: self.uiIsVisible)
+            setUI(visible: uiIsVisible)
         }
+    }
+
+    let viewModel: PlayerViewModel
+
+    init(viewModel: PlayerViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
     }
     
-    private let skipButtonShowingSeconds = 10
-
-    private var currentIndex: Int = 0 {
-        didSet {
-            seriesSelectorLabel.text = currentListItem?.name ?? ""
-        }
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
-
-    private var currentListItem: PlaylistItem? {
-        playlist[safe: currentIndex]
-    }
-
-    var handler: PlayerEventHandler!
-
+    
     // MARK: - Life cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
-        self.handler.didLoad()
+        self.setupUI()
         self.addTermenateAppObserver()
         self.setupPlayer()
         self.setupRewind()
@@ -98,7 +94,7 @@ final class PlayerViewController: BaseViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.saveState()
+        viewModel.save()
         #if targetEnvironment(macCatalyst)
         let window = UIApplication.getWindow()
         window?.windowScene?.sizeRestrictions?.minimumSize = Sizes.minSize
@@ -138,6 +134,24 @@ final class PlayerViewController: BaseViewController {
         return [playPause, back, forward]
     }
 
+    private func setupUI() {
+        skipContainer.isHidden = true
+        titleLabel.text = viewModel.seriesName
+
+        videoSliderView.set(duration: 0)
+        setLoader(visible: true)
+
+        viewModel.$orientation.sink { [weak self] value in
+            self?.orientation = value.mask
+            self?.updateOrientation()
+        }.store(in: &subscribers)
+
+        viewModel.$playItem.compactMap { $0 }
+            .sink { [weak self] item in
+                self?.set(playItem: item)
+            }.store(in: &subscribers)
+    }
+
     private func setupPlayer() {
         self.playerContainer.addSubview(self.playerView)
         self.playerView.constraintEdgesToSuperview()
@@ -148,7 +162,7 @@ final class PlayerViewController: BaseViewController {
             }
             .sink(onNext: { [weak self] time in
                 guard let self else { return }
-                currentTime[currentIndex] = time
+                viewModel.update(time: time)
                 videoSliderView.set(progress: time)
             })
             .store(in: &subscribers)
@@ -257,44 +271,30 @@ final class PlayerViewController: BaseViewController {
     }
     
     private func updateSkipButton(time: Int) {
-        if let canSkip = currentListItem?.skips.canSkip(
-            time: time,
-            length: skipButtonShowingSeconds
-        ), canSkip {
-            skipContainer.isHidden = false
-        } else {
-            skipContainer.isHidden = true
-        }
+        skipContainer.isHidden = !viewModel.canSkip(time: time)
     }
 
-    private func saveState() {
-        self.handler.save(
-            quality: currentQuality,
-            number: currentIndex,
-            time: currentTime[currentIndex] ?? 0
-        )
-    }
-
-    private func set(playItem index: Int, seek time: Double) {
+    private func set(playItem: PlayItem) {
+        seriesSelectorLabel.text = playItem.name
         videoSliderView.set(duration: 0)
-        self.currentIndex = index
-        self.currentTime[index] = time
-        let qualities = currentListItem?.supportedQualities() ?? []
-        guard let bestQuality = qualities.first else {
-            return
-        }
-        if qualities.contains(self.currentQuality) == false {
-            self.currentQuality = bestQuality
-        }
-        if let url = currentListItem?.video[self.currentQuality] {
+
+        change(enabled: !playItem.isFirst, view: previousContainer)
+        change(enabled: !playItem.isLast, view: nextContainer)
+
+        if let url = playItem.url {
             self.bag = self.playerView.setVideo(url: url)
                 .filter { $0 != nil }
                 .map { $0! }
                 .sink(onNext: { [weak self] duration in
                     self?.videoSliderView.set(duration: duration)
-                    self?.playerView.set(time: time)
+                    self?.playerView.set(time: playItem.time)
                 })
         }
+    }
+
+    private func change(enabled: Bool, view: UIView) {
+        view.isUserInteractionEnabled = enabled
+        view.alpha = enabled ? 1 : 0.5
     }
 
     private func setUI(visible: Bool) {
@@ -331,7 +331,7 @@ final class PlayerViewController: BaseViewController {
 
     override func appWillTerminate() {
         super.appWillTerminate()
-        self.saveState()
+        viewModel.save()
         sleep(2) // this used for to give time for save async data
     }
 
@@ -342,7 +342,7 @@ final class PlayerViewController: BaseViewController {
     @IBAction func closeAction(_ sender: Any) {
         self.orientation = .portrait
         updateOrientation()
-        self.handler.back()
+        self.viewModel.back()
     }
 
     private func updateOrientation() {
@@ -366,9 +366,26 @@ final class PlayerViewController: BaseViewController {
         }
     }
 
+    @IBAction func runNextItemAction() {
+        viewModel.selectNext()
+    }
+
+    @IBAction func runPreviousItemAction() {
+        viewModel.selectPrevious()
+    }
+
     @IBAction func settingAction(_ sender: Any) {
-        if let item = self.currentListItem {
-            self.handler.settings(quality: self.currentQuality, for: item)
+        viewModel.showSettings()
+    }
+
+    @IBAction func toogleVideoGravity() {
+        switch playerView.playerLayer.videoGravity {
+        case .resizeAspect:
+            playerView.playerLayer.videoGravity = .resizeAspectFill
+        case .resizeAspectFill:
+            playerView.playerLayer.videoGravity = .resize
+        default:
+            playerView.playerLayer.videoGravity = .resizeAspect
         }
     }
 
@@ -382,50 +399,14 @@ final class PlayerViewController: BaseViewController {
     }
 
     @IBAction func selectVideoDidTap() {
-        handler.select(playItemIndex: currentIndex)
+        viewModel.selectPlayItem()
     }
 
     @IBAction func skipDidTap() {
         let currentTime = Int(videoSliderView.progress)
-        guard
-            let currentListItem = currentListItem,
-            let endTime = currentListItem.skips.upperBound(time: currentTime),
-            endTime > currentTime
-        else {
-            return
+        if let time = viewModel.getSkipTime(for: currentTime) {
+            self.apply(rewind: time)
         }
-        
-        self.apply(rewind: Double(endTime - currentTime))
-    }
-}
-
-extension PlayerViewController: PlayerViewBehavior {
-    func set(name: String,
-             playlist: [PlaylistItem],
-             playItemIndex: Int,
-             time: Double,
-             preffered quality: VideoQuality) {
-        self.titleLabel.text = name
-        self.playlist = playlist
-
-        videoSliderView.set(duration: 0)
-        setLoader(visible: true)
-        currentQuality = quality
-        self.set(playItem: playItemIndex, seek: time)
-    }
-
-    func set(playItemIndex: Int) {
-        self.set(playItem: playItemIndex, seek: currentTime[playItemIndex] ?? 0)
-    }
-
-    func set(quality: VideoQuality) {
-        self.currentQuality = quality
-        self.set(playItem: currentIndex, seek: currentTime[currentIndex] ?? 0)
-    }
-
-    func set(orientation: InterfaceOrientation) {
-        self.orientation = orientation.mask
-        updateOrientation()
     }
 }
 
@@ -438,69 +419,7 @@ extension PlayerViewController: AVPictureInPictureControllerDelegate {
     }
 }
 
-public final class TouchableSlider: UISlider {
-    private var firstLocation: CGPoint?
-
-    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        guard let touch = touches.first else {
-            return
-        }
-
-        self.firstLocation = touch.location(in: self)
-    }
-
-    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-
-        guard let touch = touches.first else {
-            return
-        }
-
-        let location = touch.location(in: self)
-
-        if floor(location.x) != floor(self.firstLocation?.x ?? 0) {
-            return
-        }
-
-        let thumbWidth = self.currentThumbImage?.size.width ?? 0
-        let percent = Float((location.x - thumbWidth/2) / (self.frame.width - thumbWidth))
-        self.setValue(percent * self.maximumValue, animated: false)
-        self.sendActions(for: .touchDown)
-        self.sendActions(for: .touchUpInside)
-    }
-}
-
-final class RewindView: CircleView {
-    @IBOutlet var titleLabel: UILabel!
-    private var tapHandler: Action<Double>?
-
-    private var time: Double = 0
-
-    func set(time: Double) {
-        self.time = time
-        self.titleLabel.text = "\(Int(abs(time)))"
-    }
-
-    func setDidTap(_ action: Action<Double>?) {
-        self.tapHandler = action
-    }
-
-    @IBAction func tapAction(_ sender: Any) {
-        self.tapHandler?(time)
-    }
-}
-
 
 private extension UIKeyCommand {
     static let inputSpace = " "
-}
-
-private extension PlaylistItem {
-    var name: String {
-        if let ordinal  {
-            return "\(NSNumber(value: ordinal))"
-        }
-        return title
-    }
 }

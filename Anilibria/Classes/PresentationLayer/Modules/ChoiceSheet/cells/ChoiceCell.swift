@@ -12,6 +12,7 @@ public final class ChoiceCell: RippleViewCell {
         self.titleLabel.text = item.title
         self.iconView.isHidden = !item.isSelected
         self.separatorView.isHidden = isLast
+        self.rippleContainerView.smoothCorners(with: 4)
         self.cancellable = item.$isSelected.sink(receiveValue: { [weak self] value in
             self?.iconView.isHidden = !value
         })

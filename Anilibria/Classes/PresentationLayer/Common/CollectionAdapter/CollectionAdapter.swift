@@ -20,7 +20,7 @@ class CollectionViewAdapter: NSObject {
     private var adapterContext: AdapterContext!
 
     weak var scrollViewDelegate: UIScrollViewDelegate?
-    weak var layout: UICollectionViewCompositionalLayout?
+    private(set) weak var layout: UICollectionViewCompositionalLayout?
 
     init(collectionView: UICollectionView) {
         self.collectionView = collectionView
@@ -28,7 +28,15 @@ class CollectionViewAdapter: NSObject {
         super.init()
         self.dataSource = makeDataSource()
         self.adapterContext = AdapterContext(dataSource: dataSource)
-        let layout = UICollectionViewCompositionalLayout(
+        self.collectionView.delegate = self
+        self.setLayout()
+    }
+
+    func setLayout<Layout: UICollectionViewCompositionalLayout>(
+        type: Layout.Type = UICollectionViewCompositionalLayout.self,
+        populator: ((Layout) -> Void)? = nil
+    ) {
+        let layout = Layout(
             sectionProvider: { [weak self] sectionIndex, environment in
                 guard
                     let self,
@@ -39,29 +47,28 @@ class CollectionViewAdapter: NSObject {
                 return section.getSectionLayout(environment: environment)
             }
         )
+        populator?(layout)
 
         collectionView.collectionViewLayout = layout
         self.layout = layout
-        self.collectionView.delegate = self
     }
 
     func set(sections: [any SectionAdapterProtocol], animated: Bool = true, completion: (() -> Void)? = nil) {
         self.sectionsHolder = sections
         var snapshot = Snapshot()
 
-        let sectionIds = sections.flatMap {
-            $0.set(context: adapterContext)
-            return $0.getIdentifiers().map(\.hashValue)
-        }
-
-        snapshot.appendSections(sectionIds)
         for section in sections {
+            section.set(context: adapterContext)
             section.getIdentifiers().forEach { id in
-                snapshot.appendItems(section.getItems(for: id), toSection: id.hashValue)
+                let sectionId = id.hashValue
+                snapshot.appendSections([sectionId])
+                snapshot.appendItems(section.getItems(for: id), toSection: sectionId)
             }
         }
-
         dataSource.apply(snapshot, animatingDifferences: animated, completion: completion)
+        if snapshot.itemIdentifiers.isEmpty {
+            collectionView.collectionViewLayout.invalidateLayout()
+        }
     }
 
     private func makeDataSource() -> DataSource {

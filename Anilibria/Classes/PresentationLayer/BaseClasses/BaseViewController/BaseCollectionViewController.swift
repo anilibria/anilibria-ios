@@ -11,7 +11,6 @@ import UIKit
 
 class BaseCollectionViewController: BaseViewController {
     // MARK: - Outlets
-
     @IBOutlet var collectionView: UICollectionView!
 
     private weak var refreshActivity: ActivityDisposable?

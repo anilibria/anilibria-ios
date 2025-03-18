@@ -10,7 +10,6 @@ import UIKit
 
 public final class RelatedSeriesView: UIView {
     @IBOutlet private var button: UIButton!
-    @IBOutlet private var indicatorView: UIView!
     @IBOutlet private var titleLabel: UILabel!
 
     private var handler: Action<Series>?
@@ -21,20 +20,13 @@ public final class RelatedSeriesView: UIView {
         self.handler = handler
     }
 
-    public override func layoutSubviews() {
-        super.layoutSubviews()
-        indicatorView.smoothCorners(with: indicatorView.bounds.height / 2)
-    }
-
-    func configure(_ series: Series, selected: Bool) {
+    func configure(index: Int, series: Series, selected: Bool) {
         self.series = series
-        titleLabel.text = series.name?.main
+        titleLabel.text = "\(index + 1). \(series.name?.main ?? "")"
         if selected {
-            indicatorView.backgroundColor = UIColor(resource: .Buttons.selected)
             titleLabel.textColor = UIColor(resource: .Buttons.selected)
             button.isUserInteractionEnabled = false
         } else {
-            indicatorView.backgroundColor = UIColor(resource: .Buttons.unselected)
             titleLabel.textColor = UIColor(resource: .Text.main)
             button.isUserInteractionEnabled = true
         }

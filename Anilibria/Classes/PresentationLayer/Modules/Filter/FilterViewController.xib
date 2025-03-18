@@ -48,7 +48,12 @@
                                     <constraints>
                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" id="Tgm-Ml-E4z"/>
                                     </constraints>
-                                    <collectionViewLayout key="collectionViewLayout" id="IhP-6q-5m1" customClass="LeftAlignedCollectionViewFlowLayout" customModule="Anilibria" customModuleProvider="target"/>
+                                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="rMT-i1-0VN">
+                                        <size key="itemSize" width="128" height="128"/>
+                                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    </collectionViewFlowLayout>
                                 </collectionView>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

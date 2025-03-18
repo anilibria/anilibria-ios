@@ -203,16 +203,15 @@ extension SeriesViewController: SeriesViewBehavior {
             return
         }
         relatedView.isHidden = false
-        let views = series.lazy.compactMap { item -> RelatedSeriesView? in
-            let view = RelatedSeriesView.fromNib()
-            view?.configure(item, selected: item.id == current.id)
-            view?.setTap { [weak self] in
+        series.enumerated().forEach { index, item in
+            guard let view = RelatedSeriesView.fromNib() else {
+                return
+            }
+            view.configure(index: index, series: item, selected: item.id == current.id)
+            view.setTap { [weak self] in
                 self?.handler.select(series: $0)
             }
-            return view
-        }
-        for view in views {
-            self.relatedStackView.addArrangedSubview(view)
+            relatedStackView.addArrangedSubview(view)
         }
         relatedView.fadeTransition()
     }

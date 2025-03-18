@@ -4,7 +4,19 @@ import UIKit
 
 final class ChoiceSheetViewController: BaseCollectionViewController {
     @IBOutlet var collectionHeightConstraint: NSLayoutConstraint!
+    @IBOutlet var bottomConstraint: NSLayoutConstraint!
     @IBOutlet var backButton: UIButton!
+    @IBOutlet var additionalStackView: UIStackView! {
+        didSet {
+            updateAdditionalView()
+        }
+    }
+
+    var additionalView: UIView? {
+        didSet {
+            updateAdditionalView()
+        }
+    }
 
     var handler: ChoiceSheetEventHandler!
     private var bag: Any?
@@ -14,6 +26,7 @@ final class ChoiceSheetViewController: BaseCollectionViewController {
     override func viewDidLoad() {
         self.defaultBottomInset = 0
         super.viewDidLoad()
+        self.addKeyboardObservers()
         self.view.backgroundColor = .clear
         self.handler.didLoad()
 
@@ -21,6 +34,13 @@ final class ChoiceSheetViewController: BaseCollectionViewController {
             if let height = self?.collectionView.contentSize.height {
                 self?.collectionHeightConstraint.constant = height
             }
+        }
+
+        adapter.setLayout(type: SectionBackgroundCollectionViewCompositionalLayout.self) { layout in
+            layout.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+            layout.cornerRadius = 4
+            layout.backgroundInsets = .init(top: 8, left: 8, bottom: 8, right: 8)
+            layout.configuration.interSectionSpacing = 16
         }
     }
     
@@ -52,6 +72,39 @@ final class ChoiceSheetViewController: BaseCollectionViewController {
         coordinator.animate(alongsideTransition: { _ in
             self.collectionView.collectionViewLayout.invalidateLayout()
         }, completion: nil)
+    }
+
+    override func keyBoardWillShow(keyboardHeight: CGFloat) {
+        super.keyBoardWillShow(keyboardHeight: keyboardHeight)
+        self.bottomConstraint.constant = keyboardHeight
+        UIView.animate(withDuration: 0.2) {
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    override func keyBoardWillHide() {
+        super.keyBoardWillHide()
+        self.bottomConstraint.constant = 0
+        UIView.animate(withDuration: 0.2) {
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    private func updateAdditionalView() {
+        guard let additionalStackView else {
+            return
+        }
+        additionalStackView.subviews.forEach {
+            additionalStackView.removeArrangedSubview($0)
+            $0.removeFromSuperview()
+        }
+
+        if let additionalView {
+            additionalStackView.addArrangedSubview(additionalView)
+            additionalStackView.isHidden = false
+        } else {
+            additionalStackView.isHidden = true
+        }
     }
 
     // MARK: - Actions

@@ -34,6 +34,7 @@ open class NetworkManager: Loggable {
         configuration.timeoutIntervalForRequest = NetworkManager.requestTimeout
         configuration.waitsForConnectivity = true
         configuration.urlCredentialStorage = nil
+        configuration.httpShouldSetCookies = false
 
         if let proxy = proxy {
             configuration.connectionProxyDictionary = proxy.config()
@@ -150,6 +151,7 @@ open class NetworkManager: Loggable {
                                  timeoutInterval: NetworkManager.requestTimeout)
         request.allHTTPHeaderFields = headers
         request.httpMethod = method.rawValue
+        request.httpShouldHandleCookies = false
 
         if let item = body, let data = try? JSONEncoder().encode(item) {
             request.httpBody = data

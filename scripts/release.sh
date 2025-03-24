@@ -41,7 +41,7 @@ makeIPA () {
 
     mkdir Payload
     mv $IOS_APP ./Payload/$APP_NAME.app
-    zip -r ${APP_NAME}_${VERSION}_iOS_${TARGET}.ipa ./Payload/$APP_NAME.app
+    zip -r ${APP_NAME}_iOS.ipa ./Payload/$APP_NAME.app
 
     if [ -d Payload ]; then
         rm -rf Payload
@@ -69,7 +69,7 @@ makeMacOSApp () {
     fi
 
     mv $MACOS_APP $APP_NAME\ Catalyst.app
-    create-dmg  ${APP_NAME}_${VERSION}.dmg $APP_NAME\ Catalyst.app
+    create-dmg  ${APP_NAME}_macOS.dmg $APP_NAME\ Catalyst.app
 
     if [ -d $APP_NAME\ Catalyst.app ]; then
         rm -rf $APP_NAME\ Catalyst.app

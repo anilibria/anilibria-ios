@@ -28,6 +28,7 @@ final class FeedViewController: BaseCollectionViewController {
         self.addRefreshControl()
         self.handler.didLoad()
         self.collectionView.contentInset.top = 10
+        self.collectionView.contentInset.bottom = 16
     }
 
     override func setupStrings() {

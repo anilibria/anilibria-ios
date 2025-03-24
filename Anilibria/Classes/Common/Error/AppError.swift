@@ -22,10 +22,11 @@ extension AppError: ErrorDisplayable {
         case let .error(code):
             return "Error: \(code)"
         case let .network(code):
-            if code == 401 {
-                return L10n.Error.authorizationInvailid
+            switch code {
+            case 403: return L10n.Error.authorizationInvailid
+            case 401: return L10n.Error.authorizationFailed
+            default: return "Network Error: \(code)"
             }
-            return "Network Error: \(code)"
         case let .plain(message):
             return message
         }

@@ -13,6 +13,7 @@ public enum InterfaceOrientation: Codable, CaseIterable {
 
     case portrait
     case landscape
+    case landscapeRight
     case system
 
     var title: String {
@@ -20,7 +21,9 @@ public enum InterfaceOrientation: Codable, CaseIterable {
         case .portrait:
             return L10n.Common.Orientation.portrait
         case .landscape:
-            return L10n.Common.Orientation.landscape
+            return L10n.Common.Orientation.landscape + " ↺"
+        case .landscapeRight:
+            return L10n.Common.Orientation.landscape + " ↻"
         case .system:
             return L10n.Common.Orientation.system
         }
@@ -34,6 +37,7 @@ public enum InterfaceOrientation: Codable, CaseIterable {
         switch self {
         case .portrait: return .portrait
         case .landscape: return .landscapeLeft
+        case .landscapeRight: return .landscapeRight
         case .system: return .all
         }
     }

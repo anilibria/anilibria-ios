@@ -19,11 +19,16 @@
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kFk-vh-moy">
+                    <rect key="frame" x="-8" y="0.0" width="336" height="50"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rbK-RH-Vgs" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                     <connections>
                         <action selector="tapAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="fOM-yc-alf"/>
+                        <outlet property="rippleContainerView" destination="kFk-vh-moy" id="jz9-XK-ybX"/>
                     </connections>
                 </button>
             </subviews>
@@ -31,11 +36,15 @@
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="mQ7-Bz-jak" secondAttribute="bottom" constant="8" id="0GG-tH-InA"/>
                 <constraint firstItem="mQ7-Bz-jak" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="4PO-67-A8v"/>
+                <constraint firstAttribute="bottom" secondItem="kFk-vh-moy" secondAttribute="bottom" id="Cu7-t2-I3j"/>
                 <constraint firstItem="mQ7-Bz-jak" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="OM9-CC-dxC"/>
+                <constraint firstAttribute="trailing" secondItem="kFk-vh-moy" secondAttribute="trailing" constant="-8" id="PSI-Te-xlw"/>
                 <constraint firstItem="rbK-RH-Vgs" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="RWD-aS-bMZ"/>
                 <constraint firstAttribute="bottom" secondItem="rbK-RH-Vgs" secondAttribute="bottom" id="X2J-5c-grf"/>
                 <constraint firstItem="rbK-RH-Vgs" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="frW-ZZ-vfl"/>
                 <constraint firstAttribute="trailing" secondItem="rbK-RH-Vgs" secondAttribute="trailing" id="nkB-bF-X7F"/>
+                <constraint firstItem="kFk-vh-moy" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="pQ8-1a-7rV"/>
+                <constraint firstItem="kFk-vh-moy" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="-8" id="taL-9r-hQY"/>
                 <constraint firstAttribute="trailing" secondItem="mQ7-Bz-jak" secondAttribute="trailing" id="v4X-YW-ukk"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

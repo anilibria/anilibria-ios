@@ -85,7 +85,7 @@
 "common.appearance" = "Appearance";
 "common.appearance.dark" = "Dark";
 "common.appearance.light" = "Light";
-"common.appearance.system" = "Light";
+"common.appearance.system" = "System";
 
 "common.intern" = "Intern";
 "common.vacation" = "Vacation";

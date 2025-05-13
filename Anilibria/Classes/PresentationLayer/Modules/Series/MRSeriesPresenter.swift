@@ -20,20 +20,25 @@ final class SeriesPresenter {
     private let mainService: MainService
     private let sessionService: SessionService
     private let favoriteService: FavoriteService
+    private let collectionsService: UserCollectionsService
     private let downloadService: DownloadService
 
     private var favoriteState: Bool?
-    private var favoritesCount: Int = 0
-    private var bag = Set<AnyCancellable>()
+    private var collectionType: UserCollectionType?
+    private var requestBag = Set<AnyCancellable>()
+    private var updatesBag = Set<AnyCancellable>()
+    private var isAutorized: Bool = false
 
     init(mainService: MainService,
          sessionService: SessionService,
          favoriteService: FavoriteService,
-         downloadService: DownloadService) {
+         downloadService: DownloadService,
+         collectionsService: UserCollectionsService) {
         self.mainService = mainService
         self.sessionService = sessionService
         self.favoriteService = favoriteService
         self.downloadService = downloadService
+        self.collectionsService = collectionsService
     }
 }
 
@@ -44,30 +49,9 @@ extension SeriesPresenter: SeriesEventHandler {
         self.view = view
         self.router = router
         self.series = series
-        self.favoritesCount = series.addedInUsersFavorites
     }
 
     func didLoad() {
-        bag.removeAll()
-        self.view.set(series: self.series)
-        self.view.set(favorite: favoriteState, count: favoritesCount)
-
-        self.view.can(watch: self.series.playlist.isEmpty == false)
-        self.sessionService
-            .fetchState()
-            .sink(onNext: { [weak self] state in
-                guard let self else { return }
-                switch state {
-                case .guest, nil:
-                    view.can(favorite: false)
-                    view.set(favorite: false, count: favoritesCount)
-                case .user:
-                    view.can(favorite: true)
-                    loadFavorite()
-                }
-            })
-            .store(in: &bag)
-
         self.favoriteService.favoritesUpdates().sink { [weak self] update in
             switch update {
             case .added(let series) where series.id == self?.series.id:
@@ -77,7 +61,18 @@ extension SeriesPresenter: SeriesEventHandler {
             default: break
             }
         }
-        .store(in: &bag)
+        .store(in: &updatesBag)
+
+        self.collectionsService.collectionsUpdates().sink { [weak self] update in
+            switch update {
+            case .added(let series, let toType, _) where series.id == self?.series.id:
+                self?.updateCollection(toType)
+            case .deleted(let series, _) where series.id == self?.series.id:
+                self?.updateCollection(nil)
+            default: break
+            }
+        }
+        .store(in: &updatesBag)
 
         self.mainService.fetchFranchise(for: series.id).sink(onNext: { [weak self] franchises in
             guard let self else { return }
@@ -86,73 +81,126 @@ extension SeriesPresenter: SeriesEventHandler {
         }, onError: { [weak self] _ in
             guard let self else { return }
             view.set(series: [], current: series)
-        }).store(in: &bag)
+        }).store(in: &updatesBag)
+
+        self.sessionService.fetchState().sink { [weak self] state in
+            switch state {
+            case .user: self?.isAutorized = true
+            default: self?.isAutorized = false
+            }
+
+            self?.load(self?.view.showUpdatesActivity())
+        }.store(in: &updatesBag)
     }
 
-    private func loadFavorite() {
-        self.favoriteService.getFavoriteState(for: series.id).sink { [weak self] state in
-            guard let self else { return }
-            favoriteState = state
-            view.set(favorite: state, count: favoritesCount)
-        } onError: { [weak self] _ in
-            self?.view.can(favorite: false)
-        }
-        .store(in: &bag)
+    func refresh() {
+        load(view.showRefreshIndicator())
     }
 
     func select(genre: String) {
         guard let genreID = Int(genre) else { return }
-        var filter = SeriesFilter()
-        filter.genres = [genreID]
+        var data = SeriesSearchData()
+        data.filter.genres = [genreID]
 
-        self.router.openCatalog(filter: filter)
+        self.router.openCatalog(data: data)
     }
 
     func select(url: URL) {
-        if let code = URLHelper.isRelease(url: url) {
-            self.load(code: code)
-        } else {
-            self.router.open(url: .web(url))
-        }
+        self.router.open(url: .web(url))
     }
 
     func select(series: Series) {
         if series.id != self.series.id {
-            load(code: series.alias)
+            router.open(series: series)
         }
     }
 
-    func favorite() {
+    func favorite(_ activity: (any ActivityDisposable)?) {
         guard let favoriteState else { return }
-        self.favoriteService
-            .favorite(add: !favoriteState, series: series)
-            .manageActivity(self.view.showLoading(fullscreen: false))
+        if !isAutorized {
+            router.signInScreen()
+            return
+        }
+        favoriteService.favorite(add: !favoriteState, series: series)
+            .manageActivity(activity)
             .sink(onError: { [weak self] error in
                 self?.router.show(error: error)
             })
-            .store(in: &bag)
+            .store(in: &requestBag)
+    }
+
+    func selectCollection(_ activity: (any ActivityDisposable)?) {
+        if !isAutorized {
+            router.signInScreen()
+            return
+        }
+
+        let didSelect: (UserCollectionType) -> Bool = { [weak self] item in
+            guard let self else { return true }
+            if collectionType == item {
+                collectionsService.removeFrom(collection: item, series: series)
+                    .manageActivity(activity)
+                    .sink(onError: { [weak self] error in
+                        self?.router.show(error: error)
+                    })
+                    .store(in: &requestBag)
+            } else {
+                collectionsService.move(series: series, from: collectionType, to: item)
+                    .manageActivity(activity)
+                    .sink(onError: { [weak self] error in
+                        self?.router.show(error: error)
+                    })
+                    .store(in: &requestBag)
+            }
+            return true
+        }
+
+        let items = UserCollectionType.allCases.map { item in
+            ChoiceItem(
+                value: item,
+                title: item.localizedTitle,
+                isSelected: item == collectionType,
+                didSelect: didSelect
+            )
+        }
+
+        router.openSheet(with: [ChoiceGroup(items: items)])
     }
 
     private func updateFavoriteState(_ newState: Bool) {
         self.favoriteState = newState
-        let value = newState ? 1 : -1
-        favoritesCount += value
-        view.set(favorite: newState, count: favoritesCount)
+        view.set(favorite: newState)
+    }
+
+    private func updateCollection(_ type: UserCollectionType?) {
+        self.collectionType = type
+        view.set(collection: type)
     }
 
     func donate() {
         self.router.open(url: .web(URLS.donate))
     }
 
-    private func load(code: String) {
-        self.mainService.series(with: code)
-            .manageActivity(self.view.showLoading(fullscreen: false))
-            .sink(onNext: { [weak self] item in
-                self?.router.open(series: item)
-            }, onError: { [weak self] error in
-                self?.router.show(error: error)
-            })
-            .store(in: &bag)
+    private func load(_ activity: (any ActivityDisposable)? = nil) {
+        requestBag.removeAll()
+
+        Publishers.CombineLatest3(
+            mainService.series(with: series.id),
+            isAutorized ? favoriteService.getFavoriteState(for: series.id) : .just(false),
+            isAutorized ? collectionsService.getCollection(for: series.id) : .just(nil)
+        )
+        .manageActivity(activity)
+        .sink { [weak self] item, state, collection in
+            guard let self else { return }
+            series = item
+            view.set(series: item)
+            view.can(watch: item.playlist.isEmpty == false)
+            updateFavoriteState(state)
+            updateCollection(collection)
+        } onError: { [weak self] error in
+            self?.router.show(error: error)
+        }
+        .store(in: &requestBag)
     }
 
     func schedule() {
@@ -180,7 +228,7 @@ extension SeriesPresenter: SeriesEventHandler {
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })
-            .store(in: &bag)
+            .store(in: &requestBag)
     }
 
     func share() {
@@ -189,6 +237,5 @@ extension SeriesPresenter: SeriesEventHandler {
         }
     }
 }
-
 
 public struct ScheduleCommand: RouteCommand {}

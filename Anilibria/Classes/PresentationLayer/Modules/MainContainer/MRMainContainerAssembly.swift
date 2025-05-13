@@ -1,7 +1,7 @@
 import UIKit
 
 final class MainContainerAssembly {
-    class func createModule(parent: Router? = nil) -> MainContainerViewController {
+    static func createModule(parent: Router? = nil) -> MainContainerViewController {
         let module = MainContainerViewController()
         let router = MainContainerRouter(view: module, parent: parent)
         module.handler = MainAppCoordinator.shared.container.resolve()
@@ -36,8 +36,8 @@ public final class MenuItemsControllersFactory {
             result = CatalogAssembly.createModule()
         case .other:
             result = OtherAssembly.createModule()
-        case .favorite:
-            result = FavoriteAssembly.createModule()
+        case .collections:
+            result = UserCollectionsAssembly.createModule()
         }
 
         if UIDevice.current.userInterfaceIdiom == .pad {

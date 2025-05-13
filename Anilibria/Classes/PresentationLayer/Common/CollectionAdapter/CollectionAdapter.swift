@@ -34,19 +34,30 @@ class CollectionViewAdapter: NSObject {
 
     func setLayout<Layout: UICollectionViewCompositionalLayout>(
         type: Layout.Type = UICollectionViewCompositionalLayout.self,
+        configuration: UICollectionViewCompositionalLayoutConfiguration? = nil,
         populator: ((Layout) -> Void)? = nil
     ) {
-        let layout = Layout(
-            sectionProvider: { [weak self] sectionIndex, environment in
-                guard
-                    let self,
-                    let section = dataSource.itemIdentifier(for: IndexPath(item: 0, section: sectionIndex))?.section
-                else {
-                    return nil
-                }
-                return section.getSectionLayout(environment: environment)
+        let layout: Layout
+        let provider: UICollectionViewCompositionalLayoutSectionProvider = { [weak self] sectionIndex, environment in
+            guard
+                let self,
+                let section = dataSource.itemIdentifier(for: IndexPath(item: 0, section: sectionIndex))?.section
+            else {
+                return nil
             }
-        )
+            return section.getSectionLayout(environment: environment)
+        }
+
+        if let configuration {
+            layout = Layout(
+                sectionProvider: provider,
+                configuration: configuration
+            )
+        } else {
+            layout = Layout(
+                sectionProvider: provider
+            )
+        }
         populator?(layout)
 
         collectionView.collectionViewLayout = layout
@@ -73,12 +84,12 @@ class CollectionViewAdapter: NSObject {
 
     private func makeDataSource() -> DataSource {
         let dataSource = DataSource(collectionView: collectionView) { [weak self] _, indexPath, item in
-            guard let self = self else { return nil }
-            return item.cellForItem(at: indexPath, context: self.context)
+            guard let self else { return nil }
+            return item.cellForItem(at: indexPath, context: context)
         }
 
-        dataSource.supplementaryViewProvider = { [weak self] _, kind, indexPath in
-            guard let self, let section = dataSource.itemIdentifier(for: indexPath)?.section else { return nil }
+        dataSource.supplementaryViewProvider = { [weak self, weak dataSource] _, kind, indexPath in
+            guard let self, let section = dataSource?.itemIdentifier(for: indexPath)?.section else { return nil }
             return section.supplementaryFor(elementKind: kind, index: indexPath, context: context)
         }
 
@@ -89,8 +100,8 @@ class CollectionViewAdapter: NSObject {
         dataSource.itemIdentifier(for: index)
     }
 
-    private func item(for section: Int) -> AnyCellAdapter? {
-        dataSource.itemIdentifier(for: IndexPath(item: 0, section: section))
+    func item<T: AnyCellAdapter>(type: T.Type = T.self, for index: IndexPath) -> T? {
+        dataSource.itemIdentifier(for: index) as? T
     }
 }
 

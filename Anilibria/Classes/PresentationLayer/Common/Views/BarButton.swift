@@ -28,7 +28,6 @@ final class BarButton: UIBarButtonItem {
     convenience init(type: UIButton.ButtonType = .system,
                      image: UIImage,
                      activeImage: UIImage? = nil,
-                     size: CGSize = .init(width: 30, height: 30),
                      tintColor: UIColor? = nil,
                      rippleColor: UIColor? = nil,
                      imageEdge: UIEdgeInsets = .zero,
@@ -36,43 +35,15 @@ final class BarButton: UIBarButtonItem {
         let tintColor = tintColor ?? UIColor(resource: .Tint.main)
         let rippleColor = rippleColor ?? UIColor(resource: .Tint.main)
 
-        let button = RippleButton(type: type)
-        button.frame = CGRect(origin: .zero, size: CGSize(width: size.width, height: 44))
+        let button = BarRippleButton(type: type)
+        button.contentSize = CGSize(width: 30, height: 44)
         button.tintColor = tintColor
-        let container = BorderedView(frame: CGRect(origin: .zero, size: size))
-        container.cornerRadius = 4
-        container.isUserInteractionEnabled = false
-        container.clipsToBounds = true
         button.setImage(image, for: .normal)
-        button.addSubview(container)
-        let buttonSize = button.frame.size
-        container.center = CGPoint(x: buttonSize.width / 2,
-                                   y: buttonSize.height / 2)
-        button.rippleContainerView = container
         button.rippleColor = rippleColor
         button.imageEdgeInsets = imageEdge
         self.init(customView: button)
         self.normalImage = image
         self.activeImage = activeImage
-        self.didTapAction = action
-        self.button = button
-        button.addTarget(self, action: #selector(self.didTap), for: .touchUpInside)
-    }
-
-    convenience init(text: String,
-                     font: UIFont = UIFont.systemFont(ofSize: 15, weight: .bold),
-                     textColor: UIColor? = nil,
-                     action: ActionFunc?) {
-        let button = BarRippleButton(frame: .init(x: 0,
-                                                  y: 0,
-                                                  width: 1,
-                                                  height: 44))
-
-        button.titleLabel?.font = font
-        button.rippleColor = UIColor(resource: .Tint.main)
-        button.setTitle(text, for: .normal)
-        button.setTitleColor(textColor ?? UIColor(resource: .Text.main), for: .normal)
-        self.init(customView: button)
         self.didTapAction = action
         self.button = button
         button.addTarget(self, action: #selector(self.didTap), for: .touchUpInside)
@@ -88,27 +59,35 @@ final class BarButton: UIBarButtonItem {
 }
 
 public class BarRippleButton: RippleButton {
-    let ripple: UIView = UIView(frame: .zero)
-    private var size: CGSize = .zero
+    var contentSize: CGSize = UIView.layoutFittingCompressedSize
+
+    public override var intrinsicContentSize: CGSize {
+        contentSize
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        rippleContainerView = ripple
-        self.ripple.clipsToBounds = true
-        self.ripple.layer.cornerRadius = 11
-        self.ripple.layer.zPosition = -100
-        self.ripple.isUserInteractionEnabled = false
-        self.contentEdgeInsets = UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)
-        self.addSubview(self.ripple)
-        self.sizeToFit()
-        self.size = frame.size
+        setup()
     }
 
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
+        setup()
     }
 
-    public override var intrinsicContentSize: CGSize {
-        return self.size
+    private func setup() {
+        self.layoutMargins = .init(top: 7, left: 0, bottom: 7, right: 0)
+        let container = BorderedView()
+        container.cornerRadius = 4
+        container.isUserInteractionEnabled = false
+        container.clipsToBounds = true
+        addSubview(container)
+        container.constraintEdgesToSuperview(.init(
+            top: .margins(0),
+            left: .margins(0),
+            bottom: .margins(0),
+            right: .margins(0)
+        ))
+        rippleContainerView = container
     }
 }

@@ -1,7 +1,7 @@
 import UIKit
 
 final class PlayerAssembly {
-    class func createModule(series: Series, parent: Router? = nil) -> PlayerViewController {
+    static func createModule(series: Series, parent: Router? = nil) -> PlayerViewController {
         let module = PlayerViewController(
             viewModel: MainAppCoordinator.shared.container.resolve()
         )

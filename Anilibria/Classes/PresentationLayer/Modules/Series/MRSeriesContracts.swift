@@ -2,15 +2,17 @@ import UIKit
 
 // MARK: - Contracts
 
-protocol SeriesViewBehavior: WaitingBehavior {
+protocol SeriesViewBehavior: WaitingBehavior, RefreshBehavior {
     func set(series: Series)
-    func set(favorite: Bool?, count: Int)
-    func can(favorite: Bool)
+    func set(favorite: Bool)
+    func set(collection: UserCollectionType?)
     func can(watch: Bool)
     func set(series: [Series], current: Series)
+    
+    func showUpdatesActivity() -> ActivityDisposable?
 }
 
-protocol SeriesEventHandler: ViewControllerEventHandler {
+protocol SeriesEventHandler: ViewControllerEventHandler, RefreshEventHandler {
     func bind(view: SeriesViewBehavior,
               router: SeriesRoutable,
               series: Series)
@@ -23,7 +25,8 @@ protocol SeriesEventHandler: ViewControllerEventHandler {
     func play()
     func download(torrent: Torrent)
 
-    func favorite()
+    func favorite(_ activity: (any ActivityDisposable)?)
+    func selectCollection(_ activity: (any ActivityDisposable)?)
     func donate()
     func share()
 }

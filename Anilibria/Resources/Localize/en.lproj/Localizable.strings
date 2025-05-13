@@ -92,6 +92,14 @@
 
 "common.content_blocked" = "Content is blocked";
 
+"common.collections.favorites" = "Favorites";
+"common.collections.planned" = "Planned";
+"common.collections.watched" = "Watched";
+"common.collections.watching" = "Watching";
+"common.collections.postponed" = "Postponed";
+"common.collections.abandoned" = "Abandoned";
+"common.collections.add_to" = "Add to";
+
 //PERMISSION
 "permission.title" = "Permission";
 "permission.push" = "To recieve push notifications you should enable it on the iOS Settings.";
@@ -143,7 +151,7 @@
 
 //STUB VIEW
 "stub.title" = "Empty";
-"stub.favorite.message" = "Your favorite series will be here";
+"stub.collection.message" = "You didn't add any release yet";
 "stub.history.message" = "Your watching history will be here";
 "stub.message_not_found" = "No results found for \"%@\"";
 

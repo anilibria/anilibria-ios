@@ -1,7 +1,7 @@
 import UIKit
 
 final class SettingsAssembly {
-    class func createModule(parent: Router? = nil) -> SettingsViewController {
+    static func createModule(parent: Router? = nil) -> SettingsViewController {
         let module = SettingsViewController()
         let router = SettingsRouter(view: module, parent: parent)
         module.handler = MainAppCoordinator.shared.container.resolve()

@@ -1,7 +1,7 @@
 import UIKit
 
 final class ChoiceSheetAssembly {
-    class func createModule(
+    static func createModule(
         source: any ChoiceGroupSource,
         parent: Router? = nil
     ) -> ChoiceSheetViewController {

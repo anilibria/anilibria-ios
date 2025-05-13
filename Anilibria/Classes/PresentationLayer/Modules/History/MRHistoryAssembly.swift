@@ -1,7 +1,7 @@
 import UIKit
 
 final class HistoryAssembly {
-    class func createModule(parent: Router? = nil) -> HistoryViewController {
+    static func createModule(parent: Router? = nil) -> HistoryViewController {
         let module = HistoryViewController()
         let router = HistoryRouter(view: module, parent: parent)
         module.handler = MainAppCoordinator.shared.container.resolve()

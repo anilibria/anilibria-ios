@@ -9,7 +9,7 @@
 import UIKit
 
 final class RestorePasswordAssembly {
-    class func createModule(parent: Router? = nil) -> RestorePasswordViewController {
+    static func createModule(parent: Router? = nil) -> RestorePasswordViewController {
         let module = RestorePasswordViewController()
         let router = RestorePasswordRouter(view: module, parent: parent)
         module.viewModel = MainAppCoordinator.shared.container.resolve()

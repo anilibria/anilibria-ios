@@ -22,6 +22,7 @@ public final class RemovableSeriesCell: DraggableRippleCell {
     }
 
     func configure(_ item: Series) {
+        self.deleteIconView.transform = .identity
         self.imageView.setImage(from: item.poster,
                                 placeholder: UIImage(resource: .imgPlaceholder))
         self.titleLabel.text = item.name?.main ?? ""

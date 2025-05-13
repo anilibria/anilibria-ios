@@ -1,5 +1,5 @@
 //
-//  FavoriteFilterRequest.swift
+//  FavoriteFilterReleaseTypesRequest.swift
 //  Anilibria
 //
 //  Created by Ivan Morozov on 22.11.2024.

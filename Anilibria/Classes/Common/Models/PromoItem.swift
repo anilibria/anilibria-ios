@@ -12,6 +12,7 @@ public struct PromoItem: Hashable, Decodable {
     enum Content: Hashable {
         case release(Series)
         case ad(PromoAd)
+        case promo(Promo)
     }
 
     let id: String
@@ -25,13 +26,18 @@ public struct PromoItem: Hashable, Decodable {
         self.id = try container.decode(required: "id")
         self.image = urlConverter.convert(from: container.decode("image", "preview"))
         self.info = container.decode("description") ?? ""
+        let isAd: Bool = container.decode("is_ad") ?? false
 
         if let series: Series = container.decode("release") {
             content = .release(series)
+        } else if !isAd {
+            content = .promo(.init(
+                title: container.decode("title"),
+                url: urlConverter.convert(from: container.decode("url"))
+            ))
         } else if let ad = PromoAd(
             title: container.decode("title"),
             url: urlConverter.convert(from: container.decode("url")),
-            urlLabel: container.decode("url_label"),
             adErid: container.decode("ad_erid"),
             adOrigin: container.decode("ad_origin")
         ) {
@@ -45,21 +51,18 @@ public struct PromoItem: Hashable, Decodable {
 struct PromoAd: Hashable {
     let title: String
     let url: URL
-    let urlLabel: String
     let adErid: String
     let adOrigin: String
 
     init?(
         title: String?,
         url: URL?,
-        urlLabel: String?,
         adErid: String?,
         adOrigin: String?
     ) {
-        if let title, let url, let urlLabel, let adErid, let adOrigin {
+        if let title, let url, let adErid, let adOrigin {
             self.title = title
             self.url = url
-            self.urlLabel = urlLabel
             self.adErid = adErid
             self.adOrigin = adOrigin
         } else {
@@ -70,4 +73,9 @@ struct PromoAd: Hashable {
     var info: String {
         "erid: \(adErid) • \(adOrigin)"
     }
+}
+
+struct Promo: Hashable {
+    let title: String?
+    let url: URL?
 }

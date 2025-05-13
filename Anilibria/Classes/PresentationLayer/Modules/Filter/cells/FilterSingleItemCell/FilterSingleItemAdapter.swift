@@ -39,4 +39,3 @@ final class FilterSingleItemAdapter: BaseCellAdapter<FilterSingleItem> {
         viewModel.action(viewModel)
     }
 }
-

@@ -96,25 +96,16 @@ extension FeedPresenter: FeedEventHandler {
     }
 
     func select(series: Series) {
-        self.mainService.series(with: series.alias)
-            .manageActivity(self.view.showLoading(fullscreen: false))
-            .sink(onNext: { [weak self] item in
-                self?.router.open(series: item)
-            }, onError: { [weak self] error in
-                self?.router.show(error: error)
-            })
-            .store(in: &bag)
+        self.router.open(series: series)
     }
 
     func selectRandom() {
         self.mainService.fetchRandom()
             .manageActivity(self.view.showLoading(fullscreen: false))
-            .flatMap { [weak self] item -> AnyPublisher<Series, Error> in
-                guard let self, let item else { return .empty() }
-                return self.mainService.series(with: item.alias)
-            }
             .sink(onNext: { [weak self] item in
-                self?.router.open(series: item)
+                if let item {
+                    self?.router.open(series: item)
+                }
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })
@@ -137,6 +128,8 @@ extension FeedPresenter: FeedEventHandler {
         switch promo.content {
         case .ad(let ad):
             router.open(url: .web(ad.url))
+        case .promo(let item):
+            router.open(url: .web(item.url))
         case .release(let series):
             select(series: series)
         case nil:

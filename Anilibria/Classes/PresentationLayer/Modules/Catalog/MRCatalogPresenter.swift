@@ -33,7 +33,7 @@ final class CatalogPresenter {
 extension CatalogPresenter: RouterCommandResponder {
     func respond(command: RouteCommand) -> Bool {
         if let filterCommand = command as? FilterRouteCommand {
-            if viewModel.filter != filterCommand.value {
+            if viewModel.searchData.filter != filterCommand.value {
                 self.update(filter: filterCommand.value)
             }
             return true
@@ -57,17 +57,17 @@ extension CatalogPresenter: RouterCommandResponder {
 extension CatalogPresenter: CatalogEventHandler {
     func bind(view: CatalogViewBehavior,
               router: CatalogRoutable,
-              filter: SeriesFilter) {
+              data: SeriesSearchData) {
         self.view = view
         self.router = router
         self.router.responder = self
         viewModel.router = router
-        viewModel.filter = filter
+        viewModel.searchData = data
     }
 
     func didLoad() {
         self.view.set(model: viewModel)
-        self.view.setFilter(active: viewModel.filter != SeriesFilter())
+        self.view.setFilter(active: !viewModel.searchData.filter.isEmpty)
         viewModel.load(activity: view.showLoading(fullscreen: false))
     }
 
@@ -76,18 +76,7 @@ extension CatalogPresenter: CatalogEventHandler {
     }
 
     func select(series: Series) {
-        if !series.playlist.isEmpty {
-            router.open(series: series)
-        } else {
-            self.catalogService.fetchSeries(id: series.id)
-                .manageActivity(self.view.showLoading(fullscreen: false))
-                .sink(onNext: { [weak self] item in
-                    self?.router.open(series: item)
-                }, onError: { [weak self] error in
-                    self?.router.show(error: error)
-                })
-                .store(in: &bag)
-        }
+        router.open(series: series)
     }
 
     func openFilter() {
@@ -95,7 +84,7 @@ extension CatalogPresenter: CatalogEventHandler {
             .manageActivity(self.view.showLoading(fullscreen: false))
             .sink(onNext: { [weak self] data in
                 guard let self else { return }
-                router.open(filter: viewModel.filter, data: data)
+                router.open(filter: viewModel.searchData.filter, data: data)
             }, onError: { [weak self] error in
                 self?.router.show(error: error)
             })
@@ -106,10 +95,10 @@ extension CatalogPresenter: CatalogEventHandler {
         self.router.openSearchScreen()
     }
 
-    private func update(filter: SeriesFilter) {
+    private func update(filter: SeriesSearchData.Filter) {
         view.scrollToTop()
-        viewModel.filter = filter
-        view.setFilter(active: viewModel.filter != SeriesFilter())
+        viewModel.searchData.filter = filter
+        view.setFilter(active: !viewModel.searchData.filter.isEmpty)
         refresh()
     }
 }

@@ -44,7 +44,8 @@ private class ServicesPart: DIPart {
         MainServicePart.self,
         LinksServicePart.self,
         DownloadServicePart.self,
-        CatalogServicePart.self
+        CatalogServicePart.self,
+        UserCollectionsServicePart.self
     ]
 
     static func load(container: DIContainer) {
@@ -61,6 +62,7 @@ private class PersentersPart: DIPart {
         HistoryPart.self,
         SettingsPart.self,
         FavoritePart.self,
+        UserCollectionPart.self,
         SignInPart.self,
         OtherPart.self,
         ChoiceSheetPart.self,

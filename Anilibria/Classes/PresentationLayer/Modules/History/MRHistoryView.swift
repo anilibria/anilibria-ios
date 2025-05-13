@@ -5,7 +5,7 @@ import UIKit
 final class HistoryViewController: BaseCollectionViewController {
     var handler: HistoryEventHandler!
 
-    private let searchView: SearchView? = SearchView.fromNib()
+    private let searchView: SearchView? = SearchView()
     private let stubView: StubView? = StubView.fromNib()?.apply {
         $0.set(image: UIImage(resource: .iconHistory), color: UIColor(resource: .Text.secondary))
         $0.title = L10n.Stub.title

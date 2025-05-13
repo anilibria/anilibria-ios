@@ -5,12 +5,13 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="SeriesHeaderView" customModule="Anilibria" customModuleProvider="target">
+        <view userInteractionEnabled="NO" contentMode="scaleToFill" id="iN0-l3-epB" customClass="SeriesHeaderView" customModule="Anilibria" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="320" height="260"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -20,7 +21,7 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dmk-dj-otg">
                     <rect key="frame" x="135" y="105" width="50" height="50"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ptt-rL-sw8" customClass="CircleView" customModule="Anilibria" customModuleProvider="target">
+                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ptt-rL-sw8" customClass="CircleView" customModule="Anilibria" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                             <subviews>
                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aZ1-i8-btX">
@@ -76,7 +77,7 @@
                         <userDefinedRuntimeAttribute type="string" keyPath="gradientTypeName" value="bottomTop"/>
                     </userDefinedRuntimeAttributes>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KUL-ZZ-db2" customClass="CircleView" customModule="Anilibria" customModuleProvider="target">
+                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KUL-ZZ-db2" customClass="CircleView" customModule="Anilibria" customModuleProvider="target">
                     <rect key="frame" x="60.333333333333329" y="205" width="199.66666666666669" height="34"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Контент заблокирован" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="97q-pe-VDC">
@@ -94,13 +95,21 @@
                         <constraint firstItem="97q-pe-VDC" firstAttribute="top" secondItem="KUL-ZZ-db2" secondAttribute="top" constant="8" id="mWp-ba-X19"/>
                     </constraints>
                 </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1gm-vu-WCY" customClass="ShimmerView" customModule="Anilibria" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="260"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </view>
             </subviews>
             <color key="backgroundColor" name="surfaces/content"/>
             <constraints>
+                <constraint firstItem="1gm-vu-WCY" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="5UY-QU-E9Z"/>
+                <constraint firstItem="1gm-vu-WCY" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="6p7-hP-RM9"/>
                 <constraint firstAttribute="bottom" secondItem="0s3-Uv-qmH" secondAttribute="bottom" id="7Lz-lK-RcU"/>
+                <constraint firstAttribute="bottom" secondItem="1gm-vu-WCY" secondAttribute="bottom" id="Ap1-vb-krZ"/>
                 <constraint firstItem="x6C-7H-r4b" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="D15-bC-CHI"/>
                 <constraint firstItem="0s3-Uv-qmH" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="D64-4Q-94v"/>
                 <constraint firstAttribute="trailing" secondItem="0s3-Uv-qmH" secondAttribute="trailing" id="FCR-in-9Uf"/>
+                <constraint firstAttribute="trailing" secondItem="1gm-vu-WCY" secondAttribute="trailing" id="Iyu-sn-djc"/>
                 <constraint firstAttribute="trailing" secondItem="x6C-7H-r4b" secondAttribute="trailing" id="TsP-XK-Ppp"/>
                 <constraint firstItem="0s3-Uv-qmH" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Wdo-It-2Ff"/>
                 <constraint firstItem="x6C-7H-r4b" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Y2r-9y-Od8"/>
@@ -119,8 +128,9 @@
                 <outlet property="blockView" destination="KUL-ZZ-db2" id="xbP-wK-kdK"/>
                 <outlet property="imageView" destination="0s3-Uv-qmH" id="im3-bq-YJX"/>
                 <outlet property="playIconView" destination="ptt-rL-sw8" id="8oB-KM-Qtv"/>
+                <outlet property="shimmerView" destination="1gm-vu-WCY" id="8xl-MV-kK8"/>
             </connections>
-            <point key="canvasLocation" x="136.875" y="127.5"/>
+            <point key="canvasLocation" x="135.87786259541986" y="127.46478873239437"/>
         </view>
     </objects>
     <resources>
@@ -134,5 +144,8 @@
         <namedColor name="text/monoLight">
             <color red="0.99607843137254903" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

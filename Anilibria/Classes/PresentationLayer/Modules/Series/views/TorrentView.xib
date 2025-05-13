@@ -16,7 +16,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aXS-hM-ECg">
-                    <rect key="frame" x="15" y="8" width="397.33333333333331" height="96"/>
+                    <rect key="frame" x="0.0" y="8" width="427.33333333333331" height="96"/>
                     <string key="text">Серия 133-144 [WEBRip 1080p HEVC] 
 Добавлен 23.02.2020 00:00</string>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -24,7 +24,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dwP-dc-YWg">
-                    <rect key="frame" x="15" y="111" width="470" height="1"/>
+                    <rect key="frame" x="0.0" y="111" width="500" height="1"/>
                     <color key="backgroundColor" name="tint/separator"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="iKY-CC-JrK"/>
@@ -37,7 +37,7 @@
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sbc-V4-00K">
-                    <rect key="frame" x="422.33333333333331" y="8" width="62.666666666666686" height="96"/>
+                    <rect key="frame" x="437.33333333333331" y="8" width="62.666666666666686" height="96"/>
                     <string key="text">113.91 GB
 ↑ 8
 ↓ 9
@@ -59,11 +59,11 @@
                 <constraint firstItem="Sbc-V4-00K" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="Kyo-gZ-4NA"/>
                 <constraint firstAttribute="bottom" secondItem="UlW-ye-Zxg" secondAttribute="bottom" id="VDD-Eq-DJo"/>
                 <constraint firstAttribute="bottom" secondItem="Sbc-V4-00K" secondAttribute="bottom" constant="8" id="bcz-ez-2HO"/>
-                <constraint firstItem="aXS-hM-ECg" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="15" id="fhP-J4-cvW"/>
-                <constraint firstItem="dwP-dc-YWg" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="15" id="k6T-1c-YGD"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Sbc-V4-00K" secondAttribute="trailing" constant="15" id="rgN-hS-6u9"/>
+                <constraint firstItem="aXS-hM-ECg" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="fhP-J4-cvW"/>
+                <constraint firstItem="dwP-dc-YWg" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="k6T-1c-YGD"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Sbc-V4-00K" secondAttribute="trailing" id="rgN-hS-6u9"/>
                 <constraint firstItem="aXS-hM-ECg" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="t7d-sn-WH7"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="dwP-dc-YWg" secondAttribute="trailing" constant="15" id="vfe-XS-ybE"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="dwP-dc-YWg" secondAttribute="trailing" id="vfe-XS-ybE"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>

@@ -1,7 +1,7 @@
 import UIKit
 
 final class SearchAssembly {
-    class func createModule(parent: Router? = nil) -> SearchViewController {
+    static func createModule(parent: Router? = nil) -> SearchViewController {
         let module = SearchViewController()
         let router = SearchRouter(view: module, parent: parent)
         module.handler = MainAppCoordinator.shared.container.resolve()

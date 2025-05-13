@@ -8,11 +8,9 @@ final class SeriesViewController: BaseViewController {
     @IBOutlet var headerContainerView: UIView!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var secondTitleLabel: UILabel!
-    @IBOutlet var favoriteContainerView: UIView!
-    @IBOutlet var favoriteCountLabel: UILabel!
-    @IBOutlet var favoriteStarView: UIImageView!
-    @IBOutlet var favoriteButton: RippleButton!
-    @IBOutlet var favoriteShimmerView: ShimmerView!
+    @IBOutlet var favoriteView: SeriesFavoriteView!
+    @IBOutlet var typeView: SeriesCollectionTypeView!
+
     @IBOutlet var paramsTextView: AttributeLinksView!
     @IBOutlet var descTextView: AttributeLinksView!
     @IBOutlet var weekDayStackView: UIStackView!
@@ -27,6 +25,7 @@ final class SeriesViewController: BaseViewController {
     @IBOutlet var relatedStackView: UIStackView!
     @IBOutlet var relatedTitleLabel: UILabel!
     @IBOutlet var relatedShimmerView: ShimmerView!
+    @IBOutlet var contentShimmerViews: [ShimmerView] = []
 
     private var header: SeriesHeaderView!
     private var weekDayViews: [WeekDayView] = []
@@ -35,11 +34,11 @@ final class SeriesViewController: BaseViewController {
 
     private let boldTextBuilder = AttributeStringBuilder()
         .set(color: UIColor(resource: .Text.secondary))
-        .set(font: UIFont.font(ofSize: 13, weight: .bold))
+        .set(font: UIFont.font(ofSize: 14, weight: .bold))
 
     private let regularTextBuilder = AttributeStringBuilder()
         .set(color: UIColor(resource: .Text.main))
-        .set(font: UIFont.font(ofSize: 13, weight: .regular))
+        .set(font: UIFont.font(ofSize: 14, weight: .regular))
 
     // MARK: - Life cycle
 
@@ -48,6 +47,7 @@ final class SeriesViewController: BaseViewController {
         self.setupWeekView()
         super.viewDidLoad()
         self.setupNavigationButtons()
+        addRefreshControl(scrollView: scrollView)
 
         let action: Action<URL> = { [weak self] url in
             if url.isAttributeLink {
@@ -77,16 +77,17 @@ final class SeriesViewController: BaseViewController {
         descTextView.textColor = UIColor(resource: .Text.main)
         supportLabelContainer.cornerRadius = 6
 
-        favoriteContainerView.smoothCorners(with: 11)
-        favoriteShimmerView.backgroundColor = UIColor(resource: .Surfaces.base)
-        favoriteShimmerView.shimmerColor = UIColor(resource: .Tint.shimmer)
-        favoriteShimmerView.isHidden = false
-        favoriteShimmerView.run()
-
         relatedShimmerView.smoothCorners(with: 8)
-        relatedShimmerView.backgroundColor = UIColor(resource: .Surfaces.base)
-        relatedShimmerView.shimmerColor = UIColor(resource: .Tint.shimmer)
+        relatedShimmerView.backgroundColor = UIColor(resource: .Tint.shimmer)
+        relatedShimmerView.shimmerColor = UIColor(resource: .Surfaces.base)
         relatedShimmerView.run()
+
+        contentShimmerViews.forEach {
+            $0.smoothCorners(with: 8)
+            $0.backgroundColor = UIColor(resource: .Tint.shimmer)
+            $0.shimmerColor = UIColor(resource: .Surfaces.base)
+            $0.run()
+        }
     }
 
     override func setupStrings() {
@@ -128,12 +129,29 @@ final class SeriesViewController: BaseViewController {
         }
     }
 
+    override func refresh() {
+        super.refresh()
+        handler.refresh()
+    }
+
     @IBAction func donateAction(_ sender: Any) {
         self.handler.donate()
     }
 
     @IBAction func favoriteAction(_ sender: Any) {
-        self.handler.favorite()
+        favoriteView.isLoading = true
+        let activity = ActivityHolder { [weak self] in
+            self?.favoriteView.isLoading = false
+        }
+        self.handler.favorite(activity)
+    }
+
+    @IBAction func selectTypeAction(_ sender: Any) {
+        typeView.isLoading = true
+        let activity = ActivityHolder { [weak self] in
+            self?.typeView.isLoading = false
+        }
+        self.handler.selectCollection(activity)
     }
 
     @IBAction func weekDaysAction(_ sender: Any) {
@@ -142,32 +160,37 @@ final class SeriesViewController: BaseViewController {
 }
 
 extension SeriesViewController: SeriesViewBehavior {
+    func showUpdatesActivity() -> (any ActivityDisposable)? {
+        typeView.isLoading = true
+        favoriteView.isLoading = true
+        let activity = ActivityHolder { [weak self] in
+            self?.typeView.isLoading = false
+            self?.favoriteView.isLoading = false
+        }
+        return activity
+    }
+
     func can(favorite: Bool) {
-        self.favoriteButton.isUserInteractionEnabled = favorite
+        self.favoriteView.isUserInteractionEnabled = favorite
     }
 
     func can(watch: Bool) {
         self.header.setPlayVisible(value: watch)
     }
 
-    func set(favorite: Bool?, count: Int) {
-        favoriteShimmerView.isHidden = true
-        favoriteShimmerView.stop()
-        switch favorite {
-        case true?:
-            favoriteStarView.tintColor = UIColor(resource: .Buttons.selected)
-        case false?:
-            favoriteStarView.tintColor = UIColor(resource: .Text.secondary)
-        case nil:
-            favoriteShimmerView.isHidden = false
-            favoriteShimmerView.run()
-        }
+    func set(favorite: Bool) {
+        favoriteView.set(favorite: favorite)
+    }
 
-        self.favoriteCountLabel.text = "\(count)"
-        favoriteContainerView.fadeTransition()
+    func set(collection: UserCollectionType?) {
+        typeView.configure(with: collection)
     }
 
     func set(series: Series) {
+        contentShimmerViews.forEach {
+            $0.stop()
+            $0.isHidden = true
+        }
         self.header.configure(series)
         self.navigationItem.backButtonTitle = series.name?.main
 
@@ -193,6 +216,7 @@ extension SeriesViewController: SeriesViewBehavior {
         #if targetEnvironment(macCatalyst)
         self.set(torrents: series.torrents)
         #endif
+        view.fadeTransition()
     }
 
     func set(series: [Series], current: Series) {
@@ -299,10 +323,10 @@ extension SeriesViewController: SeriesViewBehavior {
 
         if series.members.isEmpty == false {
             let items = Dictionary(grouping: series.members, by: { $0.role })
-            items.forEach { (role, members) in
-                guard let role else { return }
+            let roles = items.compactMap { $0.key }.sorted(by: { $0.value < $1.value })
+            roles.forEach { role in
                 var data = self.boldTextBuilder.build("\(role.description): ")
-
+                let members = items[role] ?? []
                 let last = members.last
                 for member in members {
                     data = data + regularTextBuilder.build(member.name)
@@ -320,63 +344,10 @@ extension SeriesViewController: SeriesViewBehavior {
     }
 
     func set(desc: NSAttributedString?) {
-        self.descTextView.attributedText = desc
-    }
-}
-
-public final class WeekDayView: CircleView {
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.font(ofSize: 12, weight: .semibold)
-        label.textColor = .darkGray
-        label.textAlignment = .center
-        return label
-    }()
-    
-    private var subscriber: AnyCancellable?
-    
-    public private(set) var day: WeekDay?
-    
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-        setup()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setup()
-    }
-    
-    private func setup() {
-        addSubview(titleLabel)
-        borderColor = UIColor(resource: .Tint.separator)
-        borderThickness = 1
-        backgroundColor = .clear
-        
-        titleLabel.constraintEdgesToSuperview(.init(top: 10, left: 4, bottom: 10, right: 4))
-        widthAnchor.constraint(equalTo: heightAnchor, multiplier: 1).isActive = true
-    }
-    
-    func configure(_ weekDay: WeekDay) {
-        self.day = weekDay
-        titleLabel.text = weekDay.shortName
-        
-        subscriber = Language.languageChanged.sink { [weak self] in
-            self?.titleLabel.text = weekDay.shortName
+        guard let desc else {
+            self.descTextView.attributedText = nil
+            return
         }
-    }
-
-    var isSelected: Bool = false {
-        didSet {
-            if self.isSelected {
-                self.backgroundColor = UIColor(resource: .Buttons.selected)
-                self.titleLabel.textColor = UIColor(resource: .Text.monoLight)
-                self.borderThickness = 0
-            } else {
-                self.backgroundColor = .clear
-                self.titleLabel.textColor = UIColor(resource: .Text.secondary)
-                self.borderThickness = 1
-            }
-        }
+        self.descTextView.attributedText = regularTextBuilder.build(desc)
     }
 }

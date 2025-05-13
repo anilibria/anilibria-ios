@@ -163,6 +163,37 @@ internal enum L10n {
       }
     }
 
+    internal enum Collections {
+      /// Брошено
+      internal static var abandoned: String {
+          return L10n.tr("Localizable", "common.collections.abandoned")
+      }
+      /// Добавить
+      internal static var addTo: String {
+          return L10n.tr("Localizable", "common.collections.add_to")
+      }
+      /// Избранное
+      internal static var favorites: String {
+          return L10n.tr("Localizable", "common.collections.favorites")
+      }
+      /// Запланировано
+      internal static var planned: String {
+          return L10n.tr("Localizable", "common.collections.planned")
+      }
+      /// Отложено
+      internal static var postponed: String {
+          return L10n.tr("Localizable", "common.collections.postponed")
+      }
+      /// Просмотрено
+      internal static var watched: String {
+          return L10n.tr("Localizable", "common.collections.watched")
+      }
+      /// Смотрю
+      internal static var watching: String {
+          return L10n.tr("Localizable", "common.collections.watching")
+      }
+    }
+
     internal enum FilterSearch {
       /// Искать по жанрам и годам
       internal static var title: String {
@@ -671,10 +702,10 @@ internal enum L10n {
         return L10n.tr("Localizable", "stub.title")
     }
 
-    internal enum Favorite {
-      /// Здесь будут отображаться ваши избранные релизы
+    internal enum Collection {
+      /// Вы еще не добавили ни одного релиза
       internal static var message: String {
-          return L10n.tr("Localizable", "stub.favorite.message")
+          return L10n.tr("Localizable", "stub.collection.message")
       }
     }
 

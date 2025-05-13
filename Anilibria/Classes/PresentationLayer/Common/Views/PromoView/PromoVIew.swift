@@ -80,6 +80,8 @@ final class PromoView: LoadableView {
         imageView.image = nil
         imageView.cancelDownloadTask()
         imageView.setImage(from: model.image)
+        adView.isHidden = true
+        adInfo.isHidden = true
 
         switch model.content {
         case .ad(let ad):
@@ -89,8 +91,8 @@ final class PromoView: LoadableView {
             adInfo.text = ad.info
         case .release(let series):
             titleLabel.text = series.name?.main
-            adView.isHidden = true
-            adInfo.isHidden = true
+        case .promo(let item):
+            titleLabel.text = item.title
         case nil:
             break
         }
@@ -109,13 +111,14 @@ final class PromoView: LoadableView {
         }
         pageControl.currentPage = index
         viewModel?.selectedIndex = index
-
         workItem?.cancel()
-        workItem = DispatchWorkItem { [weak self] in
-            self?.changeToNext()
-        }
-        if let workItem {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 20, execute: workItem)
+        if (viewModel?.items.count ?? 0) > 1 {
+            workItem = DispatchWorkItem { [weak self] in
+                self?.changeToNext()
+            }
+            if let workItem {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 20, execute: workItem)
+            }
         }
     }
 

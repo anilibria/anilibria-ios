@@ -25,7 +25,7 @@ final class FeedViewController: BaseCollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupNavbar()
-        self.addRefreshControl()
+        self.addRefreshControl(scrollView: collectionView)
         self.handler.didLoad()
         self.collectionView.contentInset.top = 10
         self.collectionView.contentInset.bottom = 16

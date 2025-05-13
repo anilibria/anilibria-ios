@@ -18,7 +18,7 @@ final class CatalogViewModel: SeriesViewModelProtocol {
     let items = CurrentValueSubject<[Series], Never>([])
 
     var router: CatalogRoutable?
-    var filter: SeriesFilter = SeriesFilter()
+    var searchData: SeriesSearchData = SeriesSearchData()
 
     var select: ((Series) -> Void)?
 
@@ -33,7 +33,7 @@ final class CatalogViewModel: SeriesViewModelProtocol {
     func load(activity: ActivityDisposable?) {
         nextPage = 1
         pagination.reset()
-        pageSubscriber = catalogService.fetchCatalog(page: nextPage, limit: limit, filter: filter)
+        pageSubscriber = catalogService.fetchCatalog(page: nextPage, limit: limit, data: searchData)
             .sink(onNext: { [weak self, limit] items in
                 self?.nextPage += 1
                 self?.items.send(items)
@@ -46,7 +46,7 @@ final class CatalogViewModel: SeriesViewModelProtocol {
     }
 
     private func loadPage(completion: @escaping Action<Bool>) {
-        pageSubscriber = catalogService.fetchCatalog(page: nextPage, limit: limit, filter: filter)
+        pageSubscriber = catalogService.fetchCatalog(page: nextPage, limit: limit, data: searchData)
             .sink(onNext: { [weak self, limit] items in
                 self?.nextPage += 1
                 if var currentItems = self?.items.value {

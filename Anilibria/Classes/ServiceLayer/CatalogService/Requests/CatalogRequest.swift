@@ -13,8 +13,8 @@ public struct CatalogRequest: BackendAPIRequest {
     let method: NetworkManager.Method = .GET
     let parameters: [String: Any]
 
-    init(filter: SeriesFilter, page: Int, limit: Int) {
-        var results = filter.parameters
+    init(data: SeriesSearchData, page: Int, limit: Int) {
+        var results = data.parameters
         results["page"] = page
         results["limit"] = limit
 
@@ -27,52 +27,62 @@ public enum SeriesSorting: String {
     case newest = "2"
 }
 
-public struct SeriesFilter: Hashable {
-    var genres: Set<Int> = []
-    var types: Set<String> = []
-    var seasons: Set<String> = []
-    var yearsRange: YearsRange?
-    var years:  Set<Int> = []
-    var sorting: String?
-    var ageRatings: Set<String> = []
-    var publishStatuses: Set<String> = []
-    var productionStatuses: Set<String> = []
-    var search: String?
+public struct SeriesSearchData: Hashable {
+    var search: String = ""
+    var filter: Filter = .init()
 
     var parameters: [String: Any] {
         var result: [String: Any] = [:]
-        if let sorting {
+        if let sorting = filter.sorting {
             result["f[sorting]"] = sorting
         }
-        if let yearsRange {
+        if let yearsRange = filter.yearsRange {
             result["f[years][from_year]"] = yearsRange.fromYear
             result["f[years][to_year]"] = yearsRange.toYear
         }
-        if !years.isEmpty {
-            result["f[years]"] = years.lazy.map { "\($0)" }.joined(separator: ",")
+        if !filter.years.isEmpty {
+            result["f[years]"] = filter.years.lazy.map { "\($0)" }.joined(separator: ",")
         }
-        if !genres.isEmpty {
-            result["f[genres]"] = genres.lazy.map { "\($0)" }.joined(separator: ",")
+        if !filter.genres.isEmpty {
+            result["f[genres]"] = filter.genres.lazy.map { "\($0)" }.joined(separator: ",")
         }
-        if !types.isEmpty {
-            result["f[types]"] = types.joined(separator: ",")
+        if !filter.types.isEmpty {
+            result["f[types]"] = filter.types.joined(separator: ",")
         }
-        if !seasons.isEmpty {
-            result["f[seasons]"] = seasons.joined(separator: ",")
+        if !filter.seasons.isEmpty {
+            result["f[seasons]"] = filter.seasons.joined(separator: ",")
         }
-        if !ageRatings.isEmpty {
-            result["f[age_ratings]"] = ageRatings.joined(separator: ",")
+        if !filter.ageRatings.isEmpty {
+            result["f[age_ratings]"] = filter.ageRatings.joined(separator: ",")
         }
-        if !publishStatuses.isEmpty {
-            result["f[publish_statuses]"] = publishStatuses.joined(separator: ",")
+        if !filter.publishStatuses.isEmpty {
+            result["f[publish_statuses]"] = filter.publishStatuses.joined(separator: ",")
         }
-        if !productionStatuses.isEmpty {
-            result["f[production_statuses]"] = productionStatuses.joined(separator: ",")
+        if !filter.productionStatuses.isEmpty {
+            result["f[production_statuses]"] = filter.productionStatuses.joined(separator: ",")
         }
-        if let search, !search.isEmpty {
+        if !search.isEmpty {
             result["f[search]"] = search
         }
         return result
+    }
+}
+
+public extension SeriesSearchData {
+    struct Filter: Hashable {
+        var genres: Set<Int> = []
+        var types: Set<String> = []
+        var seasons: Set<String> = []
+        var yearsRange: YearsRange?
+        var years:  Set<Int> = []
+        var sorting: String?
+        var ageRatings: Set<String> = []
+        var publishStatuses: Set<String> = []
+        var productionStatuses: Set<String> = []
+
+        var isEmpty: Bool {
+            self == Filter()
+        }
     }
 }
 

@@ -1,7 +1,7 @@
 import UIKit
 
 final class FeedAssembly {
-    class func createModule(parent: Router? = nil) -> FeedViewController {
+    static func createModule(parent: Router? = nil) -> FeedViewController {
         let module = FeedViewController()
         let router = FeedRouter(view: module, parent: parent)
         module.handler = MainAppCoordinator.shared.container.resolve()

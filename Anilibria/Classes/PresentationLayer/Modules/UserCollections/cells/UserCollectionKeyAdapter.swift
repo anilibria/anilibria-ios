@@ -92,7 +92,11 @@ class UserCollectionKeySectionAdapter: SectionAdapterProtocol {
         return []
     }
 
-    func getSectionLayout(environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
+    func getSectionLayout(
+        for identifier: AnyHashable,
+        environment: any NSCollectionLayoutEnvironment
+    ) -> NSCollectionLayoutSection? {
+        guard identifier == uid else { return nil }
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .estimated(50),
             heightDimension: .absolute(30)

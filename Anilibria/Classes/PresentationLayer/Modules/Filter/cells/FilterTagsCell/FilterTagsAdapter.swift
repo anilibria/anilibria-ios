@@ -104,7 +104,11 @@ class FilterTagsSectionAdapter: SectionAdapterProtocol {
         return []
     }
 
-    func getSectionLayout(environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
+    func getSectionLayout(
+        for identifier: AnyHashable,
+        environment: any NSCollectionLayoutEnvironment
+    ) -> NSCollectionLayoutSection? {
+        guard identifier == uid else { return nil }
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .estimated(50),
             heightDimension: .estimated(50)
@@ -141,10 +145,12 @@ class FilterTagsSectionAdapter: SectionAdapterProtocol {
     }
 
     func supplementaryFor(
+        identifier: AnyHashable,
         elementKind: String,
         index: IndexPath,
         context: CollectionContext
     ) -> UICollectionReusableView? {
+        guard identifier == uid else { return nil }
         if elementKind == headerKind {
             let view = context.dequeueReusableNibSupplementaryView(
                 type: FilterTitleView.self,

@@ -8,22 +8,28 @@
 
 import UIKit
 
-final class RewindView: CircleView {
+final class RewindView: UIView {
     @IBOutlet var titleLabel: UILabel!
-    private var tapHandler: Action<Double>?
 
-    private var time: Double = 0
+    private let timeFormatter = FormatterFactory.time.create()
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        smoothCorners(with: bounds.height / 2)
+        backgroundColor = UIColor.darkGray.withAlphaComponent(0.5)
+        layer.borderColor = backgroundColor?.cgColor
+        layer.borderWidth = 1
+
+        titleLabel.font = .monospacedSystemFont(ofSize: 18, weight: .bold)
+        titleLabel.textColor = UIColor(resource: .Text.monoLight)
+    }
 
     func set(time: Double) {
-        self.time = time
-        self.titleLabel.text = "\(Int(abs(time)))"
-    }
-
-    func setDidTap(_ action: Action<Double>?) {
-        self.tapHandler = action
-    }
-
-    @IBAction func tapAction(_ sender: Any) {
-        self.tapHandler?(time)
+        let text = timeFormatter.string(from: time) ?? ""
+        if time >= 0 {
+            titleLabel.text = "+\(text)"
+        } else {
+            titleLabel.text = "-\(text)"
+        }
     }
 }

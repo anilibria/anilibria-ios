@@ -14,6 +14,7 @@ protocol PlayerService: AnyObject {
     func fetchSettings() -> PlayerSettings
     func update(settings: PlayerSettings)
 
+    func observeSettings() -> AnyPublisher<PlayerSettings, Never>
     func fetchSeriesHistory() -> AnyPublisher<[Series], Error>
     func fetchPlayerContext(for series: Series) -> AnyPublisher<PlayerContext?, Error>
     func set(context: PlayerContext, for series: Series) -> AnyPublisher<Void, Error>
@@ -23,19 +24,26 @@ protocol PlayerService: AnyObject {
 final class PlayerServiceImp: PlayerService {
     private let settingsRepository: PlayerSettingsRepository
     private let historyRepository: HistoryRepository
+    private let settings: CurrentValueSubject<PlayerSettings, Never>
 
     init(settingsRepository: PlayerSettingsRepository,
          historyRepository: HistoryRepository) {
         self.settingsRepository = settingsRepository
         self.historyRepository = historyRepository
+        settings = .init(settingsRepository.getSettings())
     }
 
     func fetchSettings() -> PlayerSettings {
-        return self.settingsRepository.getSettings()
+        settings.value
+    }
+
+    func observeSettings() -> AnyPublisher<PlayerSettings, Never> {
+        settings.eraseToAnyPublisher()
     }
 
     func update(settings: PlayerSettings) {
         self.settingsRepository.set(settings: settings)
+        self.settings.send(settings)
     }
 
     func fetchSeriesHistory() -> AnyPublisher<[Series], Error> {

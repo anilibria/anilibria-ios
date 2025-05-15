@@ -80,7 +80,18 @@ final class SeriesSectionsAdapter: SectionAdapterProtocol {
         paginationAdapter.getItems(for: identifier)
     }
 
-    func getSectionLayout(environment: any NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
-        nil
+    func getSectionLayout(
+        for identifier: AnyHashable,
+        environment: any NSCollectionLayoutEnvironment
+    ) -> NSCollectionLayoutSection? {
+        if let layout = seriesAdapter.getSectionLayout(for: identifier, environment: environment) {
+            return layout
+        }
+
+        if let layout = paginationAdapter.getSectionLayout(for: identifier, environment: environment) {
+            return layout
+        }
+
+        return nil
     }
 }

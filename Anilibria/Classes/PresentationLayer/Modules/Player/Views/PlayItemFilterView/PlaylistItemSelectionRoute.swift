@@ -16,7 +16,7 @@ extension PlaylistItemSelectionRoute where Self: RouterProtocol {
     func openItemSelection(with model: PlaylistItemSelectionModel) {
         let view = PlayItemFilterView()
         view.viewModel = model
-        let module = ChoiceSheetAssembly.createModule(source: model, parent: self)
+        let module = ActionSheetAssembly.createModule(source: model, parent: self)
         module.additionalView = view
         PresentRouter(target: module,
                       from: nil,

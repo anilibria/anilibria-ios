@@ -65,7 +65,7 @@ private class PersentersPart: DIPart {
         UserCollectionPart.self,
         SignInPart.self,
         OtherPart.self,
-        ChoiceSheetPart.self,
+        ActionSheetPart.self,
         PlayerPart.self,
         SeriesPart.self,
         SearchPart.self,

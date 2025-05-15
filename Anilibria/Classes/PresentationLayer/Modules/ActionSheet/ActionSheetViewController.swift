@@ -1,8 +1,16 @@
+//
+//  ActionSheetViewController.swift
+//  Anilibria
+//
+//  Created by Ivan Morozov on 16.05.2025.
+//  Copyright © 2025 Иван Морозов. All rights reserved.
+//
+
 import UIKit
 
 // MARK: - View Controller
 
-final class ChoiceSheetViewController: BaseCollectionViewController {
+final class ActionSheetViewController: BaseCollectionViewController {
     @IBOutlet var collectionHeightConstraint: NSLayoutConstraint!
     @IBOutlet var bottomConstraint: NSLayoutConstraint!
     @IBOutlet var backButton: UIButton!
@@ -18,7 +26,7 @@ final class ChoiceSheetViewController: BaseCollectionViewController {
         }
     }
 
-    var handler: ChoiceSheetEventHandler!
+    var handler: ActionSheetEventHandler!
     private var bag: Any?
 
     // MARK: - Life cycle
@@ -33,6 +41,9 @@ final class ChoiceSheetViewController: BaseCollectionViewController {
         self.bag = self.collectionView.observe(\UICollectionView.contentSize) { [weak self] _, _ in
             if let height = self?.collectionView.contentSize.height {
                 self?.collectionHeightConstraint.constant = height
+                UIView.animate(withDuration: 0.2) {
+                    self?.view.layoutIfNeeded()
+                }
             }
         }
 
@@ -114,9 +125,9 @@ final class ChoiceSheetViewController: BaseCollectionViewController {
     }
 }
 
-extension ChoiceSheetViewController: ChoiceSheetViewBehavior {
+extension ActionSheetViewController: ActionSheetViewBehavior {
     func set(items: [ChoiceGroup]) {
-        let sections = ChoiceCellAdapterSectionFactory.create(for: items) { [weak self] item in
+        let sections = SheetAdapterSectionFactory.create(for: items) { [weak self] item in
             self?.handler.select(item: item)
         }
         self.set(sections: sections)

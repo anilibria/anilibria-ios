@@ -1,43 +1,31 @@
+//
+//  SheetSectionAdapter.swift
+//  Anilibria
+//
+//  Created by Ivan Morozov on 16.05.2025.
+//  Copyright © 2025 Иван Морозов. All rights reserved.
+//
+
 import UIKit
 
-final class ChoiceCellAdapter: BaseCellAdapter<ChoiceItem> {
-    private var selectAction: ((ChoiceItem) -> Void)?
-
-    init(viewModel: ChoiceItem, seclect: ((ChoiceItem) -> Void)?) {
-        self.selectAction = seclect
-        super.init(viewModel: viewModel)
-    }
-
-    override func cellForItem(at index: IndexPath, context: CollectionContext) -> UICollectionViewCell? {
-        let cell = context.dequeueReusableNibCell(type: ChoiceCell.self, for: index)
-        cell.configure(self.viewModel, isLast: self.section?.getItems().count == index.item + 1)
-        return cell
-    }
-
-    override func didSelect(at index: IndexPath) {
-        selectAction?(viewModel)
-    }
-}
-
-class ChoiceCellAdapterSectionFactory {
-    class func create(for items: [ChoiceGroup], seclect: ((ChoiceItem) -> Void)?) -> [any SectionAdapterProtocol] {
-        items.map { ChoiceCellSectionAdapter($0, seclect: seclect) }
-    }
-}
-
-class ChoiceCellSectionAdapter: SectionAdapterProtocol {
-    private let headerKind = "ChoiceSectionTitle"
+class SheetSectionAdapter: SectionAdapterProtocol {
+    private let headerKind = "SheetSectionTitle"
     private let title: String?
     private let uid: AnyHashable = UUID()
-    private(set) var items: [AnyCellAdapter] = []
+    private var isExpanded: Bool?
+    private var context: AdapterContext?
 
-    init(_ group: ChoiceGroup, seclect: ((ChoiceItem) -> Void)?) {
+    var items: [AnyCellAdapter] = []
+
+    init(_ group: SheetGroup) {
         self.title = group.title
-        self.items = group.items.map {
-            let model = ChoiceCellAdapter(viewModel: $0, seclect: seclect)
-            model.section = self
-            return model
+        if group.isExpandable && group.title != nil {
+            self.isExpanded = false
         }
+    }
+
+    func set(context: AdapterContext) {
+        self.context = context
     }
 
     func getIdentifiers() -> [AnyHashable] {
@@ -46,12 +34,19 @@ class ChoiceCellSectionAdapter: SectionAdapterProtocol {
 
     func getItems(for identifier: AnyHashable?) -> [AnyCellAdapter] {
         if identifier == uid {
+            if let isExpanded {
+                return isExpanded ? items : []
+            }
             return items
         }
         return []
     }
 
-    func getSectionLayout(environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
+    func getSectionLayout(
+        for identifier: AnyHashable,
+        environment: any NSCollectionLayoutEnvironment
+    ) -> NSCollectionLayoutSection? {
+        guard identifier == uid else { return nil }
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(1)
@@ -72,7 +67,7 @@ class ChoiceCellSectionAdapter: SectionAdapterProtocol {
             let header = NSCollectionLayoutBoundarySupplementaryItem(
                 layoutSize: .init(
                     widthDimension: .fractionalWidth(1),
-                    heightDimension: .estimated(1)
+                    heightDimension: .absolute(40)
                 ),
                 elementKind: headerKind,
                 alignment: .top
@@ -92,17 +87,28 @@ class ChoiceCellSectionAdapter: SectionAdapterProtocol {
     }
 
     func supplementaryFor(
+        identifier: AnyHashable,
         elementKind: String,
         index: IndexPath,
         context: CollectionContext
     ) -> UICollectionReusableView? {
+        guard identifier == uid else { return nil }
         if elementKind == headerKind {
             let view = context.dequeueReusableSupplementaryView(
-                type: ChoiceHaderView.self,
+                type: SheetHeaderView.self,
                 ofKind: headerKind,
                 for: index
             )
-            view.titleLabel.text = title
+            view.set(title: title)
+            view.set(expanded: isExpanded, animated: false)
+            view.tapAction = { [weak self, weak view] in
+                guard let self else { return }
+                if let isExpanded {
+                    self.isExpanded = !isExpanded
+                    view?.set(expanded: self.isExpanded, animated: true)
+                }
+                self.context?.reload(section: self)
+            }
             return view
         }
         return nil

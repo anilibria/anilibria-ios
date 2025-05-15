@@ -23,6 +23,7 @@
 "buttons.cancel" = "Cancel";
 "buttons.retry" = "Retry";
 "buttons.skip" = "Skip";
+"buttons.watch" = "Watch";
 "buttons.reset" = "Reset";
 "buttons.apply" = "Apply";
 "buttons.continue" = "Continue";
@@ -99,6 +100,14 @@
 "common.collections.postponed" = "Postponed";
 "common.collections.abandoned" = "Abandoned";
 "common.collections.add_to" = "Add to";
+
+"common.enabled" = "Enabled";
+"common.disabled" = "Disabled";
+"common.auto" = "Auto";
+"common.manual" = "Manual";
+"common.skip_credits" = "Skip credits";
+"common.auto_play" = "Autoplay";
+"common.playback_rate" = "Playback rate";
 
 //PERMISSION
 "permission.title" = "Permission";

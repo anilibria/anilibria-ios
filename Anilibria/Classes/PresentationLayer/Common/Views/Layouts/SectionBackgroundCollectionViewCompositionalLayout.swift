@@ -21,10 +21,6 @@ open class SectionBackgroundCollectionViewCompositionalLayout: UICollectionViewC
 
     open override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         var results = super.layoutAttributesForElements(in: rect)
-        // Workaround to avoid displayng sectionBackground for empty section in iOS 15
-        if results?.count == 1 && results?.first?.representedElementKind == Self.backgroundViewKind {
-            return []
-        }
         results?.enumerated().forEach { offset, attribute in
             if attribute.representedElementKind != Self.backgroundViewKind {
                 return

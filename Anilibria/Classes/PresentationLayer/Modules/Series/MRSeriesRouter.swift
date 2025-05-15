@@ -10,7 +10,7 @@ protocol SeriesRoutable: BaseRoutable,
                          ShareRoute,
                          CatalogRoute,
                          SignInRoute,
-                         ChoiceSheetRoute,
+                         ActionSheetRoute,
                          SeriesRoute {}
 
 final class SeriesRouter: BaseRouter, SeriesRoutable {}

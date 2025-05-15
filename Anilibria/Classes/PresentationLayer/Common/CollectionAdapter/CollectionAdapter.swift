@@ -10,8 +10,8 @@ import UIKit
 
 class CollectionViewAdapter: NSObject {
 
-    typealias DataSource = UICollectionViewDiffableDataSource<Int, AnyCellAdapter>
-    typealias Snapshot = NSDiffableDataSourceSnapshot<Int, AnyCellAdapter>
+    typealias DataSource = UICollectionViewDiffableDataSource<SectionData, AnyCellAdapter>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<SectionData, AnyCellAdapter>
 
     private let collectionView: UICollectionView
     private var dataSource: DataSource!
@@ -40,8 +40,7 @@ class CollectionViewAdapter: NSObject {
         let layout: Layout
         let provider: UICollectionViewCompositionalLayoutSectionProvider = { [weak self] sectionIndex, environment in
             guard
-                let self,
-                let section = dataSource.itemIdentifier(for: IndexPath(item: 0, section: sectionIndex))?.section
+                let section = self?.dataSource.getSection(for: sectionIndex)
             else {
                 return nil
             }
@@ -71,7 +70,7 @@ class CollectionViewAdapter: NSObject {
         for section in sections {
             section.set(context: adapterContext)
             section.getIdentifiers().forEach { id in
-                let sectionId = id.hashValue
+                let sectionId = SectionData(id: id, section: section)
                 snapshot.appendSections([sectionId])
                 snapshot.appendItems(section.getItems(for: id), toSection: sectionId)
             }
@@ -89,7 +88,7 @@ class CollectionViewAdapter: NSObject {
         }
 
         dataSource.supplementaryViewProvider = { [weak self, weak dataSource] _, kind, indexPath in
-            guard let self, let section = dataSource?.itemIdentifier(for: indexPath)?.section else { return nil }
+            guard let self, let section = dataSource?.getSection(for: indexPath.section) else { return nil }
             return section.supplementaryFor(elementKind: kind, index: indexPath, context: context)
         }
 
@@ -153,10 +152,10 @@ extension CollectionViewAdapter {
 }
 
 final class AdapterContext {
-    private weak var dataSource: UICollectionViewDiffableDataSource<Int, AnyCellAdapter>?
+    private weak var dataSource: UICollectionViewDiffableDataSource<SectionData, AnyCellAdapter>?
 
     init(
-        dataSource: UICollectionViewDiffableDataSource<Int, AnyCellAdapter>?
+        dataSource: UICollectionViewDiffableDataSource<SectionData, AnyCellAdapter>?
     ) {
         self.dataSource = dataSource
     }
@@ -166,11 +165,23 @@ final class AdapterContext {
         var snapshot = dataSource.snapshot()
 
         section.getIdentifiers().forEach { id in
-            let current = snapshot.itemIdentifiers(inSection: id.hashValue)
+            let sectionId = SectionData(id: id, section: section)
+            let current = snapshot.itemIdentifiers(inSection: sectionId)
             snapshot.deleteItems(current)
-            snapshot.appendItems(section.getItems(for: id), toSection: id.hashValue)
+            snapshot.appendItems(section.getItems(for: id), toSection: sectionId)
         }
 
         dataSource.apply(snapshot, animatingDifferences: animated)
+    }
+}
+
+
+extension UICollectionViewDiffableDataSource {
+    func getSection(for index: Int) -> SectionIdentifierType? {
+//        if #available(iOS 15.0, *) {
+//            self.sectionIdentifier(for: index)
+//        } else {
+            self.snapshot().sectionIdentifiers[safe: index]
+//        }
     }
 }

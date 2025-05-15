@@ -5,6 +5,7 @@ final class PlayerAssembly {
         let module = PlayerViewController(
             viewModel: MainAppCoordinator.shared.container.resolve()
         )
+        module.playerView = DefaultPlayerView()
         let router = PlayerRouter(view: module, parent: parent)
         module.viewModel.bind(router: router, series: series)
         return module

@@ -80,6 +80,10 @@ internal enum L10n {
     internal static var skip: String {
         return L10n.tr("Localizable", "buttons.skip")
     }
+    /// Смотреть
+    internal static var watch: String {
+        return L10n.tr("Localizable", "buttons.watch")
+    }
     /// Да
     internal static var yes: String {
         return L10n.tr("Localizable", "buttons.yes")
@@ -95,6 +99,14 @@ internal enum L10n {
     internal static var appearance: String {
         return L10n.tr("Localizable", "common.appearance")
     }
+    /// Автоматически
+    internal static var auto: String {
+        return L10n.tr("Localizable", "common.auto")
+    }
+    /// Автовоспроизведение
+    internal static var autoPlay: String {
+        return L10n.tr("Localizable", "common.auto_play")
+    }
     /// Контент заблокирован
     internal static var contentBlocked: String {
         return L10n.tr("Localizable", "common.content_blocked")
@@ -103,9 +115,17 @@ internal enum L10n {
     internal static var `default`: String {
         return L10n.tr("Localizable", "common.default")
     }
+    /// Отключено
+    internal static var disabled: String {
+        return L10n.tr("Localizable", "common.disabled")
+    }
     /// Понравилась озвучка?\nПоддержи проект :3
     internal static var donatePls: String {
         return L10n.tr("Localizable", "common.donate_pls")
+    }
+    /// Включено
+    internal static var enabled: String {
+        return L10n.tr("Localizable", "common.enabled")
     }
     /// Гость
     internal static var guest: String {
@@ -115,6 +135,10 @@ internal enum L10n {
     internal static var intern: String {
         return L10n.tr("Localizable", "common.intern")
     }
+    /// Вручную
+    internal static var manual: String {
+        return L10n.tr("Localizable", "common.manual")
+    }
     /// (по МСК)
     internal static var mskTimeZone: String {
         return L10n.tr("Localizable", "common.msk_time_zone")
@@ -123,6 +147,10 @@ internal enum L10n {
     internal static var orientation: String {
         return L10n.tr("Localizable", "common.orientation")
     }
+    /// Скорость воспроизведения
+    internal static var playbackRate: String {
+        return L10n.tr("Localizable", "common.playback_rate")
+    }
     /// Качество видео
     internal static var quality: String {
         return L10n.tr("Localizable", "common.quality")
@@ -130,6 +158,10 @@ internal enum L10n {
     /// Связанное
     internal static var related: String {
         return L10n.tr("Localizable", "common.related")
+    }
+    /// Пропуск титров
+    internal static var skipCredits: String {
+        return L10n.tr("Localizable", "common.skip_credits")
     }
     /// Сегодня
     internal static var today: String {

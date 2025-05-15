@@ -5,7 +5,6 @@ import AVKit
 // MARK: - View Controller
 
 final class PlayerViewController: BaseViewController {
-    @IBOutlet var hidableViews: [UIView]!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var pipButton: UIButton!
     @IBOutlet var playPauseButton: RippleButton!
@@ -14,18 +13,16 @@ final class PlayerViewController: BaseViewController {
     @IBOutlet var timeLeftLabel: UILabel!
     @IBOutlet var elapsedTimeLabel: UILabel!
     @IBOutlet var videoSliderView: PlayerProgressView!
-    @IBOutlet var playerContainer: UIView!
+    @IBOutlet var playerContainer: PlayerContainerView!
     @IBOutlet var nextContainer: UIView!
     @IBOutlet var previousContainer: UIView!
     @IBOutlet var loaderContainer: UIView!
     @IBOutlet var container: UIView!
-    @IBOutlet var rewindButtons: [RewindView] = []
-    @IBOutlet var skipContainer: UIView!
-    @IBOutlet var skipButtonLabel: UILabel!
+    @IBOutlet var skipContainer: SkipContainerView!
     @IBOutlet var topShadowView: ShadowView!
     @IBOutlet var bottomShadowView: ShadowView!
 
-    private let playerView = PlayerView()
+    var playerView: (any Player)!
     private let airplayView = AVRoutePickerView()
     private var pictureInPictureController: AVPictureInPictureController?
     private let timeFormatter = FormatterFactory.time.create()
@@ -33,14 +30,6 @@ final class PlayerViewController: BaseViewController {
     private var pipObservation: Any?
 
     private var orientation: UIInterfaceOrientationMask = .all
-
-    private let rewindTimes: [Double] = [-15, -5, 5, 15]
-
-    private var uiIsVisible: Bool = true {
-        didSet {
-            setUI(visible: uiIsVisible)
-        }
-    }
 
     let viewModel: PlayerViewModel
 
@@ -58,10 +47,9 @@ final class PlayerViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
-        self.setupUI()
+        self.setup()
         self.addTermenateAppObserver()
         self.setupPlayer()
-        self.setupRewind()
         self.setupAirPlay()
         self.setupPictureInPicture()
 
@@ -85,11 +73,6 @@ final class PlayerViewController: BaseViewController {
 
         MacOSHelper.shared.fullscreenButtonEnabled = true
         #endif
-    }
-
-    override func setupStrings() {
-        super.setupStrings()
-        skipButtonLabel.text = L10n.Buttons.skip
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -134,8 +117,12 @@ final class PlayerViewController: BaseViewController {
         return [playPause, back, forward]
     }
 
-    private func setupUI() {
-        skipContainer.isHidden = true
+    private func setup() {
+        skipContainer.configure(with: viewModel.skipViewModel)
+        viewModel.skipViewModel.skipHandler = { [weak self] time in
+            self?.apply(rewind: time)
+        }
+
         titleLabel.text = viewModel.seriesName
 
         videoSliderView.set(duration: 0)
@@ -149,6 +136,11 @@ final class PlayerViewController: BaseViewController {
         viewModel.$playItem.compactMap { $0 }
             .sink { [weak self] item in
                 self?.set(playItem: item)
+            }.store(in: &subscribers)
+
+        viewModel.$playbackRate
+            .sink { [weak self] rate in
+                self?.playerView.set(rate: rate)
             }.store(in: &subscribers)
     }
 
@@ -185,18 +177,15 @@ final class PlayerViewController: BaseViewController {
                 switch value {
                 case .unknown, .waitingToPlay:
                     self?.setLoader(visible: true)
-                case .pause:
-                    break
                 default:
                     self?.setLoader(visible: false)
                 }
             })
             .store(in: &subscribers)
 
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.playerTapped))
-        tap.numberOfTapsRequired = 1
-        tap.numberOfTouchesRequired = 1
-        self.playerContainer.addGestureRecognizer(tap)
+        playerContainer.didRequestRewind = { [weak self] in
+            self?.apply(rewind: $0)
+        }
 
         videoSliderView.didSelectProgress = { [weak self] time in
             self?.playerView.set(time: time)
@@ -204,21 +193,14 @@ final class PlayerViewController: BaseViewController {
 
         videoSliderView.changeValue = { [weak self] progress, duration in
             self?.updateLabels(progress: progress, duration: duration)
-            self?.updateSkipButton(time: Int(progress))
-        }
-    }
-
-    private func setupRewind() {
-        rewindButtons.enumerated().forEach { offset, view in
-            view.set(time: rewindTimes[offset])
-            view.setDidTap { [weak self] in self?.apply(rewind: $0) }
         }
     }
 
     func setupPictureInPicture() {
-        if AVPictureInPictureController.isPictureInPictureSupported() {
+        if let layer = playerView.playerLayer,
+           AVPictureInPictureController.isPictureInPictureSupported() {
             pipButton.isHidden = false
-            pictureInPictureController = AVPictureInPictureController(playerLayer: playerView.playerLayer)
+            pictureInPictureController = AVPictureInPictureController(playerLayer: layer)
             pictureInPictureController?.delegate = self
 
             pipObservation = pictureInPictureController?.observe(
@@ -233,7 +215,7 @@ final class PlayerViewController: BaseViewController {
     }
 
     private func apply(rewind time: Double) {
-        guard playerView.duration != nil else { return }
+        guard playerView.duration != nil, time != 0 else { return }
         let newTime = videoSliderView.progress + time
 
         let playing = playerView.isPlaying
@@ -269,10 +251,6 @@ final class PlayerViewController: BaseViewController {
             elapsedTimeLabel.text = "-\(elapsed)"
         }
     }
-    
-    private func updateSkipButton(time: Int) {
-        skipContainer.isHidden = !viewModel.canSkip(time: time)
-    }
 
     private func set(playItem: PlayItem) {
         seriesSelectorLabel.text = playItem.name
@@ -286,8 +264,13 @@ final class PlayerViewController: BaseViewController {
                 .filter { $0 != nil }
                 .map { $0! }
                 .sink(onNext: { [weak self] duration in
-                    self?.videoSliderView.set(duration: duration)
-                    self?.playerView.set(time: playItem.time)
+                    guard let self else { return }
+                    videoSliderView.set(duration: duration)
+                    playerView.set(time: playItem.time)
+                    if !playerView.isPlaying {
+                        playerView.togglePlay()
+                        playerContainer.uiIsVisible = false
+                    }
                 })
         }
     }
@@ -295,14 +278,6 @@ final class PlayerViewController: BaseViewController {
     private func change(enabled: Bool, view: UIView) {
         view.isUserInteractionEnabled = enabled
         view.alpha = enabled ? 1 : 0.5
-    }
-
-    private func setUI(visible: Bool) {
-        UIView.animate(withDuration: 0.3) {
-            self.hidableViews.forEach {
-                $0.alpha = visible ? 1 : 0
-            }
-        }
     }
 
     private func setLoader(visible: Bool) {
@@ -335,10 +310,6 @@ final class PlayerViewController: BaseViewController {
         sleep(2) // this used for to give time for save async data
     }
 
-    @objc func playerTapped() {
-        self.uiIsVisible.toggle()
-    }
-
     @IBAction func closeAction(_ sender: Any) {
         self.orientation = .portrait
         updateOrientation()
@@ -362,7 +333,7 @@ final class PlayerViewController: BaseViewController {
     @IBAction func playPauseAction(_ sender: Any) {
         self.playerView.togglePlay()
         if self.playerView.isPlaying {
-            self.uiIsVisible = false
+            self.playerContainer.uiIsVisible = false
         }
     }
 
@@ -379,14 +350,7 @@ final class PlayerViewController: BaseViewController {
     }
 
     @IBAction func toogleVideoGravity() {
-        switch playerView.playerLayer.videoGravity {
-        case .resizeAspect:
-            playerView.playerLayer.videoGravity = .resizeAspectFill
-        case .resizeAspectFill:
-            playerView.playerLayer.videoGravity = .resize
-        default:
-            playerView.playerLayer.videoGravity = .resizeAspect
-        }
+        playerView.toogleVideoGravity()
     }
 
     @IBAction func togglePictureInPictureMode(_ sender: UIButton) {
@@ -400,13 +364,6 @@ final class PlayerViewController: BaseViewController {
 
     @IBAction func selectVideoDidTap() {
         viewModel.selectPlayItem()
-    }
-
-    @IBAction func skipDidTap() {
-        let currentTime = Int(videoSliderView.progress)
-        if let time = viewModel.getSkipTime(for: currentTime) {
-            self.apply(rewind: time)
-        }
     }
 }
 

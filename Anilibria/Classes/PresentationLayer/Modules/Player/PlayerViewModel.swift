@@ -17,6 +17,9 @@ final class PlayerViewModel {
 
     @Published private(set) var orientation = InterfaceOrientation.current
     @Published private(set) var playItem: PlayItem?
+    @Published private(set) var playbackRate: Double
+
+    let skipViewModel = SkipViewModel()
 
     private var videoQuality: VideoQuality = .fullHd {
         didSet {
@@ -28,12 +31,19 @@ final class PlayerViewModel {
         series.name?.main ?? ""
     }
 
-    private let skipButtonShowingSeconds = 10
+    private var playerSettings: PlayerSettings {
+        didSet {
+            playbackRate = playerSettings.playbackRate
+        }
+    }
 
     private let playerService: PlayerService
 
     init(playerService: PlayerService) {
         self.playerService = playerService
+        self.playerSettings = playerService.fetchSettings()
+        self.playbackRate = playerSettings.playbackRate
+        skipViewModel.set(mode: playerSettings.skipMode)
     }
 }
 
@@ -48,7 +58,7 @@ extension PlayerViewModel {
             .sink(onNext: { [weak self] context in
                 guard let self else { return }
                 let context = context ?? PlayerContext(
-                    quality: playerService.fetchSettings().quality
+                    quality: playerSettings.quality
                 )
                 run(with: context)
             })
@@ -92,46 +102,71 @@ extension PlayerViewModel {
             quality: videoQuality,
             itemsCount: series?.playlist.count ?? 0
         )
+        skipViewModel.set(item: playItem)
+    }
+
+    private func seriesEnded() {
+        if playerSettings.autoPlay {
+            selectNext()
+        }
     }
 
     func update(time: Double) {
         guard let playItem else { return }
-        context?.number = playItem.index
-        context?.time = time
-        context?.allItems[playItem.index] = time
-    }
-
-    func canSkip(time: Int) -> Bool {
-        playItem?.value.skips.canSkip(
-            time: time,
-            length: skipButtonShowingSeconds
-        ) ?? false
+        skipViewModel.update(time: time)
+        if time >= playItem.value.duration {
+            context?.time = 0
+            context?.allItems.removeValue(forKey: playItem.index)
+            save()
+            seriesEnded()
+        } else {
+            context?.number = playItem.index
+            context?.time = time
+            context?.allItems[playItem.index] = time
+        }
     }
 
     func showSettings() {
-        guard let playItem else { return }
         var groups: [ChoiceGroup] = []
+        setOrientation(to: &groups)
+        setQuality(to: &groups)
+        setRate(to: &groups)
+        setAutoPlay(to: &groups)
+        setSkipMode(to: &groups)
 
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            let didSelectOrientation: (InterfaceOrientation) -> Bool = { [weak self] item in
-                self?.orientation = item
-                item.save()
-                return false
-            }
+        self.router.openSheet(with: groups)
+    }
 
-            let orientations = InterfaceOrientation.allCases
-
-            let orientationItems = orientations.map {
-                ChoiceItem(
-                    value: $0,
-                    title: $0.title, isSelected: orientation == $0,
-                    didSelect: didSelectOrientation
-                )
-            }
-
-            groups.append(ChoiceGroup(title: L10n.Common.orientation, items: orientationItems))
+    private func setOrientation(to groups: inout [ChoiceGroup]) {
+        if UIDevice.current.userInterfaceIdiom != .phone {
+            return
+        }
+        let didSelectOrientation: (InterfaceOrientation) -> Bool = { [weak self] item in
+            self?.orientation = item
+            item.save()
+            return false
         }
 
+        let orientations = InterfaceOrientation.allCases
+
+        let orientationItems = orientations.map {
+            ChoiceItem(
+                value: $0,
+                title: $0.title,
+                isSelected: orientation == $0,
+                didSelect: didSelectOrientation
+            )
+        }
+
+        groups.append(ChoiceGroup(
+            title: L10n.Common.orientation,
+            isExpandable: true,
+            items: orientationItems)
+        )
+    }
+
+    private func setQuality(to groups: inout [ChoiceGroup]) {
+        guard let playItem else { return }
         let didSelect: (VideoQuality) -> Bool = { [weak self] item in
             self?.update(quality: item)
             return false
@@ -146,9 +181,85 @@ extension PlayerViewModel {
             )
         }
 
-        groups.append(ChoiceGroup(title: L10n.Common.quality, items: items))
+        groups.append(ChoiceGroup(
+            title: L10n.Common.quality,
+            isExpandable: true,
+            items: items)
+        )
+    }
 
-        self.router.openSheet(with: groups)
+    private func setRate(to groups: inout [ChoiceGroup]) {
+        let didSelect: (Double) -> Bool = { [weak self] item in
+            guard let self else { return false }
+            playerSettings.playbackRate = item
+            playerService.update(settings: playerSettings)
+            return false
+        }
+
+        let options = PlayerSettings.playbackRateOptions
+        let items = options.map {
+            ChoiceItem(
+                value: $0,
+                title: PlayerSettings.nameFor(rate: $0),
+                isSelected: playerSettings.playbackRate == $0,
+                didSelect: didSelect
+            )
+        }
+
+        groups.append(ChoiceGroup(
+            title: L10n.Common.playbackRate,
+            isExpandable: true,
+            items: items)
+        )
+    }
+
+    private func setAutoPlay(to groups: inout [ChoiceGroup]) {
+        let didSelect: (Bool) -> Bool = { [weak self] item in
+            guard let self else { return false }
+            playerSettings.autoPlay = item
+            playerService.update(settings: playerSettings)
+            return false
+        }
+
+        let items = [true, false].map {
+            ChoiceItem(
+                value: $0,
+                title: PlayerSettings.nameFor(autoPlay: $0),
+                isSelected: playerSettings.autoPlay == $0,
+                didSelect: didSelect
+            )
+        }
+
+        groups.append(ChoiceGroup(
+            title: L10n.Common.autoPlay,
+            isExpandable: true,
+            items: items)
+        )
+    }
+
+    private func setSkipMode(to groups: inout [ChoiceGroup]) {
+        let didSelect: (SkipCreditsMode) -> Bool = { [weak self] item in
+            guard let self else { return false }
+            playerSettings.skipMode = item
+            playerService.update(settings: playerSettings)
+            skipViewModel.set(mode: item)
+            return false
+        }
+
+        let items = SkipCreditsMode.allCases.map {
+            ChoiceItem(
+                value: $0,
+                title: $0.name,
+                isSelected: playerSettings.skipMode == $0,
+                didSelect: didSelect
+            )
+        }
+
+        groups.append(ChoiceGroup(
+            title: L10n.Common.skipCredits,
+            isExpandable: true,
+            items: items)
+        )
     }
 
     func back() {
@@ -161,16 +272,6 @@ extension PlayerViewModel {
             .set(context: context, for: self.series)
             .sink()
             .store(in: &bag)
-    }
-
-    func getSkipTime(for time: Int) -> Double? {
-        guard
-            let endTime = playItem?.value.skips.upperBound(time: time),
-            endTime > time
-        else {
-            return nil
-        }
-        return Double(endTime - time)
     }
 
     private func update(quality: VideoQuality) {
@@ -194,6 +295,7 @@ extension PlayerViewModel {
                 quality: videoQuality,
                 itemsCount: series?.playlist.count ?? 0
             )
+            skipViewModel.set(item: playItem)
         }
     }
 }

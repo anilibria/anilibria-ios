@@ -45,7 +45,16 @@ final class SoonSectionsAdapter: SectionAdapterProtocol {
         scheduleAdapter.getItems(for: identifier)
     }
 
-    func getSectionLayout(environment: any NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
-        nil
+    func getSectionLayout(
+        for identifier: AnyHashable,
+        environment: any NSCollectionLayoutEnvironment
+    ) -> NSCollectionLayoutSection? {
+        if let layout = soonAdapter.getSectionLayout(for: identifier, environment: environment) {
+            return layout
+        }
+        if let layout = scheduleAdapter.getSectionLayout(for: identifier, environment: environment) {
+            return layout
+        }
+        return nil
     }
 }

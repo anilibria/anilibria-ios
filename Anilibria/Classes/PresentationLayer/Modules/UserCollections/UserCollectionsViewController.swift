@@ -158,7 +158,6 @@ extension UserCollectionsViewController: UICollectionViewDropDelegate {
             let key = items.remove(at: sourceIndex.item)
             items.insert(key, at: destinationIndex.item)
             viewModel.collections = items
-            print("TEST> \(items.map(\.title))")
 
             if let keysSection {
                 keysSection.update(keys: viewModel.collections)

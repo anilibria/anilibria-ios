@@ -45,6 +45,7 @@ final class SkipViewModel {
         }
     }
 
+    var isActive: Bool = false
     var skipHandler: ((Double) -> Void)?
 
     func set(item: PlayItem?) {
@@ -84,8 +85,10 @@ final class SkipViewModel {
         skipHandler?(time)
     }
 
-    func clearCurrentSkipRange() {
+    func watch() {
         currentRange = nil
+        currentRangeType = nil
+        timerSubscriber = nil
     }
 
     private func runAutoSkipTimer() {
@@ -94,11 +97,11 @@ final class SkipViewModel {
         autoSkipTimeLeft = autoSkipTime
         timerSubscriber = Timer.publish(every: 1, on: .main, in: .common)
             .autoconnect()
-            .prefix(autoSkipTime)
             .sink(receiveValue: { [weak self] _ in
-                guard let self else { return }
+                guard let self, isActive else { return }
                 autoSkipTimeLeft -= 1
                 if autoSkipTimeLeft <= 0 {
+                    timerSubscriber = nil
                     skip()
                 }
             })

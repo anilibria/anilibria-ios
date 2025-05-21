@@ -63,6 +63,6 @@ final class SkipContainerView: UIStackView {
     }
 
     @IBAction func watchDidTap() {
-        viewModel?.clearCurrentSkipRange()
+        viewModel?.watch()
     }
 }

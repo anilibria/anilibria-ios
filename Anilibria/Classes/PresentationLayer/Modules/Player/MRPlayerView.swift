@@ -169,6 +169,7 @@ final class PlayerViewController: BaseViewController {
             .sink(onNext: { [weak self] value in
                 let image = UIImage(resource: value ? .iconPause : .iconPlay)
                 self?.playPauseIconView.templateImage = image
+                self?.viewModel.skipViewModel.isActive = value
             })
             .store(in: &subscribers)
 

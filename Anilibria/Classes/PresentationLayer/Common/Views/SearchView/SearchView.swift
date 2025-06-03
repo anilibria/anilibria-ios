@@ -1,7 +1,7 @@
 import Combine
 import UIKit
 
-public final class SearchView: UIView {
+public final class SearchView: LoadableView {
     @IBOutlet var cancelButton: UIButton!
     @IBOutlet var searchField: UITextField! {
         didSet {
@@ -32,6 +32,10 @@ public final class SearchView: UIView {
                 self?.isSearching = !text.isEmpty
             })
             .store(in: &bag)
+        self.searchField.publisher(for: .primaryActionTriggered).sink { [weak self] _ in
+            self?.searchField.resignFirstResponder()
+        }
+        .store(in: &bag)
     }
 
     public private(set) var isSearching: Bool = false

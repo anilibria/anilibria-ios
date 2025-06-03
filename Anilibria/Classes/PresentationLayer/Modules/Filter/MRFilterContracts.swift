@@ -9,10 +9,9 @@ protocol FilterViewBehavior: AnyObject {
 protocol FilterEventHandler: ViewControllerEventHandler {
     func bind(view: FilterViewBehavior,
               router: FilterRoutable,
-              filter: SeriesFilter,
+              filter: SeriesSearchData.Filter,
               data: FilterData)
 
-    func change(filter: SeriesFilter)
     func apply()
     func reset()
     func back()

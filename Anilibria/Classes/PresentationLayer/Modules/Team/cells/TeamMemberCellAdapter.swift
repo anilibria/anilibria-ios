@@ -42,7 +42,11 @@ class TeamMemberSectionAdapter: SectionAdapterProtocol {
         return []
     }
 
-    func getSectionLayout(environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
+    func getSectionLayout(
+        for identifier: AnyHashable,
+        environment: any NSCollectionLayoutEnvironment
+    ) -> NSCollectionLayoutSection? {
+        guard identifier == uid else { return nil }
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(1)
@@ -75,10 +79,12 @@ class TeamMemberSectionAdapter: SectionAdapterProtocol {
     }
 
     func supplementaryFor(
+        identifier: AnyHashable,
         elementKind: String,
         index: IndexPath,
         context: CollectionContext
     ) -> UICollectionReusableView? {
+        guard identifier == uid else { return nil }
         if elementKind == headerKind {
             let view = context.dequeueReusableNibSupplementaryView(
                 type: TeamTitleView.self,

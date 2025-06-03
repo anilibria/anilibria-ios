@@ -16,7 +16,7 @@ final class TeamViewController: BaseCollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupNavbar()
-        self.addRefreshControl()
+        self.addRefreshControl(scrollView: collectionView)
         self.handler.didLoad()
     }
 

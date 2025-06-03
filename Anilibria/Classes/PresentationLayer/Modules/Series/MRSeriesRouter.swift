@@ -9,6 +9,8 @@ protocol SeriesRoutable: BaseRoutable,
                          AlertRoute,
                          ShareRoute,
                          CatalogRoute,
-                         SeriesRoute{}
+                         SignInRoute,
+                         ActionSheetRoute,
+                         SeriesRoute {}
 
 final class SeriesRouter: BaseRouter, SeriesRoutable {}

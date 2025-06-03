@@ -6,6 +6,9 @@ class BaseViewController: UIViewController, WaitingBehavior, Loggable {
     
     var subscribers = Set<AnyCancellable>()
 
+    public private(set) var refreshControl: RefreshIndicator?
+    private weak var refreshActivity: ActivityDisposable?
+
     public var statusBarStyle: UIStatusBarStyle = .default
 
     deinit {
@@ -28,6 +31,11 @@ class BaseViewController: UIViewController, WaitingBehavior, Loggable {
         self.setupBackButton()
         self.setupStrings()
         view.backgroundColor = UIColor(resource: .Surfaces.base)
+    }
+
+    public override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        updateRefreshControlRect()
     }
 
     func initialize() {
@@ -109,5 +117,63 @@ class BaseViewController: UIViewController, WaitingBehavior, Loggable {
 
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return .portrait
+    }
+
+    // MARK: - Refresh
+
+    public func addRefreshControl(scrollView: UIScrollView, color: UIColor? = nil) {
+        if self.refreshControl != nil {
+            return
+        }
+        scrollView.alwaysBounceVertical = true
+        let refreshControl = RefreshIndicator(style: .prominent)
+        refreshControl.indicator.lineColor = color ?? UIColor(resource: .Text.main)
+        scrollView.addSubview(refreshControl)
+        refreshControl.addTarget(
+            self,
+            action: #selector(self.refresh),
+            for: .valueChanged
+        )
+        self.refreshControl = refreshControl
+    }
+
+    public func removeRefreshControl() {
+        self.refreshControl?.removeFromSuperview()
+        self.refreshControl = nil
+    }
+
+    public func updateRefreshControlRect() {
+        guard let view = refreshControl?.superview else { return }
+        self.refreshControl?.center.x = view.bounds.width / 2
+    }
+
+    public func isRefreshing() -> Bool {
+        return self.refreshControl?.isRefreshing ?? false
+    }
+
+    @objc
+    public func refresh() {
+        // override me
+    }
+}
+
+extension BaseViewController: RefreshBehavior {
+    func showRefreshIndicator() -> ActivityDisposable? {
+        if self.refreshActivity?.isDisposed == false {
+            return self.refreshActivity
+        }
+        if self.isRefreshing() == false {
+            self.refreshControl?.startRefreshing()
+        }
+        return self.createActivity()
+    }
+
+    private func createActivity() -> ActivityDisposable? {
+        let activity = ActivityHolder { [weak self] in
+            self?.refreshControl?.endRefreshing()
+        }
+
+        self.refreshActivity = activity
+        return activity
     }
 }

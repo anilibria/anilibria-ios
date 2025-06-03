@@ -1,7 +1,7 @@
 import UIKit
 
 final class TeamAssembly {
-    class func createModule(parent: Router? = nil) -> TeamViewController {
+    static func createModule(parent: Router? = nil) -> TeamViewController {
         let module = TeamViewController()
         let router = TeamRouter(view: module, parent: parent)
         module.handler = MainAppCoordinator.shared.container.resolve()

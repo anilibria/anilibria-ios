@@ -11,7 +11,7 @@ protocol CatalogViewBehavior: WaitingBehavior, RefreshBehavior {
 protocol CatalogEventHandler: ViewControllerEventHandler, RefreshEventHandler {
     func bind(view: CatalogViewBehavior,
               router: CatalogRoutable,
-              filter: SeriesFilter)
+              data: SeriesSearchData)
 
     func select(series: Series)
     func openFilter()

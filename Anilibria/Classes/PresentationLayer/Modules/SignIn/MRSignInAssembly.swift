@@ -1,7 +1,7 @@
 import UIKit
 
 final class SignInAssembly {
-    class func createModule(parent: Router? = nil) -> SignInViewController {
+    static func createModule(parent: Router? = nil) -> SignInViewController {
         let module = SignInViewController()
         let router = SignInRouter(view: module, parent: parent)
         module.handler = MainAppCoordinator.shared.container.resolve()

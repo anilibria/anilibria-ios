@@ -28,18 +28,14 @@ public enum VideoQuality: Int, CaseIterable, Codable {
     }
 }
 
-struct Skips: Hashable {
-    let opening: Range<Int>?
-    let ending: Range<Int>?
-}
-
 public struct PlaylistItem: Decodable, Hashable {
     let id: String
     let title: String
     let preview: URL?
     let ordinal: Double?
     let video: [VideoQuality: URL]
-    let skips: Skips
+    let openingRange: Range<Int>?
+    let endingRange: Range<Int>?
     let duration: TimeInterval
 
     var fullName: String {
@@ -66,15 +62,13 @@ public struct PlaylistItem: Decodable, Hashable {
         let endingStart: Int? = container.decode("ending", "start")
         let endingStop: Int? = container.decode("ending", "stop")
 
-        let opening: Range<Int>? = if let openingStart, let openingStop {
+        self.openingRange = if let openingStart, let openingStop {
             .init(uncheckedBounds: (openingStart, openingStop))
         } else { nil }
 
-        let ending: Range<Int>? = if let endingStart, let endingStop {
+        self.endingRange = if let endingStart, let endingStop {
             .init(uncheckedBounds: (endingStart, endingStop))
         } else { nil }
-
-        skips = Skips(opening: opening, ending: ending)
 
 		var result: [VideoQuality: URL] = [:]
         if let url: URL = urlConverter.convert(from: container.decode("hls_1080")) {
@@ -89,21 +83,5 @@ public struct PlaylistItem: Decodable, Hashable {
 		self.video = result
         self.duration = container.decode("duration") ?? 0
         self.preview = urlConverter.convert(from: container.decode("preview", "src"))
-    }
-}
-
-extension Skips {
-    func canSkip(time: Int, length: Int) -> Bool {
-        [opening, ending]
-            .compactMap { $0 }
-            .compactMap { Range(uncheckedBounds: ($0.lowerBound, $0.lowerBound + length)) }
-            .contains(where: { $0.contains(time) })
-    }
-
-    func upperBound(time: Int) -> Int? {
-        [opening, ending]
-            .compactMap { $0 }
-            .first(where: { $0.contains(time) })?
-            .upperBound
     }
 }

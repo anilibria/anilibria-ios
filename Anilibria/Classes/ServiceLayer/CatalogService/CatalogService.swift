@@ -21,7 +21,7 @@ final class CatalogServicePart: DIPart {
 protocol CatalogService {
     func fetchSeries(id: Int) -> AnyPublisher<Series, Error>
     func fetchSeries(alias: String) -> AnyPublisher<Series, Error>
-    func fetchCatalog(page: Int, limit: Int, filter: SeriesFilter) -> AnyPublisher<[Series], Error>
+    func fetchCatalog(page: Int, limit: Int, data: SeriesSearchData) -> AnyPublisher<[Series], Error>
     func fetchFilterData() -> AnyPublisher<FilterData, Error>
 }
 
@@ -52,9 +52,9 @@ final class CatalogServiceImp: CatalogService {
         .eraseToAnyPublisher()
     }
 
-    func fetchCatalog(page: Int, limit: Int, filter: SeriesFilter) -> AnyPublisher<[Series], Error> {
+    func fetchCatalog(page: Int, limit: Int, data: SeriesSearchData) -> AnyPublisher<[Series], Error> {
         return Deferred { [unowned self] in
-            let request = CatalogRequest(filter: filter, page: page, limit: limit)
+            let request = CatalogRequest(data: data, page: page, limit: limit)
             return self.backendRepository
                 .request(request)
                 .map { $0.items }

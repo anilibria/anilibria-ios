@@ -35,7 +35,7 @@ public final class StubView: UIView {
         }
     }
 
-    func set(image: UIImage, color: UIColor) {
+    func set(image: UIImage?, color: UIColor) {
         self.image = image
         self.color = color
         self.iconView?.templateImage = image

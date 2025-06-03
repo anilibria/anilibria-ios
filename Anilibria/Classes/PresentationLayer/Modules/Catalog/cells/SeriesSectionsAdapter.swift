@@ -53,7 +53,7 @@ final class SeriesSectionsAdapter: SectionAdapterProtocol {
             let items = series.map { factory($0) }
 
             seriesAdapter.set(items)
-            context?.reload(section: seriesAdapter)
+            context?.reloadItems(in: seriesAdapter)
         }.store(in: &cancellabes)
 
         viewModel.pagination.isReady.removeDuplicates().sink { [weak self] value in
@@ -63,7 +63,7 @@ final class SeriesSectionsAdapter: SectionAdapterProtocol {
             } else {
                 paginationAdapter.set([])
             }
-            context?.reload(section: paginationAdapter, animated: false)
+            context?.reloadItems(in: paginationAdapter, animated: false)
         }.store(in: &cancellabes)
     }
 
@@ -80,7 +80,18 @@ final class SeriesSectionsAdapter: SectionAdapterProtocol {
         paginationAdapter.getItems(for: identifier)
     }
 
-    func getSectionLayout(environment: any NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
-        nil
+    func getSectionLayout(
+        for identifier: AnyHashable,
+        environment: any NSCollectionLayoutEnvironment
+    ) -> NSCollectionLayoutSection? {
+        if let layout = seriesAdapter.getSectionLayout(for: identifier, environment: environment) {
+            return layout
+        }
+
+        if let layout = paginationAdapter.getSectionLayout(for: identifier, environment: environment) {
+            return layout
+        }
+
+        return nil
     }
 }

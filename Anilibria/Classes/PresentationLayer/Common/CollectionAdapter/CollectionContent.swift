@@ -18,8 +18,12 @@ protocol SectionAdapterProtocol: AnyObject, CellAdaptersProvider {
     func getItems() -> [AnyCellAdapter]
 
     func set(context: AdapterContext)
-    func getSectionLayout(environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection?
+    func getSectionLayout(
+        for identifier: AnyHashable,
+        environment: NSCollectionLayoutEnvironment
+    ) -> NSCollectionLayoutSection?
     func supplementaryFor(
+        identifier: AnyHashable,
         elementKind: String,
         index: IndexPath,
         context: CollectionContext
@@ -29,6 +33,7 @@ protocol SectionAdapterProtocol: AnyObject, CellAdaptersProvider {
 extension SectionAdapterProtocol {
     func set(context: AdapterContext) {}
     func supplementaryFor(
+        identifier: AnyHashable,
         elementKind: String,
         index: IndexPath,
         context: CollectionContext
@@ -52,6 +57,43 @@ class AnyCellAdapter: Hashable {
 
     func didSelect(at index: IndexPath) {}
     func willDisplay(at index: IndexPath) {}
+}
+
+struct SectionData: Hashable {
+    let id: AnyHashable
+    private weak var section: (any SectionAdapterProtocol)?
+
+    init(id: AnyHashable, section: (any SectionAdapterProtocol)?) {
+        self.id = id
+        self.section = section
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    static func == (lhs: SectionData, rhs: SectionData) -> Bool {
+        lhs.hashValue == rhs.hashValue
+    }
+
+    func getSectionLayout(
+        environment: NSCollectionLayoutEnvironment
+    ) -> NSCollectionLayoutSection? {
+        section?.getSectionLayout(for: id, environment: environment)
+    }
+
+    func supplementaryFor(
+        elementKind: String,
+        index: IndexPath,
+        context: CollectionContext
+    ) -> UICollectionReusableView? {
+        section?.supplementaryFor(
+            identifier: id,
+            elementKind: elementKind,
+            index: index,
+            context: context
+        )
+    }
 }
 
 extension AnyCellAdapter {

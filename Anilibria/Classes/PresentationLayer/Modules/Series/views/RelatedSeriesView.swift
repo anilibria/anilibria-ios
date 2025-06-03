@@ -9,12 +9,17 @@
 import UIKit
 
 public final class RelatedSeriesView: UIView {
-    @IBOutlet private var button: UIButton!
+    @IBOutlet private var button: RippleButton!
     @IBOutlet private var titleLabel: UILabel!
 
     private var handler: Action<Series>?
 
     private var series: Series?
+
+    public override func awakeFromNib() {
+        super.awakeFromNib()
+        button.rippleContainerView?.smoothCorners(with: 8)
+    }
 
     func setTap(handler: Action<Series>?) {
         self.handler = handler

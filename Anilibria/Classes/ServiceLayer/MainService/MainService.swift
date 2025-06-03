@@ -16,7 +16,7 @@ protocol MainService {
     func fetchSchedule() -> AnyPublisher<[Schedule], Error>
     func fetchNews(limit: Int) -> AnyPublisher<[News], Error>
     func search(query: String) -> AnyPublisher<[Series], Error>
-    func series(with code: String) -> AnyPublisher<Series, Error>
+    func series(with id: Int) -> AnyPublisher<Series, Error>
     func fetchPromo() -> AnyPublisher<[PromoItem], Error>
     func fetchFranchise(for seriesID: Int) -> AnyPublisher<[Franchise], Error>
     func fetchTeamMembers() -> AnyPublisher<[TeamMember], Error>
@@ -118,13 +118,12 @@ final class MainServiceImp: MainService {
         .eraseToAnyPublisher()
     }
 
-    func series(with code: String) -> AnyPublisher<Series, Error> {
+    func series(with id: Int) -> AnyPublisher<Series, Error> {
         return Deferred { [unowned self] in
-            let request = SeriesRequest(alias: code)
+            let request = SeriesRequest(id: id)
             return self.backendRepository
                 .request(request)
         }
-        .subscribe(on: DispatchQueue.global())
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }

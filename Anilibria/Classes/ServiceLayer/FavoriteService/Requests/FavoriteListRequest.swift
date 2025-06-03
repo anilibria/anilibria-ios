@@ -5,8 +5,8 @@ public struct FavoriteListRequest: BackendAPIRequest {
     let method: NetworkManager.Method = .GET
     let parameters: [String: Any]
 
-    init(filter: SeriesFilter, page: Int, limit: Int) {
-        var results = filter.parameters
+    init(data: SeriesSearchData, page: Int, limit: Int) {
+        var results = data.parameters
         results["page"] = page
         results["limit"] = limit
 

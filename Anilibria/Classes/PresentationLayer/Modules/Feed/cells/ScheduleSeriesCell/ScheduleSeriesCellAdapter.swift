@@ -46,7 +46,11 @@ final class ScheduleSeriesSectionAdapter: SectionAdapterProtocol {
         return []
     }
 
-    func getSectionLayout(environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
+    func getSectionLayout(
+        for identifier: AnyHashable,
+        environment: any NSCollectionLayoutEnvironment
+    ) -> NSCollectionLayoutSection? {
+        guard identifier == uid else { return nil }
         let itemsCount: CGFloat = 3
         let inset: CGFloat = 16
         let horizontalInsets: CGFloat = inset * itemsCount + inset

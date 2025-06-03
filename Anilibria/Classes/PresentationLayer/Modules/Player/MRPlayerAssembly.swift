@@ -1,10 +1,11 @@
 import UIKit
 
 final class PlayerAssembly {
-    class func createModule(series: Series, parent: Router? = nil) -> PlayerViewController {
+    static func createModule(series: Series, parent: Router? = nil) -> PlayerViewController {
         let module = PlayerViewController(
             viewModel: MainAppCoordinator.shared.container.resolve()
         )
+        module.playerView = DefaultPlayerView()
         let router = PlayerRouter(view: module, parent: parent)
         module.viewModel.bind(router: router, series: series)
         return module

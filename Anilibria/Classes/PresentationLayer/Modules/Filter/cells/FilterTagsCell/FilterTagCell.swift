@@ -31,7 +31,11 @@ public final class FilterTagCell: RippleViewCell {
             }
         }
 
-        UIView.animate(withDuration: 0.3) {
+        if animated {
+            UIView.animate(withDuration: 0.3) {
+                apply()
+            }
+        } else {
             apply()
         }
     }

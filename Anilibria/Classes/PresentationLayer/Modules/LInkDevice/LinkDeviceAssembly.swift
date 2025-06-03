@@ -9,7 +9,7 @@
 import Foundation
 
 final class LinkDeviceAssembly {
-    class func createModule(parent: Router? = nil) -> LinkDeviceViewController {
+    static func createModule(parent: Router? = nil) -> LinkDeviceViewController {
         let module = LinkDeviceViewController()
         let router = LinkDeviceRouter(view: module, parent: parent)
         module.handler = MainAppCoordinator.shared.container.resolve()

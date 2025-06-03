@@ -23,6 +23,7 @@
 "buttons.cancel" = "Cancel";
 "buttons.retry" = "Retry";
 "buttons.skip" = "Skip";
+"buttons.watch" = "Watch";
 "buttons.reset" = "Reset";
 "buttons.apply" = "Apply";
 "buttons.continue" = "Continue";
@@ -85,12 +86,28 @@
 "common.appearance" = "Appearance";
 "common.appearance.dark" = "Dark";
 "common.appearance.light" = "Light";
-"common.appearance.system" = "Light";
+"common.appearance.system" = "System";
 
 "common.intern" = "Intern";
 "common.vacation" = "Vacation";
 
 "common.content_blocked" = "Content is blocked";
+
+"common.collections.favorites" = "Favorites";
+"common.collections.planned" = "Planned";
+"common.collections.watched" = "Watched";
+"common.collections.watching" = "Watching";
+"common.collections.postponed" = "Postponed";
+"common.collections.abandoned" = "Abandoned";
+"common.collections.add_to" = "Add to";
+
+"common.enabled" = "Enabled";
+"common.disabled" = "Disabled";
+"common.auto" = "Auto";
+"common.manual" = "Manual";
+"common.skip_credits" = "Skip credits";
+"common.auto_play" = "Autoplay";
+"common.playback_rate" = "Playback rate";
 
 //PERMISSION
 "permission.title" = "Permission";
@@ -143,7 +160,7 @@
 
 //STUB VIEW
 "stub.title" = "Empty";
-"stub.favorite.message" = "Your favorite series will be here";
+"stub.collection.message" = "You didn't add any release yet";
 "stub.history.message" = "Your watching history will be here";
 "stub.message_not_found" = "No results found for \"%@\"";
 

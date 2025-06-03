@@ -1,7 +1,7 @@
 import UIKit
 
 final class SeriesAssembly {
-    class func createModule(series: Series, parent: Router? = nil) -> SeriesViewController {
+    static func createModule(series: Series, parent: Router? = nil) -> SeriesViewController {
         let module = SeriesViewController()
         let router = SeriesRouter(view: module, parent: parent)
         module.handler = MainAppCoordinator.shared.container.resolve()

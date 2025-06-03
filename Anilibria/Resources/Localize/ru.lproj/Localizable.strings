@@ -23,6 +23,7 @@
 "buttons.cancel" = "Отмена";
 "buttons.retry" = "Повторить";
 "buttons.skip" = "Пропустить";
+"buttons.watch" = "Смотреть";
 "buttons.reset" = "Сброс";
 "buttons.apply" = "Применить";
 "buttons.continue" = "Продолжить";
@@ -92,6 +93,22 @@
 
 "common.content_blocked" = "Контент заблокирован";
 
+"common.collections.favorites" = "Избранное";
+"common.collections.planned" = "Запланировано";
+"common.collections.watched" = "Просмотрено";
+"common.collections.watching" = "Смотрю";
+"common.collections.postponed" = "Отложено";
+"common.collections.abandoned" = "Брошено";
+"common.collections.add_to" = "Добавить";
+
+"common.enabled" = "Включено";
+"common.disabled" = "Отключено";
+"common.auto" = "Автоматически";
+"common.manual" = "Вручную";
+"common.skip_credits" = "Пропуск титров";
+"common.auto_play" = "Автовоспроизведение";
+"common.playback_rate" = "Скорость воспроизведения";
+
 //PERMISSION
 "permission.title" = "Разрешение";
 "permission.push" = "Для работы уведомлений вы должны разрешить \"Допуск уведомлений\".\nРазрешение можно установить через \"Настройки\"";
@@ -143,7 +160,7 @@
 
 //STUB VIEW
 "stub.title" = "Нет данных";
-"stub.favorite.message" = "Здесь будут отображаться ваши избранные релизы";
+"stub.collection.message" = "Вы еще не добавили ни одного релиза";
 "stub.history.message" = "Здесь будет отображаться локальная история просмотра релизов";
 "stub.message_not_found" = "По запросу \"%@\" ничего не найдено";
 

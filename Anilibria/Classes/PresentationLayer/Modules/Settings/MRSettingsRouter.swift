@@ -2,6 +2,6 @@ import UIKit
 
 // MARK: - Router
 
-protocol SettingsRoutable: BaseRoutable, ChoiceSheetRoute, PermissionRoute {}
+protocol SettingsRoutable: BaseRoutable, ActionSheetRoute, PermissionRoute {}
 
 final class SettingsRouter: BaseRouter, SettingsRoutable {}

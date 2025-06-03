@@ -12,20 +12,20 @@ final class FilterPart: DIPart {
 // MARK: - Presenter
 
 public struct FilterRouteCommand: RouteCommand {
-    let value: SeriesFilter
+    let value: SeriesSearchData.Filter
 }
 
 final class FilterPresenter {
     private weak var view: FilterViewBehavior!
     private var router: FilterRoutable!
-    private var filter: SeriesFilter!
+    private var filter: SeriesSearchData.Filter!
     private var data: FilterData!
 }
 
 extension FilterPresenter: FilterEventHandler {
     func bind(view: FilterViewBehavior,
               router: FilterRoutable,
-              filter: SeriesFilter,
+              filter: SeriesSearchData.Filter,
               data: FilterData) {
         self.view = view
         self.router = router
@@ -44,12 +44,8 @@ extension FilterPresenter: FilterEventHandler {
     }
 
     func reset() {
-        self.filter = SeriesFilter()
+        self.filter = SeriesSearchData.Filter()
         self.configure()
-    }
-
-    func change(filter: SeriesFilter) {
-        self.filter.sorting = filter.sorting
     }
 
     func back() {

@@ -1,7 +1,7 @@
 import UIKit
 
 final class ScheduleAssembly {
-    class func createModule(parent: Router? = nil) -> ScheduleViewController {
+    static func createModule(parent: Router? = nil) -> ScheduleViewController {
         let module = ScheduleViewController()
         let router = ScheduleRouter(view: module, parent: parent)
         module.handler = MainAppCoordinator.shared.container.resolve()

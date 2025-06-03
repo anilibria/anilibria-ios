@@ -1,7 +1,7 @@
 import UIKit
 
 final class ConfigurationAssembly {
-    class func createModule(parent: Router? = nil) -> ConfigurationViewController {
+    static func createModule(parent: Router? = nil) -> ConfigurationViewController {
         let module = ConfigurationViewController()
         let router = ConfigurationRouter(view: module, parent: parent)
         module.handler = MainAppCoordinator.shared.container.resolve()

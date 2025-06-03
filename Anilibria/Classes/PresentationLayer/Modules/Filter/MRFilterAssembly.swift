@@ -1,7 +1,7 @@
 import UIKit
 
 final class FilterAssembly {
-    class func createModule(_ filter: SeriesFilter,
+    static func createModule(_ filter: SeriesSearchData.Filter,
                             data: FilterData,
                             parent: Router? = nil) -> FilterViewController {
         let module = FilterViewController()
@@ -18,11 +18,11 @@ final class FilterAssembly {
 // MARK: - Route
 
 protocol FilterRoute {
-    func open(filter: SeriesFilter, data: FilterData)
+    func open(filter: SeriesSearchData.Filter, data: FilterData)
 }
 
 extension FilterRoute where Self: RouterProtocol {
-    func open(filter: SeriesFilter, data: FilterData) {
+    func open(filter: SeriesSearchData.Filter, data: FilterData) {
         let module = FilterAssembly.createModule(filter, data: data, parent: self)
         PresentRouter(target: module,
                       from: nil,

@@ -80,6 +80,10 @@ internal enum L10n {
     internal static var skip: String {
         return L10n.tr("Localizable", "buttons.skip")
     }
+    /// Смотреть
+    internal static var watch: String {
+        return L10n.tr("Localizable", "buttons.watch")
+    }
     /// Да
     internal static var yes: String {
         return L10n.tr("Localizable", "buttons.yes")
@@ -95,6 +99,14 @@ internal enum L10n {
     internal static var appearance: String {
         return L10n.tr("Localizable", "common.appearance")
     }
+    /// Автоматически
+    internal static var auto: String {
+        return L10n.tr("Localizable", "common.auto")
+    }
+    /// Автовоспроизведение
+    internal static var autoPlay: String {
+        return L10n.tr("Localizable", "common.auto_play")
+    }
     /// Контент заблокирован
     internal static var contentBlocked: String {
         return L10n.tr("Localizable", "common.content_blocked")
@@ -103,9 +115,17 @@ internal enum L10n {
     internal static var `default`: String {
         return L10n.tr("Localizable", "common.default")
     }
+    /// Отключено
+    internal static var disabled: String {
+        return L10n.tr("Localizable", "common.disabled")
+    }
     /// Понравилась озвучка?\nПоддержи проект :3
     internal static var donatePls: String {
         return L10n.tr("Localizable", "common.donate_pls")
+    }
+    /// Включено
+    internal static var enabled: String {
+        return L10n.tr("Localizable", "common.enabled")
     }
     /// Гость
     internal static var guest: String {
@@ -115,6 +135,10 @@ internal enum L10n {
     internal static var intern: String {
         return L10n.tr("Localizable", "common.intern")
     }
+    /// Вручную
+    internal static var manual: String {
+        return L10n.tr("Localizable", "common.manual")
+    }
     /// (по МСК)
     internal static var mskTimeZone: String {
         return L10n.tr("Localizable", "common.msk_time_zone")
@@ -123,6 +147,10 @@ internal enum L10n {
     internal static var orientation: String {
         return L10n.tr("Localizable", "common.orientation")
     }
+    /// Скорость воспроизведения
+    internal static var playbackRate: String {
+        return L10n.tr("Localizable", "common.playback_rate")
+    }
     /// Качество видео
     internal static var quality: String {
         return L10n.tr("Localizable", "common.quality")
@@ -130,6 +158,10 @@ internal enum L10n {
     /// Связанное
     internal static var related: String {
         return L10n.tr("Localizable", "common.related")
+    }
+    /// Пропуск титров
+    internal static var skipCredits: String {
+        return L10n.tr("Localizable", "common.skip_credits")
     }
     /// Сегодня
     internal static var today: String {
@@ -160,6 +192,37 @@ internal enum L10n {
       /// Системная
       internal static var system: String {
           return L10n.tr("Localizable", "common.appearance.system")
+      }
+    }
+
+    internal enum Collections {
+      /// Брошено
+      internal static var abandoned: String {
+          return L10n.tr("Localizable", "common.collections.abandoned")
+      }
+      /// Добавить
+      internal static var addTo: String {
+          return L10n.tr("Localizable", "common.collections.add_to")
+      }
+      /// Избранное
+      internal static var favorites: String {
+          return L10n.tr("Localizable", "common.collections.favorites")
+      }
+      /// Запланировано
+      internal static var planned: String {
+          return L10n.tr("Localizable", "common.collections.planned")
+      }
+      /// Отложено
+      internal static var postponed: String {
+          return L10n.tr("Localizable", "common.collections.postponed")
+      }
+      /// Просмотрено
+      internal static var watched: String {
+          return L10n.tr("Localizable", "common.collections.watched")
+      }
+      /// Смотрю
+      internal static var watching: String {
+          return L10n.tr("Localizable", "common.collections.watching")
       }
     }
 
@@ -671,10 +734,10 @@ internal enum L10n {
         return L10n.tr("Localizable", "stub.title")
     }
 
-    internal enum Favorite {
-      /// Здесь будут отображаться ваши избранные релизы
+    internal enum Collection {
+      /// Вы еще не добавили ни одного релиза
       internal static var message: String {
-          return L10n.tr("Localizable", "stub.favorite.message")
+          return L10n.tr("Localizable", "stub.collection.message")
       }
     }
 

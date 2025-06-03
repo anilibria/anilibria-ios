@@ -17,7 +17,7 @@ enum FavoriteUpdates {
 
 protocol FavoriteService: AnyObject {
     func favoritesUpdates() -> AnyPublisher<FavoriteUpdates, Never>
-    func fetchSeries(limit: Int, page: Int, filter: SeriesFilter) -> AnyPublisher<[Series], Error>
+    func fetchSeries(limit: Int, page: Int, data: SeriesSearchData) -> AnyPublisher<[Series], Error>
     func favorite(add: Bool, series: Series) -> AnyPublisher<Void, Error>
     func getFavoriteState(for seriesID: Int) -> AnyPublisher<Bool, Error>
     func fetchFilterData() -> AnyPublisher<FilterData, Error>
@@ -51,7 +51,6 @@ final class FavoriteServiceImp: FavoriteService {
             return self.backendRepository
                 .request(request)
         }
-        .subscribe(on: DispatchQueue.global())
         .receive(on: DispatchQueue.main)
         .map { [unowned self] in
             self.favoriteIDs = Set($0)
@@ -61,9 +60,9 @@ final class FavoriteServiceImp: FavoriteService {
         .eraseToAnyPublisher()
     }
 
-    func fetchSeries(limit: Int, page: Int, filter: SeriesFilter) -> AnyPublisher<[Series], Error> {
+    func fetchSeries(limit: Int, page: Int, data: SeriesSearchData) -> AnyPublisher<[Series], Error> {
         return Deferred { [unowned self] in
-            let request = FavoriteListRequest(filter: filter, page: page, limit: limit)
+            let request = FavoriteListRequest(data: data, page: page, limit: limit)
             return self.backendRepository
                 .request(request)
                 .map { $0.items }

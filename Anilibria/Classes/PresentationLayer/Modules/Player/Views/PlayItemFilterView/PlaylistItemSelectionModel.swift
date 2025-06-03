@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class PlaylistItemSelectionModel: ChoiceGroupSource {
+final class PlaylistItemSelectionModel: ActionSheetGroupSource {
     private let selected: PlaylistItem
     private var items: [ChoiceItem] = []
     private var reloadItems: (([ChoiceGroup]) -> Void)?

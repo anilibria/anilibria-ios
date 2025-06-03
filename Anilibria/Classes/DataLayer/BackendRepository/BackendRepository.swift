@@ -38,7 +38,7 @@ final class BackendRepositoryImp: BackendRepository, Loggable {
     func request<T: BackendAPIRequest>(_ request: T) -> AnyPublisher<T.ResponseObject, Error> {
         return self.defaultRequest(request)
             .tryMap { [unowned self] data in
-                try self.convertResponse(request: request, data: data)
+                return try self.convertResponse(request: request, data: data)
             }
             .eraseToAnyPublisher()
     }

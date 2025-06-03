@@ -59,7 +59,11 @@ class SectionAdapter: SectionAdapterProtocol {
         return []
     }
 
-    func getSectionLayout(environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
+    func getSectionLayout(
+        for identifier: AnyHashable,
+        environment: any NSCollectionLayoutEnvironment
+    ) -> NSCollectionLayoutSection? {
+        guard identifier == uid else { return nil }
         if UIDevice.current.userInterfaceIdiom == .pad {
             if let configuration = ipad {
                 return getIPadLayout(environment, configuration: configuration)

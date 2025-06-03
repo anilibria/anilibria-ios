@@ -33,14 +33,7 @@ extension SchedulePresenter: ScheduleEventHandler {
     }
 
     func select(series: Series) {
-        self.mainService.series(with: series.alias)
-            .manageActivity(self.view.showLoading(fullscreen: false))
-            .sink(onNext: { [weak self] item in
-                self?.router.open(series: item)
-            }, onError: { [weak self] error in
-                self?.router.show(error: error)
-            })
-            .store(in: &bag)
+        router.open(series: series)
     }
 
     func didLoad() {

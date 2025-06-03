@@ -86,7 +86,7 @@ extension SettingsPresenter: SettingsEventHandler {
             let orientation = SettingsControlItem(
                 title: L10n.Common.orientation,
                 value: InterfaceAppearance.current.title,
-                action: { [weak self] _ in self?.selectLanguage() }
+                action: { [weak self] in self?.selectOrientation($0) }
             )
             items.append(orientation)
         }

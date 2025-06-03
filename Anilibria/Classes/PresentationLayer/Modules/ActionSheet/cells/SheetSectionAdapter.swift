@@ -7,13 +7,24 @@
 //
 
 import UIKit
+import Combine
 
 class SheetSectionAdapter: SectionAdapterProtocol {
     private let headerKind = "SheetSectionTitle"
     private let title: String?
     private let uid: AnyHashable = UUID()
-    private var isExpanded: Bool?
     private var context: AdapterContext?
+    private var cancellable: AnyCancellable?
+
+    @Published var selectedValue: String?
+
+    let expandingChanged = PassthroughSubject<Void, Never>()
+
+    private(set) var isExpanded: Bool? {
+        didSet {
+            expandingChanged.send()
+        }
+    }
 
     var items: [AnyCellAdapter] = []
 
@@ -101,13 +112,18 @@ class SheetSectionAdapter: SectionAdapterProtocol {
             )
             view.set(title: title)
             view.set(expanded: isExpanded, animated: false)
+            cancellable = $selectedValue.sink(receiveValue: { [weak view] value in
+                view?.set(value: value)
+            })
+            view.setValue(hidden: isExpanded != false)
             view.tapAction = { [weak self, weak view] in
                 guard let self else { return }
                 if let isExpanded {
                     self.isExpanded = !isExpanded
                     view?.set(expanded: self.isExpanded, animated: true)
+                    view?.setValue(hidden: !isExpanded)
                 }
-                self.context?.reload(section: self)
+                self.context?.reloadItems(in: self)
             }
             return view
         }

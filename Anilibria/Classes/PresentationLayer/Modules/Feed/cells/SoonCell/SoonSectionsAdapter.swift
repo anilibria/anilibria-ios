@@ -28,7 +28,7 @@ final class SoonSectionsAdapter: SectionAdapterProtocol {
             }
 
             scheduleAdapter.set(items)
-            context?.reload(section: scheduleAdapter)
+            context?.reloadItems(in: scheduleAdapter)
         }.store(in: &cancellabes)
     }
 

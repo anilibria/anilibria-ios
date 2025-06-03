@@ -160,7 +160,7 @@ final class AdapterContext {
         self.dataSource = dataSource
     }
 
-    func reload(section: (any SectionAdapterProtocol)?, animated: Bool = true) {
+    func reloadItems(in section: (any SectionAdapterProtocol)?, animated: Bool = true) {
         guard let section, let dataSource else { return }
         var snapshot = dataSource.snapshot()
 
@@ -173,15 +173,40 @@ final class AdapterContext {
 
         dataSource.apply(snapshot, animatingDifferences: animated)
     }
+
+    func reload(section: (any SectionAdapterProtocol)?, animated: Bool = true) {
+        guard let section, let dataSource else { return }
+        var snapshot = dataSource.snapshot()
+
+        section.getIdentifiers().forEach { id in
+            let sectionId = SectionData(id: id, section: section)
+            if snapshot.sectionIdentifiers.contains(sectionId) {
+                snapshot.deleteSections([sectionId])
+            }
+            snapshot.appendSections([sectionId])
+            snapshot.appendItems(section.getItems(for: id), toSection: sectionId)
+        }
+
+        dataSource.apply(snapshot, animatingDifferences: animated)
+    }
+
+    func removeSections(identifiers: Set<AnyHashable>, animated: Bool = true) {
+        guard let dataSource else { return }
+        var snapshot = dataSource.snapshot()
+
+        snapshot.deleteSections(identifiers.map { SectionData(id: $0, section: nil) })
+
+        dataSource.apply(snapshot, animatingDifferences: animated)
+    }
 }
 
 
 extension UICollectionViewDiffableDataSource {
     func getSection(for index: Int) -> SectionIdentifierType? {
-//        if #available(iOS 15.0, *) {
-//            self.sectionIdentifier(for: index)
-//        } else {
+        if #available(iOS 15.0, *) {
+            self.sectionIdentifier(for: index)
+        } else {
             self.snapshot().sectionIdentifiers[safe: index]
-//        }
+        }
     }
 }

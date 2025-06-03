@@ -10,10 +10,12 @@ import UIKit
 
 public class SheetGroup: NSObject {
     let title: String?
+    let icon: UIImage?
     let isExpandable: Bool
 
-    init(title: String? = nil, isExpandable: Bool = false) {
+    init(title: String? = nil, icon: UIImage? = nil, isExpandable: Bool = false) {
         self.title = title
+        self.icon = icon
         self.isExpandable = isExpandable
     }
 }

@@ -2,7 +2,7 @@ import UIKit
 
 public final class ChoiceGroup: SheetGroup {
     let items: [ChoiceItem]
-    private var selectedItem: ChoiceItem?
+    private(set) var selectedItem: ChoiceItem?
 
     init(title: String? = nil, isExpandable: Bool = false, items: [ChoiceItem]) {
         self.items = items
@@ -78,9 +78,12 @@ final class ChoiceCellAdapter: BaseCellAdapter<ChoiceItem> {
 final class ChoiceCellSectionAdapter: SheetSectionAdapter {
     init(_ group: ChoiceGroup, select: ((SheetSelector) -> Void)?) {
         super.init(group)
-
+        selectedValue = group.selectedItem?.title
         self.items = group.items.map {
-            let model = ChoiceCellAdapter(viewModel: $0, select: select)
+            let model = ChoiceCellAdapter(viewModel: $0, select: { [weak self, weak group] selector in
+                select?(selector)
+                self?.selectedValue = group?.selectedItem?.title
+            })
             model.section = self
             return model
         }

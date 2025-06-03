@@ -184,8 +184,8 @@ extension PlayerViewModel {
         groups.append(ChoiceGroup(
             title: L10n.Common.quality,
             isExpandable: true,
-            items: items)
-        )
+            items: items
+        ))
     }
 
     private func setRate(to groups: inout [ChoiceGroup]) {

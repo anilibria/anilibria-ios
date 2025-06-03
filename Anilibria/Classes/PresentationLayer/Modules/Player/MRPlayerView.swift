@@ -133,9 +133,12 @@ final class PlayerViewController: BaseViewController {
             self?.updateOrientation()
         }.store(in: &subscribers)
 
-        viewModel.$playItem.compactMap { $0 }
-            .sink { [weak self] item in
-                self?.set(playItem: item)
+        viewModel.$playItem
+            .scan((nil, nil), { ($0.1, $1) })
+            .sink { [weak self] (old, next) in
+                if let next {
+                    self?.set(playItem: next, previous: old)
+                }
             }.store(in: &subscribers)
 
         viewModel.$playbackRate
@@ -253,7 +256,7 @@ final class PlayerViewController: BaseViewController {
         }
     }
 
-    private func set(playItem: PlayItem) {
+    private func set(playItem: PlayItem, previous: PlayItem? = nil) {
         seriesSelectorLabel.text = playItem.name
         videoSliderView.set(duration: 0)
 
@@ -268,7 +271,7 @@ final class PlayerViewController: BaseViewController {
                     guard let self else { return }
                     videoSliderView.set(duration: duration)
                     playerView.set(time: playItem.time)
-                    if !playerView.isPlaying {
+                    if previous?.index != playItem.index && !playerView.isPlaying {
                         playerView.togglePlay()
                         playerContainer.uiIsVisible = false
                     }

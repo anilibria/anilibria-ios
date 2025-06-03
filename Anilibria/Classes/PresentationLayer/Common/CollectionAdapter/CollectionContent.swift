@@ -63,7 +63,7 @@ struct SectionData: Hashable {
     let id: AnyHashable
     private weak var section: (any SectionAdapterProtocol)?
 
-    init(id: AnyHashable, section: any SectionAdapterProtocol) {
+    init(id: AnyHashable, section: (any SectionAdapterProtocol)?) {
         self.id = id
         self.section = section
     }

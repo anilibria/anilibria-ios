@@ -3,6 +3,11 @@ import UIKit
 public final class TorrentView: UIView {
     @IBOutlet private var mainLabel: UILabel!
     @IBOutlet private var infoLabel: UILabel!
+    @IBOutlet private var button: UIButton! {
+        didSet {
+            button?.smoothCorners(with: 8)
+        }
+    }
 
     private var handler: Action<Torrent>?
 

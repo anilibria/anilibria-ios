@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="TorrentView" customModule="Anilibria" customModuleProvider="target">
+        <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="iN0-l3-epB" customClass="TorrentView" customModule="Anilibria" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="500" height="112"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -31,7 +30,7 @@
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UlW-ye-Zxg" customClass="RippleButton" customModule="Anilibria" customModuleProvider="target">
-                    <rect key="frame" x="0.0" y="59" width="500" height="53"/>
+                    <rect key="frame" x="-8" y="0.0" width="516" height="112"/>
                     <connections>
                         <action selector="tapAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="XII-gI-jkb"/>
                     </connections>
@@ -47,26 +46,26 @@
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
-            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" name="surfaces/base"/>
             <constraints>
                 <constraint firstItem="Sbc-V4-00K" firstAttribute="leading" secondItem="aXS-hM-ECg" secondAttribute="trailing" constant="10" id="3T6-UZ-08k"/>
-                <constraint firstItem="UlW-ye-Zxg" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="9gj-00-zTl"/>
+                <constraint firstItem="UlW-ye-Zxg" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="-8" id="9gj-00-zTl"/>
                 <constraint firstAttribute="bottom" secondItem="aXS-hM-ECg" secondAttribute="bottom" constant="8" id="D7S-fA-A9s"/>
-                <constraint firstItem="UlW-ye-Zxg" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="Fmi-u5-kng"/>
-                <constraint firstAttribute="trailing" secondItem="UlW-ye-Zxg" secondAttribute="trailing" id="Fto-vh-6TA"/>
+                <constraint firstItem="UlW-ye-Zxg" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Fmi-u5-kng"/>
+                <constraint firstAttribute="trailing" secondItem="UlW-ye-Zxg" secondAttribute="trailing" constant="-8" id="Fto-vh-6TA"/>
                 <constraint firstAttribute="bottom" secondItem="dwP-dc-YWg" secondAttribute="bottom" id="JsP-fW-18f"/>
                 <constraint firstItem="Sbc-V4-00K" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="Kyo-gZ-4NA"/>
                 <constraint firstAttribute="bottom" secondItem="UlW-ye-Zxg" secondAttribute="bottom" id="VDD-Eq-DJo"/>
                 <constraint firstAttribute="bottom" secondItem="Sbc-V4-00K" secondAttribute="bottom" constant="8" id="bcz-ez-2HO"/>
-                <constraint firstItem="aXS-hM-ECg" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="fhP-J4-cvW"/>
-                <constraint firstItem="dwP-dc-YWg" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="k6T-1c-YGD"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Sbc-V4-00K" secondAttribute="trailing" id="rgN-hS-6u9"/>
+                <constraint firstItem="aXS-hM-ECg" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="fhP-J4-cvW"/>
+                <constraint firstItem="dwP-dc-YWg" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="k6T-1c-YGD"/>
+                <constraint firstAttribute="trailing" secondItem="Sbc-V4-00K" secondAttribute="trailing" id="rgN-hS-6u9"/>
                 <constraint firstItem="aXS-hM-ECg" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="t7d-sn-WH7"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="dwP-dc-YWg" secondAttribute="trailing" id="vfe-XS-ybE"/>
+                <constraint firstAttribute="trailing" secondItem="dwP-dc-YWg" secondAttribute="trailing" id="vfe-XS-ybE"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="button" destination="UlW-ye-Zxg" id="BcV-Vu-VzJ"/>
                 <outlet property="infoLabel" destination="Sbc-V4-00K" id="lFA-9d-drr"/>
                 <outlet property="mainLabel" destination="aXS-hM-ECg" id="QxQ-zy-kQP"/>
             </connections>

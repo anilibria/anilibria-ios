@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Combine
 
 // MARK: - View Controller
 
@@ -37,21 +38,30 @@ final class ActionSheetViewController: BaseCollectionViewController {
         self.addKeyboardObservers()
         self.view.backgroundColor = .clear
         self.handler.didLoad()
+        collectionView.contentInset = .init(top: 8, left: 0, bottom: 8, right: 0)
+        self.bag = self.collectionView.publisher(for: \UICollectionView.contentSize)
+            .removeDuplicates()
+            .throttle(for: .milliseconds(100), scheduler: DispatchQueue.main, latest: true)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                collectionHeightConstraint.constant = collectionView.contentSize.height
+                    + collectionView.contentInset.top
+                    + collectionView.contentInset.bottom
 
-        self.bag = self.collectionView.observe(\UICollectionView.contentSize) { [weak self] _, _ in
-            if let height = self?.collectionView.contentSize.height {
-                self?.collectionHeightConstraint.constant = height
                 UIView.animate(withDuration: 0.2) {
-                    self?.view.layoutIfNeeded()
+                    self.view.layoutIfNeeded()
                 }
             }
-        }
 
-        adapter.setLayout(type: SectionBackgroundCollectionViewCompositionalLayout.self) { layout in
+        let conf = UICollectionViewCompositionalLayoutConfiguration()
+        conf.interSectionSpacing = 8
+        adapter.setLayout(
+            type: SectionBackgroundCollectionViewCompositionalLayout.self,
+            configuration: conf
+        ) { layout in
             layout.backgroundColor = UIColor.white.withAlphaComponent(0.1)
             layout.cornerRadius = 4
-            layout.backgroundInsets = .init(top: 8, left: 8, bottom: 8, right: 8)
-            layout.configuration.interSectionSpacing = 16
+            layout.backgroundInsets = .init(top: 0, left: 8, bottom: 0, right: 8)
         }
     }
     

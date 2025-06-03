@@ -78,7 +78,7 @@ class SheetSectionAdapter: SectionAdapterProtocol {
             let header = NSCollectionLayoutBoundarySupplementaryItem(
                 layoutSize: .init(
                     widthDimension: .fractionalWidth(1),
-                    heightDimension: .absolute(40)
+                    heightDimension: .absolute(44)
                 ),
                 elementKind: headerKind,
                 alignment: .top
@@ -87,7 +87,7 @@ class SheetSectionAdapter: SectionAdapterProtocol {
             header.pinToVisibleBounds = false
             section.boundarySupplementaryItems = [header]
         }
-        section.contentInsets = .init(top: 8, leading: 8, bottom: 8, trailing: 8)
+        section.contentInsets = .init(top: 0, leading: 8, bottom: 0, trailing: 8)
         section.decorationItems = [
             NSCollectionLayoutDecorationItem.background(
                 elementKind: SectionBackgroundCollectionViewCompositionalLayout.backgroundViewKind

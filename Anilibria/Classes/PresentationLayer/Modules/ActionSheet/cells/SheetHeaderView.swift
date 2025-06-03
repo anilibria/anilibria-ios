@@ -30,7 +30,7 @@ class SheetHeaderView: UICollectionReusableView {
         contentView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(contentView)
         contentView.constraintEdgesToSuperview(
-            .init(top: 16, left: 16, bottom: 0, right: 16)
+            .init(top: 8, left: 16, bottom: 8, right: 16)
         )
         contentView.axis = .horizontal
         contentView.spacing = 8

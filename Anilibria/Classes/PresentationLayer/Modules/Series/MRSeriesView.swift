@@ -99,11 +99,21 @@ final class SeriesViewController: BaseViewController {
     }
 
     private func setupNavigationButtons() {
-        let item = BarButton(image: UIImage(resource: .iconShare),
+        var items = [UIBarButtonItem]()
+        let shareButton = BarButton(image: UIImage(resource: .iconShare),
                              imageEdge: inset(8, 0, 10, 0)) { [weak self] in
             self?.handler.share()
         }
-        self.navigationItem.setRightBarButtonItems([item], animated: false)
+        items.append(shareButton)
+        #if targetEnvironment(macCatalyst)
+        let refreshButton = BarButton(image: UIImage(resource: .iconRefresh)) { [weak self] in
+            guard let self else { return }
+            _ = showRefreshIndicator()
+            handler.refresh()
+        }
+        items.append(refreshButton)
+        #endif
+        self.navigationItem.setRightBarButtonItems(items, animated: false)
     }
 
     private func setupHeader() {
@@ -241,6 +251,10 @@ extension SeriesViewController: SeriesViewBehavior {
     }
 
     func set(torrents: [Torrent]) {
+        torrentsStackView.arrangedSubviews.forEach {
+            torrentsStackView.removeArrangedSubview($0)
+            $0.removeFromSuperview()
+        }
         let views = torrents.lazy.compactMap { item -> TorrentView? in
             let view = TorrentView.fromNib()
             view?.configure(item)

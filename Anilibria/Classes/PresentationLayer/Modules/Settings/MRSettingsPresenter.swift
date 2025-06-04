@@ -85,7 +85,7 @@ extension SettingsPresenter: SettingsEventHandler {
         if UIDevice.current.userInterfaceIdiom == .phone {
             let orientation = SettingsControlItem(
                 title: L10n.Common.orientation,
-                value: InterfaceAppearance.current.title,
+                value: InterfaceOrientation.current.title,
                 action: { [weak self] in self?.selectOrientation($0) }
             )
             items.append(orientation)

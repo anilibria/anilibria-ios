@@ -428,6 +428,23 @@
         }
       }
     },
+    "common.auto_play_long" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoplay next episode"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Автовоспроизведение следующей серии"
+          }
+        }
+      }
+    },
     "common.collections.abandoned" : {
       "extractionState" : "migrated",
       "localizations" : {
@@ -798,6 +815,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Системная"
+          }
+        }
+      }
+    },
+    "common.play_on_startup" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Play a series on player startup"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запуск серии при старте плеера"
           }
         }
       }

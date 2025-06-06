@@ -318,6 +318,10 @@ enum L10n {
         static var `autoPlay`: String {
             return L10n.tr("Localizable", "common.auto_play")
         }
+        /// Autoplay next episode
+        static var `autoPlayLong`: String {
+            return L10n.tr("Localizable", "common.auto_play_long")
+        }
         /// Content is blocked
         static var `contentBlocked`: String {
             return L10n.tr("Localizable", "common.content_blocked")
@@ -358,6 +362,10 @@ enum L10n {
         /// Player orientation
         static var `orientation`: String {
             return L10n.tr("Localizable", "common.orientation")
+        }
+        /// Play a series on player startup
+        static var `playOnStartup`: String {
+            return L10n.tr("Localizable", "common.play_on_startup")
         }
         /// Playback rate
         static var `playbackRate`: String {

@@ -27,8 +27,10 @@ final class PlayerViewController: BaseViewController {
     private var pictureInPictureController: AVPictureInPictureController?
     private let timeFormatter = FormatterFactory.time.create()
     private var bag: AnyCancellable?
+    private var hideUISubscriber: AnyCancellable?
     private var pipObservation: Any?
     private var needsPlay = false
+    private let userInteractionSubject = PassthroughSubject<Void, Never>()
 
     private var orientation: UIInterfaceOrientationMask = .all
 
@@ -74,6 +76,14 @@ final class PlayerViewController: BaseViewController {
 
         MacOSHelper.shared.fullscreenButtonEnabled = true
         #endif
+
+        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handle))
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handle))
+        tapRecognizer.cancelsTouchesInView = false
+        tapRecognizer.delegate = self
+        panRecognizer.delegate = self
+        view.addGestureRecognizer(tapRecognizer)
+        view.addGestureRecognizer(panRecognizer)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -125,6 +135,7 @@ final class PlayerViewController: BaseViewController {
         }
 
         titleLabel.text = viewModel.seriesName
+        needsPlay = viewModel.playOnStartup
 
         videoSliderView.set(duration: 0)
         setLoader(visible: true)
@@ -177,6 +188,21 @@ final class PlayerViewController: BaseViewController {
             })
             .store(in: &subscribers)
 
+        Publishers.CombineLatest(
+            playerView.getPlayChanges(),
+            userInteractionSubject.throttle(
+                for: .seconds(0.5),
+                scheduler: DispatchQueue.main,
+                latest: true
+            )
+        ).sink { [weak self] isPlaiyng, _ in
+            if isPlaiyng {
+                self?.startAutoHiddingUI()
+            } else {
+                self?.stopAutoHiddingUI()
+            }
+        }.store(in: &subscribers)
+
         self.playerView.getStatusSequence()
             .sink(onNext: { [weak self] value in
                 switch value {
@@ -199,6 +225,19 @@ final class PlayerViewController: BaseViewController {
         videoSliderView.changeValue = { [weak self] progress, duration in
             self?.updateLabels(progress: progress, duration: duration)
         }
+    }
+
+    private func startAutoHiddingUI() {
+        hideUISubscriber = Timer.publish(every: 3, on: .main, in: .common)
+            .autoconnect()
+            .first()
+            .sink(receiveValue: { [weak self] _ in
+                self?.playerContainer.uiIsVisible = false
+            })
+    }
+
+    private func stopAutoHiddingUI() {
+        hideUISubscriber?.cancel()
     }
 
     func setupPictureInPicture() {
@@ -371,6 +410,10 @@ final class PlayerViewController: BaseViewController {
     @IBAction func selectVideoDidTap() {
         viewModel.selectPlayItem()
     }
+
+    @objc private func handle(recognizer: UIPanGestureRecognizer) {
+        userInteractionSubject.send()
+    }
 }
 
 extension PlayerViewController: AVPictureInPictureControllerDelegate {
@@ -382,6 +425,18 @@ extension PlayerViewController: AVPictureInPictureControllerDelegate {
     }
 }
 
+extension PlayerViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+    ) -> Bool {
+        true
+    }
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        true
+    }
+}
 
 private extension UIKeyCommand {
     static let inputSpace = " "

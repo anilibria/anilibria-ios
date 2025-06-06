@@ -37,6 +37,10 @@ final class PlayerViewModel {
         }
     }
 
+    var playOnStartup: Bool {
+        playerSettings.playOnStartup
+    }
+
     private let playerService: PlayerService
 
     init(playerService: PlayerService) {
@@ -224,7 +228,7 @@ extension PlayerViewModel {
         let items = [true, false].map {
             ChoiceItem(
                 value: $0,
-                title: PlayerSettings.nameFor(autoPlay: $0),
+                title: PlayerSettings.nameFor(bool: $0),
                 isSelected: playerSettings.autoPlay == $0,
                 didSelect: didSelect
             )

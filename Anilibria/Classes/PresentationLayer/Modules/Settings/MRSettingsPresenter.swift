@@ -47,6 +47,22 @@ extension SettingsPresenter: SettingsEventHandler {
         )
         items.append(languageItem)
 
+        let appearanceItem = SettingsControlItem(
+            title: L10n.Common.appearance,
+            value: InterfaceAppearance.current.title,
+            action: { [weak self] in self?.selectAppearance($0) }
+        )
+        items.append(appearanceItem)
+
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            let orientation = SettingsControlItem(
+                title: L10n.Common.orientation,
+                value: InterfaceOrientation.current.title,
+                action: { [weak self] in self?.selectOrientation($0) }
+            )
+            items.append(orientation)
+        }
+
         let qualityItem = SettingsControlItem(
             title: L10n.Screen.Settings.videoQuality,
             value: "",
@@ -69,34 +85,26 @@ extension SettingsPresenter: SettingsEventHandler {
         items.append(skipItem)
 
         let autoplayItem = SettingsControlItem(
-            title: L10n.Common.autoPlay,
+            title: L10n.Common.autoPlayLong,
             value: "",
             action: { [weak self] _ in self?.selectAutoplay() }
         )
         items.append(autoplayItem)
 
-        let appearanceItem = SettingsControlItem(
-            title: L10n.Common.appearance,
-            value: InterfaceAppearance.current.title,
-            action: { [weak self] in self?.selectAppearance($0) }
+        let startupItem = SettingsControlItem(
+            title: L10n.Common.playOnStartup,
+            value: "",
+            action: { [weak self] _ in self?.selectStartupPlay() }
         )
-        items.append(appearanceItem)
-
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            let orientation = SettingsControlItem(
-                title: L10n.Common.orientation,
-                value: InterfaceOrientation.current.title,
-                action: { [weak self] in self?.selectOrientation($0) }
-            )
-            items.append(orientation)
-        }
+        items.append(startupItem)
 
         playerService.observeSettings().sink { [weak self] settings in
             self?.playerSettings = settings
             qualityItem.value = settings.quality.name
             speedItem.value = PlayerSettings.nameFor(rate: settings.playbackRate)
-            autoplayItem.value = PlayerSettings.nameFor(autoPlay: settings.autoPlay)
+            autoplayItem.value = PlayerSettings.nameFor(bool: settings.autoPlay)
             skipItem.value = settings.skipMode.name
+            startupItem.value = PlayerSettings.nameFor(bool: settings.playOnStartup)
         }.store(in: &bag)
 
         self.view.set(name: Bundle.main.displayName ?? "",
@@ -216,10 +224,25 @@ extension SettingsPresenter: SettingsEventHandler {
         let items = [true, false].map {
             ChoiceItem(
                 value: $0,
-                title: PlayerSettings.nameFor(autoPlay: $0),
+                title: PlayerSettings.nameFor(bool: $0),
                 isSelected: playerSettings?.autoPlay == $0,
                 didSelect: { [weak self] item in
-                    self?.update(item)
+                    self?.update(autoplay: item)
+                    return true
+                }
+            )
+        }
+        self.router.openSheet(with: [ChoiceGroup(items: items)])
+    }
+
+    func selectStartupPlay() {
+        let items = [true, false].map {
+            ChoiceItem(
+                value: $0,
+                title: PlayerSettings.nameFor(bool: $0),
+                isSelected: playerSettings?.playOnStartup == $0,
+                didSelect: { [weak self] item in
+                    self?.update(playOnStartup: item)
                     return true
                 }
             )
@@ -245,9 +268,15 @@ extension SettingsPresenter: SettingsEventHandler {
         playerService.update(settings: playerSettings)
     }
 
-    private func update(_ autoplay: Bool) {
+    private func update(autoplay: Bool) {
         guard var playerSettings else { return }
         playerSettings.autoPlay = autoplay
+        playerService.update(settings: playerSettings)
+    }
+
+    private func update(playOnStartup: Bool) {
+        guard var playerSettings else { return }
+        playerSettings.playOnStartup = playOnStartup
         playerService.update(settings: playerSettings)
     }
 }

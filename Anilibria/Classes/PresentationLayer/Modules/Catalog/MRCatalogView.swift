@@ -5,17 +5,17 @@ import UIKit
 final class CatalogViewController: BaseCollectionViewController {
     var handler: CatalogEventHandler!
 
-    private lazy var searchButton = BarButton(image: UIImage(resource: .menuItemSearch),
-                                              imageEdge: inset(12, 5, 12, 5)) { [weak self] in
+    private lazy var searchButton = BarButton(image: .System.search,
+                                              imageEdge: inset(0, 5, 0, 5)) { [weak self] in
         self?.handler.search()
     }
 
-    private lazy var filterButton = BarButton(image: UIImage(resource: .iconFilter)) { [weak self] in
+    private lazy var filterButton = BarButton(image: .iconFilter) { [weak self] in
         self?.handler.openFilter()
     }
 
     #if targetEnvironment(macCatalyst)
-    private lazy var refreshButton = BarButton(image: UIImage(resource: .iconRefresh)) { [weak self] in
+    private lazy var refreshButton = BarButton(image: .System.refresh) { [weak self] in
         _ = self?.showRefreshIndicator()
         self?.scrollToTop()
         self?.handler.refresh()
@@ -63,9 +63,9 @@ extension CatalogViewController: CatalogViewBehavior {
 
     func setFilter(active: Bool) {
         self.filterButton.tintColor = if active {
-            UIColor(resource: .Tint.active)
+            .Tint.active
         } else {
-            UIColor(resource: .Tint.main)
+            .Tint.main
         }
     }
 }

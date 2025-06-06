@@ -5,13 +5,13 @@ import UIKit
 final class FeedViewController: BaseCollectionViewController {
     var handler: FeedEventHandler!
 
-    private lazy var searchButton = BarButton(image: UIImage(resource: .menuItemSearch),
-                                              imageEdge: inset(12, 5, 12, 5)) { [weak self] in
+    private lazy var searchButton = BarButton(image: .System.search,
+                                              imageEdge: inset(0, 5, 0, 5)) { [weak self] in
         self?.handler.search()
     }
 
     #if targetEnvironment(macCatalyst)
-    private lazy var refreshButton = BarButton(image: UIImage(resource: .iconRefresh)) { [weak self] in
+    private lazy var refreshButton = BarButton(image: .System.refresh) { [weak self] in
         _ = self?.showRefreshIndicator()
         self?.collectionView.setContentOffset(.init(x: 0, y: -10), animated: false)
         self?.handler.refresh()

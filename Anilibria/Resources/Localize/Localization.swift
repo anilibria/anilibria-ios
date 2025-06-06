@@ -58,12 +58,13 @@ public enum Language: String, Equatable, Codable, CaseIterable {
     }
 }
 
-extension String {
-    func localized(using tableName: String?) -> String {
-        if let path = Bundle.main.path(forResource: Language.current.rawValue, ofType: "lproj"),
-           let bundle = Bundle(path: path) {
-            return bundle.localizedString(forKey: self, value: nil, table: tableName)
-        }
-        return self
-    }
+extension L10n {
+  static func tr(_ table: String, _ key: String, _ args: CVarArg...) -> String {
+      if let path = Bundle.main.path(forResource: Language.current.rawValue, ofType: "lproj"),
+         let bundle = Bundle(path: path) {
+          let text = bundle.localizedString(forKey: key, value: nil, table: table)
+          return String(format: text, locale: Language.current.locale, args)
+      }
+      return key
+  }
 }

@@ -34,15 +34,3 @@ extension UIImageView {
         self.kf.cancelDownloadTask()
     }
 }
-
-extension UIImageView {
-    @IBInspectable
-    var templateImage: UIImage? {
-        get {
-            return self.image
-        }
-        set {
-            self.image = newValue?.withRenderingMode(.alwaysTemplate)
-        }
-    }
-}

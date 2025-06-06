@@ -21,9 +21,9 @@ public enum InterfaceOrientation: Codable, CaseIterable {
         case .portrait:
             return L10n.Common.Orientation.portrait
         case .landscape:
-            return L10n.Common.Orientation.landscape + " ↺"
-        case .landscapeRight:
             return L10n.Common.Orientation.landscape + " ↻"
+        case .landscapeRight:
+            return L10n.Common.Orientation.landscape + " ↺"
         case .system:
             return L10n.Common.Orientation.system
         }

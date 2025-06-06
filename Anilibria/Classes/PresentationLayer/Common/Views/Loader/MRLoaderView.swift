@@ -29,7 +29,7 @@ public class MRLoaderView: LoadableView, Loader {
     private func configure() {
         containerView.smoothCorners(with: 16)
         containerView.addSubview(self.animationView)
-        containerView.backgroundColor = UIColor(resource: .Surfaces.content)
+        containerView.backgroundColor = .Surfaces.content
         animationView.apply {
             $0.setImage(from: Bundle.main.url(forResource: "nyan_cat", withExtension: ".gif"))
             $0.contentMode = .scaleAspectFit

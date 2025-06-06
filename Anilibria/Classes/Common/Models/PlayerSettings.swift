@@ -5,6 +5,7 @@ public struct PlayerSettings: Codable {
     var skipMode: SkipCreditsMode = .automatic
     var autoPlay: Bool = true
     var playbackRate: Double = 1.0
+    var playOnStartup: Bool = false
 
     init() {}
 
@@ -14,6 +15,7 @@ public struct PlayerSettings: Codable {
         self.skipMode = container.decode(.skipMode) ?? .automatic
         self.autoPlay = container.decode(.autoPlay) ?? true
         self.playbackRate = container.decode(.playbackRate) ?? 1.0
+        self.playOnStartup = container.decode(.playOnStartup) ?? false
     }
 
     static var playbackRateOptions: [Double] {
@@ -24,8 +26,8 @@ public struct PlayerSettings: Codable {
         "\(rate)x"
     }
 
-    static func nameFor(autoPlay: Bool) -> String {
-        autoPlay ? L10n.Common.enabled : L10n.Common.disabled
+    static func nameFor(bool value: Bool) -> String {
+        value ? L10n.Common.enabled : L10n.Common.disabled
     }
 }
 

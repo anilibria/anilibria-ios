@@ -21,11 +21,11 @@ public struct MainTheme: AppTheme {
 
     func configureNavBar() {
         let navbar = UINavigationBar.appearance()
-        navbar.tintColor = UIColor(resource: .Tint.main)
+        navbar.tintColor = .Tint.main
         let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = UIColor(resource: .Surfaces.background)
+        appearance.backgroundColor = .Surfaces.background
         appearance.titleTextAttributes = [
-            .foregroundColor: UIColor(resource: .Text.main),
+            .foregroundColor: UIColor.Text.main,
             .font: UIFont.font(ofSize: 17, weight: .medium)
         ]
         appearance.shadowColor = .clear
@@ -35,8 +35,8 @@ public struct MainTheme: AppTheme {
     }
 
     func configureTextView() {
-        UITextView.appearance().tintColor = UIColor(resource: .Tint.main)
-        UITextField.appearance().tintColor = UIColor(resource: .Tint.main)
+        UITextView.appearance().tintColor = .Tint.main
+        UITextField.appearance().tintColor = .Tint.main
         UICollectionView.appearance().backgroundColor = .clear
     }
 

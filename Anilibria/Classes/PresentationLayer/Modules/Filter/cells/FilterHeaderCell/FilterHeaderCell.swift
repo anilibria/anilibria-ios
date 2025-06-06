@@ -7,7 +7,7 @@ public final class FilterHeaderCell: UICollectionViewCell {
         super.awakeFromNib()
         filterTitleLabel.text = L10n.Screen.Filter.title
         filterTitleLabel.textAlignment = .center
-        filterTitleLabel.textColor = UIColor(resource: .Text.main)
+        filterTitleLabel.textColor = .Text.main
         filterTitleLabel.font = UIFont.font(ofSize: 17, weight: .medium)
     }
 }

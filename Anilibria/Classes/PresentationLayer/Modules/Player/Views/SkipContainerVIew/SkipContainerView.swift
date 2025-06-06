@@ -25,7 +25,7 @@ final class SkipContainerView: UIStackView {
         func applyStyle(to button: RippleButton) {
             button.smoothCorners(with: button.bounds.height / 2)
             button.titleLabel?.font = .monospacedSystemFont(ofSize: 13, weight: .medium)
-            button.setTitleColor(UIColor(resource: .Text.monoLight), for: .normal)
+            button.setTitleColor(.Text.monoLight, for: .normal)
             button.backgroundColor = UIColor.darkGray.withAlphaComponent(0.5)
             button.layer.borderColor = button.backgroundColor?.cgColor
             button.layer.borderWidth = 1

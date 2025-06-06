@@ -19,7 +19,7 @@ public final class FilterRangeCell: UICollectionViewCell {
 
     public override func awakeFromNib() {
         super.awakeFromNib()
-        titleLabel.textColor = UIColor(resource: .Text.secondary)
+        titleLabel.textColor = .Text.secondary
         valueBackView.clipsToBounds = true
         valueBackView.layer.cornerRadius = 8
     }
@@ -51,11 +51,11 @@ public final class FilterRangeCell: UICollectionViewCell {
 
     private func apply(selected: Bool) {
         if selected {
-            valueLabel.textColor = UIColor(resource: .Text.monoLight)
-            valueBackView.backgroundColor = UIColor(resource: .Buttons.selected)
+            valueLabel.textColor = .Text.monoLight
+            valueBackView.backgroundColor = .Buttons.selected
         } else {
-            valueLabel.textColor = UIColor(resource: .Text.main)
-            valueBackView.backgroundColor = UIColor(resource: .Buttons.unselected)
+            valueLabel.textColor = .Text.main
+            valueBackView.backgroundColor = .Buttons.unselected
         }
     }
 }

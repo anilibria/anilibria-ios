@@ -10,6 +10,7 @@ import UIKit
 import Combine
 
 public final class UserCollectionKeyCell: RippleViewCell {
+    @IBOutlet var iconView: UIImageView!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var backView: UIView!
 
@@ -23,6 +24,7 @@ public final class UserCollectionKeyCell: RippleViewCell {
 
     func configure(_ item: UserCollectionKeyViewModel) {
         titleLabel.text = item.key.title
+        iconView.image = item.key.icon
         set(selected: item.isSelected, animated: false)
         bag = item.$isSelected.dropFirst().sink(receiveValue: { [weak self] value in
             self?.set(selected: value, animated: true)
@@ -32,11 +34,13 @@ public final class UserCollectionKeyCell: RippleViewCell {
     func set(selected: Bool, animated: Bool) {
         func apply() {
             if selected {
-                backView.backgroundColor = UIColor(resource: .Buttons.selected)
-                titleLabel.textColor = UIColor(resource: .Text.monoLight)
+                backView.backgroundColor = .Buttons.selected
+                titleLabel.textColor = .Text.monoLight
+                iconView.tintColor = .Text.monoLight
             } else {
-                backView.backgroundColor = UIColor(resource: .Buttons.unselected)
-                titleLabel.textColor = UIColor(resource: .Text.main)
+                backView.backgroundColor = .Buttons.unselected
+                titleLabel.textColor = .Text.main
+                iconView.tintColor = .Text.main
             }
         }
 

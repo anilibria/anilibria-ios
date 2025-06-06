@@ -4,7 +4,7 @@ final class TeamViewController: BaseCollectionViewController {
     var handler: TeamEventHandler!
 
     #if targetEnvironment(macCatalyst)
-    private lazy var refreshButton = BarButton(image: UIImage(resource: .iconRefresh)) { [weak self] in
+    private lazy var refreshButton = BarButton(image: .System.refresh) { [weak self] in
         _ = self?.showRefreshIndicator()
         self?.scrollToTop()
         self?.handler.refresh()

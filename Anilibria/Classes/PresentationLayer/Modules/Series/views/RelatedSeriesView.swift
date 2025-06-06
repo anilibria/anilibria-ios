@@ -29,10 +29,10 @@ public final class RelatedSeriesView: UIView {
         self.series = series
         titleLabel.text = "\(index + 1). \(series.name?.main ?? "")"
         if selected {
-            titleLabel.textColor = UIColor(resource: .Buttons.selected)
+            titleLabel.textColor = .Buttons.selected
             button.isUserInteractionEnabled = false
         } else {
-            titleLabel.textColor = UIColor(resource: .Text.main)
+            titleLabel.textColor = .Text.main
             button.isUserInteractionEnabled = true
         }
     }

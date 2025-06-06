@@ -2,7 +2,7 @@ import UIKit
 
 public class RippleManager {
     public var isEnabled: Bool = true
-    public var rippleColor: UIColor = UIColor(resource: .Tint.main)
+    public var rippleColor: UIColor = .Tint.main
     public var rippleAlpha: CGFloat = 0.1
     public var mask: UIImage? {
         didSet {
@@ -138,7 +138,7 @@ open class RippleViewCell: UICollectionViewCell {
 
     open override func awakeFromNib() {
         super.awakeFromNib()
-        rippleManager.rippleColor = UIColor(resource: .Tint.main)
+        rippleManager.rippleColor = .Tint.main
     }
 
     open override func prepareForReuse() {

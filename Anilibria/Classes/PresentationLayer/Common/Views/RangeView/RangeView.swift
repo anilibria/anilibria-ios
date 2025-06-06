@@ -99,12 +99,12 @@ public final class RangeView: UIView {
         let tap = UITapGestureRecognizer(target: self, action: #selector(recognize(gesture:)))
         addGestureRecognizer(tap)
 
-        lineRangeView.backgroundColor = UIColor(resource: .Buttons.unselected)
+        lineRangeView.backgroundColor = .Buttons.unselected
         lineRangeView.clipsToBounds = true
         lineRangeView.layer.cornerRadius = lineHeight / 2
-        selectedRangeView.backgroundColor = UIColor(resource: .Buttons.selected)
-        maxThumbView.backgroundColor = UIColor(resource: .Buttons.selected)
-        minThumbView.backgroundColor = UIColor(resource: .Buttons.selected)
+        selectedRangeView.backgroundColor = .Buttons.selected
+        maxThumbView.backgroundColor = .Buttons.selected
+        minThumbView.backgroundColor = .Buttons.selected
 
         maxThumbView.valueUpdated = { [weak self] value in
             self?.selectedMax = value

@@ -37,20 +37,20 @@ final class RestorePasswordViewController: BaseViewController {
         super.setupStrings()
         navigationItem.title = L10n.Screen.RestorePassword.title
         emailField.placeholder = L10n.Screen.RestorePassword.email
-        emailField.placeHolderColor = UIColor(resource: .Text.secondary)
+        emailField.placeHolderColor = .Text.secondary
 
         tokenField.placeholder = L10n.Screen.RestorePassword.token
-        tokenField.placeHolderColor = UIColor(resource: .Text.secondary)
+        tokenField.placeHolderColor = .Text.secondary
 
         passwordField.placeholder = L10n.Screen.RestorePassword.newPassword
-        passwordField.placeHolderColor = UIColor(resource: .Text.secondary)
+        passwordField.placeHolderColor = .Text.secondary
 
         repeatPasswordField.placeholder = L10n.Screen.RestorePassword.repeatPassword
-        repeatPasswordField.placeHolderColor = UIColor(resource: .Text.secondary)
+        repeatPasswordField.placeHolderColor = .Text.secondary
 
         continueButton.setTitle(L10n.Buttons.continue, for: .normal)
-        continueButton.enabledColor = UIColor(resource: .Buttons.selected)
-        continueButton.disabledColor = UIColor(resource: .Buttons.unselected)
+        continueButton.enabledColor = .Buttons.selected
+        continueButton.disabledColor = .Buttons.unselected
         continueButton.cornerRadius = 6
 
         changeModeButton.setTitle(L10n.Buttons.signUp, for: .normal)
@@ -81,13 +81,13 @@ final class RestorePasswordViewController: BaseViewController {
             case .resetPassword:
                 if fields.2.isEmpty || fields.3.isEmpty {
                     continueButton.isEnabled = false
-                    updatePasswordLine(color: UIColor(resource: .Tint.main))
+                    updatePasswordLine(color: .Tint.main)
                 } else if fields.2 == fields.3 {
                     continueButton.isEnabled = !fields.1.isEmpty
-                    updatePasswordLine(color: UIColor(resource: .Tint.main))
+                    updatePasswordLine(color: .Tint.main)
                 } else {
                     continueButton.isEnabled = false
-                    updatePasswordLine(color: UIColor(resource: .Tint.active))
+                    updatePasswordLine(color: .Tint.active)
                 }
             }
         }.store(in: &subscribers)

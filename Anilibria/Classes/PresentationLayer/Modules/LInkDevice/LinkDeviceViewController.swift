@@ -24,8 +24,8 @@ final class LinkDeviceViewController: BaseViewController {
         view.backgroundColor = .clear
         contentView.smoothCorners(with: 12)
 
-        doneButton.enabledColor = UIColor(resource: .Buttons.selected)
-        doneButton.disabledColor = UIColor(resource: .Buttons.unselected)
+        doneButton.enabledColor = .Buttons.selected
+        doneButton.disabledColor = .Buttons.unselected
         doneButton.cornerRadius = 6
 
         codeField.textPublisher.map { $0?.trim() ?? "" }.sink(onNext: { [weak self] in

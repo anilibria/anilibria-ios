@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -30,10 +30,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tXR-Br-u8V" customClass="ShadowView" customModule="Anilibria" customModuleProvider="target">
-                    <rect key="frame" x="0.0" y="108" width="414" height="788"/>
+                    <rect key="frame" x="0.0" y="156" width="414" height="740"/>
                     <subviews>
                         <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DpG-Aa-mCd" customClass="TouchesScrollView" customModule="Anilibria" customModuleProvider="target">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="788"/>
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="740"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="R3G-kp-Dbk">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="298"/>
@@ -92,16 +92,13 @@
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n7x-2Y-gdd">
                                                             <rect key="frame" x="0.0" y="40" width="382" height="40"/>
                                                             <subviews>
-                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="z22-xv-ueb">
-                                                                    <rect key="frame" x="16" y="10" width="20" height="20"/>
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="memories" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="z22-xv-ueb">
+                                                                    <rect key="frame" x="15.5" y="10.5" width="20.5" height="19"/>
                                                                     <color key="tintColor" name="text/secondary"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="20" id="St4-LA-9A4"/>
                                                                         <constraint firstAttribute="height" constant="20" id="Ywv-Za-iRA"/>
                                                                     </constraints>
-                                                                    <userDefinedRuntimeAttributes>
-                                                                        <userDefinedRuntimeAttribute type="image" keyPath="templateImage" value="icon_history"/>
-                                                                    </userDefinedRuntimeAttributes>
                                                                 </imageView>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fca-Sy-DOy">
                                                                     <rect key="frame" x="46" y="20" width="320" height="0.0"/>
@@ -133,16 +130,13 @@
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wXq-zj-kgL">
                                                             <rect key="frame" x="0.0" y="80" width="382" height="40"/>
                                                             <subviews>
-                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="OdS-ta-Nqs">
-                                                                    <rect key="frame" x="16" y="10" width="20" height="20"/>
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.2.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="OdS-ta-Nqs">
+                                                                    <rect key="frame" x="16" y="11" width="20" height="18.5"/>
                                                                     <color key="tintColor" name="text/secondary"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="20" id="hm0-RN-B0q"/>
                                                                         <constraint firstAttribute="height" constant="20" id="v1m-Gs-o5P"/>
                                                                     </constraints>
-                                                                    <userDefinedRuntimeAttributes>
-                                                                        <userDefinedRuntimeAttribute type="image" keyPath="templateImage" value="icon_people"/>
-                                                                    </userDefinedRuntimeAttributes>
                                                                 </imageView>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zzf-sV-SGr">
                                                                     <rect key="frame" x="46" y="20" width="320" height="0.0"/>
@@ -174,16 +168,13 @@
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NZz-a4-KfU">
                                                             <rect key="frame" x="0.0" y="120" width="382" height="40"/>
                                                             <subviews>
-                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="RbB-eU-e9K">
-                                                                    <rect key="frame" x="16" y="10" width="20" height="20"/>
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gift" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="RbB-eU-e9K">
+                                                                    <rect key="frame" x="16" y="9.5" width="20" height="19.5"/>
                                                                     <color key="tintColor" name="text/secondary"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="20" id="Z2t-rN-doC"/>
                                                                         <constraint firstAttribute="height" constant="20" id="ied-it-skX"/>
                                                                     </constraints>
-                                                                    <userDefinedRuntimeAttributes>
-                                                                        <userDefinedRuntimeAttribute type="image" keyPath="templateImage" value="icon_gift"/>
-                                                                    </userDefinedRuntimeAttributes>
                                                                 </imageView>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yce-rf-kRd">
                                                                     <rect key="frame" x="46" y="20" width="320" height="0.0"/>
@@ -237,16 +228,13 @@
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FfB-yM-8U7">
                                                             <rect key="frame" x="0.0" y="0.0" width="382" height="40"/>
                                                             <subviews>
-                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fKZ-rD-fC0">
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_settings" translatesAutoresizingMaskIntoConstraints="NO" id="fKZ-rD-fC0">
                                                                     <rect key="frame" x="16" y="10" width="20" height="20"/>
                                                                     <color key="tintColor" name="text/secondary"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="20" id="aaL-YD-KkU"/>
                                                                         <constraint firstAttribute="height" constant="20" id="rZq-m8-OrK"/>
                                                                     </constraints>
-                                                                    <userDefinedRuntimeAttributes>
-                                                                        <userDefinedRuntimeAttribute type="image" keyPath="templateImage" value="icon_settings"/>
-                                                                    </userDefinedRuntimeAttributes>
                                                                 </imageView>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Настройки" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yIP-4y-s4K">
                                                                     <rect key="frame" x="46" y="11.5" width="320" height="17"/>
@@ -349,20 +337,17 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0QZ-VR-nGh">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="108"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="156"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FNO-cS-reU">
-                            <rect key="frame" x="0.0" y="48" width="414" height="60"/>
+                            <rect key="frame" x="0.0" y="96" width="414" height="60"/>
                             <subviews>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="IPX-KG-Lfj">
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_anilibria" translatesAutoresizingMaskIntoConstraints="NO" id="IPX-KG-Lfj">
                                     <rect key="frame" x="16" y="8" width="28" height="44"/>
                                     <color key="tintColor" red="0.70742018399999995" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="28" id="dVh-71-kdT"/>
                                     </constraints>
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="image" keyPath="templateImage" value="icon_anilibria"/>
-                                    </userDefinedRuntimeAttributes>
                                 </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OuO-Q2-EIi">
                                     <rect key="frame" x="80" y="30" width="297" height="0.0"/>
@@ -408,7 +393,7 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wzi-Cl-YtJ" customClass="GradientView" customModule="Anilibria" customModuleProvider="target">
-                    <rect key="frame" x="0.0" y="108" width="414" height="5"/>
+                    <rect key="frame" x="0.0" y="156" width="414" height="5"/>
                     <viewLayoutGuide key="safeArea" id="7Ks-Bi-d7K"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
@@ -445,12 +430,12 @@
         </view>
     </objects>
     <resources>
+        <image name="gift" catalog="system" width="128" height="125"/>
         <image name="icon_anilibria" width="122" height="114"/>
-        <image name="icon_gift" width="18" height="18"/>
-        <image name="icon_history" width="18" height="18"/>
-        <image name="icon_people" width="18" height="18"/>
         <image name="icon_settings" width="18" height="18"/>
         <image name="link" catalog="system" width="128" height="124"/>
+        <image name="memories" catalog="system" width="128" height="119"/>
+        <image name="person.2.fill" catalog="system" width="128" height="86"/>
         <namedColor name="surfaces/background">
             <color red="0.99607843137254903" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

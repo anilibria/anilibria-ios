@@ -11,20 +11,19 @@ public final class RemovableSeriesCell: DraggableRippleCell {
 
     private static let textBuilder: AttributeStringBuilder = AttributeStringBuilder()
         .set(font: .font(ofSize: 13, weight: .regular))
-        .set(color: UIColor(resource: .Text.secondary))
+        .set(color: .Text.secondary)
         .set(lineBreakMode: .byTruncatingTail)
 
     public override func awakeFromNib() {
         super.awakeFromNib()
         draggableView.swipeOffset = 100
         containerView.smoothCorners(with: 4)
-        containerView.backgroundColor = UIColor(resource: .Surfaces.content)
+        containerView.backgroundColor = .Surfaces.content
     }
 
     func configure(_ item: Series) {
         self.deleteIconView.transform = .identity
-        self.imageView.setImage(from: item.poster,
-                                placeholder: UIImage(resource: .imgPlaceholder))
+        self.imageView.setImage(from: item.poster, placeholder: .imgPlaceholder)
         self.titleLabel.text = item.name?.main ?? ""
         self.descLabel.attributedText = Self.textBuilder.build(item.desc?.string ?? "")
     }

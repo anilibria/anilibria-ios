@@ -79,7 +79,7 @@ public final class PlayerProgressView: UIView {
         addGestureRecognizer(tap)
 
         bufferRangeView.backgroundColor = UIColor.white.withAlphaComponent(0.5)
-        progressRangeView.backgroundColor = UIColor(resource: .Tint.active)
+        progressRangeView.backgroundColor = .Tint.active
         backRangeView.backgroundColor = UIColor.white.withAlphaComponent(0.5)
         backRangeView.clipsToBounds = true
 

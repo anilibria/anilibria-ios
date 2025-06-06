@@ -28,6 +28,7 @@ final class PlayerViewController: BaseViewController {
     private let timeFormatter = FormatterFactory.time.create()
     private var bag: AnyCancellable?
     private var pipObservation: Any?
+    private var needsPlay = false
 
     private var orientation: UIInterfaceOrientationMask = .all
 
@@ -271,7 +272,9 @@ final class PlayerViewController: BaseViewController {
                     guard let self else { return }
                     videoSliderView.set(duration: duration)
                     playerView.set(time: playItem.time)
-                    if previous?.index != playItem.index && !playerView.isPlaying {
+                    if previous?.index != playItem.index
+                        && !playerView.isPlaying
+                        && needsPlay {
                         playerView.togglePlay()
                         playerContainer.uiIsVisible = false
                     }
@@ -333,6 +336,7 @@ final class PlayerViewController: BaseViewController {
     }
 
     @IBAction func playPauseAction(_ sender: Any) {
+        needsPlay.toggle()
         self.playerView.togglePlay()
         if self.playerView.isPlaying {
             self.playerContainer.uiIsVisible = false

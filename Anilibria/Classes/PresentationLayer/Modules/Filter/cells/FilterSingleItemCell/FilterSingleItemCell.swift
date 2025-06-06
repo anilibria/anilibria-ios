@@ -19,10 +19,10 @@ public final class FilterSingleItemCell: RippleViewCell {
 
     public override func awakeFromNib() {
         super.awakeFromNib()
-        titleLabel.textColor = UIColor(resource: .Text.secondary)
+        titleLabel.textColor = .Text.secondary
         selectionView.clipsToBounds = true
         selectionView.layer.cornerRadius = 8
-        selectionImageView.image = UIImage(resource: .iconArrowDown).withRenderingMode(.alwaysTemplate)
+        selectionImageView.image = .System.Chevrone.down.withRenderingMode(.alwaysTemplate)
     }
 
     func configure(with model: FilterSingleItem) {
@@ -40,15 +40,15 @@ public final class FilterSingleItemCell: RippleViewCell {
 
     private func apply(selected: Bool) {
         if selected {
-            let color = UIColor(resource: .Text.monoLight)
+            let color = UIColor.Text.monoLight
             selectionLabel.textColor = color
             selectionImageView.tintColor = color
-            selectionView.backgroundColor = UIColor(resource: .Buttons.selected)
+            selectionView.backgroundColor = .Buttons.selected
         } else {
-            let color = UIColor(resource: .Text.main)
+            let color = UIColor.Text.main
             selectionLabel.textColor = color
             selectionImageView.tintColor = color
-            selectionView.backgroundColor = UIColor(resource: .Buttons.unselected)
+            selectionView.backgroundColor = .Buttons.unselected
         }
     }
 }

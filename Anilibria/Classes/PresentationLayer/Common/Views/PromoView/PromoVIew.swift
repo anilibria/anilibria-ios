@@ -32,9 +32,9 @@ final class PromoView: LoadableView {
         let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(swipe))
         rightSwipe.direction = .right
         self.addGestureRecognizer(rightSwipe)
-        rippleManager.rippleColor = UIColor(resource: .Tint.main)
+        rippleManager.rippleColor = .Tint.main
         adView.cornerRadius = 8
-        adView.borderColor = UIColor(resource: .Text.monoLight)
+        adView.borderColor = .Text.monoLight
         adView.borderThickness = 1
         adLabel.text = L10n.Common.ad
         contentView.smoothCorners(with: 8)

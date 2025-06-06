@@ -29,18 +29,18 @@ final class SeriesFavoriteView: UIView {
         super.awakeFromNib()
 
         smoothCorners(with: 8)
-        shimmerView.backgroundColor = UIColor(resource: .Tint.shimmer)
-        shimmerView.shimmerColor = UIColor(resource: .Surfaces.base)
+        shimmerView.backgroundColor = .Tint.shimmer
+        shimmerView.shimmerColor = .Surfaces.base
         isLoading = false
     }
 
     func set(favorite: Bool) {
         if favorite {
-            backgroundColor = UIColor(resource: .Buttons.selected)
-            starView.tintColor = UIColor(resource: .Text.monoLight)
+            backgroundColor = .Buttons.selected
+            starView.tintColor = .Text.monoLight
         } else {
-            backgroundColor = UIColor(resource: .Buttons.unselected)
-            starView.tintColor = UIColor(resource: .Text.main)
+            backgroundColor = .Buttons.unselected
+            starView.tintColor = .Text.main
         }
         fadeTransition()
     }

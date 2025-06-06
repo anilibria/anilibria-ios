@@ -30,10 +30,10 @@ public final class SeriesCollectionTypeView: UIView {
     public override func awakeFromNib() {
         super.awakeFromNib()
         smoothCorners(with: 8)
-        shimmerView.backgroundColor = UIColor(resource: .Tint.shimmer)
-        shimmerView.shimmerColor = UIColor(resource: .Surfaces.base)
+        shimmerView.backgroundColor = .Tint.shimmer
+        shimmerView.shimmerColor = .Surfaces.base
         isLoading = false
-        selectionImageView.image = UIImage(resource: .iconArrowDown).withRenderingMode(.alwaysTemplate)
+        selectionImageView.image = .System.Chevrone.down.withRenderingMode(.alwaysTemplate)
     }
 
     func configure(with item: UserCollectionType?) {
@@ -44,15 +44,15 @@ public final class SeriesCollectionTypeView: UIView {
 
     private func apply(selected: Bool) {
         if selected {
-            let color = UIColor(resource: .Text.monoLight)
+            let color = UIColor.Text.monoLight
             selectionLabel.textColor = color
             selectionImageView.tintColor = color
-            backgroundColor = UIColor(resource: .Buttons.selected)
+            backgroundColor = .Buttons.selected
         } else {
-            let color = UIColor(resource: .Text.main)
+            let color = UIColor.Text.main
             selectionLabel.textColor = color
             selectionImageView.tintColor = color
-            backgroundColor = UIColor(resource: .Buttons.unselected)
+            backgroundColor = .Buttons.unselected
         }
     }
 }

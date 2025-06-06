@@ -7,8 +7,8 @@ public final class SeriesHeaderView: UIView {
     @IBOutlet private var blockTitleLabel: UILabel!
     @IBOutlet private var shimmerView: ShimmerView! {
         didSet {
-            shimmerView.backgroundColor = UIColor(resource: .Tint.shimmer)
-            shimmerView.shimmerColor = UIColor(resource: .Surfaces.base)
+            shimmerView.backgroundColor = .Tint.shimmer
+            shimmerView.shimmerColor = .Surfaces.base
             shimmerView.run()
         }
     }
@@ -24,7 +24,7 @@ public final class SeriesHeaderView: UIView {
         shimmerView.stop()
         self.imageView.setImage(
             from: series.poster,
-            placeholder: UIImage(resource: .imgPlaceholder)
+            placeholder: .imgPlaceholder
         )
 
         self.blockView.isHidden = !series.isBlocked

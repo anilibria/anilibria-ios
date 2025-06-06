@@ -21,7 +21,7 @@ final class FilterViewController: BaseCollectionViewController {
         self.defaultBottomInset = 0
         super.viewDidLoad()
         self.view.backgroundColor = .clear
-        self.backView.backgroundColor = UIColor(resource: .Surfaces.background)
+        self.backView.backgroundColor = .Surfaces.background
         self.backView.smoothCorners(with: 5, maskedCorners: .topCorners)
         self.collectionView.frame = UIApplication.getWindow()?.frame ?? .zero
         self.handler.didLoad()

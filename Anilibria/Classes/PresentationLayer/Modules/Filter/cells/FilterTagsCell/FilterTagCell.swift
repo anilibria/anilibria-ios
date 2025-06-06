@@ -23,11 +23,11 @@ public final class FilterTagCell: RippleViewCell {
     private func renderSelect(_ selected: Bool, animated: Bool) {
         func apply() {
             if selected {
-                backView.backgroundColor = UIColor(resource: .Buttons.selected)
-                titleLabel.textColor = UIColor(resource: .Text.monoLight)
+                backView.backgroundColor = .Buttons.selected
+                titleLabel.textColor = .Text.monoLight
             } else {
-                backView.backgroundColor = UIColor(resource: .Buttons.unselected)
-                titleLabel.textColor = UIColor(resource: .Text.main)
+                backView.backgroundColor = .Buttons.unselected
+                titleLabel.textColor = .Text.main
             }
         }
 

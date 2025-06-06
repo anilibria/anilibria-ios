@@ -34,7 +34,7 @@ public final class WeekDayView: CircleView {
     
     private func setup() {
         addSubview(titleLabel)
-        borderColor = UIColor(resource: .Tint.separator)
+        borderColor = .Tint.separator
         borderThickness = 1
         backgroundColor = .clear
         
@@ -54,12 +54,12 @@ public final class WeekDayView: CircleView {
     var isSelected: Bool = false {
         didSet {
             if self.isSelected {
-                self.backgroundColor = UIColor(resource: .Buttons.selected)
-                self.titleLabel.textColor = UIColor(resource: .Text.monoLight)
+                self.backgroundColor = .Buttons.selected
+                self.titleLabel.textColor = .Text.monoLight
                 self.borderThickness = 0
             } else {
                 self.backgroundColor = .clear
-                self.titleLabel.textColor = UIColor(resource: .Text.secondary)
+                self.titleLabel.textColor = .Text.secondary
                 self.borderThickness = 1
             }
         }

@@ -9,7 +9,7 @@ public final class NewsCell: RippleViewCell {
     @IBOutlet var commentsCountLabel: UILabel!
 
     private static let titleBuilder: AttributeStringBuilder = AttributeStringBuilder()
-        .set(color: UIColor(resource: .Text.main))
+        .set(color: .Text.main)
         .set(font: UIFont.font(ofSize: 15, weight: .medium))
 
     func configure(_ item: News) {
@@ -17,7 +17,7 @@ public final class NewsCell: RippleViewCell {
         self.commentsCountLabel.text = "\(item.comments)"
         self.viewsCountLabel.text = "\(item.views)"
         self.imageView.setImage(from: item.image,
-                                placeholder: UIImage(resource: .imgPlaceholder))
+                                placeholder: .imgPlaceholder)
         self.viewsIconView.tintColor = .darkGray
         self.commentsIconView.tintColor = .darkGray
     }

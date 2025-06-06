@@ -21,7 +21,7 @@ final class PlayItemFilterView: LoadableView {
         smoothCorners(with: 5)
         textField.placeholder = L10n.Common.Search.byName
         textField.placeHolderColor = UIColor.white.withAlphaComponent(0.5)
-        textField.tintColor = UIColor(resource: .Text.monoLight)
+        textField.tintColor = .Text.monoLight
 
         textField.publisher(for: .editingDidEndOnExit).sink { [weak self] text in
             self?.textField.resignFirstResponder()

@@ -30,7 +30,7 @@ class BaseViewController: UIViewController, WaitingBehavior, Loggable {
         super.viewDidLoad()
         self.setupBackButton()
         self.setupStrings()
-        view.backgroundColor = UIColor(resource: .Surfaces.base)
+        view.backgroundColor = .Surfaces.base
     }
 
     public override func viewWillLayoutSubviews() {
@@ -127,7 +127,7 @@ class BaseViewController: UIViewController, WaitingBehavior, Loggable {
         }
         scrollView.alwaysBounceVertical = true
         let refreshControl = RefreshIndicator(style: .prominent)
-        refreshControl.indicator.lineColor = color ?? UIColor(resource: .Text.main)
+        refreshControl.indicator.lineColor = color ?? .Text.main
         scrollView.addSubview(refreshControl)
         refreshControl.addTarget(
             self,

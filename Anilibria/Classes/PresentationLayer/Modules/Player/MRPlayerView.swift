@@ -170,8 +170,8 @@ final class PlayerViewController: BaseViewController {
 
         self.playerView.getPlayChanges()
             .sink(onNext: { [weak self] value in
-                let image = UIImage(resource: value ? .iconPause : .iconPlay)
-                self?.playPauseIconView.templateImage = image
+                let image: UIImage = value ? .System.pause : .System.play
+                self?.playPauseIconView.image = image
                 self?.viewModel.skipViewModel.isActive = value
             })
             .store(in: &subscribers)
@@ -331,8 +331,6 @@ final class PlayerViewController: BaseViewController {
             }
         }
     }
-
-    @IBAction func downloadAction(_ sender: Any) {}
 
     @IBAction func playPauseAction(_ sender: Any) {
         self.playerView.togglePlay()

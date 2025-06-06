@@ -36,13 +36,13 @@ final class SignInViewController: BaseViewController {
     override func setupStrings() {
         super.setupStrings()
         loginField.placeholder = L10n.Screen.Auth.login
-        loginField.placeHolderColor = UIColor(resource: .Text.secondary)
+        loginField.placeHolderColor = .Text.secondary
         passwordField.placeholder = L10n.Screen.Auth.password
-        passwordField.placeHolderColor = UIColor(resource: .Text.secondary)
+        passwordField.placeHolderColor = .Text.secondary
         logInButton.setTitle(L10n.Buttons.signIn, for: .normal)
 
-        logInButton.enabledColor = UIColor(resource: .Buttons.selected)
-        logInButton.disabledColor = UIColor(resource: .Buttons.unselected)
+        logInButton.enabledColor = .Buttons.selected
+        logInButton.disabledColor = .Buttons.unselected
         logInButton.cornerRadius = 6
 
         signUpButton.setTitle(L10n.Buttons.signUp, for: .normal)
@@ -107,10 +107,10 @@ extension SignInViewController: SignInViewBehavior {
 
     private func makeAuthButton(provider: AuthProvider) -> UIButton {
         let button = RippleButton()
-        button.backgroundColor = UIColor(resource: .Buttons.selected)
+        button.backgroundColor = .Buttons.selected
         button.smoothCorners(with: 6)
         button.setImage(provider.image.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.tintColor = UIColor(resource: .Text.monoLight)
+        button.tintColor = .Text.monoLight
         button.publisher(for: .touchUpInside).sink { [weak self] in
             self?.handler.login(with: provider)
         }.store(in: &providersBag)
@@ -124,10 +124,10 @@ extension SignInViewController: SignInViewBehavior {
 private extension AuthProvider {
     var image: UIImage {
         switch self {
-        case .vk: return UIImage(resource: .iconVk)
-        case .google: return UIImage(resource: .iconGoogle)
-        case .patreon: return UIImage(resource: .iconPatreon)
-        case .discord: return UIImage(resource: .iconDiscord)
+        case .vk: return .iconVk
+        case .google: return .iconGoogle
+        case .patreon: return .iconPatreon
+        case .discord: return .iconDiscord
         }
     }
 }

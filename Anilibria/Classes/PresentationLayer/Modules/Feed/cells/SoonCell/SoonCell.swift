@@ -12,10 +12,10 @@ final class SoonCell: RippleViewCell {
         titleLabel.text = L10n.Screen.Feed.schedule
         rippleContainerView?.smoothCorners(with: 8)
         segmentControl.setTitleTextAttributes([
-            .foregroundColor: UIColor(resource: .Text.monoLight),
+            .foregroundColor: UIColor.Text.monoLight,
         ], for: .selected)
         segmentControl.setTitleTextAttributes([
-            .foregroundColor: UIColor(resource: .Text.main),
+            .foregroundColor: UIColor.Text.main,
         ], for: .normal)
     }
     

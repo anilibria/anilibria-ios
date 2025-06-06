@@ -21,7 +21,7 @@ final class RewindView: UIView {
         layer.borderWidth = 1
 
         titleLabel.font = .monospacedSystemFont(ofSize: 18, weight: .bold)
-        titleLabel.textColor = UIColor(resource: .Text.monoLight)
+        titleLabel.textColor = .Text.monoLight
     }
 
     func set(time: Double) {

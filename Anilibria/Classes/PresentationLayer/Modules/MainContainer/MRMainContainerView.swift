@@ -17,7 +17,7 @@ final class MainContainerViewController: BaseViewController {
         super.viewDidLoad()
         shadowView.shadowX = 10
         shadowView.shadowRadius = 10
-        tabBarContainer.backgroundColor = UIColor(resource: .Surfaces.background)
+        tabBarContainer.backgroundColor = .Surfaces.background
         setupPager()
         handler.didLoad()
     }

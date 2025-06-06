@@ -17,21 +17,21 @@ public enum LinkType: String, Codable {
     public var icon: UIImage? {
         switch self {
         case .vk:
-            return UIImage(resource: .iconVk)
+            return .iconVk
         case .youtube:
-            return UIImage(resource: .menuItemYoutube)
+            return .iconYoutube
         case .patreon:
-            return UIImage(resource: .iconPatreon)
+            return .iconPatreon
         case .telegram:
-            return UIImage(resource: .iconTelegram)
+            return .iconTelegram
         case .discord:
-            return UIImage(resource: .iconDiscord)
+            return .iconDiscord
         case .site:
-            return UIImage(resource: .iconWeb)
+            return .System.web
         case .boosty:
-            return UIImage(resource: .iconBoosty)
+            return .iconBoosty
         default:
-            return UIImage(resource: .iconAnilibria)
+            return .iconAnilibria
         }
     }
 }

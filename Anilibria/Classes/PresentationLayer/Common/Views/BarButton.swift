@@ -32,8 +32,8 @@ final class BarButton: UIBarButtonItem {
                      rippleColor: UIColor? = nil,
                      imageEdge: UIEdgeInsets = .zero,
                      action: ActionFunc?) {
-        let tintColor = tintColor ?? UIColor(resource: .Tint.main)
-        let rippleColor = rippleColor ?? UIColor(resource: .Tint.main)
+        let tintColor = tintColor ?? .Tint.main
+        let rippleColor = rippleColor ?? .Tint.main
 
         let button = BarRippleButton(type: type)
         button.contentSize = CGSize(width: 30, height: 44)
@@ -41,6 +41,7 @@ final class BarButton: UIBarButtonItem {
         button.setImage(image, for: .normal)
         button.rippleColor = rippleColor
         button.imageEdgeInsets = imageEdge
+        button.imageView?.contentMode = .scaleAspectFit
         self.init(customView: button)
         self.normalImage = image
         self.activeImage = activeImage

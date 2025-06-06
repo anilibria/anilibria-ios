@@ -9,9 +9,9 @@ final class MenuItemView: LoadableView {
     public var isSelected: Bool = false {
         didSet {
             self.iconView.tintColor = if isSelected {
-                UIColor(resource: .Tint.active)
+                .Tint.active
             } else {
-                UIColor(resource: .Tint.main)
+                .Tint.main
             }
         }
     }

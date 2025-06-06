@@ -33,11 +33,11 @@ final class SeriesViewController: BaseViewController {
     var handler: SeriesEventHandler!
 
     private let boldTextBuilder = AttributeStringBuilder()
-        .set(color: UIColor(resource: .Text.secondary))
+        .set(color: .Text.secondary)
         .set(font: UIFont.font(ofSize: 14, weight: .bold))
 
     private let regularTextBuilder = AttributeStringBuilder()
-        .set(color: UIColor(resource: .Text.main))
+        .set(color: .Text.main)
         .set(font: UIFont.font(ofSize: 14, weight: .regular))
 
     // MARK: - Life cycle
@@ -62,7 +62,7 @@ final class SeriesViewController: BaseViewController {
         paramsTextView.setTapLink(handler: action)
         descTextView.setTapLink(handler: action)
 
-        let color = UIColor(resource: .Tint.active)
+        let color = UIColor.Tint.active
         paramsTextView.linkTextAttributes = [
             .foregroundColor: color,
             .underlineColor: color
@@ -74,18 +74,18 @@ final class SeriesViewController: BaseViewController {
         ]
 
         descTextView.font = .font(ofSize: 14, weight: .regular)
-        descTextView.textColor = UIColor(resource: .Text.main)
+        descTextView.textColor = .Text.main
         supportLabelContainer.cornerRadius = 6
 
         relatedShimmerView.smoothCorners(with: 8)
-        relatedShimmerView.backgroundColor = UIColor(resource: .Tint.shimmer)
-        relatedShimmerView.shimmerColor = UIColor(resource: .Surfaces.base)
+        relatedShimmerView.backgroundColor = .Tint.shimmer
+        relatedShimmerView.shimmerColor = .Surfaces.base
         relatedShimmerView.run()
 
         contentShimmerViews.forEach {
             $0.smoothCorners(with: 8)
-            $0.backgroundColor = UIColor(resource: .Tint.shimmer)
-            $0.shimmerColor = UIColor(resource: .Surfaces.base)
+            $0.backgroundColor = .Tint.shimmer
+            $0.shimmerColor = .Surfaces.base
             $0.run()
         }
     }
@@ -100,13 +100,12 @@ final class SeriesViewController: BaseViewController {
 
     private func setupNavigationButtons() {
         var items = [UIBarButtonItem]()
-        let shareButton = BarButton(image: UIImage(resource: .iconShare),
-                             imageEdge: inset(8, 0, 10, 0)) { [weak self] in
+        let shareButton = BarButton(image: .System.share) { [weak self] in
             self?.handler.share()
         }
         items.append(shareButton)
         #if targetEnvironment(macCatalyst)
-        let refreshButton = BarButton(image: UIImage(resource: .iconRefresh)) { [weak self] in
+        let refreshButton = BarButton(image: .System.refresh) { [weak self] in
             guard let self else { return }
             _ = showRefreshIndicator()
             handler.refresh()

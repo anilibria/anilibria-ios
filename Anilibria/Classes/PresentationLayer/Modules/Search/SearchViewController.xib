@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -25,7 +26,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d7b-dd-oxZ" customClass="ShadowView" customModule="Anilibria" customModuleProvider="target">
-                    <rect key="frame" x="0.0" y="48" width="414" height="814"/>
+                    <rect key="frame" x="0.0" y="96" width="414" height="732"/>
                     <subviews>
                         <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w8J-re-mrl" customClass="BorderedView" customModule="Anilibria" customModuleProvider="target">
                             <rect key="frame" x="363" y="2" width="35" height="40"/>
@@ -36,8 +37,8 @@
                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                     <textInputTraits key="textInputTraits"/>
                                 </textField>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu_item_search" translatesAutoresizingMaskIntoConstraints="NO" id="mdB-fe-WWt">
-                                    <rect key="frame" x="9" y="0.0" width="20" height="40"/>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="magnifyingglass" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="mdB-fe-WWt">
+                                    <rect key="frame" x="9" y="0.5" width="20" height="38.5"/>
                                     <color key="tintColor" name="tint/main"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="20" id="hT4-8B-Iz1"/>
@@ -50,7 +51,9 @@
                                         <constraint firstAttribute="width" constant="30" id="SV3-2V-Z0m"/>
                                     </constraints>
                                     <color key="tintColor" name="tint/main"/>
-                                    <state key="normal" image="icon_close"/>
+                                    <state key="normal">
+                                        <imageReference key="image" image="xmark" catalog="system" symbolScale="medium"/>
+                                    </state>
                                     <connections>
                                         <action selector="backAction:" destination="-1" eventType="touchUpInside" id="Amv-Ba-xdV"/>
                                     </connections>
@@ -84,10 +87,10 @@
                             </constraints>
                         </view>
                         <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W6w-2u-Nrt">
-                            <rect key="frame" x="363" y="37" width="35" height="777"/>
+                            <rect key="frame" x="363" y="37" width="35" height="695"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pf1-Q5-afI">
-                                    <rect key="frame" x="0.0" y="0.0" width="35" height="777"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="35" height="695"/>
                                     <connections>
                                         <action selector="backAction:" destination="-1" eventType="touchUpInside" id="Yez-rW-SU2"/>
                                     </connections>
@@ -180,10 +183,10 @@
         </view>
     </objects>
     <resources>
-        <image name="icon_close" width="18" height="18"/>
-        <image name="menu_item_search" width="30" height="30"/>
+        <image name="magnifyingglass" catalog="system" width="128" height="117"/>
+        <image name="xmark" catalog="system" width="128" height="113"/>
         <namedColor name="surfaces/content">
-            <color red="0.99999994039535522" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.99607843137254903" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="text/main">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

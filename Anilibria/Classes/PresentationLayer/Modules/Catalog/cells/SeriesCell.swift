@@ -8,15 +8,15 @@ public final class SeriesCell: RippleViewCell {
 
     private static let textBuilder: AttributeStringBuilder = AttributeStringBuilder()
         .set(font: .font(ofSize: 13, weight: .regular))
-        .set(color: UIColor(resource: .Text.secondary))
+        .set(color: .Text.secondary)
         .set(lineBreakMode: .byTruncatingTail)
 
     public override func awakeFromNib() {
         super.awakeFromNib()
         titleLabel.font = .font(ofSize: 14, weight: .bold)
-        titleLabel.textColor = UIColor(resource: .Text.main)
+        titleLabel.textColor = .Text.main
         containerView.smoothCorners(with: 4)
-        containerView.backgroundColor = UIColor(resource: .Surfaces.content)
+        containerView.backgroundColor = .Surfaces.content
     }
     
     public override func prepareForReuse() {
@@ -26,7 +26,7 @@ public final class SeriesCell: RippleViewCell {
 
     func configure(_ item: Series) {
         self.imageView.setImage(from: item.poster,
-                                placeholder: UIImage(resource: .imgPlaceholder))
+                                placeholder: .imgPlaceholder)
         self.titleLabel.text = item.name?.main ?? ""
         self.descLabel.attributedText = Self.textBuilder.build(item.desc?.string ?? "")
     }

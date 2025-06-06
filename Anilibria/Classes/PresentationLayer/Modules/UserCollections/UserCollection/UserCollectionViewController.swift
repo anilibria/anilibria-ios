@@ -28,7 +28,7 @@ final class UserCollectionViewController: BaseCollectionViewController {
     var viewModel: (any UserCollectionViewModelProtocol)!
 
     private let stubView: StubView? = StubView.fromNib()?.apply {
-        $0.set(image: UIImage(systemName: "book"), color: UIColor(resource: .Text.secondary))
+        $0.set(image: .System.book, color: .Text.secondary)
         $0.title = L10n.Stub.title
     }
 
@@ -104,9 +104,9 @@ final class UserCollectionViewController: BaseCollectionViewController {
             guard let self else { return }
             scrollToTop()
             filterButton.tintColor = if active {
-                UIColor(resource: .Tint.active)
+                .Tint.active
             } else {
-                UIColor(resource: .Tint.main)
+                .Tint.main
             }
         }.store(in: &subscribers)
 

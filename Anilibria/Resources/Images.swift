@@ -21,6 +21,10 @@ extension UIImage {
         static var search: UIImage { create(system: "magnifyingglass") }
         static var news: UIImage { create(system: "newspaper") }
         static var history: UIImage { create(system: "memories") }
+        static var star: UIImage { create(system: "star") }
+        static var calendar: UIImage { create(system: "calendar") }
+        static var xmark: UIImage { create(system: "xmark") }
+        static var checkmark: UIImage { create(system: "checkmark") }
 
         static var dots: UIImage {
             create(system: "ellipsis")

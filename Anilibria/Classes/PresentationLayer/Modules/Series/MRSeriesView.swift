@@ -10,6 +10,7 @@ final class SeriesViewController: BaseViewController {
     @IBOutlet var secondTitleLabel: UILabel!
     @IBOutlet var favoriteView: SeriesFavoriteView!
     @IBOutlet var typeView: SeriesCollectionTypeView!
+    @IBOutlet var tagsView: TagsView!
 
     @IBOutlet var paramsTextView: AttributeLinksView!
     @IBOutlet var descTextView: AttributeLinksView!
@@ -222,6 +223,8 @@ extension SeriesViewController: SeriesViewBehavior {
         self.separatorView.isHidden = self.weekDaysContainer.isHidden &&
             self.anonceLabel.isHidden
 
+        tagsView.set(tags: series.tags)
+
         #if targetEnvironment(macCatalyst)
         self.set(torrents: series.torrents)
         #endif
@@ -362,5 +365,17 @@ extension SeriesViewController: SeriesViewBehavior {
             return
         }
         self.descTextView.attributedText = regularTextBuilder.build(desc)
+    }
+}
+
+
+private extension Series {
+    var tags: [TagsView.Tag] {
+        UserCollectionKey.allCases.compactMap {
+            if let count = addedIn[$0], count > 0 {
+                return .init(icon: $0.icon, title: "\(count)")
+            }
+            return nil
+        }
     }
 }

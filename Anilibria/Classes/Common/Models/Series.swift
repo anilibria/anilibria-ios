@@ -21,7 +21,7 @@ public struct Series: Codable, Hashable {
     let isBlockedByGeo: Bool
     let episodesAreUnknown: Bool
     let isBlockedByCopyrights: Bool
-    let addedInUsersFavorites: Int
+    let addedIn: [UserCollectionKey: Int]
     let averageDurationOfEpisode: Int?
     let genres: [Genre]
     let members: [Member]
@@ -63,13 +63,22 @@ public struct Series: Codable, Hashable {
         isBlockedByGeo = container.decode("is_blocked_by_geo") ?? false
         episodesAreUnknown = container.decode("episodes_are_unknown") ?? false
         isBlockedByCopyrights = container.decode("is_blocked_by_copyrights") ?? false
-        addedInUsersFavorites = container.decode("added_in_users_favorites") ?? 0
         averageDurationOfEpisode = container.decode("average_duration_of_episode")
         genres = container.decode("genres") ?? []
         members = container.decode("members") ?? []
         playlist = container.decode("episodes") ?? []
         torrents = container.decode("torrents") ?? []
         sponsor = container.decode("sponsor")
+
+        var info = [UserCollectionKey: Int]()
+        info[.favorite] = container.decode("added_in_users_favorites") ?? 0
+        info[.planned] = container.decode("added_in_planned_collection") ?? 0
+        info[.watched] = container.decode("added_in_watched_collection") ?? 0
+        info[.watching] = container.decode("added_in_watching_collection") ?? 0
+        info[.postponed] = container.decode("added_in_postponed_collection") ?? 0
+        info[.abandoned] = container.decode("added_in_abandoned_collection") ?? 0
+        addedIn = info
+
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -94,8 +103,13 @@ public struct Series: Codable, Hashable {
             container["is_blocked_by_geo"] = isBlockedByGeo
             container["episodes_are_unknown"] = episodesAreUnknown
             container["is_blocked_by_copyrights"] = isBlockedByCopyrights
-            container["added_in_users_favorites"] = addedInUsersFavorites
             container["average_duration_of_episode"] = averageDurationOfEpisode
+            container["added_in_users_favorites"] = addedIn[.favorite]
+            container["added_in_planned_collection"] = addedIn[.planned]
+            container["added_in_watched_collection"] = addedIn[.watched]
+            container["added_in_watching_collection"] = addedIn[.watching]
+            container["added_in_postponed_collection"] = addedIn[.postponed]
+            container["added_in_abandoned_collection"] = addedIn[.abandoned]
         }
     }
 }

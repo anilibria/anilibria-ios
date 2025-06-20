@@ -16,7 +16,7 @@ public struct ScheduleItem: Decodable, Hashable {
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeyString.self)
         self.item = try container.decode(required: "release")
-        self.newEpisode = container.decode("new_release_episode")
-        self.newEpisodeOrdinal = container.decode("new_release_episode_ordinal")
+        self.newEpisode = container.decode("published_release_episode")
+        self.newEpisodeOrdinal = container.decode("next_release_episode_number")
     }
 }

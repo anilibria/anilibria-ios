@@ -23,12 +23,12 @@ struct AniProxy: Codable {
 
     func config() -> [AnyHashable: Any] {
         var proxyConfiguration = [String: Any]()
-        proxyConfiguration.updateValue(1, forKey: "HTTPEnable")
-        proxyConfiguration.updateValue(ip, forKey: "HTTPProxy")
-        proxyConfiguration.updateValue(port, forKey: "HTTPPort")
-        proxyConfiguration.updateValue(1, forKey: "HTTPSEnable")
-        proxyConfiguration.updateValue(ip, forKey: "HTTPSProxy")
-        proxyConfiguration.updateValue(port, forKey: "HTTPSPort")
+        proxyConfiguration["HTTPEnable"] = 1
+        proxyConfiguration["HTTPProxy"] = ip
+        proxyConfiguration["HTTPPort"] = port
+        proxyConfiguration["HTTPSEnable"] = 1
+        proxyConfiguration["HTTPSProxy"] = ip
+        proxyConfiguration["HTTPSPort"] = port
         return proxyConfiguration
     }
 }

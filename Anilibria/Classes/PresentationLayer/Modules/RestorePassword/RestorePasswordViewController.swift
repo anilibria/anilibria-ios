@@ -140,7 +140,8 @@ final class RestorePasswordViewController: BaseViewController {
                 viewModel.send(email: email, with: self)
             }
         case .resetPassword:
-            if let token = tokenField.text, let password = passwordField.text {
+            let password = passwordField.secureText
+            if let token = tokenField.text, !password.isEmpty {
                 viewModel.reset(password: password, token: token, with: self)
             }
         }

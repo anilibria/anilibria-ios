@@ -14,7 +14,7 @@ class SectionAdapter: SectionAdapterProtocol {
         let portraitItemsPerLine: Int
 
         var itemsPerLine: Int {
-            if UIDevice.current.orientation.isLandscape {
+            if UIScreen.main.interfaceOrientation.isLandscape {
                 ladscapeItemsPerLine
             } else {
                 portraitItemsPerLine
@@ -26,6 +26,7 @@ class SectionAdapter: SectionAdapterProtocol {
     var insets: NSDirectionalEdgeInsets = .zero
     var minimumLineSpacing: CGFloat = 0
     var minimumInteritemSpacing: CGFloat = 0
+    var estimatedHeight: CGFloat = 50
     var ipad: Configuration?
     private(set) var items: [AnyCellAdapter] = []
 
@@ -80,13 +81,13 @@ class SectionAdapter: SectionAdapterProtocol {
 
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .absolute(width),
-            heightDimension: .estimated(1)
+            heightDimension: .estimated(estimatedHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(1)
+            heightDimension: .estimated(estimatedHeight)
         )
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,
@@ -102,13 +103,13 @@ class SectionAdapter: SectionAdapterProtocol {
     private func getDefaultLayout(_ environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(1)
+            heightDimension: .estimated(estimatedHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(1)
+            heightDimension: .estimated(estimatedHeight)
         )
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,

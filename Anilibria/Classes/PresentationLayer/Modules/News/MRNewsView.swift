@@ -15,6 +15,7 @@ final class NewsViewController: BaseCollectionViewController {
 
     private let sectionAdapter: SectionAdapter = {
         let section = SectionAdapter([])
+        section.estimatedHeight = 250
         section.ipad = .init(
             ladscapeItemsPerLine: 3,
             portraitItemsPerLine: 2

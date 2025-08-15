@@ -5,14 +5,16 @@ import UIKit
 final class HistoryViewController: BaseCollectionViewController {
     var handler: HistoryEventHandler!
 
-    private let searchView: SearchView? = SearchView()
+    private let searchView: SearchView? = SearchView(
+        frame: CGRect(origin: .zero, size: .init(width: 320, height: 40))
+    )
     private let stubView: StubView? = StubView.fromNib()?.apply {
         $0.set(image: .System.history, color: .Text.secondary)
         $0.title = L10n.Stub.title
     }
 
     private var currentQuery: String = ""
-    private var sectionAdapter = SectionAdapter([])
+    private let sectionAdapter = SectionAdapter([])
     private lazy var seriesHandler = RemovableSeriesCellAdapterHandler(
         select: { [weak self] item in
             self?.searchView?.resignFirstResponder()
@@ -30,6 +32,7 @@ final class HistoryViewController: BaseCollectionViewController {
         self.setupNavbar()
         self.addKeyboardObservers()
         self.handler.didLoad()
+        self.sectionAdapter.estimatedHeight = 140
         self.collectionView.contentInset.top = 10
     }
 

@@ -49,13 +49,13 @@ class TeamMemberSectionAdapter: SectionAdapterProtocol {
         guard identifier == uid else { return nil }
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(1)
+            heightDimension: .estimated(50)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(1)
+            heightDimension: .estimated(50)
         )
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,

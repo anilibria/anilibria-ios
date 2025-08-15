@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C7D4623E22CC73DF00E763DF"
-               BuildableName = "Anilibria.app"
-               BlueprintName = "Anilibria"
+               BuildableName = "AniLiberty.app"
+               BlueprintName = "AniLiberty"
                ReferencedContainer = "container:Anilibria.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -31,8 +31,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C7D4623E22CC73DF00E763DF"
-            BuildableName = "Anilibria.app"
-            BlueprintName = "Anilibria"
+            BuildableName = "AniLiberty.app"
+            BlueprintName = "AniLiberty"
             ReferencedContainer = "container:Anilibria.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -54,8 +54,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C7D4623E22CC73DF00E763DF"
-            BuildableName = "Anilibria.app"
-            BlueprintName = "Anilibria"
+            BuildableName = "AniLiberty.app"
+            BlueprintName = "AniLiberty"
             ReferencedContainer = "container:Anilibria.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -101,8 +101,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C7D4623E22CC73DF00E763DF"
-            BuildableName = "Anilibria.app"
-            BlueprintName = "Anilibria"
+            BuildableName = "AniLiberty.app"
+            BlueprintName = "AniLiberty"
             ReferencedContainer = "container:Anilibria.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

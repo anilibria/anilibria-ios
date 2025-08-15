@@ -5,13 +5,15 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 cd $SCRIPT_DIR
 cd ..
 
-APP_NAME="Anilibria"
+APP_NAME="AniLiberty"
 
 IOS_APP_DIR=./Build/Build/Products/Release-iphoneos
 MACOS_APP_DIR=./Build/Build/Products/Release-maccatalyst
 
 IOS_APP=$IOS_APP_DIR/$APP_NAME.app
 MACOS_APP=${MACOS_APP_DIR}/${APP_NAME}.app
+
+IOS_DSYM=$IOS_APP_DIR/$APP_NAME.app.dSYM
 
 VERSION=$(xcodebuild -showBuildSettings | grep MARKETING_VERSION | tr -d 'MARKETING_VERSION =')
 echo $VERSION
@@ -31,7 +33,12 @@ makeIPA () {
         IPHONEOS_DEPLOYMENT_TARGET=$TARGET
 
     if [ ! -d $IOS_APP ]; then
-        echo "iOS: Anilibria.app is not found"
+        echo "iOS: $APP_NAME.app is not found"
+        exit 1
+    fi
+
+    if [ ! -d $IOS_DSYM ]; then
+        echo "iOS: dSYM is not found"
         exit 1
     fi
 
@@ -41,7 +48,9 @@ makeIPA () {
 
     mkdir Payload
     mv $IOS_APP ./Payload/$APP_NAME.app
+    mv $IOS_DSYM ./$APP_NAME.app.dSYM
     zip -r ${APP_NAME}_iOS.ipa ./Payload/$APP_NAME.app
+    zip -r ${APP_NAME}.dSYM.zip ./$APP_NAME.app.dSYM
 
     if [ -d Payload ]; then
         rm -rf Payload
@@ -64,7 +73,7 @@ makeMacOSApp () {
         -derivedDataPath ./Build
     
     if [ ! -d $MACOS_APP ]; then
-        echo "macOS: Anilibria.app is not found"
+        echo "macOS: $APP_NAME.app is not found"
         exit 1
     fi
 

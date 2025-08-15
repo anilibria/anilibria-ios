@@ -1,11 +1,17 @@
 import UIKit
 
 final class SeriesCellAdapter: BaseCellAdapter<Series> {
+    private let uuid: UUID = UUID()
     private var selectAction: ((Series) -> Void)?
 
     init(viewModel: Series, seclect: ((Series) -> Void)?) {
         self.selectAction = seclect
         super.init(viewModel: viewModel)
+    }
+
+    override func hash(into hasher: inout Hasher) {
+        super.hash(into: &hasher)
+        hasher.combine(uuid)
     }
 
     override func cellForItem(at index: IndexPath, context: CollectionContext) -> UICollectionViewCell? {

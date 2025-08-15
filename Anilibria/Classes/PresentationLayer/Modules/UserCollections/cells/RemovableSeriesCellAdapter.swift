@@ -6,11 +6,17 @@ struct RemovableSeriesCellAdapterHandler {
 }
 
 final class RemovableSeriesCellAdapter: BaseCellAdapter<Series> {
+    private let uuid = UUID()
     private let handler: RemovableSeriesCellAdapterHandler
 
     init(viewModel: Series, handler: RemovableSeriesCellAdapterHandler) {
         self.handler = handler
         super.init(viewModel: viewModel)
+    }
+
+    override func hash(into hasher: inout Hasher) {
+        super.hash(into: &hasher)
+        hasher.combine(uuid)
     }
 
     override func cellForItem(at index: IndexPath, context: CollectionContext) -> UICollectionViewCell? {

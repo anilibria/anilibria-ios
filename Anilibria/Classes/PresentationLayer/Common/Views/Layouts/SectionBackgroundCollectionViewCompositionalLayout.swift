@@ -14,8 +14,25 @@ open class SectionBackgroundCollectionViewCompositionalLayout: UICollectionViewC
     public var backgroundInsets: UIEdgeInsets = .zero
     public var cornerRadius: CGFloat = 0
 
-    open override func prepare() {
-        super.prepare()
+    public override init(
+        sectionProvider: @escaping UICollectionViewCompositionalLayoutSectionProvider,
+        configuration: UICollectionViewCompositionalLayoutConfiguration
+    ) {
+        super.init(sectionProvider: sectionProvider, configuration: configuration)
+        setup()
+    }
+
+    public override init(sectionProvider: @escaping UICollectionViewCompositionalLayoutSectionProvider) {
+        super.init(sectionProvider: sectionProvider)
+        setup()
+    }
+
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setup()
+    }
+    
+    private func setup() {
         register(SectionBackgroundCollectionReusableView.self, forDecorationViewOfKind: Self.backgroundViewKind)
     }
 

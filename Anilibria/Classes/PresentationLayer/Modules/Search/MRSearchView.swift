@@ -8,6 +8,7 @@ final class SearchViewController: BaseCollectionViewController {
     @IBOutlet var collectionHeightConstraint: NSLayoutConstraint!
     @IBOutlet var searchContainerConstraint: NSLayoutConstraint!
     @IBOutlet var searchField: UITextField!
+    @IBOutlet var backview: UIView!
 
     var handler: SearchEventHandler!
 
@@ -18,15 +19,18 @@ final class SearchViewController: BaseCollectionViewController {
     override func viewDidLoad() {
         self.defaultBottomInset = 0
         super.viewDidLoad()
-        self.view.backgroundColor = .black.withAlphaComponent(0.5)
-        self.addKeyboardObservers()
-        self.handler.didLoad()
+        collectionView.layoutMargins = .zero
+        view.backgroundColor = .black.withAlphaComponent(0.5)
+        addKeyboardObservers()
+        handler.didLoad()
 
-        self.scrollView.isScrollEnabled = false
-        self.collectionView.layer.cornerRadius = 5
-        self.collectionHeightConstraint.constant = 1
-        self.collectionView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        self.bag = self.collectionView.observe(\UICollectionView.contentSize) { [weak self] _, _ in
+        scrollView.isScrollEnabled = false
+        collectionHeightConstraint.constant = 1
+        backview.layer.cornerRadius = 5
+        backview.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        collectionView.layer.cornerRadius = 5
+        collectionView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        bag = collectionView.publisher(for: \.contentSize).removeDuplicates().sink { [weak self] _ in
             if let height = self?.collectionView.contentSize.height {
                 self?.collectionHeightConstraint.constant = max(height, 1)
                 UIView.animate(withDuration: 0.2) {

@@ -12,6 +12,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SearchViewController" customModule="Anilibria" customModuleProvider="target">
             <connections>
+                <outlet property="backview" destination="pJS-rq-fWi" id="mbf-rU-iME"/>
                 <outlet property="collectionHeightConstraint" destination="5BL-dJ-45L" id="XQR-OZ-ZO5"/>
                 <outlet property="collectionView" destination="DVp-p1-2sy" id="zHo-Gh-RIz"/>
                 <outlet property="scrollView" destination="W6w-2u-Nrt" id="Rlk-MN-ki6"/>
@@ -54,9 +55,6 @@
                                     <state key="normal">
                                         <imageReference key="image" image="xmark" catalog="system" symbolScale="medium"/>
                                     </state>
-                                    <connections>
-                                        <action selector="backAction:" destination="-1" eventType="touchUpInside" id="Amv-Ba-xdV"/>
-                                    </connections>
                                 </button>
                             </subviews>
                             <color key="backgroundColor" name="surfaces/content"/>
@@ -79,27 +77,25 @@
                                 </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                         </view>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pJS-rq-fWi">
-                            <rect key="frame" x="363" y="37" width="35" height="0.0"/>
-                            <color key="backgroundColor" name="surfaces/content"/>
-                            <constraints>
-                                <constraint firstAttribute="height" relation="greaterThanOrEqual" id="sO5-e8-HL7"/>
-                            </constraints>
-                        </view>
-                        <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W6w-2u-Nrt">
+                        <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1" verticalHuggingPriority="1" horizontalCompressionResistancePriority="1" verticalCompressionResistancePriority="1" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pf1-Q5-afI">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="732"/>
+                            <connections>
+                                <action selector="backAction:" destination="-1" eventType="touchUpInside" id="xSv-6K-pUN"/>
+                            </connections>
+                        </button>
+                        <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W6w-2u-Nrt" customClass="PassThrougScrollView" customModule="Anilibria" customModuleProvider="target">
                             <rect key="frame" x="363" y="37" width="35" height="695"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pf1-Q5-afI">
-                                    <rect key="frame" x="0.0" y="0.0" width="35" height="695"/>
-                                    <connections>
-                                        <action selector="backAction:" destination="-1" eventType="touchUpInside" id="Yez-rW-SU2"/>
-                                    </connections>
-                                </button>
-                                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="DVp-p1-2sy">
-                                    <rect key="frame" x="0.0" y="0.0" width="35" height="0.0"/>
+                                <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pJS-rq-fWi">
+                                    <rect key="frame" x="0.0" y="0.0" width="35" height="1"/>
+                                    <color key="backgroundColor" name="surfaces/content"/>
+                                    <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                                </view>
+                                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="DVp-p1-2sy">
+                                    <rect key="frame" x="0.0" y="0.0" width="35" height="1"/>
                                     <color key="backgroundColor" name="surfaces/content"/>
                                     <constraints>
-                                        <constraint firstAttribute="height" id="5BL-dJ-45L"/>
+                                        <constraint firstAttribute="height" constant="1" identifier="COLLECTION::HEIGHT" id="5BL-dJ-45L"/>
                                     </constraints>
                                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="wxL-JK-jts">
                                         <size key="itemSize" width="50" height="50"/>
@@ -111,16 +107,20 @@
                             </subviews>
                             <gestureRecognizers/>
                             <constraints>
-                                <constraint firstAttribute="trailing" secondItem="Pf1-Q5-afI" secondAttribute="trailing" id="1uq-FA-Lmu"/>
-                                <constraint firstItem="DVp-p1-2sy" firstAttribute="leading" secondItem="W6w-2u-Nrt" secondAttribute="leading" id="3IR-Tz-Vmy"/>
-                                <constraint firstAttribute="trailing" secondItem="DVp-p1-2sy" secondAttribute="trailing" id="C5c-QD-dOx"/>
-                                <constraint firstAttribute="bottom" secondItem="DVp-p1-2sy" secondAttribute="bottom" id="I26-ga-bFL"/>
-                                <constraint firstItem="Pf1-Q5-afI" firstAttribute="top" secondItem="W6w-2u-Nrt" secondAttribute="top" id="LSY-VT-Ek4"/>
-                                <constraint firstItem="DVp-p1-2sy" firstAttribute="top" secondItem="W6w-2u-Nrt" secondAttribute="top" id="c7K-nM-3Q5"/>
-                                <constraint firstItem="Pf1-Q5-afI" firstAttribute="leading" secondItem="W6w-2u-Nrt" secondAttribute="leading" id="lBQ-jP-AB9"/>
-                                <constraint firstItem="DVp-p1-2sy" firstAttribute="width" secondItem="W6w-2u-Nrt" secondAttribute="width" id="lm6-Xf-iQG"/>
-                                <constraint firstItem="Pf1-Q5-afI" firstAttribute="height" secondItem="W6w-2u-Nrt" secondAttribute="height" id="x4c-vV-3Yh"/>
+                                <constraint firstItem="pJS-rq-fWi" firstAttribute="leading" secondItem="9YH-eP-wu8" secondAttribute="leading" id="358-qC-vkY"/>
+                                <constraint firstItem="DVp-p1-2sy" firstAttribute="bottom" secondItem="V48-oC-p5h" secondAttribute="bottom" identifier="COLLECTION::BOTTOM" id="46W-5r-pzj"/>
+                                <constraint firstItem="DVp-p1-2sy" firstAttribute="trailing" secondItem="9YH-eP-wu8" secondAttribute="trailing" id="Itu-WD-gFC"/>
+                                <constraint firstItem="pJS-rq-fWi" firstAttribute="top" secondItem="9YH-eP-wu8" secondAttribute="top" identifier="VIEW::TOP" id="KFd-rt-42q"/>
+                                <constraint firstItem="DVp-p1-2sy" firstAttribute="top" secondItem="V48-oC-p5h" secondAttribute="top" id="Pky-9k-ZW1"/>
+                                <constraint firstItem="DVp-p1-2sy" firstAttribute="bottom" secondItem="pJS-rq-fWi" secondAttribute="bottom" id="SEZ-i4-dAg"/>
+                                <constraint firstItem="pJS-rq-fWi" firstAttribute="trailing" secondItem="9YH-eP-wu8" secondAttribute="trailing" id="Xzc-vJ-vYP"/>
+                                <constraint firstItem="DVp-p1-2sy" firstAttribute="leading" secondItem="V48-oC-p5h" secondAttribute="leading" id="feg-4H-Dsn"/>
+                                <constraint firstItem="DVp-p1-2sy" firstAttribute="leading" secondItem="9YH-eP-wu8" secondAttribute="leading" id="gIE-uy-QSU"/>
+                                <constraint firstItem="DVp-p1-2sy" firstAttribute="trailing" secondItem="V48-oC-p5h" secondAttribute="trailing" id="qV7-Ce-zx0"/>
                             </constraints>
+                            <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                            <viewLayoutGuide key="contentLayoutGuide" id="V48-oC-p5h"/>
+                            <viewLayoutGuide key="frameLayoutGuide" id="9YH-eP-wu8"/>
                         </scrollView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gHl-8P-eG4" customClass="HideableView" customModule="Anilibria" customModuleProvider="target">
                             <rect key="frame" x="363" y="37" width="35" height="5"/>
@@ -155,19 +155,19 @@
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstItem="W6w-2u-Nrt" firstAttribute="leading" secondItem="pJS-rq-fWi" secondAttribute="leading" id="0Sm-t4-oUH"/>
+                        <constraint firstItem="Pf1-Q5-afI" firstAttribute="top" secondItem="d7b-dd-oxZ" secondAttribute="top" id="4ga-6s-12P"/>
                         <constraint firstItem="w8J-re-mrl" firstAttribute="top" secondItem="d7b-dd-oxZ" secondAttribute="top" constant="2" id="6Fg-EK-HaW"/>
-                        <constraint firstItem="pJS-rq-fWi" firstAttribute="top" secondItem="w8J-re-mrl" secondAttribute="bottom" priority="1" constant="-5" id="BUq-wh-MP0"/>
                         <constraint firstItem="W6w-2u-Nrt" firstAttribute="leading" secondItem="gHl-8P-eG4" secondAttribute="leading" id="J66-IK-BoG"/>
-                        <constraint firstAttribute="bottom" secondItem="W6w-2u-Nrt" secondAttribute="bottom" id="Kh8-1E-vJY"/>
+                        <constraint firstAttribute="bottom" secondItem="W6w-2u-Nrt" secondAttribute="bottom" identifier="SCROLL::BOTTOM" id="Kh8-1E-vJY"/>
                         <constraint firstItem="W6w-2u-Nrt" firstAttribute="top" secondItem="w8J-re-mrl" secondAttribute="bottom" constant="-5" id="Mqi-cq-ESw"/>
-                        <constraint firstItem="DVp-p1-2sy" firstAttribute="top" secondItem="pJS-rq-fWi" secondAttribute="bottom" id="N0x-f6-5VQ"/>
                         <constraint firstItem="w8J-re-mrl" firstAttribute="leading" secondItem="W6w-2u-Nrt" secondAttribute="leading" id="U7m-wF-wNX"/>
+                        <constraint firstAttribute="trailing" secondItem="Pf1-Q5-afI" secondAttribute="trailing" id="UkR-X0-9hm"/>
                         <constraint firstAttribute="trailing" secondItem="W6w-2u-Nrt" secondAttribute="trailing" constant="16" id="VLV-4j-9fz"/>
+                        <constraint firstItem="Pf1-Q5-afI" firstAttribute="leading" secondItem="d7b-dd-oxZ" secondAttribute="leading" id="YHe-j8-pGw"/>
                         <constraint firstItem="W6w-2u-Nrt" firstAttribute="top" secondItem="gHl-8P-eG4" secondAttribute="top" id="di6-u2-OFC"/>
                         <constraint firstAttribute="trailing" secondItem="w8J-re-mrl" secondAttribute="trailing" constant="16" id="hru-De-f3S"/>
                         <constraint firstItem="W6w-2u-Nrt" firstAttribute="trailing" secondItem="gHl-8P-eG4" secondAttribute="trailing" id="jgE-it-GTS"/>
-                        <constraint firstAttribute="trailing" secondItem="pJS-rq-fWi" secondAttribute="trailing" constant="16" id="zi6-k7-zuS"/>
+                        <constraint firstAttribute="bottom" secondItem="Pf1-Q5-afI" secondAttribute="bottom" id="rhq-ZK-dwY"/>
                     </constraints>
                 </view>
             </subviews>

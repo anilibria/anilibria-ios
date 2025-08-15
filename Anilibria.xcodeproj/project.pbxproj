@@ -7,14 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		46B82AAE2971A2DE003E450B /* YandexMobileMetrica.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B82AA929718FB9003E450B /* YandexMobileMetrica.xcframework */; platformFilter = ios; };
-		46B82AAF2971A2DE003E450B /* YandexMobileMetrica.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 46B82AA929718FB9003E450B /* YandexMobileMetrica.xcframework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		46B82AB12971A2E0003E450B /* YandexMobileMetricaCrashes.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46B82AAA29718FB9003E450B /* YandexMobileMetricaCrashes.xcframework */; platformFilter = ios; };
-		46B82AB22971A2E0003E450B /* YandexMobileMetricaCrashes.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 46B82AAA29718FB9003E450B /* YandexMobileMetricaCrashes.xcframework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4880C22C23DAD192006FABE1 /* MacBundle.bundle in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 4880C21F23DACDCD006FABE1 /* MacBundle.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C72BFEEA2B0F687E0093FD64 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C72BFEE92B0F687E0093FD64 /* Kingfisher */; };
 		C72BFEED2B0F69160093FD64 /* DITranquillity in Frameworks */ = {isa = PBXBuildFile; productRef = C72BFEEC2B0F69160093FD64 /* DITranquillity */; };
 		C7B0F2CC22D6F0B100540CA9 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7B0F2CB22D6F0B100540CA9 /* WebKit.framework */; };
+		C7F05CA82E4EFC45006A021F /* AppMetricaCore in Frameworks */ = {isa = PBXBuildFile; platformFilter = ios; productRef = C7F05CA72E4EFC45006A021F /* AppMetricaCore */; };
+		C7F05CAA2E4EFC45006A021F /* AppMetricaCrashes in Frameworks */ = {isa = PBXBuildFile; platformFilter = ios; productRef = C7F05CA92E4EFC45006A021F /* AppMetricaCrashes */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,18 +26,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		46B82AB02971A2DE003E450B /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				46B82AB22971A2E0003E450B /* YandexMobileMetricaCrashes.xcframework in Embed Frameworks */,
-				46B82AAF2971A2DE003E450B /* YandexMobileMetrica.xcframework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4880C22F23DAD192006FABE1 /* Embed PlugIns */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -54,8 +40,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		46B82AA929718FB9003E450B /* YandexMobileMetrica.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = YandexMobileMetrica.xcframework; sourceTree = "<group>"; };
-		46B82AAA29718FB9003E450B /* YandexMobileMetricaCrashes.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = YandexMobileMetricaCrashes.xcframework; sourceTree = "<group>"; };
 		4880C21F23DACDCD006FABE1 /* MacBundle.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacBundle.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7B0F2CB22D6F0B100540CA9 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		C7D4623F22CC73DF00E763DF /* Anilibria.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Anilibria.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -99,9 +83,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				C72BFEED2B0F69160093FD64 /* DITranquillity in Frameworks */,
+				C7F05CAA2E4EFC45006A021F /* AppMetricaCrashes in Frameworks */,
+				C7F05CA82E4EFC45006A021F /* AppMetricaCore in Frameworks */,
 				C72BFEEA2B0F687E0093FD64 /* Kingfisher in Frameworks */,
-				46B82AB12971A2E0003E450B /* YandexMobileMetricaCrashes.xcframework in Frameworks */,
-				46B82AAE2971A2DE003E450B /* YandexMobileMetrica.xcframework in Frameworks */,
 				C7B0F2CC22D6F0B100540CA9 /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -117,21 +101,11 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		46B82AA829718FB9003E450B /* xcframeworks */ = {
-			isa = PBXGroup;
-			children = (
-				46B82AA929718FB9003E450B /* YandexMobileMetrica.xcframework */,
-				46B82AAA29718FB9003E450B /* YandexMobileMetricaCrashes.xcframework */,
-			);
-			path = xcframeworks;
-			sourceTree = "<group>";
-		};
 		C7D4623622CC73DF00E763DF = {
 			isa = PBXGroup;
 			children = (
 				C72B5E612CB11F3B00AC89EE /* Anilibria */,
 				C72B5FAF2CB11F4700AC89EE /* MacBundle */,
-				46B82AA829718FB9003E450B /* xcframeworks */,
 				C7D4624022CC73DF00E763DF /* Products */,
 				1E00FA7C1790713686A9CDAF /* Frameworks */,
 			);
@@ -175,7 +149,6 @@
 				C7D4623C22CC73DF00E763DF /* Frameworks */,
 				C7D4623D22CC73DF00E763DF /* Resources */,
 				4880C22F23DAD192006FABE1 /* Embed PlugIns */,
-				46B82AB02971A2DE003E450B /* Embed Frameworks */,
 				46B82AAD2971956B003E450B /* Strip Script */,
 			);
 			buildRules = (
@@ -190,6 +163,8 @@
 			packageProductDependencies = (
 				C72BFEE92B0F687E0093FD64 /* Kingfisher */,
 				C72BFEEC2B0F69160093FD64 /* DITranquillity */,
+				C7F05CA72E4EFC45006A021F /* AppMetricaCore */,
+				C7F05CA92E4EFC45006A021F /* AppMetricaCrashes */,
 			);
 			productName = Anilibria;
 			productReference = C7D4623F22CC73DF00E763DF /* Anilibria.app */;
@@ -235,6 +210,7 @@
 			packageReferences = (
 				C72BFEE82B0F687E0093FD64 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				C72BFEEB2B0F69160093FD64 /* XCRemoteSwiftPackageReference "DITranquillity" */,
+				C7F05CA62E4EFC45006A021F /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */,
 			);
 			productRefGroup = C7D4624022CC73DF00E763DF /* Products */;
 			projectDirPath = "";
@@ -506,6 +482,7 @@
 				CODE_SIGN_ENTITLEMENTS = Anilibria/Anilibria.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 46;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/Anilibria/Resources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = AniLiberty;
@@ -515,7 +492,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.4.1;
+				MARKETING_VERSION = 2.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = tv.anilibria.anilibria;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -543,7 +520,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.4.1;
+				MARKETING_VERSION = 2.5.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = tv.anilibria.anilibria;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -605,6 +582,14 @@
 				version = 4.5.0;
 			};
 		};
+		C7F05CA62E4EFC45006A021F /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/appmetrica/appmetrica-sdk-ios";
+			requirement = {
+				kind = exactVersion;
+				version = 5.12.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -617,6 +602,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C72BFEEB2B0F69160093FD64 /* XCRemoteSwiftPackageReference "DITranquillity" */;
 			productName = DITranquillity;
+		};
+		C7F05CA72E4EFC45006A021F /* AppMetricaCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C7F05CA62E4EFC45006A021F /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */;
+			productName = AppMetricaCore;
+		};
+		C7F05CA92E4EFC45006A021F /* AppMetricaCrashes */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C7F05CA62E4EFC45006A021F /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */;
+			productName = AppMetricaCrashes;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

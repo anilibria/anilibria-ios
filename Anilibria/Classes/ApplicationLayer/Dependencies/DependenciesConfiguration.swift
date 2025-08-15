@@ -3,7 +3,7 @@ import Kingfisher
 import UIKit
 #if targetEnvironment(macCatalyst)
 #else
-import YandexMobileMetrica
+import AppMetricaCore
 #endif
 
 public protocol DependenciesConfiguration: AnyObject {
@@ -37,8 +37,8 @@ public class DependenciesConfigurationBase: DependenciesConfiguration, Loggable 
     private func setupMetrica() {
         #if targetEnvironment(macCatalyst)
         #else
-        if let config = YMMYandexMetricaConfiguration(apiKey: Keys.yandexMetricaApiKey) {
-            YMMYandexMetrica.activate(with: config)
+        if let config = AppMetricaConfiguration(apiKey: Keys.yandexMetricaApiKey) {
+            AppMetrica.activate(with: config)
         }
         #endif
     }

@@ -26,7 +26,7 @@ public final class SeriesCell: RippleViewCell {
 
     func configure(_ item: Series) {
         self.imageView.setImage(from: item.poster,
-                                placeholder: .imgPlaceholder)
+                                placeholder: DefaultPlaceholder())
         self.titleLabel.text = item.name?.main ?? ""
         self.descLabel.attributedText = Self.textBuilder.build(item.desc?.string ?? "")
     }

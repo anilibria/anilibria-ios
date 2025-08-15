@@ -24,7 +24,7 @@ public final class SeriesHeaderView: UIView {
         shimmerView.stop()
         self.imageView.setImage(
             from: series.poster,
-            placeholder: .imgPlaceholder
+            placeholder: DefaultPlaceholder()
         )
 
         self.blockView.isHidden = !series.isBlocked

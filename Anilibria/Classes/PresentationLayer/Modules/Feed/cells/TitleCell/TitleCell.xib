@@ -1,42 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="QKo-0M-ITU" customClass="TitleCell" customModule="Anilibria" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="201" height="44"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="t1K-gp-Cp9" customClass="TitleCell" customModule="Anilibria" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="247" height="50"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                <rect key="frame" x="0.0" y="0.0" width="201" height="44"/>
+            <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="gHP-vo-amu">
+                <rect key="frame" x="0.0" y="0.0" width="247" height="50"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EZk-EA-UKZ">
-                        <rect key="frame" x="16" y="18" width="170" height="16"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gxj-Zq-VBe">
+                        <rect key="frame" x="16" y="18" width="215" height="22"/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
-            </view>
-            <viewLayoutGuide key="safeArea" id="mkX-1A-YxS"/>
-            <constraints>
-                <constraint firstItem="EZk-EA-UKZ" firstAttribute="top" secondItem="QKo-0M-ITU" secondAttribute="top" constant="18" id="Aj1-ps-ysq"/>
-                <constraint firstAttribute="trailing" secondItem="EZk-EA-UKZ" secondAttribute="trailing" constant="15" id="gSE-FF-VEY"/>
-                <constraint firstAttribute="bottom" secondItem="EZk-EA-UKZ" secondAttribute="bottom" constant="10" id="k20-Qf-m6H"/>
-                <constraint firstItem="EZk-EA-UKZ" firstAttribute="leading" secondItem="QKo-0M-ITU" secondAttribute="leading" constant="16" id="kUK-jS-nbV"/>
-            </constraints>
-            <size key="customSize" width="201" height="50"/>
+                <constraints>
+                    <constraint firstItem="gxj-Zq-VBe" firstAttribute="top" secondItem="gHP-vo-amu" secondAttribute="top" constant="18" id="Faz-1k-uA4"/>
+                    <constraint firstAttribute="trailing" secondItem="gxj-Zq-VBe" secondAttribute="trailing" constant="16" id="Hmr-n8-du1"/>
+                    <constraint firstAttribute="bottom" secondItem="gxj-Zq-VBe" secondAttribute="bottom" priority="999" constant="10" id="erb-n8-tTv"/>
+                    <constraint firstItem="gxj-Zq-VBe" firstAttribute="leading" secondItem="gHP-vo-amu" secondAttribute="leading" constant="16" id="goi-O1-7f5"/>
+                </constraints>
+            </collectionViewCellContentView>
+            <size key="customSize" width="247" height="50"/>
             <connections>
-                <outlet property="titleLabel" destination="EZk-EA-UKZ" id="y46-6s-fN7"/>
+                <outlet property="titleLabel" destination="gxj-Zq-VBe" id="w85-Uu-qm6"/>
             </connections>
-            <point key="canvasLocation" x="125.36231884057972" y="65.625"/>
+            <point key="canvasLocation" x="132.60869565217394" y="142.63392857142856"/>
         </collectionViewCell>
     </objects>
 </document>

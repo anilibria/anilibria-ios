@@ -508,7 +508,7 @@
 				CURRENT_PROJECT_VERSION = 46;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/Anilibria/Resources/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Anilibria;
+				INFOPLIST_KEY_CFBundleDisplayName = AniLiberty;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -536,7 +536,7 @@
 				CURRENT_PROJECT_VERSION = 46;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/Anilibria/Resources/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = Anilibria;
+				INFOPLIST_KEY_CFBundleDisplayName = AniLiberty;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (

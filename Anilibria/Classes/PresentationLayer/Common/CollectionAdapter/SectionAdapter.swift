@@ -28,7 +28,7 @@ class SectionAdapter: SectionAdapterProtocol {
     var minimumInteritemSpacing: CGFloat = 0
     var estimatedHeight: CGFloat = 50
     var ipad: Configuration?
-    private(set) var items: [AnyCellAdapter] = []
+    private(set) var items: OrderedSet<AnyCellAdapter> = []
 
 
     init(_ items: [AnyCellAdapter]) {
@@ -36,14 +36,14 @@ class SectionAdapter: SectionAdapterProtocol {
     }
 
     func set(_ items: [AnyCellAdapter]) {
-        self.items = items
-        self.items.forEach {
+        self.items = OrderedSet(items)
+        items.forEach {
             $0.section = self
         }
     }
 
     func append(_ items: [AnyCellAdapter]) {
-        self.items.append(contentsOf: items)
+        self.items.append(items)
         items.forEach {
             $0.section = self
         }
@@ -55,7 +55,7 @@ class SectionAdapter: SectionAdapterProtocol {
 
     func getItems(for identifier: AnyHashable?) -> [AnyCellAdapter] {
         if identifier == uid {
-            return items
+            return items.array
         }
         return []
     }

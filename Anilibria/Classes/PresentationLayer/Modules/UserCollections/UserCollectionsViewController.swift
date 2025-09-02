@@ -22,7 +22,7 @@ final class UserCollectionsViewController: BaseCollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        view.backgroundColor = .Surfaces.background
         setupPager()
     }
 

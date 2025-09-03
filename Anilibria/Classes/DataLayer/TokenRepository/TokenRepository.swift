@@ -26,13 +26,17 @@ protocol TokenRepository: Clearable {
 
 final class TokenRepositoryImp: TokenRepository {
     private let key: String = "USER_TOKEN"
-    private let keychain = KeychainManager()
+    private let storage: SecureStorage
+
+    init(storage: SecureStorage) {
+        self.storage = storage
+    }
 
     private var buffered: String?
 
     func set(token: String) {
         do {
-            try keychain.save(key: key, item: token)
+            try storage.save(key: key, item: token)
             buffered = token
         } catch {
             assertionFailure(error.localizedDescription)
@@ -43,7 +47,7 @@ final class TokenRepositoryImp: TokenRepository {
         if buffered != nil {
             return .just(buffered)
         }
-        return keychain.get(key: key)
+        return storage.get(key: key)
             .handleEvents(receiveOutput: { [weak self] in
                 self?.buffered = $0
             })
@@ -53,7 +57,7 @@ final class TokenRepositoryImp: TokenRepository {
     func clear() {
         buffered = nil
         do {
-            try keychain.remove(key: key)
+            try storage.remove(key: key)
         } catch {
             assertionFailure(error.localizedDescription)
         }

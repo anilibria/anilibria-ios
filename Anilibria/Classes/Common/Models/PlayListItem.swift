@@ -62,11 +62,11 @@ public struct PlaylistItem: Decodable, Hashable {
         let endingStart: Int? = container.decode("ending", "start")
         let endingStop: Int? = container.decode("ending", "stop")
 
-        self.openingRange = if let openingStart, let openingStop {
+        self.openingRange = if let openingStart, let openingStop, openingStart <= openingStop {
             .init(uncheckedBounds: (openingStart, openingStop))
         } else { nil }
 
-        self.endingRange = if let endingStart, let endingStop {
+        self.endingRange = if let endingStart, let endingStop, endingStart <= endingStop  {
             .init(uncheckedBounds: (endingStart, endingStop))
         } else { nil }
 

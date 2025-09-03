@@ -20,6 +20,7 @@ final class MainContainerViewController: BaseViewController {
         tabBarContainer.backgroundColor = .Surfaces.background
         setupPager()
         handler.didLoad()
+        view.backgroundColor = .Surfaces.background
     }
 
     func setupPager() {

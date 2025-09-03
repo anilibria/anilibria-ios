@@ -28,7 +28,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="288" height="162"/>
                                         <color key="tintColor" name="text/secondary"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="1hm-YK-uy1" secondAttribute="height" multiplier="16:9" id="ADj-fB-HiN"/>
+                                            <constraint firstAttribute="width" secondItem="1hm-YK-uy1" secondAttribute="height" multiplier="16:9" priority="999" id="ADj-fB-HiN"/>
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="JKSJDKJSKD" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7qL-w2-kOr">

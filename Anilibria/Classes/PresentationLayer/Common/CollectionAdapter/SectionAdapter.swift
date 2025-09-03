@@ -14,7 +14,7 @@ class SectionAdapter: SectionAdapterProtocol {
         let portraitItemsPerLine: Int
 
         var itemsPerLine: Int {
-            if UIDevice.current.orientation.isLandscape {
+            if UIScreen.main.interfaceOrientation.isLandscape {
                 ladscapeItemsPerLine
             } else {
                 portraitItemsPerLine
@@ -26,8 +26,9 @@ class SectionAdapter: SectionAdapterProtocol {
     var insets: NSDirectionalEdgeInsets = .zero
     var minimumLineSpacing: CGFloat = 0
     var minimumInteritemSpacing: CGFloat = 0
+    var estimatedHeight: CGFloat = 50
     var ipad: Configuration?
-    private(set) var items: [AnyCellAdapter] = []
+    private(set) var items: OrderedSet<AnyCellAdapter> = []
 
 
     init(_ items: [AnyCellAdapter]) {
@@ -35,14 +36,14 @@ class SectionAdapter: SectionAdapterProtocol {
     }
 
     func set(_ items: [AnyCellAdapter]) {
-        self.items = items
-        self.items.forEach {
+        self.items = OrderedSet(items)
+        items.forEach {
             $0.section = self
         }
     }
 
     func append(_ items: [AnyCellAdapter]) {
-        self.items.append(contentsOf: items)
+        self.items.append(items)
         items.forEach {
             $0.section = self
         }
@@ -54,7 +55,7 @@ class SectionAdapter: SectionAdapterProtocol {
 
     func getItems(for identifier: AnyHashable?) -> [AnyCellAdapter] {
         if identifier == uid {
-            return items
+            return items.array
         }
         return []
     }
@@ -80,13 +81,13 @@ class SectionAdapter: SectionAdapterProtocol {
 
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .absolute(width),
-            heightDimension: .estimated(1)
+            heightDimension: .estimated(estimatedHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(1)
+            heightDimension: .estimated(estimatedHeight)
         )
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,
@@ -102,13 +103,13 @@ class SectionAdapter: SectionAdapterProtocol {
     private func getDefaultLayout(_ environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(1)
+            heightDimension: .estimated(estimatedHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(1)
+            heightDimension: .estimated(estimatedHeight)
         )
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,

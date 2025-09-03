@@ -22,7 +22,7 @@ final class UserCollectionsViewController: BaseCollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        view.backgroundColor = .Surfaces.background
         setupPager()
     }
 
@@ -34,6 +34,7 @@ final class UserCollectionsViewController: BaseCollectionViewController {
         self.collectionView.dragDelegate = self
         self.collectionView.dropDelegate = self
         self.collectionView.showsHorizontalScrollIndicator = false
+        self.collectionView.layoutMargins = .zero
         if UIDevice.current.userInterfaceIdiom != .pad {
             let conf = UICollectionViewCompositionalLayoutConfiguration()
             conf.scrollDirection = .horizontal

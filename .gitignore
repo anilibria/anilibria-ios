@@ -114,3 +114,5 @@ funimp\.sh
 xcframeworks
 mpv_build
 Anilibria/Resources/Localize/GenerationScript
+*.zip
+AniLiberty.app.dSYM

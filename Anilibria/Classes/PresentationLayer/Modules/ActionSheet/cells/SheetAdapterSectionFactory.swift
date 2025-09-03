@@ -10,7 +10,6 @@ import Foundation
 
 enum SheetAdapterSectionFactory {
     static func create(for items: [ChoiceGroup], select: ((SheetSelector) -> Void)?) -> [any SectionAdapterProtocol] {
-//        items.map { ChoiceCellSectionAdapter($0, select: select) }
         [SheetSectionsAdapter(items: items, select: select)]
     }
 }

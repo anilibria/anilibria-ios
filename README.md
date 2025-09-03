@@ -1,5 +1,5 @@
-# AniLibria
-iOS клиент для сайта [AniLibria.tv](https://anilibria.tv/)
+# AniLiberty
+iOS клиент для сайта [AniLiberty](https://aniliberty.top)
 
 ## Информация
 |Версия приложения |iOS/iPad.           |macOS                 |

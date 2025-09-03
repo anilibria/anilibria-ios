@@ -36,6 +36,7 @@ final class BarButton: UIBarButtonItem {
         let rippleColor = rippleColor ?? .Tint.main
 
         let button = BarRippleButton(type: type)
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.contentSize = CGSize(width: 30, height: 44)
         button.tintColor = tintColor
         button.setImage(image, for: .normal)

@@ -26,19 +26,32 @@ final class BlurPresentationController: UIPresentationController {
 
     public var transformation: Transformation = ScaleTransformation()
 
+    private let wrapView = UIView()
+
+    override var presentedView: UIView? {
+        return wrapView
+    }
+
     override init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?) {
         super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
     }
 
     override func presentationTransitionWillBegin() {
-        self.updateDimmingFrame(containerView!.bounds.size)
+        guard let view = super.presentedView else {
+            return
+        }
+        wrapView.frame = view.frame
+        wrapView.addSubview(view)
+        if let size = containerView?.bounds.size {
+            self.updateDimmingFrame(size)
+        }
         self.containerView?.insertSubview(self.dimmingView, at: 0)
         self.dimmingView.alpha = 0
 
-        self.transformation.beforePresent(self.presentedView)
+        self.transformation.beforePresent(view)
         let animations = {
             self.dimmingView.alpha = 1
-            self.transformation.present(self.presentedView)
+            self.transformation.present(view)
         }
 
         if let transitionCoordinator = presentingViewController.transitionCoordinator {

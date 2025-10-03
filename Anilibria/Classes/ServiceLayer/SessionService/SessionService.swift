@@ -54,13 +54,11 @@ final class SessionServiceImp: SessionService, Loggable {
         return tokenRepository.getToken().flatMap { [unowned self] value -> AnyPublisher<SessionState?, Never> in
             if value == nil {
                 statusRelay.send(.guest)
-                return statusRelay
-                    .eraseToAnyPublisher()
+                return getStatusRelay()
             }
             if let user = userRepository.getUser() {
                 statusRelay.send(.user(user))
-                return statusRelay
-                    .eraseToAnyPublisher()
+                return getStatusRelay()
             }
             return backendRepository
                 .request(UserRequest())
@@ -76,13 +74,18 @@ final class SessionServiceImp: SessionService, Loggable {
                         statusRelay.send(.guest)
                     }
 
-                    return statusRelay
-                        .eraseToAnyPublisher()
+                    return getStatusRelay()
                 }
                 .eraseToAnyPublisher()
         }
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
+    }
+
+    private func getStatusRelay() -> AnyPublisher<SessionState?, Never> {
+        statusRelay
+            .removeDuplicates()
+            .eraseToAnyPublisher()
     }
 
     func signIn(login: String, password: String) -> AnyPublisher<User, Error> {

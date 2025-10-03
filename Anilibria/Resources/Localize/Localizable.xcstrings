@@ -2459,7 +2459,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Всего эпизодов: "
+            "value" : "Эпизоды: "
           }
         }
       }

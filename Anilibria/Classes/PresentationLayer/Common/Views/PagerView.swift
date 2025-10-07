@@ -276,4 +276,17 @@ private final class PageViewController: UIPageViewController {
             }
         }
     }
+
+    // MARK: - Orientation
+    public override var shouldAutorotate: Bool {
+        return false
+    }
+
+    public override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+
+    public override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
+        return .portrait
+    }
 }

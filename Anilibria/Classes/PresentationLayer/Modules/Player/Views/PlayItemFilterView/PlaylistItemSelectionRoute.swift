@@ -24,6 +24,6 @@ extension PlaylistItemSelectionRoute where Self: RouterProtocol {
                       configure: {
                           $0.isBlured = true
                           $0.transformation = MoveUpTransformation()
-        }).set(level: .statusBar).move()
+        }).move()
     }
 }

@@ -20,7 +20,7 @@ public class AppRouter {
 
     public func openDefaultScene() {
         let module = MainContainerAssembly.createModule()
-        ShowWindowRouter(target: module,
-                         window: self.createWindow()).move()
+        SetWindowRouter(target: module,
+                        window: self.createWindow()).move()
     }
 }

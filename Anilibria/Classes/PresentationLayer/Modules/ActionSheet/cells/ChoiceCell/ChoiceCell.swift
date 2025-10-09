@@ -6,15 +6,20 @@ public final class ChoiceCell: RippleViewCell {
     @IBOutlet var iconView: UIImageView!
     @IBOutlet var separatorView: UIView!
 
-    private var cancellable: AnyCancellable?
+    private var cancellables = Set<AnyCancellable>()
 
-    func configure(_ item: ChoiceItem, isLast: Bool) {
+    func configure(_ item: ChoiceItem) {
+        cancellables.removeAll()
         self.titleLabel.text = item.title
         self.iconView.isHidden = !item.isSelected
-        self.separatorView.isHidden = isLast
         self.rippleContainerView.smoothCorners(with: 4)
-        self.cancellable = item.$isSelected.sink(receiveValue: { [weak self] value in
+
+        item.$isSelected.sink(receiveValue: { [weak self] value in
             self?.iconView.isHidden = !value
-        })
+        }).store(in: &cancellables)
+
+        item.$isLast.sink(receiveValue: { [weak self] value in
+            self?.separatorView.isHidden = value
+        }).store(in: &cancellables)
     }
 }

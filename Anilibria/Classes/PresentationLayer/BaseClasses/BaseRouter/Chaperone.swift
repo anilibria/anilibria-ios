@@ -12,7 +12,6 @@ public protocol StatusBarChangeable: AnyObject {
 public class ModalRouter: NSObject, ChaperoneRouter {
     fileprivate weak var target: UIViewController!
     fileprivate weak var parent: UIViewController?
-    fileprivate var windowLevel: UIWindow.Level = .normal
 
     init(target: UIViewController, parent: UIViewController?) {
         self.target = target
@@ -20,11 +19,6 @@ public class ModalRouter: NSObject, ChaperoneRouter {
         if parent == nil {
             self.target.modalPresentationStyle = .fullScreen
         }
-    }
-
-    public func set(level: UIWindow.Level) -> Self {
-        self.windowLevel = level
-        return self
     }
 
     public func move() {
@@ -89,7 +83,7 @@ public class PushRouter: ChaperoneRouter {
     }
 }
 
-public final class ShowWindowRouter: ChaperoneRouter {
+public final class SetWindowRouter: ChaperoneRouter {
     let target: UIViewController
     let window: UIWindow
     let transition: ViewTransition
@@ -192,15 +186,6 @@ public final class PresentRouter<T: UIPresentationController>: ModalRouter, UIVi
         self.target.storeLink(self)
     }
 
-    public func set(_ modalPresentationStyle: UIModalPresentationStyle) -> Self {
-        self.target.modalPresentationStyle = modalPresentationStyle
-        return self
-    }
-
-    public override func move() {
-        super.move()
-    }
-
     public func presentationController(forPresented presented: UIViewController,
                                        presenting: UIViewController?,
                                        source: UIViewController) -> UIPresentationController? {
@@ -211,13 +196,6 @@ public final class PresentRouter<T: UIPresentationController>: ModalRouter, UIVi
 }
 
 // MARK: - Support classes
-
-private class MRViewController: UIViewController {
-    func close() {
-        view.removeFromSuperview()
-        removeFromParent()
-    }
-}
 
 private extension UIViewController {
     func storeLink(_ item: Any?) {
@@ -231,9 +209,6 @@ private final class HolderHelper: UILayoutGuide {
     var storedObject: Any?
 
     deinit {
-        if let value = storedObject as? MRViewController {
-            value.close()
-        }
         storedObject = nil
     }
 }

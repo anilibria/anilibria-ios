@@ -26,19 +26,26 @@ final class BlurPresentationController: UIPresentationController {
 
     public var transformation: Transformation = ScaleTransformation()
 
-    override init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?) {
-        super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
+    private let wrapView = UIView()
+
+    override var presentedView: UIView? {
+        return wrapView
     }
 
     override func presentationTransitionWillBegin() {
-        self.updateDimmingFrame(containerView!.bounds.size)
-        self.containerView?.insertSubview(self.dimmingView, at: 0)
-        self.dimmingView.alpha = 0
+        guard let containerView, let view = super.presentedView else {
+            return
+        }
+        wrapView.addSubview(view)
+        wrapView.frame = containerView.bounds
+        updateDimmingFrame()
+        containerView.insertSubview(self.dimmingView, at: 0)
+        dimmingView.alpha = 0
 
-        self.transformation.beforePresent(self.presentedView)
-        let animations = {
-            self.dimmingView.alpha = 1
-            self.transformation.present(self.presentedView)
+        transformation.beforePresent(view)
+        let animations = { [weak self] in
+            self?.dimmingView.alpha = 1
+            self?.transformation.present(view)
         }
 
         if let transitionCoordinator = presentingViewController.transitionCoordinator {
@@ -74,25 +81,23 @@ final class BlurPresentationController: UIPresentationController {
     }
 
     override func size(forChildContentContainer container: UIContentContainer, withParentContainerSize parentSize: CGSize) -> CGSize {
-        return self.calculateFrame(parentSize: parentSize).size
+        return parentSize
     }
 
     override func containerViewWillLayoutSubviews() {
-        self.updateDimmingFrame(containerView!.bounds.size)
-        self.presentedView?.frame = self.frameOfPresentedViewInContainerView
+        self.updateDimmingFrame()
+        self.wrapView.frame = self.frameOfPresentedViewInContainerView
+        super.presentedView?.frame = wrapView.bounds
     }
 
     override var frameOfPresentedViewInContainerView: CGRect {
-        return self.calculateFrame(parentSize: containerView!.bounds.size)
+        return containerView?.bounds ?? .zero
     }
 
-    private func calculateFrame(parentSize: CGSize) -> CGRect {
-        return CGRect(origin: .zero, size: parentSize)
-    }
-
-    private func updateDimmingFrame(_ parentSize: CGSize) {
-        self.dimmingView.frame = CGRect(origin: .zero,
-                                        size: parentSize)
+    private func updateDimmingFrame() {
+        if let bounds = containerView?.bounds {
+            dimmingView.frame = bounds
+        }
     }
 }
 
@@ -120,7 +125,6 @@ public class ScaleTransformation: Transformation {
     private let transform: CGAffineTransform = CGAffineTransform(scaleX: 0.8, y: 0.8)
 
     func beforePresent(_ view: UIView?) {
-        view?.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         view?.transform = self.transform
     }
 

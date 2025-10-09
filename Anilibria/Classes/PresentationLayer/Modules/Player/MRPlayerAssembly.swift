@@ -21,8 +21,12 @@ protocol PlayerRoute {
 extension PlayerRoute where Self: RouterProtocol {
     func openPlayer(series: Series) {
         let module = PlayerAssembly.createModule(series: series, parent: self)
-        module.modalPresentationStyle = .fullScreen
-        ModalRouter(target: module, parent: self.controller)
-            .move()
+        PresentRouter(target: module,
+                      from: controller,
+                      use: BlurPresentationController.self,
+                      configure: {
+                          $0.isBlured = false
+                          $0.transformation = ScaleTransformation()
+        }).move()
     }
 }

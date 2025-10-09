@@ -61,7 +61,7 @@ public struct Series: Codable, Hashable {
         episodesTotal = container.decode("episodes_total")
         isInProduction = container.decode("is_in_production") ?? false
         isBlockedByGeo = container.decode("is_blocked_by_geo") ?? false
-        episodesAreUnknown = container.decode("episodes_are_unknown") ?? false
+        episodesAreUnknown = container.decode("episodes_are_unknown") ?? true
         isBlockedByCopyrights = container.decode("is_blocked_by_copyrights") ?? false
         averageDurationOfEpisode = container.decode("average_duration_of_episode")
         genres = (container.decode("genres") ?? []).sorted(by: { $0.name < $1.name })

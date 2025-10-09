@@ -30,6 +30,7 @@ final class PlayerViewController: BaseViewController {
     private var hideUISubscriber: AnyCancellable?
     private var pipObservation: Any?
     private var needsPlay = false
+    private var needsClose = false
     private let userInteractionSubject = PassthroughSubject<Void, Never>()
 
     private var orientation: UIInterfaceOrientationMask = .all
@@ -356,10 +357,37 @@ final class PlayerViewController: BaseViewController {
         sleep(2) // this used for to give time for save async data
     }
 
+    override func viewWillTransition(
+        to size: CGSize,
+        with coordinator: UIViewControllerTransitionCoordinator
+    ) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: nil, completion: { [weak self] _ in
+            guard let self else { return }
+            if needsClose {
+                needsClose = false
+                viewModel.back()
+            }
+        })
+    }
+
     @IBAction func closeAction(_ sender: Any) {
-        self.orientation = .portrait
-        updateOrientation()
-        self.viewModel.back()
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            self.viewModel.back()
+        } else {
+            if needsClose { return }
+            if orientation == .portrait {
+                self.viewModel.back()
+            } else {
+                self.orientation = .portrait
+                if UIScreen.main.interfaceOrientation == .portrait {
+                    self.viewModel.back()
+                } else {
+                    self.needsClose = true
+                    updateOrientation()
+                }
+            }
+        }
     }
 
     private func updateOrientation() {

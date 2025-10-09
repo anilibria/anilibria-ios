@@ -15,6 +15,11 @@ final class PromoCellAdapter: BaseCellAdapter<PromoViewModel> {
         return cell
     }
 
+    override func hash(into hasher: inout Hasher) {
+        super.hash(into: &hasher)
+        hasher.combine(ObjectIdentifier(self))
+    }
+
     override func didSelect(at index: IndexPath) {
         viewModel.select()
     }

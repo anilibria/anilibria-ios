@@ -36,7 +36,7 @@ extension ActionSheetRoute where Self: RouterProtocol {
                       configure: {
                           $0.isBlured = true
                           $0.transformation = MoveUpTransformation()
-        }).set(level: .statusBar).move()
+        }).move()
     }
 
     func openSheet(with items: [ChoiceGroup]) {

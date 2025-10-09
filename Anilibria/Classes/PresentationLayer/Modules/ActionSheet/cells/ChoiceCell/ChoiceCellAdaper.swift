@@ -14,6 +14,7 @@ public final class ChoiceGroup: SheetGroup {
                 item.isSelected = true
                 self?.selectedItem = item
             }
+            $0.isLast = $0 === items.last
         }
 
         selectedItem = items.first { $0.isSelected }
@@ -25,6 +26,8 @@ public final class ChoiceItem: NSObject {
     let title: String
     @Published var isSelected: Bool
     fileprivate var didSelect: ((ChoiceItem) -> Void)?
+
+    @Published fileprivate(set) var isLast: Bool = false
 
     init<T>(
         value: T,
@@ -66,7 +69,7 @@ final class ChoiceCellAdapter: BaseCellAdapter<ChoiceItem> {
 
     override func cellForItem(at index: IndexPath, context: CollectionContext) -> UICollectionViewCell? {
         let cell = context.dequeueReusableNibCell(type: ChoiceCell.self, for: index)
-        cell.configure(self.viewModel, isLast: self.section?.getItems().count == index.item + 1)
+        cell.configure(self.viewModel)
         return cell
     }
 

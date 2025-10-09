@@ -90,9 +90,12 @@ public final class DefaultPlayerView: UIView, Player {
         setupStateObserving()
         observeTime()
         observeBuffer(for: item)
-
         return Deferred {
-            AnyPublisher<Double?, Error>.just(asset.duration.seconds)
+            Future { promise in
+                asset.loadValuesAsynchronously(forKeys: ["duration"]) {
+                    promise(.success(asset.duration.seconds))
+                }
+            }
         }
         .subscribe(on: DispatchQueue.global())
         .receive(on: DispatchQueue.main)

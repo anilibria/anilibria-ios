@@ -310,11 +310,11 @@ extension SeriesViewController: SeriesViewBehavior {
             result = result + title + value
         }
 
-        if let episodes = series.episodesTotal {
-            let title = self.boldTextBuilder.build(strings.episodes)
-            let value = self.regularTextBuilder.build("\(episodes)\n")
-            result = result + title + value
-        }
+        let availableCount = series.playlist.count
+        let title = self.boldTextBuilder.build(strings.episodes)
+        let episodes = series.episodesTotal.map { "\($0)"} ?? "?"
+        let value = self.regularTextBuilder.build("\(availableCount)/\(episodes)\n")
+        result = result + title + value
 
         if series.genres.isEmpty == false {
             var data = self.boldTextBuilder.build(strings.genres)

@@ -11,4 +11,11 @@ public final class DateConverter: Converter {
         }
         return dateFormatter.date(from: item)
     }
+
+    public func convert(from value: Date?) -> String? {
+        guard let value else {
+            return nil
+        }
+        return dateFormatter.string(from: value)
+    }
 }

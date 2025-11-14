@@ -28,7 +28,7 @@ public enum VideoQuality: Int, CaseIterable, Codable {
     }
 }
 
-public struct PlaylistItem: Decodable, Hashable {
+public struct PlaylistItem: Codable, Hashable {
     let id: String
     let title: String
     let preview: URL?
@@ -50,17 +50,36 @@ public struct PlaylistItem: Decodable, Hashable {
         return self.video.keys.sorted(by: { $0.rawValue < $1.rawValue })
     }
 
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeyString.self)
-        let urlConverter = URLConverter()
-        self.id = try container.decode(required: "id")
-        self.title = container.decode("name") ?? ""
-        self.ordinal = container.decode("ordinal")
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case ordinal
+        case duration
 
-        let openingStart: Int? = container.decode("opening", "start")
-        let openingStop: Int? = container.decode("opening", "stop")
-        let endingStart: Int? = container.decode("ending", "start")
-        let endingStop: Int? = container.decode("ending", "stop")
+        case preview
+        case src
+
+        case opening
+        case ending
+        case start
+        case stop
+
+        case hls1080 = "hls_1080"
+        case hls720 = "hls_720"
+        case hls480 = "hls_480"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let urlConverter = URLConverter()
+        self.id = try container.decode(required: .id)
+        self.title = container.decode(.name) ?? ""
+        self.ordinal = container.decode(.ordinal)
+
+        let openingStart: Int? = container.decode(.opening, .start)
+        let openingStop: Int? = container.decode(.opening, .stop)
+        let endingStart: Int? = container.decode(.ending, .start)
+        let endingStop: Int? = container.decode(.ending, .stop)
 
         self.openingRange = if let openingStart, let openingStop, openingStart <= openingStop {
             .init(uncheckedBounds: (openingStart, openingStop))
@@ -71,17 +90,38 @@ public struct PlaylistItem: Decodable, Hashable {
         } else { nil }
 
 		var result: [VideoQuality: URL] = [:]
-        if let url: URL = container.decode("hls_1080") {
+        if let url: URL = container.decode(.hls1080) {
 			result[.fullHd] = url
 		}
-		if let url: URL = container.decode("hls_720") {
+        if let url: URL = container.decode(.hls720) {
 			result[.hd] = url
 		}
-		if let url: URL = container.decode("hls_480") {
+        if let url: URL = container.decode(.hls480) {
 			result[.sd] = url
 		}
 		self.video = result
-        self.duration = container.decode("duration") ?? 0
-        self.preview = urlConverter.convert(from: container.decode("preview", "src"))
+        self.duration = container.decode(.duration) ?? 0
+        self.preview = urlConverter.convert(from: container.decode(.preview, .src))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        let dateConverter = DateConverter()
+        encoder.apply(CodingKeys.self) { container in
+            container[.id] = id
+            container[.name] = title
+            container[.ordinal] = ordinal
+            container[.duration] = duration
+
+            container[.opening][.start] = openingRange?.lowerBound
+            container[.opening][.ending] = openingRange?.upperBound
+            container[.ending][.start] = endingRange?.lowerBound
+            container[.ending][.ending] = endingRange?.upperBound
+
+            container[.hls1080] = video[.fullHd]?.absoluteString
+            container[.hls720] = video[.hd]?.absoluteString
+            container[.hls480] = video[.sd]?.absoluteString
+
+            container[.preview][.src] = preview?.absoluteString
+        }
     }
 }

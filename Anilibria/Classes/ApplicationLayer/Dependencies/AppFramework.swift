@@ -12,9 +12,10 @@ public class AppFramework: DIFramework {
 
 private class RepositoriesPart: DIPart {
     static let parts: [DIPart.Type] = [
+        CoreDataHolderPart.self,
         SecureStoragePart.self,
         ConfigRepositoryPart.self,
-        HistoryRepositoryPart.self,
+        SeriesRepositoryPart.self,
         PlayerSettingsRepositoryPart.self,
         UserRepositoryPart.self,
         TokenRepositoryPart.self,

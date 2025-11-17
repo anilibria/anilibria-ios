@@ -105,7 +105,6 @@ public struct PlaylistItem: Codable, Hashable {
     }
 
     public func encode(to encoder: Encoder) throws {
-        let dateConverter = DateConverter()
         encoder.apply(CodingKeys.self) { container in
             container[.id] = id
             container[.name] = title

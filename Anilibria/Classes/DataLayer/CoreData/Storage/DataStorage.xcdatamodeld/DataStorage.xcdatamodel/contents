@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="24299" systemVersion="25B78" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DownloadedDataEntity" representedClassName="DownloadedDataEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="data" optional="YES" attributeType="Binary"/>
+        <attribute name="seriesID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="seriesData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SeriesDataEntity" inverseName="downloadedData" inverseEntity="SeriesDataEntity"/>
+    </entity>
+    <entity name="PlayerContextEntity" representedClassName="PlayerContextEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="data" optional="YES" attributeType="Binary"/>
+        <attribute name="seriesID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="seriesData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SeriesDataEntity" inverseName="playerContext" inverseEntity="SeriesDataEntity"/>
+    </entity>
+    <entity name="SeriesDataEntity" representedClassName="SeriesDataEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="series" attributeType="Binary"/>
+        <relationship name="downloadedData" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DownloadedDataEntity" inverseName="seriesData" inverseEntity="DownloadedDataEntity"/>
+        <relationship name="playerContext" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="PlayerContextEntity" inverseName="seriesData" inverseEntity="PlayerContextEntity"/>
+    </entity>
+</model>

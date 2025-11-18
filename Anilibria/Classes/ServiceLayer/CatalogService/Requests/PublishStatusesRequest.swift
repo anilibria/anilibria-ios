@@ -7,9 +7,10 @@
 //
 
 
-public struct PublishStatusesRequest: BackendAPIRequest {
+public struct PublishStatusesRequest: AuthorizableAPIRequest {
     typealias ResponseObject = [DescribedValue<String>]
 
     let endpoint: String = "/anime/catalog/references/publish-statuses"
     let method: NetworkManager.Method = .GET
+    var headers: [String : String] = [:]
 }

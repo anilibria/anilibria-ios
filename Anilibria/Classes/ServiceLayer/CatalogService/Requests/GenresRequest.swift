@@ -7,9 +7,10 @@
 //
 
 
-public struct GenresRequest: BackendAPIRequest {
+public struct GenresRequest: AuthorizableAPIRequest {
     typealias ResponseObject = [Genre]
 
     let endpoint: String = "/anime/catalog/references/genres"
     let method: NetworkManager.Method = .GET
+    var headers: [String : String] = [:]
 }

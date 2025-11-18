@@ -1,17 +1,9 @@
 import Foundation
 
 public final class URLConverter: Converter {
+    static let base = "https://placeholder.some"
     public typealias FromValue = String?
     public typealias ToValue = URL?
-    let base: String
-
-    init(_ base: String) {
-        if base.last == "/" {
-            self.base = String(base.dropLast())
-        } else {
-            self.base = base
-        }
-    }
 
     public func convert(from item: String?) -> URL? {
         guard let urlString = item else {
@@ -22,6 +14,6 @@ public final class URLConverter: Converter {
             return urlString.toURL()
         }
 
-        return "\(self.base)\(urlString)".toURL()
+        return "\(Self.base)\(urlString)".toURL()
     }
 }

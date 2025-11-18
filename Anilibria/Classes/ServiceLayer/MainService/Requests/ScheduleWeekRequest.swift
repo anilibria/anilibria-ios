@@ -8,9 +8,10 @@
 
 import Foundation
 
-public struct ScheduleWeekRequest: BackendAPIRequest {
+public struct ScheduleWeekRequest: AuthorizableAPIRequest {
     typealias ResponseObject = [ScheduleItem]
 
     let endpoint: String = "/anime/schedule/week"
     let method: NetworkManager.Method = .GET
+    var headers: [String : String] = [:]
 }

@@ -52,7 +52,7 @@ public struct PlaylistItem: Decodable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeyString.self)
-        let urlConverter = URLConverter(Configuration.server)
+        let urlConverter = URLConverter()
         self.id = try container.decode(required: "id")
         self.title = container.decode("name") ?? ""
         self.ordinal = container.decode("ordinal")
@@ -71,13 +71,13 @@ public struct PlaylistItem: Decodable, Hashable {
         } else { nil }
 
 		var result: [VideoQuality: URL] = [:]
-        if let url: URL = urlConverter.convert(from: container.decode("hls_1080")) {
+        if let url: URL = container.decode("hls_1080") {
 			result[.fullHd] = url
 		}
-		if let url: URL = urlConverter.convert(from: container.decode("hls_720")) {
+		if let url: URL = container.decode("hls_720") {
 			result[.hd] = url
 		}
-		if let url: URL = urlConverter.convert(from: container.decode("hls_480")) {
+		if let url: URL = container.decode("hls_480") {
 			result[.sd] = url
 		}
 		self.video = result

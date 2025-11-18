@@ -90,3 +90,50 @@ extension AnyPublisher {
         }
     }
 }
+
+public extension AnyPublisher where Failure == Error {
+    static func create<T: AsyncSequence>(
+        _ sequence: T,
+        priority: TaskPriority? = nil
+    ) -> AnyPublisher<Output, Failure> where T.Element == Output {
+        create { promise in
+            let task = Task(priority: priority) {
+                do {
+                    for try await result in sequence {
+                        promise(.send(result))
+                    }
+                    promise(.completed)
+                } catch {
+                    promise(.failure(error))
+                }
+            }
+
+            return AnyCancellable { task.cancel() }
+        }
+        .receive(on: RunLoop.current)
+        .eraseToAnyPublisher()
+    }
+
+    static func create(
+        priority: TaskPriority? = nil,
+        asyncFunc: @escaping () async throws -> Output
+    ) -> AnyPublisher<Output, Failure> {
+        Deferred {
+            return create { promise in
+                let task = Task(priority: priority) {
+                    do {
+                        let result = try await asyncFunc()
+                        promise(.send(result))
+                        promise(.completed)
+                    } catch {
+                        promise(.failure(error))
+                    }
+                }
+                return AnyCancellable {
+                    task.cancel()
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+}

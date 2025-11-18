@@ -17,7 +17,7 @@ struct Franchise: Hashable, Decodable {
 
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeyString.self)
-        let urlConverter = URLConverter(Configuration.imageServer)
+        let urlConverter = URLConverter()
         self.id = try container.decode(required: "id")
         self.name = container.decode("name") ?? ""
         self.nameEnglish = container.decode("name_english") ?? ""

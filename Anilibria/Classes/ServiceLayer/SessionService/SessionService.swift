@@ -30,8 +30,9 @@ protocol SessionService: AnyObject {
 
 final class SessionServiceImp: SessionService, Loggable {
     var defaultLoggingTag: LogTag { .service }
-    
+
     private let backendRepository: BackendRepository
+    private let appConfig: AppConfigurationRepository
     private let userRepository: UserRepository
     private let tokenRepository: TokenRepository
     private let clearManager: ClearableManager
@@ -43,11 +44,13 @@ final class SessionServiceImp: SessionService, Loggable {
     init(clearManager: ClearableManager,
          backendRepository: BackendRepository,
          userRepository: UserRepository,
-         tokenRepository: TokenRepository) {
+         tokenRepository: TokenRepository,
+         appConfig: AppConfigurationRepository) {
         self.clearManager = clearManager
         self.backendRepository = backendRepository
         self.userRepository = userRepository
         self.tokenRepository = tokenRepository
+        self.appConfig = appConfig
     }
 
     func fetchState() -> AnyPublisher<SessionState?, Never> {
@@ -108,13 +111,14 @@ final class SessionServiceImp: SessionService, Loggable {
     }
 
     func getDataFor(provider: AuthProvider) -> AnyPublisher<AuthProviderData, Error> {
-        return Deferred { [unowned self] in
-            let request = AuthProviderDataRequest(provider: provider)
+        return appConfig.fetchBaseUrl().flatMap { url in
+            let request = AuthProviderDataRequest(
+                provider: provider,
+                baseUrl: url
+            )
             return self.backendRepository
                 .request(request)
         }
-        .subscribe(on: DispatchQueue.global())
-        .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
 

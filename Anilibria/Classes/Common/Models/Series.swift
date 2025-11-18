@@ -37,7 +37,7 @@ public struct Series: Codable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeyString.self)
-        let urlConverter = URLConverter(Configuration.imageServer)
+        let urlConverter = URLConverter()
         let dateConverter = DateConverter()
         let atributedContverter = AttributedConverter(css: Css.text())
         id = try container.decode(required: "id")
@@ -154,7 +154,7 @@ struct Genre: Decodable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeyString.self)
-        let urlConverter = URLConverter(Configuration.imageServer)
+        let urlConverter = URLConverter()
         id = try container.decode(required: "id")
         name = container.decode("name") ?? ""
         totalReleases = container.decode("total_releases")

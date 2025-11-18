@@ -12,7 +12,7 @@ public struct News: Hashable, Decodable {
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeyString.self)
         let dateConverter = DateConverter()
-        let urlConverter = URLConverter(Configuration.imageServer)
+        let urlConverter = URLConverter()
         self.id = try container.decode(required: "id")
         self.title = container.decode("title") ?? ""
         self.image = urlConverter.convert(from: container.decode("image", "preview"))

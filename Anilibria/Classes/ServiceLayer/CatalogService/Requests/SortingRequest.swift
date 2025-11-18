@@ -7,9 +7,10 @@
 //
 
 
-public struct SortingRequest: BackendAPIRequest {
+public struct SortingRequest: AuthorizableAPIRequest {
     typealias ResponseObject = [Sorting]
 
     let endpoint: String = "/anime/catalog/references/sorting"
     let method: NetworkManager.Method = .GET
+    var headers: [String : String] = [:]
 }

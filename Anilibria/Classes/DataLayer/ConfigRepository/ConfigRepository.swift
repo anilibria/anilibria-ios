@@ -11,30 +11,18 @@ final class ConfigRepositoryPart: DIPart {
 }
 
 protocol ConfigRepository {
-    func set(config: AniConfig)
-    func getConfig() -> AniConfig?
-
-    func getCurrentSettings() -> AniSettings?
-    func setCurrent(settings: AniSettings)
+    func set(config: AniConfigInfo)
+    func getConfig() -> AniConfigInfo
 }
 
 final class ConfigRepositoryImp: ConfigRepository {
-    private let keyConfig: String = "ANI_CONFIG_KEY"
-    private let keySettings: String = "ANI_SETTINGS_KEY"
+    private let keyConfig: String = "ANI_CONFIG_INFO_KEY"
 
-    func set(config: AniConfig) {
+    func set(config: AniConfigInfo) {
         UserDefaults.standard[keyConfig] = config
     }
 
-    func getConfig() -> AniConfig? {
-        UserDefaults.standard[keyConfig]
-    }
-
-    func setCurrent(settings: AniSettings) {
-        UserDefaults.standard[keySettings] = settings
-    }
-
-    func getCurrentSettings() -> AniSettings? {
-        UserDefaults.standard[keySettings]
+    func getConfig() -> AniConfigInfo {
+        UserDefaults.standard[keyConfig] ?? AniConfigInfo()
     }
 }

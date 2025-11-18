@@ -6,12 +6,13 @@
 //  Copyright © 2024 Иван Морозов. All rights reserved.
 //
 
-public struct CatalogRequest: BackendAPIRequest {
+public struct CatalogRequest: AuthorizableAPIRequest {
     typealias ResponseObject = PageData<Series>
 
     let endpoint: String = "/anime/catalog/releases"
     let method: NetworkManager.Method = .GET
-    let parameters: [String: Any]
+    let parameters: [String : Any]
+    var headers: [String : String] = [:]
 
     init(data: SeriesSearchData, page: Int, limit: Int) {
         var results = data.parameters

@@ -9,7 +9,7 @@ public struct User: Codable, Hashable {
         let container = try decoder.container(keyedBy: CodingKeyString.self)
         self.id = try container.decode(required: "id")
 		self.name = container.decode("nickname") ?? ""
-        self.avatar = URLConverter(Configuration.imageServer).convert(
+        self.avatar = URLConverter().convert(
             from: container.decode("avatar", "preview")
         )
     }

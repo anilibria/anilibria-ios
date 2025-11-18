@@ -8,9 +8,10 @@
 
 import Foundation
 
-public struct TeamMembersRequest: BackendAPIRequest {
+public struct TeamMembersRequest: AuthorizableAPIRequest {
     typealias ResponseObject = [TeamMember]
 
     let endpoint: String = "/teams/users"
     let method: NetworkManager.Method = .GET
+    var headers: [String : String] = [:]
 }

@@ -19,7 +19,6 @@ public class MainAppCoordinator: Loggable {
     public var container: DIContainer
 
     private let router: AppRouter
-    private let appService: AppConfigurationService
     private var bag = Set<AnyCancellable>()
 
     public var window: UIWindow? {
@@ -31,7 +30,6 @@ public class MainAppCoordinator: Loggable {
         self.configuration.setup()
         self.container = self.configuration.configuredContainer()
         self.router = AppRouter()
-        self.appService = self.container.resolve()
 
         self.log(.debug, "Dependencies are configured")
     }

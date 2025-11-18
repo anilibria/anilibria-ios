@@ -8,9 +8,10 @@
 
 import Foundation
 
-public struct PromoRequest: BackendAPIRequest {
+public struct PromoRequest: AuthorizableAPIRequest {
     typealias ResponseObject = [PromoItem]
 
     let endpoint: String = "/media/promotions"
     let method: NetworkManager.Method = .GET
+    var headers: [String : String] = [:]
 }

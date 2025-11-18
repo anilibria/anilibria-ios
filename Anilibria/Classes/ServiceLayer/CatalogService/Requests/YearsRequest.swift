@@ -7,10 +7,11 @@
 //
 
 
-public struct YearsRequest: BackendAPIRequest {
+public struct YearsRequest: AuthorizableAPIRequest {
     typealias ResponseObject = [Int]
 
     let endpoint: String = "/anime/catalog/references/years"
     let method: NetworkManager.Method = .GET
+    var headers: [String : String] = [:]
 
 }

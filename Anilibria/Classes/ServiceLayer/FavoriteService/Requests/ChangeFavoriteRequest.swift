@@ -8,12 +8,13 @@
 
 import Foundation
 
-public struct ChangeFavoriteRequest: BackendAPIRequest {
+public struct ChangeFavoriteRequest: AuthorizableAPIRequest {
     typealias ResponseObject = Unit
 
     let endpoint: String = "/accounts/users/me/favorites"
     let method: NetworkManager.Method
     let body: (any Encodable)?
+    var headers: [String : String] = [:]
 
     init(add: Bool, id: Int) {
         self.method = add ? .POST : .DELETE

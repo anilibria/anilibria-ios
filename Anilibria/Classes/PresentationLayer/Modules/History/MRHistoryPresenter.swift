@@ -52,8 +52,6 @@ extension HistoryPresenter: HistoryEventHandler {
         self.items.removeAll(where: { $0.id == series.id })
         self.showItems()
         self.playerService.removeHistory(for: series)
-            .sink()
-            .store(in: &bag)
     }
 
     func select(series: Series) {

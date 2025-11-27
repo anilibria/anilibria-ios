@@ -22,9 +22,9 @@ final class SeriesRepositoryPart: DIPart {
 protocol SeriesRepository {
     func getAllSeries() -> AnyPublisher<[Series], Never>
     func getSeriesWithPlayerContext() -> AnyPublisher<[Series], Never>
-    func add(series: Series) -> AnyPublisher<Void, Never>
+    func add(series: Series)
 
-    func set(playerContext: PlayerContext?, seriesID: Int) -> AnyPublisher<Void, Never>
+    func set(playerContext: PlayerContext?, seriesID: Int)
     func getPlayerContext(for seriesID: Int) -> AnyPublisher<PlayerContext?, Never>
 }
 
@@ -62,39 +62,35 @@ final class SeriesRepositoryImp: SeriesRepository {
             .eraseToAnyPublisher()
     }
 
-    func add(series: Series) -> AnyPublisher<Void, Never> {
-        return holder.getBackgroundContext()
-            .map { context in
-                let predicate = NSPredicate(
-                    format: "id == %i",
-                    series.id
-                )
-                let entity = context.fetch(SeriesDataEntity.self, predicate: predicate).first
-                if entity != nil {
-                    entity?.update(with: series)
-                } else {
-                    SeriesDataEntity.make(from: series, context: context)
-                }
-                context.saveIfNeeded()
+    func add(series: Series) {
+        let context = holder.context
+        context.performAndWait {
+            let predicate = NSPredicate(
+                format: "id == %i",
+                series.id
+            )
+            let entity = context.fetch(SeriesDataEntity.self, predicate: predicate).first
+            if entity != nil {
+                entity?.update(with: series)
+            } else {
+                SeriesDataEntity.make(from: series, context: context)
             }
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
+            context.saveIfNeeded()
+        }
     }
 
-    func set(playerContext: PlayerContext?, seriesID: Int) -> AnyPublisher<Void, Never> {
-        return holder.getBackgroundContext()
-            .map { context in
-                let predicate = NSPredicate(
-                    format: "id == %i",
-                    seriesID
-                )
-                if let entity = context.fetch(SeriesDataEntity.self, predicate: predicate).first {
-                    entity.update(playerContext: playerContext, context: context)
-                    context.saveIfNeeded()
-                }
+    func set(playerContext: PlayerContext?, seriesID: Int) {
+        let context = holder.context
+        context.performAndWait {
+            let predicate = NSPredicate(
+                format: "id == %i",
+                seriesID
+            )
+            if let entity = context.fetch(SeriesDataEntity.self, predicate: predicate).first {
+                entity.update(playerContext: playerContext, context: context)
+                context.saveIfNeeded()
             }
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
+        }
     }
 
     func getPlayerContext(for seriesID: Int) -> AnyPublisher<PlayerContext?, Never> {

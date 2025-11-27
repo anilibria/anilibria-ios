@@ -17,8 +17,8 @@ protocol PlayerService: AnyObject {
     func observeSettings() -> AnyPublisher<PlayerSettings, Never>
     func fetchSeriesHistory() -> AnyPublisher<[Series], Never>
     func fetchPlayerContext(for series: Series) -> AnyPublisher<PlayerContext?, Never>
-    func set(context: PlayerContext, for series: Series) -> AnyPublisher<Void, Never>
-    func removeHistory(for series: Series) -> AnyPublisher<Void, Never>
+    func set(context: PlayerContext, for series: Series)
+    func removeHistory(for series: Series)
 }
 
 final class PlayerServiceImp: PlayerService {
@@ -54,15 +54,12 @@ final class PlayerServiceImp: PlayerService {
         seriesRepository.getPlayerContext(for: series.id)
     }
 
-    func set(context: PlayerContext, for series: Series) -> AnyPublisher<Void, Never> {
+    func set(context: PlayerContext, for series: Series) {
         seriesRepository.add(series: series)
-            .flatMap { [unowned self] in
-                seriesRepository.set(playerContext: context, seriesID: series.id)
-            }
-            .eraseToAnyPublisher()
+        seriesRepository.set(playerContext: context, seriesID: series.id)
     }
 
-    func removeHistory(for series: Series) -> AnyPublisher<Void, Never> {
+    func removeHistory(for series: Series) {
         seriesRepository.set(playerContext: nil, seriesID: series.id)
     }
 }

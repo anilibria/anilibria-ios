@@ -274,8 +274,6 @@ extension PlayerViewModel {
         guard let context else { return }
         self.playerService
             .set(context: context, for: self.series)
-            .sink()
-            .store(in: &bag)
     }
 
     private func update(quality: VideoQuality) {

@@ -12,8 +12,11 @@ final class PlayerPart: DIPart {
 final class PlayerViewModel {
     private var router: PlayerRoutable!
     private var series: Series!
-    private var context: PlayerContext?
     private var bag = Set<AnyCancellable>()
+
+    private lazy var context: PlayerContext = PlayerContext(
+        quality: playerSettings.quality
+    )
 
     @Published private(set) var orientation = InterfaceOrientation.current
     @Published private(set) var playItem: PlayItem?
@@ -23,7 +26,7 @@ final class PlayerViewModel {
 
     private var videoQuality: VideoQuality = .fullHd {
         didSet {
-            context?.quality = videoQuality
+            context.quality = videoQuality
         }
     }
 
@@ -53,7 +56,8 @@ final class PlayerViewModel {
 
 extension PlayerViewModel {
     func bind(router: PlayerRoutable,
-              series: Series) {
+              series: Series,
+              episode: PlaylistItem?) {
         self.router = router
         self.series = series
 
@@ -61,10 +65,14 @@ extension PlayerViewModel {
             .fetchPlayerContext(for: self.series)
             .sink(onNext: { [weak self] context in
                 guard let self else { return }
-                let context = context ?? PlayerContext(
-                    quality: playerSettings.quality
-                )
-                run(with: context)
+                if let context {
+                    self.context = context
+                }
+                if let episode {
+                    run(item: episode)
+                } else {
+                    run()
+                }
             })
             .store(in: &bag)
     }
@@ -102,7 +110,7 @@ extension PlayerViewModel {
         playItem = PlayItem(
             index: index,
             value: item,
-            time: context?.allItems[index] ?? 0,
+            time: context.allItems[index] ?? 0,
             quality: videoQuality,
             itemsCount: series?.playlist.count ?? 0
         )
@@ -119,14 +127,14 @@ extension PlayerViewModel {
         guard let playItem else { return }
         skipViewModel.update(time: time)
         if time >= playItem.value.duration {
-            context?.time = 0
-            context?.allItems.removeValue(forKey: playItem.index)
+            context.time = 0
+            context.allItems.removeValue(forKey: playItem.index)
             save()
             seriesEnded()
         } else {
-            context?.number = playItem.index
-            context?.time = time
-            context?.allItems[playItem.index] = time
+            context.number = playItem.index
+            context.time = time
+            context.allItems[playItem.index] = time
         }
     }
 
@@ -271,19 +279,16 @@ extension PlayerViewModel {
     }
 
     func save() {
-        guard let context else { return }
         self.playerService
             .set(context: context, for: self.series)
     }
 
     private func update(quality: VideoQuality) {
-        if let time = context?.time {
-            videoQuality = quality
-            playItem?.set(quality: quality, time: time)
-        }
+        videoQuality = quality
+        playItem?.set(quality: quality, time: context.time)
     }
 
-    private func run(with context: PlayerContext) {
+    private func run() {
         self.context = context
         let index = context.number
         let time = context.time
@@ -328,7 +333,7 @@ struct PlayItem {
         if let ordinal = value.ordinal  {
             return "\(NSNumber(value: ordinal))"
         }
-        return value.title
+        return value.title ?? "1"
     }
 
     init(index: Int,

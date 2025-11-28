@@ -46,7 +46,7 @@ public class CollectionContext {
         }
 
         guard let cell = self.collectioView?.dequeueReusableCell(withReuseIdentifier: nibName, for: indexPath) as? CellType else {
-            preconditionFailure("collectioView is nil or cell not registered")
+            preconditionFailure("collectionView is nil or cell not registered")
         }
 
         return cell

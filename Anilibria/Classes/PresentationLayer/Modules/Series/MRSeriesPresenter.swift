@@ -215,6 +215,10 @@ extension SeriesPresenter: SeriesEventHandler {
         self.router.openPlayer(series: self.series)
     }
 
+    func episodes() {
+        self.router.openEpisodes(for: self.series)
+    }
+
     func download(torrent: Torrent) {
         var name = self.series.name?.english ?? ""
         if name.isEmpty {

@@ -1,38 +1,51 @@
+//
+//  EpisodesViewController.swift
+//  AniLiberty
+//
+//  Created by Ivan Morozov on 28.11.2025.
+//  Copyright © 2025 Иван Морозов. All rights reserved.
+//
+
 import UIKit
 
-// MARK: - View Controller
-
-final class HistoryViewController: BaseCollectionViewController {
-    var handler: HistoryEventHandler!
-
+final class EpisodesViewController: BaseCollectionViewController {
     private let searchView: SearchView? = SearchView(
         frame: CGRect(origin: .zero, size: .init(width: 320, height: 40))
     )
+
+    private lazy var reverseButton = BarButton(
+        image: .System.upDownArrows,
+        imageEdge: inset(5, 5, 5, 5)
+    ) { [weak self] in
+        self?.viewModel?.toggleDirection()
+    }
+
     private let stubView: StubView? = StubView.fromNib()?.apply {
-        $0.set(image: .System.history, color: .Text.secondary)
+        $0.set(image: .System.play, color: .Text.secondary)
         $0.title = L10n.Stub.title
     }
 
     private let sectionAdapter = SectionAdapter([])
-    private lazy var seriesHandler = RemovableSeriesCellAdapterHandler(
+
+    var viewModel: EpisodesViewModel?
+
+    private lazy var episodesHandler = EpisodeCellAdapterHandler(
         select: { [weak self] item in
             self?.searchView?.resignFirstResponder()
-            self?.handler.select(series: item)
-        },
-        delete: { [weak self] item in
-            self?.handler.delete(series: item)
+            self?.viewModel?.play(item: item)
         }
     )
-
-    // MARK: - Life cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupNavbar()
         self.addKeyboardObservers()
-        self.handler.didLoad()
-        self.sectionAdapter.estimatedHeight = 140
+        self.sectionAdapter.estimatedHeight = 80
         self.collectionView.contentInset.top = 10
+
+        viewModel?.items.removeDuplicates().sink { [weak self] items in
+            self?.set(items: items)
+        }.store(in: &subscribers)
     }
 
     private func setupNavbar() {
@@ -40,10 +53,12 @@ final class HistoryViewController: BaseCollectionViewController {
             self.navigationItem.titleView = value
             value.querySequence()
                 .sink(onNext: { [weak self] text in
-                    self?.handler.search(query: text)
+                    self?.viewModel?.search(query: text)
                 })
                 .store(in: &subscribers)
         }
+
+        navigationItem.setRightBarButtonItems([reverseButton], animated: false)
     }
 
     override func keyBoardWillShow(keyboardHeight: CGFloat) {
@@ -58,16 +73,16 @@ final class HistoryViewController: BaseCollectionViewController {
 
     func updateEmptyView() {
         guard let searchView else { return }
-        var text = L10n.Stub.History.message
-        if searchView.isSearching {
-            text = L10n.Stub.messageNotFound(searchView.text)
+        stubView?.message = if searchView.isSearching {
+            L10n.Stub.messageNotFound(searchView.text)
+        } else {
+            ""
         }
-        stubView?.message = text
     }
 }
 
-extension HistoryViewController: HistoryViewBehavior {
-    func set(items: [Series]) {
+extension EpisodesViewController {
+    func set(items: [PlaylistItem]) {
         if items.isEmpty {
             self.updateEmptyView()
             self.collectionView.backgroundView = self.stubView
@@ -76,7 +91,7 @@ extension HistoryViewController: HistoryViewBehavior {
         }
 
         sectionAdapter.set(items.map {
-            RemovableSeriesCellAdapter(viewModel: $0, handler: seriesHandler)
+            EpisodeCellAdapter(viewModel: $0, handler: episodesHandler)
         })
         self.set(sections: [sectionAdapter])
     }

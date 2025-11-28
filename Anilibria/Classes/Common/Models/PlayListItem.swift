@@ -30,7 +30,7 @@ public enum VideoQuality: Int, CaseIterable, Codable {
 
 public struct PlaylistItem: Codable, Hashable {
     let id: String
-    let title: String
+    let title: String?
     let preview: URL?
     let ordinal: Double?
     let video: [VideoQuality: URL]
@@ -53,6 +53,7 @@ public struct PlaylistItem: Codable, Hashable {
     enum CodingKeys: String, CodingKey {
         case id
         case name
+        case nameEnglish = "name_english"
         case ordinal
         case duration
 
@@ -73,7 +74,7 @@ public struct PlaylistItem: Codable, Hashable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let urlConverter = URLConverter()
         self.id = try container.decode(required: .id)
-        self.title = container.decode(.name) ?? ""
+        self.title = container.decode(.name) ?? container.decode(.nameEnglish)
         self.ordinal = container.decode(.ordinal)
 
         let openingStart: Int? = container.decode(.opening, .start)

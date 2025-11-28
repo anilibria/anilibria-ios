@@ -25,6 +25,7 @@ extension UIImage {
         static var calendar: UIImage { create(system: "calendar") }
         static var xmark: UIImage { create(system: "xmark") }
         static var checkmark: UIImage { create(system: "checkmark") }
+        static var upDownArrows: UIImage { create(system: "arrow.up.arrow.down") }
 
         static var dots: UIImage {
             create(system: "ellipsis")

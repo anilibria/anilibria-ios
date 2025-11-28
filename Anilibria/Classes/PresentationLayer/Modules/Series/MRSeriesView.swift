@@ -10,6 +10,7 @@ final class SeriesViewController: BaseViewController {
     @IBOutlet var secondTitleLabel: UILabel!
     @IBOutlet var favoriteView: SeriesFavoriteView!
     @IBOutlet var typeView: SeriesCollectionTypeView!
+    @IBOutlet var episodesButton: UIButton!
     @IBOutlet var tagsView: TagsView!
 
     @IBOutlet var paramsTextView: AttributeLinksView!
@@ -96,6 +97,7 @@ final class SeriesViewController: BaseViewController {
         self.navigationItem.title = L10n.Screen.Series.title
         self.supportLabel.text = L10n.Common.donatePls
         self.relatedTitleLabel.text = L10n.Common.related
+        self.episodesButton.setTitle(L10n.Screen.Series.episodes, for: .normal)
         self.handler.didLoad()
     }
 
@@ -164,6 +166,10 @@ final class SeriesViewController: BaseViewController {
         self.handler.selectCollection(activity)
     }
 
+    @IBAction func selectEpisodes(_ sender: Any) {
+        self.handler.episodes()
+    }
+
     @IBAction func weekDaysAction(_ sender: Any) {
         self.handler.schedule()
     }
@@ -203,6 +209,7 @@ extension SeriesViewController: SeriesViewBehavior {
         }
         self.header.configure(series)
         self.navigationItem.backButtonTitle = series.name?.main
+        self.episodesButton.isHidden = series.playlist.isEmpty
 
         self.set(name: series.name)
         self.setParams(from: series)

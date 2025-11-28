@@ -55,11 +55,10 @@ final class PlayerServiceImp: PlayerService {
     }
 
     func set(context: PlayerContext, for series: Series) {
-        seriesRepository.add(series: series)
-        seriesRepository.set(playerContext: context, seriesID: series.id)
+        seriesRepository.set(playerContext: context, series: series)
     }
 
     func removeHistory(for series: Series) {
-        seriesRepository.set(playerContext: nil, seriesID: series.id)
+        seriesRepository.set(playerContext: nil, series: series)
     }
 }

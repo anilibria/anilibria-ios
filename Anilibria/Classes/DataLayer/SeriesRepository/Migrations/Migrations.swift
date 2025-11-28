@@ -37,9 +37,10 @@ extension SeriesRepositoryImp {
     private func migrate(history: HistoryHolder) {
         holder.context.performAndWait {
             history.items.reversed().enumerated().forEach { offset, data in
+                guard let context = data.context else { return }
                 let entity = SeriesDataEntity.make(from: data.series, context: holder.context)
                 entity?.update(
-                    playerContext: data.context,
+                    playerContext: context,
                     updatedAt: Date(timeIntervalSince1970: TimeInterval(offset)),
                     context: holder.context
                 )

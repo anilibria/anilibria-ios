@@ -22,9 +22,8 @@ final class SeriesRepositoryPart: DIPart {
 protocol SeriesRepository {
     func getAllSeries() -> AnyPublisher<[Series], Never>
     func getSeriesWithPlayerContext() -> AnyPublisher<[Series], Never>
-    func add(series: Series)
 
-    func set(playerContext: PlayerContext?, seriesID: Int)
+    func set(playerContext: PlayerContext?, series: Series)
     func getPlayerContext(for seriesID: Int) -> AnyPublisher<PlayerContext?, Never>
 }
 
@@ -79,17 +78,23 @@ final class SeriesRepositoryImp: SeriesRepository {
         }
     }
 
-    func set(playerContext: PlayerContext?, seriesID: Int) {
+    func set(playerContext: PlayerContext?, series: Series) {
         let context = holder.context
         context.performAndWait {
             let predicate = NSPredicate(
                 format: "id == %i",
-                seriesID
+                series.id
             )
-            if let entity = context.fetch(SeriesDataEntity.self, predicate: predicate).first {
-                entity.update(playerContext: playerContext, context: context)
+            if let playerContext {
+                let entity = context.fetch(SeriesDataEntity.self, predicate: predicate)
+                    .first?
+                    .apply { $0.update(with: series) } ?? SeriesDataEntity.make(from: series, context: context)
+                entity?.update(playerContext: playerContext, context: context)
                 context.saveIfNeeded()
+            } else {
+                context.deleteAll(SeriesDataEntity.self, predicate: predicate)
             }
+            context.saveIfNeeded()
         }
     }
 
@@ -142,21 +147,18 @@ extension SeriesDataEntity {
     }
 
     func update(
-        playerContext: PlayerContext?,
+        playerContext: PlayerContext,
         updatedAt: Date = Date(),
         context: NSManagedObjectContext
     ) {
-        let data = playerContext.flatMap { try? JSONEncoder().encode($0) }
+        guard let data = try? JSONEncoder().encode(playerContext) else {
+            return
+        }
 
         if let current = self.playerContext {
-            if let data {
-                current.data = data
-                current.updatedAt = updatedAt
-            } else {
-                context.delete(current)
-
-            }
-        } else if let data {
+            current.data = data
+            current.updatedAt = updatedAt
+        } else {
             let value = PlayerContextEntity(context: context)
             value.data = data
             value.seriesID = self.id

@@ -31,11 +31,12 @@ class EpisodesViewModel {
     }
 
     func search(query: String) {
+        let query = query.lowercased()
         DispatchQueue.global().async { [weak self] in
             var result = self?.series.playlist ?? []
             if query.isEmpty == false {
                 result = result.filter {
-                    $0.fullName.contains(where: { $0.lowercased().contains(query) })
+                    $0.fullName.lowercased().contains(query)
                 }
             }
 

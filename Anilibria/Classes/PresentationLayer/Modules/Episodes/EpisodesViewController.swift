@@ -54,6 +54,7 @@ final class EpisodesViewController: BaseCollectionViewController {
             value.querySequence()
                 .sink(onNext: { [weak self] text in
                     self?.viewModel?.search(query: text)
+                    self?.stubView?.message = L10n.Stub.messageNotFound(text)
                 })
                 .store(in: &subscribers)
         }
@@ -70,21 +71,11 @@ final class EpisodesViewController: BaseCollectionViewController {
         super.keyBoardWillHide()
         self.collectionView.contentInset.bottom = self.defaultBottomInset
     }
-
-    func updateEmptyView() {
-        guard let searchView else { return }
-        stubView?.message = if searchView.isSearching {
-            L10n.Stub.messageNotFound(searchView.text)
-        } else {
-            ""
-        }
-    }
 }
 
 extension EpisodesViewController {
     func set(items: [PlaylistItem]) {
         if items.isEmpty {
-            self.updateEmptyView()
             self.collectionView.backgroundView = self.stubView
         } else {
             self.collectionView.backgroundView = nil

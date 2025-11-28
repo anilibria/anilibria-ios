@@ -15,6 +15,7 @@ protocol PlayerService: AnyObject {
     func update(settings: PlayerSettings)
 
     func observeSettings() -> AnyPublisher<PlayerSettings, Never>
+    func observePlayerContextUpdates() -> AnyPublisher<PlayerContextUpdates, Never>
     func fetchSeriesHistory() -> AnyPublisher<[Series], Never>
     func fetchPlayerContext(for series: Series) -> AnyPublisher<PlayerContext?, Never>
     func set(context: PlayerContext, for series: Series)
@@ -25,6 +26,7 @@ final class PlayerServiceImp: PlayerService {
     private let settingsRepository: PlayerSettingsRepository
     private let seriesRepository: SeriesRepository
     private let settings: CurrentValueSubject<PlayerSettings, Never>
+    private let contextUpdates: PassthroughSubject<PlayerContextUpdates, Never> = .init()
 
     init(settingsRepository: PlayerSettingsRepository,
          seriesRepository: SeriesRepository) {
@@ -39,6 +41,10 @@ final class PlayerServiceImp: PlayerService {
 
     func observeSettings() -> AnyPublisher<PlayerSettings, Never> {
         settings.eraseToAnyPublisher()
+    }
+
+    func observePlayerContextUpdates() -> AnyPublisher<PlayerContextUpdates, Never> {
+        contextUpdates.eraseToAnyPublisher()
     }
 
     func update(settings: PlayerSettings) {
@@ -56,9 +62,16 @@ final class PlayerServiceImp: PlayerService {
 
     func set(context: PlayerContext, for series: Series) {
         seriesRepository.set(playerContext: context, series: series)
+        contextUpdates.send(.added(series: series))
     }
 
     func removeHistory(for series: Series) {
         seriesRepository.set(playerContext: nil, series: series)
+        contextUpdates.send(.removed(series: series))
     }
+}
+
+enum PlayerContextUpdates {
+    case removed(series: Series)
+    case added(series: Series)
 }

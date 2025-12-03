@@ -8,12 +8,13 @@
 
 import Foundation
 
-public struct ChangeUserCollectionRequest: BackendAPIRequest {
+public struct ChangeUserCollectionRequest: AuthorizableAPIRequest {
     typealias ResponseObject = Unit
 
     let endpoint: String = "/accounts/users/me/collections"
     let method: NetworkManager.Method
     let body: (any Encodable)?
+    var headers: [String : String] = [:]
 
     init(id: Int, type: UserCollectionType?) {
         if let type {

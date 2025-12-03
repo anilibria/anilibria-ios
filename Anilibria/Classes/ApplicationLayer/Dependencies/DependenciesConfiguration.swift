@@ -20,10 +20,14 @@ public class DependenciesConfigurationBase: DependenciesConfiguration, Loggable 
         return .unnamed
     }
 
-    public func configuredContainer() -> DIContainer {
+    private lazy var container: DIContainer = {
         let container = DIContainer()
         container.append(framework: AppFramework.self)
         return container
+    }()
+
+    public func configuredContainer() -> DIContainer {
+        container
     }
 
     // MARK: - Setup
@@ -32,6 +36,8 @@ public class DependenciesConfigurationBase: DependenciesConfiguration, Loggable 
         self.setupMetrica()
         self.setupLoader()
         self.setupModulesDependencies()
+        let modifier = ImageRequestModifier(appConfig: container.resolve())
+        KingfisherManager.shared.defaultOptions.append(.requestModifier(modifier))
     }
 
     private func setupMetrica() {

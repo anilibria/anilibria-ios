@@ -8,9 +8,10 @@
 
 import Foundation
 
-public struct FavoriteFilterAgeRatingsRequest: BackendAPIRequest {
+public struct FavoriteFilterAgeRatingsRequest: AuthorizableAPIRequest {
     typealias ResponseObject = [AgeRating]
 
     let endpoint: String = "/accounts/users/me/favorites/references/age-ratings"
     let method: NetworkManager.Method = .GET
+    var headers: [String : String] = [:]
 }

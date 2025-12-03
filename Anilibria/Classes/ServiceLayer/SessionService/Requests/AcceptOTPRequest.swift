@@ -8,12 +8,13 @@
 
 import Foundation
 
-public struct AcceptOTPRequest: BackendAPIRequest {
+public struct AcceptOTPRequest: AuthorizableAPIRequest {
     typealias ResponseObject = Unit
 
     let endpoint: String = "/accounts/otp/accept"
     let method: NetworkManager.Method = .POST
     let body: (any Encodable)?
+    var headers: [String : String] = [:]
 
     init(code: String) {
         self.body = ["code": code]

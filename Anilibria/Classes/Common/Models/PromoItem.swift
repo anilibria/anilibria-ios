@@ -22,7 +22,7 @@ public struct PromoItem: Hashable, Decodable {
 
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeyString.self)
-        let urlConverter = URLConverter(Configuration.imageServer)
+        let urlConverter = URLConverter()
         self.id = try container.decode(required: "id")
         self.image = urlConverter.convert(from: container.decode("image", "preview"))
         self.info = container.decode("description") ?? ""

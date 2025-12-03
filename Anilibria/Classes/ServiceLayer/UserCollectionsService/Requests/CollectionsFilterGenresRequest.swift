@@ -8,9 +8,10 @@
 
 import Foundation
 
-public struct CollectionsFilterGenresRequest: BackendAPIRequest {
+public struct CollectionsFilterGenresRequest: AuthorizableAPIRequest {
     typealias ResponseObject = [Genre]
 
     let endpoint: String = "/accounts/users/me/collections/references/genres"
     let method: NetworkManager.Method = .GET
+    var headers: [String : String] = [:]
 }

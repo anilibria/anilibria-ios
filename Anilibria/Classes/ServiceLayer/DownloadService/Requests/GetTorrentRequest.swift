@@ -8,15 +8,13 @@
 
 import Foundation
 
-public struct GetTorrentRequest: BackendAPIRequest {
+public struct GetTorrentRequest: AuthorizableAPIRequest {
     typealias ResponseObject = Data
 
     let endpoint: String
     let method: NetworkManager.Method = .GET
 
-    var headers: [String: String] {
-        return ["Content-Type": "application/x-bittorrent"]
-    }
+    var headers: [String: String] = ["Content-Type": "application/x-bittorrent"]
 
     init(id: Int) {
         endpoint = "anime/torrents/\(id)/file"

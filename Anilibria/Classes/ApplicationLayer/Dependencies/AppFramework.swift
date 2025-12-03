@@ -37,7 +37,7 @@ private class RepositoriesPart: DIPart {
 
 private class ServicesPart: DIPart {
     static let parts: [DIPart.Type] = [
-        AppConfigurationServicePart.self,
+        AppConfigurationRepositoryPart.self,
         PlayerServicePart.self,
         FavoriteServicePart.self,
         SessionServicePart.self,
@@ -58,7 +58,6 @@ private class ServicesPart: DIPart {
 
 private class PersentersPart: DIPart {
     static let parts: [DIPart.Type] = [
-        ConfigurationPart.self,
         MainContainerPart.self,
         HistoryPart.self,
         SettingsPart.self,

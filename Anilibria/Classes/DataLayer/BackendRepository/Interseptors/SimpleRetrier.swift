@@ -16,7 +16,13 @@ struct SimpleRetrier: LoadRetrier {
         self.handler = handler
     }
 
-    func need(retry request: URLRequest, error: Error, retryNumber: Int, completion: @escaping RetryCompletion) {
+
+    func need(
+        retry request: any BackendAPIRequest,
+        error: any Error,
+        retryNumber: Int,
+        completion: @escaping RetryCompletion
+    ) {
         handler(error, retryNumber, completion)
     }
 }

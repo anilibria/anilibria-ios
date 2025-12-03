@@ -6,7 +6,7 @@ protocol BackendAPIRequest {
     /// Server url
     ///
     /// Example: "http://example.com"
-    var baseUrl: String { get }
+    var baseUrl: String? { get }
 
     /// Path of request without baseUrl and version of API
     ///
@@ -42,8 +42,8 @@ protocol BackendAPIRequest {
 }
 
 extension BackendAPIRequest {
-    var baseUrl: String {
-        return Configuration.server
+    var baseUrl: String? {
+        return nil
     }
 
     var apiVersion: String {

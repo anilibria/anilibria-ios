@@ -8,11 +8,12 @@
 
 import Foundation
 
-public struct FranchiseRequest: BackendAPIRequest {
+public struct FranchiseRequest: AuthorizableAPIRequest {
     typealias ResponseObject = [Franchise]
 
     let endpoint: String
     let method: NetworkManager.Method = .GET
+    var headers: [String : String] = [:]
 
     init(seriesID: Int) {
         self.endpoint = "/anime/franchises/release/\(seriesID)"

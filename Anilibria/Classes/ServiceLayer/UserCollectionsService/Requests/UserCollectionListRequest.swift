@@ -8,12 +8,13 @@
 
 import Foundation
 
-public struct UserCollectionListRequest: BackendAPIRequest {
+public struct UserCollectionListRequest: AuthorizableAPIRequest {
     typealias ResponseObject = PageData<Series>
 
     let endpoint: String = "/accounts/users/me/collections/releases"
     let method: NetworkManager.Method = .GET
     let parameters: [String: Any]
+    var headers: [String : String] = [:]
 
     init(type: UserCollectionType, data: SeriesSearchData, page: Int, limit: Int) {
         var results = data.parameters

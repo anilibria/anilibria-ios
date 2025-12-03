@@ -8,9 +8,10 @@
 
 import Foundation
 
-public struct GetUserCollectionDataRequest: BackendAPIRequest {
+public struct GetUserCollectionDataRequest: AuthorizableAPIRequest {
     typealias ResponseObject = [UserCollectionData]
 
     let endpoint: String = "/accounts/users/me/collections/ids"
     let method: NetworkManager.Method = .GET
+    var headers: [String : String] = [:]
 }

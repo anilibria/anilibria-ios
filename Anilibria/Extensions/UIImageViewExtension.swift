@@ -8,10 +8,7 @@ extension UIImageView {
                          processor: ImageProcessor? = nil,
                          completionHandler: ((Result<RetrieveImageResult, KingfisherError>) -> Void)? = nil,
                          maxRetryCount: Int = 5) {
-        guard let url = url else {
-            completionHandler?(.failure(.requestError(reason: .emptyRequest)))
-            return
-        }
+        self.kf.cancelDownloadTask()
         var options: KingfisherOptionsInfo = [.transition(.fade(0.2))]
         if let item = processor {
             options.append(.processor(item))
@@ -21,7 +18,17 @@ extension UIImageView {
                 DelayRetryStrategy(maxRetryCount: maxRetryCount, retryInterval: .seconds(0.1))
             )
         )
-        self.kf.cancelDownloadTask()
+
+        guard let url = url else {
+            self.kf.setImage(
+                with: nil as Source?,
+                placeholder: PlaceholderAdapter(placeholder),
+                options: options,
+                completionHandler: completionHandler
+            )
+            return
+        }
+
         self.kf.setImage(
             with: KF.ImageResource(downloadURL: url),
             placeholder: PlaceholderAdapter(placeholder),

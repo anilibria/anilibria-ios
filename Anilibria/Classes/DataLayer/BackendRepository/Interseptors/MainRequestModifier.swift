@@ -16,19 +16,18 @@ final class MainRequestModifier: AsyncRequestModifier {
         self.tokenRepository = tokenRepository
     }
 
-    func modify(_ urlRequest: URLRequest, completion: @escaping (URLRequest) -> Void) {
-        if urlRequest.url?.absoluteString.hasPrefix(Configuration.server) != true {
-            completion(urlRequest)
-            return
+    func modify(_ request: any BackendAPIRequest, completion: @escaping (any BackendAPIRequest) -> Void) {
+        guard var result = request as? any AuthorizableAPIRequest else {
+            return completion(request)
         }
+
         var bag: AnyCancellable?
         bag = tokenRepository.getToken().sink { token in
             if let token {
-                var result = urlRequest
-                result.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+                result.headers["Authorization"] = "Bearer \(token)"
                 completion(result)
             } else {
-                completion(urlRequest)
+                completion(request)
             }
             bag?.cancel()
         }

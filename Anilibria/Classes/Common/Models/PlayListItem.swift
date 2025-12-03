@@ -1,6 +1,6 @@
 import Foundation
 
-public enum VideoQuality: Int, CaseIterable, Codable {
+public enum VideoQuality: Int32, CaseIterable, Codable {
     case fullHd
     case hd
     case sd
@@ -38,12 +38,8 @@ public struct PlaylistItem: Codable, Hashable {
     let endingRange: Range<Int>?
     let duration: TimeInterval
 
-    var fullName: String {
-        let items: [String?] = [
-            ordinal.map { "\(NSNumber(value: $0))" },
-            title
-        ]
-        return items.compactMap({ $0 }).joined(separator: ". ")
+    var episode: String? {
+        ordinal.map { "\(NSNumber(value: $0)) \(L10n.Common.episode)" }
     }
 
     public func supportedQualities() -> [VideoQuality] {

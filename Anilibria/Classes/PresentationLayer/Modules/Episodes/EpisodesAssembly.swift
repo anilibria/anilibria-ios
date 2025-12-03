@@ -9,11 +9,11 @@
 import UIKit
 
 final class EpisodesAssembly {
-    static func createModule(series: Series, parent: Router? = nil) -> EpisodesViewController {
+    static func createModule(userID: Int?, series: Series, parent: Router? = nil) -> EpisodesViewController {
         let module = EpisodesViewController()
         let router = EpisodesRouter(view: module, parent: parent)
         module.viewModel = MainAppCoordinator.shared.container.resolve()
-        module.viewModel?.bind(series: series, router: router)
+        module.viewModel?.bind(userID: userID, series: series, router: router)
         return module
     }
 }
@@ -21,12 +21,12 @@ final class EpisodesAssembly {
 // MARK: - Route
 
 protocol EpisodesRoute {
-    func openEpisodes(for series: Series)
+    func openEpisodes(userID: Int?, series: Series)
 }
 
 extension EpisodesRoute where Self: RouterProtocol {
-    func openEpisodes(for series: Series) {
-        let module = EpisodesAssembly.createModule(series: series, parent: self)
+    func openEpisodes(userID: Int?, series: Series) {
+        let module = EpisodesAssembly.createModule(userID: userID, series: series, parent: self)
         PushRouter(target: module, parent: controller).move()
     }
 }

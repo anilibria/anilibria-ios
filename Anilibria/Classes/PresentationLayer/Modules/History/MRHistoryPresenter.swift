@@ -37,7 +37,7 @@ extension HistoryPresenter: HistoryEventHandler {
 
     func didLoad() {
         self.playerService
-            .observePlayerContextUpdates()
+            .observeHistoryUpdates()
             .sink { [weak self] update in
                 guard let self else { return }
                 switch update {

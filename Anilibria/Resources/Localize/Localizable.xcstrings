@@ -649,6 +649,23 @@
         }
       }
     },
+    "common.episode" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "episode"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "эпизод"
+          }
+        }
+      }
+    },
     "common.filter_search.title" : {
       "extractionState" : "migrated",
       "localizations" : {
@@ -1075,6 +1092,23 @@
         }
       }
     },
+    "common.unwatch_all" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unmark all episodes as watched"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Снять все отметки о просмотре"
+          }
+        }
+      }
+    },
     "common.vacation" : {
       "extractionState" : "migrated",
       "localizations" : {
@@ -1088,6 +1122,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "В отпуске"
+          }
+        }
+      }
+    },
+    "common.watch_all" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mark all episodes as watched"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отметить все эпизоды как просмотренные"
           }
         }
       }

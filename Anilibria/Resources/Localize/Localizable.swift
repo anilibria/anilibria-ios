@@ -343,6 +343,10 @@ enum L10n {
         static var `enabled`: String {
             return L10n.tr("Localizable", "common.enabled")
         }
+        /// episode
+        static var `episode`: String {
+            return L10n.tr("Localizable", "common.episode")
+        }
         /// Guest
         static var `guest`: String {
             return L10n.tr("Localizable", "common.guest")
@@ -391,9 +395,17 @@ enum L10n {
         static var `tomorrow`: String {
             return L10n.tr("Localizable", "common.tomorrow")
         }
+        /// Unmark all episodes as watched
+        static var `unwatchAll`: String {
+            return L10n.tr("Localizable", "common.unwatch_all")
+        }
         /// Vacation
         static var `vacation`: String {
             return L10n.tr("Localizable", "common.vacation")
+        }
+        /// Mark all episodes as watched
+        static var `watchAll`: String {
+            return L10n.tr("Localizable", "common.watch_all")
         }
         /// Yesterday
         static var `yesterday`: String {

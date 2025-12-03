@@ -10,6 +10,7 @@ import Foundation
 
 protocol EpisodesRoutable: BaseRoutable,
                            BackRoute,
-                           PlayerRoute {}
+                           PlayerRoute,
+                           ActionSheetRoute {}
 
 final class EpisodesRouter: BaseRouter, EpisodesRoutable {}

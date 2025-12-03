@@ -7,11 +7,20 @@
 //
 
 import Foundation
+import UIKit
 
 final class PlaylistItemSelectionModel: ActionSheetGroupSource {
     private let selected: PlaylistItem
     private var items: [ChoiceItem] = []
     private var reloadItems: (([ChoiceGroup]) -> Void)?
+
+    private let episodeNumberBuilder = AttributeStringBuilder()
+        .set(font: UIFont.font(ofSize: 17, weight: .semibold))
+        .set(color: .Text.monoLight)
+
+    private let episodeNameBuilder = AttributeStringBuilder()
+        .set(font: UIFont.font(ofSize: 15, weight: .regular))
+        .set(color: .Text.monoLight.withAlphaComponent(0.8))
 
     var didSelect: ((PlaylistItem) -> Void)?
 
@@ -36,9 +45,21 @@ final class PlaylistItemSelectionModel: ActionSheetGroupSource {
         }
 
         self.items = series.playlist.map { value in
-            ChoiceItem(
+            var result = NSMutableAttributedString()
+            if let number = value.episode {
+                result = episodeNumberBuilder.build(number)
+            }
+            if let name = value.title {
+                if result.string.isEmpty {
+                    result = episodeNumberBuilder.build(name)
+                } else {
+                    result = result + NSMutableAttributedString(string: "\n") + episodeNameBuilder.build(name)
+                }
+            }
+
+            return ChoiceItem(
                 value: value,
-                title: value.fullName,
+                title: result,
                 isSelected: value == selected,
                 didSelect: didSelect
             )
@@ -55,7 +76,7 @@ final class PlaylistItemSelectionModel: ActionSheetGroupSource {
 
         if !text.isEmpty {
             result = result.filter {
-                $0.title.localizedCaseInsensitiveContains(text)
+                $0.title.string.localizedCaseInsensitiveContains(text)
             }
         }
 

@@ -26,6 +26,14 @@ extension UIImage {
         static var xmark: UIImage { create(system: "xmark") }
         static var checkmark: UIImage { create(system: "checkmark") }
         static var upDownArrows: UIImage { create(system: "arrow.up.arrow.down") }
+        static var app: UIImage { create(system: "app") }
+        static var checkmarkApp: UIImage { create(system: "checkmark.app") }
+        static var checkmarkAppFill: UIImage { create(system: "checkmark.app.fill") }
+
+        static var pencil: UIImage {
+            create(system: "pencil")
+                .applyingSymbolConfiguration(.init(weight: .black)) ?? UIImage()
+        }
 
         static var dots: UIImage {
             create(system: "ellipsis")

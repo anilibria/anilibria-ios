@@ -9,7 +9,7 @@
 import Foundation
 
 // Migration from old format
-extension SeriesRepositoryImp {
+extension HistoryRepositoryImp {
     private struct HistoryHolder: Codable {
         var items: [HistoryData]
     }
@@ -37,15 +37,40 @@ extension SeriesRepositoryImp {
     private func migrate(history: HistoryHolder) {
         holder.context.performAndWait {
             history.items.reversed().enumerated().forEach { offset, data in
-                guard let context = data.context else { return }
-                let entity = SeriesDataEntity.make(from: data.series, context: holder.context)
-                entity?.update(
-                    playerContext: context,
+                SeriesDataEntity.make(
+                    from: data.series,
+                    episodeIndex: data.context?.number ?? -1,
                     updatedAt: Date(timeIntervalSince1970: TimeInterval(offset)),
                     context: holder.context
                 )
             }
             holder.context.saveIfNeeded()
         }
+    }
+}
+
+private struct PlayerContext: Codable {
+    var quality: VideoQuality
+    var number: Int = 0
+    var time: Double = 0
+    var allItems: [Int: Double] = [:]
+
+    enum CodingKeys: String, CodingKey {
+        case quality
+        case number
+        case time
+        case allItems
+    }
+
+    public init(quality: VideoQuality) {
+        self.quality = quality
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        quality = container.decode(.quality) ?? .fullHd
+        number = container.decode(.number) ?? 0
+        time = container.decode(.time) ?? 0
+        allItems = container.decode(.allItems) ?? [:]
     }
 }

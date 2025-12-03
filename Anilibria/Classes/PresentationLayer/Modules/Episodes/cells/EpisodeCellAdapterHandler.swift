@@ -9,13 +9,13 @@
 import UIKit
 
 struct EpisodeCellAdapterHandler {
-    let select: ((PlaylistItem) -> Void)?
+    let select: ((EpisodeViewModel) -> Void)?
 }
 
-final class EpisodeCellAdapter: BaseCellAdapter<PlaylistItem> {
+final class EpisodeCellAdapter: BaseCellAdapter<EpisodeViewModel> {
     private let handler: EpisodeCellAdapterHandler
 
-    init(viewModel: PlaylistItem, handler: EpisodeCellAdapterHandler) {
+    init(viewModel: EpisodeViewModel, handler: EpisodeCellAdapterHandler) {
         self.handler = handler
         super.init(viewModel: viewModel)
     }

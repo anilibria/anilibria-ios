@@ -13,11 +13,20 @@ final class EpisodesViewController: BaseCollectionViewController {
         frame: CGRect(origin: .zero, size: .init(width: 320, height: 40))
     )
 
+    private var activity: ActivityDisposable?
+
     private lazy var reverseButton = BarButton(
         image: .System.upDownArrows,
         imageEdge: inset(5, 5, 5, 5)
     ) { [weak self] in
         self?.viewModel?.toggleDirection()
+    }
+
+    private lazy var optionsButton = BarButton(
+        image: .System.pencil,
+        imageEdge: inset(5, 5, 5, 5)
+    ) { [weak self] in
+        self?.viewModel?.showOptions()
     }
 
     private let stubView: StubView? = StubView.fromNib()?.apply {
@@ -40,12 +49,14 @@ final class EpisodesViewController: BaseCollectionViewController {
         super.viewDidLoad()
         self.setupNavbar()
         self.addKeyboardObservers()
-        self.sectionAdapter.estimatedHeight = 80
+        self.sectionAdapter.estimatedHeight = 182
         self.collectionView.contentInset.top = 10
 
         viewModel?.items.removeDuplicates().sink { [weak self] items in
             self?.set(items: items)
         }.store(in: &subscribers)
+
+        viewModel?.didLoad()
     }
 
     private func setupNavbar() {
@@ -59,7 +70,7 @@ final class EpisodesViewController: BaseCollectionViewController {
                 .store(in: &subscribers)
         }
 
-        navigationItem.setRightBarButtonItems([reverseButton], animated: false)
+        navigationItem.setRightBarButtonItems([optionsButton, reverseButton], animated: false)
     }
 
     override func keyBoardWillShow(keyboardHeight: CGFloat) {
@@ -74,7 +85,12 @@ final class EpisodesViewController: BaseCollectionViewController {
 }
 
 extension EpisodesViewController {
-    func set(items: [PlaylistItem]) {
+    func set(items: [EpisodeViewModel]?) {
+        guard let items else {
+            activity = showLoading(fullscreen: false)
+            return
+        }
+        activity = nil
         if items.isEmpty {
             self.collectionView.backgroundView = self.stubView
         } else {

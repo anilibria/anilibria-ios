@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="24299" systemVersion="25B78" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="PlayerContextEntity" representedClassName="PlayerContextEntity" syncable="YES" codeGenerationType="class">
-        <attribute name="data" optional="YES" attributeType="Binary"/>
+    <entity name="EpisodeContextEntity" representedClassName="EpisodeContextEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="episodeID" attributeType="String"/>
+        <attribute name="isWatched" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="seriesID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="time" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <relationship name="seriesData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SeriesDataEntity" inverseName="playerContext" inverseEntity="SeriesDataEntity"/>
+        <attribute name="userID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <entity name="SeriesDataEntity" representedClassName="SeriesDataEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="activeEpisodeID" optional="YES" attributeType="String"/>
+        <attribute name="activeEpisodeIndex" optional="YES" attributeType="Integer 32" defaultValueString="-1" usesScalarValueType="YES"/>
         <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="series" attributeType="Binary"/>
-        <relationship name="playerContext" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="PlayerContextEntity" inverseName="seriesData" inverseEntity="PlayerContextEntity"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
     </entity>
 </model>

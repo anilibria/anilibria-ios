@@ -11,7 +11,7 @@ import Foundation
 public struct ScheduleNowRequest: AuthorizableAPIRequest {
     typealias ResponseObject = ShortSchedule
 
-    let endpoint: String = "/anime/schedule/now"
-    let method: NetworkManager.Method = .GET
-    var headers: [String : String] = [:]
+    var requestData: RequestData = .init(
+        endpoint: "/anime/schedule/now"
+    )
 }

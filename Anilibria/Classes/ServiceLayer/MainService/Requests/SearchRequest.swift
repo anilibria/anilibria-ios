@@ -1,13 +1,12 @@
 public struct SearchRequest: AuthorizableAPIRequest {
     typealias ResponseObject = [Series]
 
-    let endpoint: String = "/app/search/releases"
-    let method: NetworkManager.Method = .GET
-    let parameters: [String: Any]
-    var headers: [String : String] = [:]
+    var requestData: RequestData = .init(
+        endpoint: "/app/search/releases"
+    )
 
     init(query: String) {
-        self.parameters = [
+        requestData.parameters = [
             "query": query
         ]
     }

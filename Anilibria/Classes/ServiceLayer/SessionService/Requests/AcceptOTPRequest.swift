@@ -11,12 +11,12 @@ import Foundation
 public struct AcceptOTPRequest: AuthorizableAPIRequest {
     typealias ResponseObject = Unit
 
-    let endpoint: String = "/accounts/otp/accept"
-    let method: NetworkManager.Method = .POST
-    let body: (any Encodable)?
-    var headers: [String : String] = [:]
+    var requestData: RequestData = .init(
+        endpoint: "/accounts/otp/accept",
+        method: .POST
+    )
 
     init(code: String) {
-        self.body = ["code": code]
+        requestData.body = ["code": code]
     }
 }

@@ -11,11 +11,12 @@ import Foundation
 public struct ForgotPasswordRequest: BackendAPIRequest {
     typealias ResponseObject = Unit
 
-    let endpoint: String = "/accounts/users/auth/password/forget"
-    let method: NetworkManager.Method = .POST
-    let body: (any Encodable)?
+    var requestData: RequestData = .init(
+        endpoint: "/accounts/users/auth/password/forget",
+        method: .POST
+    )
 
     init(email: String) {
-        body = ["email": email]
+        requestData.body = ["email": email]
     }
 }

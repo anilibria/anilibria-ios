@@ -11,19 +11,18 @@ import Foundation
 public struct ChangeUserCollectionRequest: AuthorizableAPIRequest {
     typealias ResponseObject = Unit
 
-    let endpoint: String = "/accounts/users/me/collections"
-    let method: NetworkManager.Method
-    let body: (any Encodable)?
-    var headers: [String : String] = [:]
+    var requestData: RequestData = .init(
+        endpoint: "/accounts/users/me/collections"
+    )
 
     init(id: Int, type: UserCollectionType?) {
         if let type {
-            method = .POST
-            body = [UserCollectionData(seriesID: id, collectionType: type)]
+            requestData.method = .POST
+            requestData.body = [UserCollectionData(seriesID: id, collectionType: type)]
 
         } else {
-            method = .DELETE
-            body = [["release_id": id]]
+            requestData.method = .DELETE
+            requestData.body = [["release_id": id]]
         }
     }
 }

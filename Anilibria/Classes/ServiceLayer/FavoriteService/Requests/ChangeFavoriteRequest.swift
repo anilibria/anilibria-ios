@@ -11,14 +11,14 @@ import Foundation
 public struct ChangeFavoriteRequest: AuthorizableAPIRequest {
     typealias ResponseObject = Unit
 
-    let endpoint: String = "/accounts/users/me/favorites"
-    let method: NetworkManager.Method
-    let body: (any Encodable)?
-    var headers: [String : String] = [:]
+    var requestData: RequestData
 
     init(add: Bool, id: Int) {
-        self.method = add ? .POST : .DELETE
-        self.body = [FavoriteItem(releaseID: id)]
+        requestData = .init(
+            endpoint: "/accounts/users/me/favorites",
+            method: add ? .POST : .DELETE,
+            body: [FavoriteItem(releaseID: id)]
+        )
     }
 }
 

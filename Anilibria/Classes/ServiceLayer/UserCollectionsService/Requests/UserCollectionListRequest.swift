@@ -11,10 +11,9 @@ import Foundation
 public struct UserCollectionListRequest: AuthorizableAPIRequest {
     typealias ResponseObject = PageData<Series>
 
-    let endpoint: String = "/accounts/users/me/collections/releases"
-    let method: NetworkManager.Method = .GET
-    let parameters: [String: Any]
-    var headers: [String : String] = [:]
+    var requestData: RequestData = .init(
+        endpoint: "/accounts/users/me/collections/releases"
+    )
 
     init(type: UserCollectionType, data: SeriesSearchData, page: Int, limit: Int) {
         var results = data.parameters
@@ -22,6 +21,6 @@ public struct UserCollectionListRequest: AuthorizableAPIRequest {
         results["page"] = page
         results["limit"] = limit
 
-        self.parameters = results
+        requestData.parameters = results
     }
 }

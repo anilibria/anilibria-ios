@@ -1,7 +1,7 @@
 public struct UserRequest: AuthorizableAPIRequest {
     typealias ResponseObject = User
 
-    let endpoint: String = "/accounts/users/me/profile"
-    let method: NetworkManager.Method = .GET
-    var headers: [String : String] = [:]
+    var requestData: RequestData = .init(
+        endpoint: "/accounts/users/me/profile"
+    )
 }

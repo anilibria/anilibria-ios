@@ -1,7 +1,8 @@
 public struct LogoutRequest: AuthorizableAPIRequest {
     typealias ResponseObject = Unit
 
-    let endpoint: String = "/accounts/users/auth/logout"
-    let method: NetworkManager.Method = .POST
-    var headers: [String : String] = [:]
+    var requestData: RequestData = .init(
+        endpoint: "/accounts/users/auth/logout",
+        method: .POST
+    )
 }

@@ -11,12 +11,13 @@ import Foundation
 public struct ResetPasswordRequest: BackendAPIRequest {
     typealias ResponseObject = Unit
 
-    let endpoint: String = "/accounts/users/auth/password/reset"
-    let method: NetworkManager.Method = .POST
-    let body: (any Encodable)?
+    var requestData: RequestData = .init(
+        endpoint: "/accounts/users/auth/password/reset",
+        method: .POST
+    )
 
     init(token: String, password: String) {
-        body = [
+        requestData.body = [
             "token": token,
             "password": password,
             "password_confirmation": password

@@ -10,7 +10,7 @@
 public struct ProductionStatusesRequest: AuthorizableAPIRequest {
     typealias ResponseObject = [DescribedValue<String>]
 
-    let endpoint: String = "/anime/catalog/references/production-statuses"
-    let method: NetworkManager.Method = .GET
-    var headers: [String : String] = [:]
+    var requestData: RequestData = .init(
+        endpoint: "/anime/catalog/references/production-statuses"
+    )
 }

@@ -10,8 +10,7 @@
 public struct YearsRequest: AuthorizableAPIRequest {
     typealias ResponseObject = [Int]
 
-    let endpoint: String = "/anime/catalog/references/years"
-    let method: NetworkManager.Method = .GET
-    var headers: [String : String] = [:]
-
+    var requestData: RequestData = .init(
+        endpoint: "/anime/catalog/references/years"
+    )
 }

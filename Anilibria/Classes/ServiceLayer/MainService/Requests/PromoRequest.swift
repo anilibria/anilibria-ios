@@ -11,7 +11,7 @@ import Foundation
 public struct PromoRequest: AuthorizableAPIRequest {
     typealias ResponseObject = [PromoItem]
 
-    let endpoint: String = "/media/promotions"
-    let method: NetworkManager.Method = .GET
-    var headers: [String : String] = [:]
+    var requestData: RequestData = .init(
+        endpoint: "/media/promotions"
+    )
 }

@@ -1,13 +1,12 @@
 public struct RandomSeriesRequest: AuthorizableAPIRequest {
     typealias ResponseObject = [Series]
 
-    let endpoint: String = "/anime/releases/random"
-    let method: NetworkManager.Method = .GET
-    let parameters: [String: Any]
-    var headers: [String : String] = [:]
+    var requestData: RequestData = .init(
+        endpoint: "/anime/releases/random"
+    )
 
     init(limit: Int) {
-        self.parameters = [
+        requestData.parameters = [
             "limit": limit
         ]
     }

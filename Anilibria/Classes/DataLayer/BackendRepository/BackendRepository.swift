@@ -84,10 +84,10 @@ final class BackendRepositoryImp: BackendRepository, Loggable {
         func run(with base: URL?) -> AnyPublisher<NetworkResponse, Error> {
             networkManager.request(
                 url: request.buildUrl(base: base),
-                method: request.method,
-                body: request.body,
-                params: request.parameters,
-                headers: request.headers
+                method: request.requestData.method,
+                body: request.requestData.body,
+                params: request.requestData.parameters,
+                headers: request.requestData.headers
             ).catch { [unowned self] error -> AnyPublisher<NetworkResponse, Error> in
                 guard let retrier else { return .fail(error) }
                 return retry(
@@ -99,7 +99,7 @@ final class BackendRepositoryImp: BackendRepository, Loggable {
             }
             .eraseToAnyPublisher()
         }
-        if let url = request.baseUrl {
+        if let url = request.requestData.baseUrl {
             return run(with: URL(string: url))
         }
 
@@ -138,7 +138,7 @@ final class BackendRepositoryImp: BackendRepository, Loggable {
     private func convertResponse<T: BackendAPIRequest>(request: T,
                                                        data: NetworkResponse) throws -> T.ResponseObject {
         var (response, error): (T.ResponseObject?, Error?)
-        if let converter = request.customResponseConverter {
+        if let converter = request.requestData.customResponseConverter {
             (response, error) = converter.convert(T.self, response: data)
         } else {
             (response, error) = self.config.converter.convert(T.self, response: data)
@@ -158,11 +158,11 @@ fileprivate extension BackendAPIRequest {
         guard var url = url else {
             fatalError("NOT VALID STRING URL!")
         }
-        if !apiVersion.isEmpty {
-            url = url.appendingPathComponent(apiVersion)
+        if !requestData.apiVersion.isEmpty {
+            url = url.appendingPathComponent(requestData.apiVersion)
         }
-        if !endpoint.isEmpty {
-            url = url.appendingPathComponent(endpoint)
+        if !requestData.endpoint.isEmpty {
+            url = url.appendingPathComponent(requestData.endpoint)
         }
         return url
     }

@@ -11,7 +11,7 @@ import Foundation
 public struct TeamMembersRequest: AuthorizableAPIRequest {
     typealias ResponseObject = [TeamMember]
 
-    let endpoint: String = "/teams/users"
-    let method: NetworkManager.Method = .GET
-    var headers: [String : String] = [:]
+    var requestData: RequestData = .init(
+        endpoint: "/teams/users"
+    )
 }

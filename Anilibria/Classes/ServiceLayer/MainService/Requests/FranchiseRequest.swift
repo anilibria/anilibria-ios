@@ -11,11 +11,11 @@ import Foundation
 public struct FranchiseRequest: AuthorizableAPIRequest {
     typealias ResponseObject = [Franchise]
 
-    let endpoint: String
-    let method: NetworkManager.Method = .GET
-    var headers: [String : String] = [:]
+    var requestData: RequestData
 
     init(seriesID: Int) {
-        self.endpoint = "/anime/franchises/release/\(seriesID)"
+        requestData = .init(
+            endpoint: "/anime/franchises/release/\(seriesID)"
+        )
     }
 }

@@ -24,7 +24,7 @@ final class MainRequestModifier: AsyncRequestModifier {
         var bag: AnyCancellable?
         bag = tokenRepository.getToken().sink { token in
             if let token {
-                result.headers["Authorization"] = "Bearer \(token)"
+                result.requestData.headers["Authorization"] = "Bearer \(token)"
                 completion(result)
             } else {
                 completion(request)

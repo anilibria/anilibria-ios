@@ -11,7 +11,7 @@ import Foundation
 public struct CollectionsFilterReleaseTypesRequest: AuthorizableAPIRequest {
     typealias ResponseObject = [DescribedValue<String>]
 
-    let endpoint: String = "/accounts/users/me/collections/references/types"
-    let method: NetworkManager.Method = .GET
-    var headers: [String : String] = [:]
+    var requestData: RequestData = .init(
+        endpoint: "/accounts/users/me/collections/references/types"
+    )
 }

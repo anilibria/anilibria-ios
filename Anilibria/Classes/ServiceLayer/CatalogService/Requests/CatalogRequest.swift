@@ -9,17 +9,16 @@
 public struct CatalogRequest: AuthorizableAPIRequest {
     typealias ResponseObject = PageData<Series>
 
-    let endpoint: String = "/anime/catalog/releases"
-    let method: NetworkManager.Method = .GET
-    let parameters: [String : Any]
-    var headers: [String : String] = [:]
+    var requestData: RequestData = .init(
+        endpoint: "/anime/catalog/releases"
+    )
 
     init(data: SeriesSearchData, page: Int, limit: Int) {
         var results = data.parameters
         results["page"] = page
         results["limit"] = limit
 
-        self.parameters = results
+        requestData.parameters = results
     }
 }
 

@@ -11,12 +11,11 @@ import Foundation
 public struct GetTorrentRequest: AuthorizableAPIRequest {
     typealias ResponseObject = Data
 
-    let endpoint: String
-    let method: NetworkManager.Method = .GET
-
-    var headers: [String: String] = ["Content-Type": "application/x-bittorrent"]
+    var requestData: RequestData = .init(
+        headers: ["Content-Type": "application/x-bittorrent"]
+    )
 
     init(id: Int) {
-        endpoint = "anime/torrents/\(id)/file"
+        requestData.endpoint = "anime/torrents/\(id)/file"
     }
 }

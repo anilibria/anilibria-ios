@@ -11,7 +11,7 @@ import Foundation
 public struct CollectionsFilterAgeRatingsRequest: AuthorizableAPIRequest {
     typealias ResponseObject = [AgeRating]
 
-    let endpoint: String = "/accounts/users/me/collections/references/age-ratings"
-    let method: NetworkManager.Method = .GET
-    var headers: [String : String] = [:]
+    var requestData: RequestData = .init(
+        endpoint: "/accounts/users/me/collections/references/age-ratings"
+    )
 }

@@ -8,6 +8,4 @@
 
 import Foundation
 
-protocol AuthorizableAPIRequest: BackendAPIRequest {
-    var headers: [String : String] { get set }
-}
+protocol AuthorizableAPIRequest: BackendAPIRequest {}

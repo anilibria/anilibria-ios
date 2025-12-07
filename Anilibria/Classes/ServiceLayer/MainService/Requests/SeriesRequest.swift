@@ -1,15 +1,13 @@
 public struct SeriesRequest: AuthorizableAPIRequest {
     typealias ResponseObject = Series
 
-    let endpoint: String
-    let method: NetworkManager.Method = .GET
-    var headers: [String : String] = [:]
+    var requestData: RequestData
 
     init(alias: String) {
-        endpoint = "/anime/releases/\(alias)"
+        requestData = .init(endpoint: "/anime/releases/\(alias)")
     }
 
     init(id: Int) {
-        endpoint = "/anime/releases/\(id)"
+        requestData = .init(endpoint: "/anime/releases/\(id)")
     }
 }

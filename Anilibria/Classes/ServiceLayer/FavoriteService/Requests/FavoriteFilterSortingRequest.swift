@@ -11,7 +11,7 @@ import Foundation
 public struct FavoriteFilterSortingRequest: AuthorizableAPIRequest {
     typealias ResponseObject = [Sorting]
 
-    let endpoint: String = "/accounts/users/me/favorites/references/sorting"
-    let method: NetworkManager.Method = .GET
-    var headers: [String : String] = [:]
+    var requestData: RequestData = .init(
+        endpoint: "/accounts/users/me/favorites/references/sorting"
+    )
 }

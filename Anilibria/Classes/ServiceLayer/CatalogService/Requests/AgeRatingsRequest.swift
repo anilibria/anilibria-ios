@@ -10,7 +10,7 @@
 public struct AgeRatingsRequest: AuthorizableAPIRequest {
     typealias ResponseObject = [AgeRating]
 
-    let endpoint: String = "/anime/catalog/references/age-ratings"
-    let method: NetworkManager.Method = .GET
-    var headers: [String : String] = [:]
+    var requestData: RequestData = .init(
+        endpoint: "/anime/catalog/references/age-ratings"
+    )
 }

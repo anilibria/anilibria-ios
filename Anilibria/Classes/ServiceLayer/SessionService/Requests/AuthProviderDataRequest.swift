@@ -10,13 +10,13 @@ import Foundation
 
 public struct AuthProviderDataRequest: BackendAPIRequest {
     typealias ResponseObject = AuthProviderData
-    
-    let endpoint: String
-    let method: NetworkManager.Method = .GET
-    let parameters: [String: Any]
+
+    var requestData: RequestData
 
     init(provider: AuthProvider, baseUrl: URL) {
-        endpoint = "/accounts/users/auth/social/\(provider.rawValue)/login"
-        parameters = ["host": baseUrl.absoluteString]
+        requestData = .init(
+            endpoint: "/accounts/users/auth/social/\(provider.rawValue)/login",
+            parameters: ["host": baseUrl.absoluteString]
+        )
     }
 }

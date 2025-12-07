@@ -1,13 +1,12 @@
 public struct NewsRequest: AuthorizableAPIRequest {
     typealias ResponseObject = [News]
 
-    let endpoint: String = "/media/videos"
-    let method: NetworkManager.Method = .GET
-    let parameters: [String: Any]
-    var headers: [String : String] = [:]
+    var requestData: RequestData = .init(
+        endpoint: "/media/videos"
+    )
 
     init(limit: Int) {
-        self.parameters = [
+        requestData.parameters = [
             "limit": limit
         ]
     }

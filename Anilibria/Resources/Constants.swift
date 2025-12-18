@@ -37,7 +37,7 @@ struct URLS {
     static let signUp: URL? = URL(string: "https://anilibria.top/app/auth/registration/newRegistration")
 
     static let config: URL = URL(
-        string: "https://gist.githubusercontent.com/Allui/ede8643134477a9ea84eea967b0e18e4/raw/fef09fd32e10c61a46c3eb68ab979954d6dfec86/config.json"
+        string: "https://gist.githubusercontent.com/Allui/ede8643134477a9ea84eea967b0e18e4/raw/config.json"
     )!
 }
 

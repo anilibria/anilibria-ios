@@ -138,7 +138,7 @@ final class BackendRepositoryImp: BackendRepository, Loggable {
     private func convertResponse<T: BackendAPIRequest>(request: T,
                                                        data: NetworkResponse) throws -> T.ResponseObject {
         var (response, error): (T.ResponseObject?, Error?)
-        if let converter = request.requestData.customResponseConverter {
+        if let converter = request.customResponseConverter {
             (response, error) = converter.convert(T.self, response: data)
         } else {
             (response, error) = self.config.converter.convert(T.self, response: data)
@@ -148,7 +148,7 @@ final class BackendRepositoryImp: BackendRepository, Loggable {
         } else if let e = error {
             throw e
         } else {
-            throw AppError.plain(message: "empty")
+            throw AppError.plain(message: "empty response")
         }
     }
 }

@@ -29,20 +29,17 @@ struct RequestData {
 
     /// Headers passed to equest
     var headers: [String: String] = ["Content-Type": "application/json"]
-
-    /// Converter for processing the response, if the default converter for this request does inappropriate
-    /// from the configuration of BeckendService
-    ///
-    /// You need this, if API is shit
-    ///
-    /// Default: nil
-    var customResponseConverter: BackendResponseConverter?
 }
 
 /// Request configuration protocol
 protocol BackendAPIRequest {
     associatedtype ResponseObject: Decodable
     var requestData: RequestData { get set }
+    var customResponseConverter: BackendResponseConverter? { get }
+}
+
+extension BackendAPIRequest {
+    var customResponseConverter: BackendResponseConverter? { nil }
 }
 
 public struct Unit: Decodable, ExpressibleByNilLiteral {

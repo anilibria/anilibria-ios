@@ -119,6 +119,7 @@ final class SessionServiceImp: SessionService, Loggable {
             return self.backendRepository
                 .request(request)
         }
+        .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
 

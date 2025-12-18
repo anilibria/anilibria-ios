@@ -35,6 +35,7 @@ final class AppConfigurationRepositoryImp: AppConfigurationRepository {
                 updateBaseUrl()
             }
         }
+        .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
 
@@ -49,6 +50,7 @@ final class AppConfigurationRepositoryImp: AppConfigurationRepository {
                 updateBaseUrl()
             }
         }
+        .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
 
@@ -57,17 +59,23 @@ final class AppConfigurationRepositoryImp: AppConfigurationRepository {
             if !(await baseUrlProvider.isOutdated) {
                 await baseUrlProvider.extractAlternative()
             } else {
-                let config = (try? await URLSession.shared.data(from: URLS.config))
-                    .flatMap { $0.0 }
-                    .flatMap { data in
-                        (try? JSONDecoder().decode(AniConfig.self, from: data))
-                    } ?? AniConfig.default
-                await baseUrlProvider.update(with: config)
+                do {
+                    let (data, _) = try await URLSession.shared.data(from: URLS.config)
+                    let config = try JSONDecoder().decode(AniConfig.self, from: data)
+                    await baseUrlProvider.update(with: config)
+                } catch(let error) {
+                    if await baseUrlProvider.containsAlternative() {
+                        await baseUrlProvider.extractAlternative()
+                    } else {
+                        throw error
+                    }
+                }
             }
         }
         .flatMap { [unowned self] in
             fetchBaseUrl()
         }
+        .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
 }
@@ -100,6 +108,10 @@ actor BaseUrlProvider {
         currentConfigData.update(with: config)
         configRepository.set(config: currentConfigData)
         infoItem = currentConfigData.topPriorityItem()
+    }
+
+    func containsAlternative() -> Bool {
+        currentConfigData.items.count > 1
     }
 
     func extractAlternative() {

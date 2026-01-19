@@ -1,16 +1,16 @@
 import Foundation
 
-/// MRKit errors code list.
-///    - unknownNetworkError: Unknown network error.
-///    - emptyResponse: Empty response from server.
-///    - parsingError: Error parsing response.
-public struct MRKitErrorCode {
+public enum MRKitErrorCode: Int {
     /// Unknown network error
-    public static let unknownNetworkError = 10000
+    case unknownNetworkError = 10000
+    /// No alternative base urls
+    case noAlternative = 10300
+    /// No base urls
+    case noBaseUrl = 10301
     /// Empty response from server
-    public static let emptyResponse = 10400
+    case emptyResponse = 10400
     /// Error parsing response
-    public static let parsingError = 10401
+    case parsingError = 10401
     /// unexpected
-    public static let unexpected = 10500
+    case unexpected = 10500
 }

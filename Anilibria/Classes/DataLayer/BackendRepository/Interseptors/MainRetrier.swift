@@ -13,6 +13,7 @@ final class MainRetrier: LoadRetrier {
 
     func need(
         retry request: any BackendAPIRequest,
+        baseURL: URL?,
         error: Error,
         retryNumber: Int,
         completion: @escaping RetryCompletion
@@ -20,8 +21,17 @@ final class MainRetrier: LoadRetrier {
         switch error {
         case let AppError.network(code) where codes.contains(code):
             sessionService?.forceLogout()
-        case let error as URLError where error.code == .timedOut:
-            appConfig.updateBaseUrl().sink(
+            completion(false)
+        case let error as URLError where [
+            .timedOut,
+            .networkConnectionLost,
+            .cannotFindHost,
+            .cannotConnectToHost,
+            .badServerResponse,
+            .cannotParseResponse,
+            .resourceUnavailable
+        ].contains(error.code):
+            appConfig.updateBaseUrl(baseURL).sink(
                 onNext: { _ in completion(true) },
                 onError: { _ in completion(false) }
             ).store(in: &cancellables)

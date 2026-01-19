@@ -11,6 +11,7 @@ import Foundation
 protocol LoadRetrier {
     typealias RetryCompletion = (Bool) -> Void
     func need(retry request: any BackendAPIRequest,
+              baseURL: URL?,
               error: Error,
               retryNumber: Int,
               completion: @escaping RetryCompletion)

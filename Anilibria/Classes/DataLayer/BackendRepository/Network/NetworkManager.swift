@@ -11,9 +11,7 @@ open class NetworkManager: Loggable {
     private static let requestTimeout: Double = 10
     private lazy var session: URLSession = {
         let configuration = URLSessionConfiguration.default
-        configuration.timeoutIntervalForResource = NetworkManager.requestTimeout * 2
         configuration.timeoutIntervalForRequest = NetworkManager.requestTimeout
-        configuration.waitsForConnectivity = true
         configuration.urlCredentialStorage = nil
         configuration.httpShouldSetCookies = false
 

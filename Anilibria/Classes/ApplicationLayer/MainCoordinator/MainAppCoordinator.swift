@@ -34,15 +34,15 @@ public class MainAppCoordinator: Loggable {
         self.log(.debug, "Dependencies are configured")
     }
 
-    func start() {
+    func start(on window: UIWindow) {
         MainTheme.shared.apply()
         self.log(.debug, "App coordinator started")
-        self.openMainModule()
+        self.openMainModule(on: window)
     }
 
     // MARK: - Modules routing
 
-    private func openMainModule() {
-        router.openDefaultScene()
+    private func openMainModule(on window: UIWindow) {
+        router.openDefaultScene(on: window)
     }
 }

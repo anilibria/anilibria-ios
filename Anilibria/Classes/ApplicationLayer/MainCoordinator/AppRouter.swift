@@ -5,22 +5,11 @@ public class AppRouter {
 
     init() {}
 
-    private func createWindow() -> UIWindow {
-        self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.window.backgroundColor = .black
-        #if targetEnvironment(macCatalyst)
-        window.windowScene?.titlebar?.titleVisibility = .hidden
-        #endif
-
-        defer {
-            InterfaceAppearance.current.apply()
-        }
-        return self.window
-    }
-
-    public func openDefaultScene() {
+    public func openDefaultScene(on window: UIWindow) {
+        self.window = window
+        InterfaceAppearance.current.apply()
         let module = MainContainerAssembly.createModule()
         SetWindowRouter(target: module,
-                        window: self.createWindow()).move()
+                        window: window).move()
     }
 }

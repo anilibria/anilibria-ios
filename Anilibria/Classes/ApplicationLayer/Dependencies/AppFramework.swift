@@ -12,9 +12,12 @@ public class AppFramework: DIFramework {
 
 private class RepositoriesPart: DIPart {
     static let parts: [DIPart.Type] = [
+        CoreDataHolderPart.self,
         SecureStoragePart.self,
         ConfigRepositoryPart.self,
         HistoryRepositoryPart.self,
+        EpisodesRepositoryPart.self,
+        AppContextRepositoryPart.self,
         PlayerSettingsRepositoryPart.self,
         UserRepositoryPart.self,
         TokenRepositoryPart.self,
@@ -76,7 +79,8 @@ private class PersentersPart: DIPart {
         NewsPart.self,
         TeamPart.self,
         LinkDevicePart.self,
-        RestorePasswordPart.self
+        RestorePasswordPart.self,
+        EpisodesPart.self
     ]
 
     static func load(container: DIContainer) {

@@ -10,6 +10,7 @@ final class SeriesViewController: BaseViewController {
     @IBOutlet var secondTitleLabel: UILabel!
     @IBOutlet var favoriteView: SeriesFavoriteView!
     @IBOutlet var typeView: SeriesCollectionTypeView!
+    @IBOutlet var episodesButton: UIButton!
     @IBOutlet var tagsView: TagsView!
 
     @IBOutlet var paramsTextView: AttributeLinksView!
@@ -96,6 +97,7 @@ final class SeriesViewController: BaseViewController {
         self.navigationItem.title = L10n.Screen.Series.title
         self.supportLabel.text = L10n.Common.donatePls
         self.relatedTitleLabel.text = L10n.Common.related
+        self.episodesButton.setTitle(L10n.Screen.Series.episodes, for: .normal)
         self.handler.didLoad()
     }
 
@@ -164,6 +166,10 @@ final class SeriesViewController: BaseViewController {
         self.handler.selectCollection(activity)
     }
 
+    @IBAction func selectEpisodes(_ sender: Any) {
+        self.handler.episodes()
+    }
+
     @IBAction func weekDaysAction(_ sender: Any) {
         self.handler.schedule()
     }
@@ -203,6 +209,7 @@ extension SeriesViewController: SeriesViewBehavior {
         }
         self.header.configure(series)
         self.navigationItem.backButtonTitle = series.name?.main
+        self.episodesButton.isHidden = series.playlist.isEmpty
 
         self.set(name: series.name)
         self.setParams(from: series)
@@ -286,38 +293,38 @@ extension SeriesViewController: SeriesViewBehavior {
         var result: NSMutableAttributedString = .init()
 
         if let type = series.type {
-            let title = self.boldTextBuilder.build(strings.type)
+            let title = self.boldTextBuilder.build(strings.type.withColon())
             let value = self.regularTextBuilder.build("\(type.description)\n")
             result = result + title + value
         }
 
         if let year = series.year {
-            let title = self.boldTextBuilder.build(strings.year)
+            let title = self.boldTextBuilder.build(strings.year.withColon())
             let value = self.regularTextBuilder.build("\(year)\n")
             result = result + title + value
         }
 
         if let season = series.season {
-            let title = self.boldTextBuilder.build(strings.season)
+            let title = self.boldTextBuilder.build(strings.season.withColon())
             let value = self.regularTextBuilder.build("\(season.description)\n")
             result = result + title + value
         }
 
         if let duration = series.averageDurationOfEpisode {
-            let title = self.boldTextBuilder.build(strings.duration)
+            let title = self.boldTextBuilder.build(strings.duration.withColon())
             let time = L10n.Screen.Series.approximalMinutes("\(duration)")
             let value = self.regularTextBuilder.build("\(time)\n")
             result = result + title + value
         }
 
         let availableCount = series.playlist.count
-        let title = self.boldTextBuilder.build(strings.episodes)
+        let title = self.boldTextBuilder.build(strings.episodes.withColon())
         let episodes = series.episodesTotal.map { "\($0)"} ?? "?"
         let value = self.regularTextBuilder.build("\(availableCount)/\(episodes)\n")
         result = result + title + value
 
         if series.genres.isEmpty == false {
-            var data = self.boldTextBuilder.build(strings.genres)
+            var data = self.boldTextBuilder.build(strings.genres.withColon())
             let linkBuilder = self.regularTextBuilder.copy()
 
             let last = series.genres.last
@@ -341,7 +348,7 @@ extension SeriesViewController: SeriesViewBehavior {
             let items = Dictionary(grouping: series.members, by: { $0.role })
             let roles = items.compactMap { $0.key }.sorted(by: { $0.value < $1.value })
             roles.forEach { role in
-                var data = self.boldTextBuilder.build("\(role.description): ")
+                var data = self.boldTextBuilder.build(role.description.withColon())
                 let members = items[role] ?? []
                 let last = members.last
                 for member in members {
@@ -377,5 +384,11 @@ private extension Series {
             }
             return nil
         }
+    }
+}
+
+private extension String {
+    func withColon() -> String {
+        "\(self): "
     }
 }

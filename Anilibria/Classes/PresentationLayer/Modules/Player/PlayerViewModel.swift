@@ -12,20 +12,18 @@ final class PlayerPart: DIPart {
 final class PlayerViewModel {
     private var router: PlayerRoutable!
     private var series: Series!
-    private var context: PlayerContext?
+    private var userID: Int?
     private var bag = Set<AnyCancellable>()
 
     @Published private(set) var orientation = InterfaceOrientation.current
     @Published private(set) var playItem: PlayItem?
     @Published private(set) var playbackRate: Double
 
+    private var changed: Bool = false
+    private var currentTimeCode: TimeCodeData?
     let skipViewModel = SkipViewModel()
 
-    private var videoQuality: VideoQuality = .fullHd {
-        didSet {
-            context?.quality = videoQuality
-        }
-    }
+    private lazy var videoQuality: VideoQuality = playerSettings.quality
 
     var seriesName: String {
         series.name?.main ?? ""
@@ -42,9 +40,12 @@ final class PlayerViewModel {
     }
 
     private let playerService: PlayerService
+    private let sessionService: SessionService
 
-    init(playerService: PlayerService) {
+    init(playerService: PlayerService,
+         sessionService: SessionService) {
         self.playerService = playerService
+        self.sessionService = sessionService
         self.playerSettings = playerService.fetchSettings()
         self.playbackRate = playerSettings.playbackRate
         skipViewModel.set(mode: playerSettings.skipMode)
@@ -53,20 +54,21 @@ final class PlayerViewModel {
 
 extension PlayerViewModel {
     func bind(router: PlayerRoutable,
-              series: Series) {
+              series: Series,
+              userID: Int?,
+              episode: PlaylistItem?) {
         self.router = router
         self.series = series
+        self.userID = userID
 
-        self.playerService
-            .fetchPlayerContext(for: self.series)
-            .sink(onNext: { [weak self] context in
-                guard let self else { return }
-                let context = context ?? PlayerContext(
-                    quality: playerSettings.quality
-                )
-                run(with: context)
-            })
-            .store(in: &bag)
+        if let episode {
+            run(item: episode)
+        } else if let id = playerService.getActiveEpisodeID(for: series),
+                  let item = series.playlist.first(where: { $0.id == id }) {
+            run(item: item)
+        } else if let item = series.playlist.first {
+            run(item: item)
+        }
     }
 
     func selectPlayItem() {
@@ -99,10 +101,19 @@ extension PlayerViewModel {
 
     private func run(item: PlaylistItem) {
         guard let index = series?.playlist.firstIndex(of: item) else { return }
+
+        self.currentTimeCode = playerService.getTimeCode(userID: userID, episodeID: item.id)
+            ?? TimeCodeData(episodeID: item.id, userID: userID)
+
+        if currentTimeCode?.isWatched == true {
+            currentTimeCode?.isWatched = false
+            currentTimeCode?.time = 0
+        }
+
         playItem = PlayItem(
             index: index,
             value: item,
-            time: context?.allItems[index] ?? 0,
+            startTime: currentTimeCode?.time ?? 0,
             quality: videoQuality,
             itemsCount: series?.playlist.count ?? 0
         )
@@ -117,16 +128,12 @@ extension PlayerViewModel {
 
     func update(time: Double) {
         guard let playItem else { return }
+        changed = currentTimeCode?.time != time
+        currentTimeCode?.time = time
         skipViewModel.update(time: time)
         if time >= playItem.value.duration {
-            context?.time = 0
-            context?.allItems.removeValue(forKey: playItem.index)
             save()
             seriesEnded()
-        } else {
-            context?.number = playItem.index
-            context?.time = time
-            context?.allItems[playItem.index] = time
         }
     }
 
@@ -271,36 +278,33 @@ extension PlayerViewModel {
     }
 
     func save() {
-        guard let context else { return }
-        self.playerService
-            .set(context: context, for: self.series)
-            .sink()
-            .store(in: &bag)
+        guard changed, let playItem, var currentTimeCode else { return }
+        let time: TimeInterval
+        if let endingTime = playItem.value.endingRange?.lowerBound {
+            time = TimeInterval(endingTime - 1)
+        } else {
+            time = playItem.value.duration * 0.9
+        }
+
+        if currentTimeCode.time > time {
+            currentTimeCode.isWatched = true
+            currentTimeCode.time = playItem.value.duration - 1
+        }
+
+        self.playerService.set(
+            timeCodes: [currentTimeCode],
+            for: series
+        )
+        self.playerService.setActiveEpisodeID(
+            playItem.value.id,
+            for: series
+        )
     }
 
     private func update(quality: VideoQuality) {
-        if let time = context?.time {
-            videoQuality = quality
-            playItem?.set(quality: quality, time: time)
-        }
-    }
-
-    private func run(with context: PlayerContext) {
-        self.context = context
-        let index = context.number
-        let time = context.time
-        videoQuality = context.quality
-
-        if let item = series?.playlist[safe: index] {
-            playItem = PlayItem(
-                index: index,
-                value: item,
-                time: time,
-                quality: videoQuality,
-                itemsCount: series?.playlist.count ?? 0
-            )
-            skipViewModel.set(item: playItem)
-        }
+        guard let currentTimeCode else { return }
+        videoQuality = quality
+        playItem?.set(quality: quality, startTime: currentTimeCode.time)
     }
 }
 
@@ -319,7 +323,7 @@ extension UIInterfaceOrientationMask {
 struct PlayItem {
     let index: Int
     let value: PlaylistItem
-    private(set) var time: Double = 0
+    private(set) var startTime: Double = 0
     private(set) var quality: VideoQuality?
     private(set) var url: URL?
 
@@ -330,22 +334,22 @@ struct PlayItem {
         if let ordinal = value.ordinal  {
             return "\(NSNumber(value: ordinal))"
         }
-        return value.title
+        return value.title ?? "1"
     }
 
     init(index: Int,
          value: PlaylistItem,
-         time: Double,
+         startTime: Double,
          quality: VideoQuality,
          itemsCount: Int) {
         self.index = index
         self.value = value
         self.isLast = index == itemsCount - 1
         self.isFirst = index == 0
-        set(quality: quality, time: time)
+        set(quality: quality, startTime: startTime)
     }
 
-    fileprivate mutating func set(quality: VideoQuality, time: Double) {
+    fileprivate mutating func set(quality: VideoQuality, startTime: Double) {
         let videoUrl = value.video[quality]
         if videoUrl == nil, let bestQuality = value.supportedQualities().first {
             self.quality = bestQuality
@@ -354,10 +358,10 @@ struct PlayItem {
             self.quality = quality
             self.url = videoUrl
         }
-        set(time: time)
+        set(time: startTime)
     }
 
     fileprivate mutating func set(time: Double) {
-        self.time = time
+        self.startTime = time
     }
 }

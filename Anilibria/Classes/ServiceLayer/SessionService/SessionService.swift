@@ -11,7 +11,7 @@ final class SessionServicePart: DIPart {
 }
 
 protocol SessionService: AnyObject {
-    func fetchState() -> AnyPublisher<SessionState?, Never>
+    func fetchState() -> AnyPublisher<SessionState, Never>
 
     func signIn(login: String, password: String) -> AnyPublisher<User, Error>
     func signIn(with data: AuthProviderData) -> AnyPublisher<User, Error>
@@ -39,7 +39,7 @@ final class SessionServiceImp: SessionService, Loggable {
 
     private var bag = Set<AnyCancellable>()
 
-    private let statusRelay = CurrentValueSubject<SessionState?, Never>(nil)
+    private let statusRelay = CurrentValueSubject<SessionState, Never>(.guest)
 
     init(clearManager: ClearableManager,
          backendRepository: BackendRepository,
@@ -53,8 +53,8 @@ final class SessionServiceImp: SessionService, Loggable {
         self.appConfig = appConfig
     }
 
-    func fetchState() -> AnyPublisher<SessionState?, Never> {
-        return tokenRepository.getToken().flatMap { [unowned self] value -> AnyPublisher<SessionState?, Never> in
+    func fetchState() -> AnyPublisher<SessionState, Never> {
+        return tokenRepository.getToken().flatMap { [unowned self] value -> AnyPublisher<SessionState, Never> in
             if value == nil {
                 statusRelay.send(.guest)
                 return getStatusRelay()
@@ -70,7 +70,7 @@ final class SessionServiceImp: SessionService, Loggable {
                     forceLogout()
                     return .just(nil)
                 }
-                .flatMap { [unowned self] user -> AnyPublisher<SessionState?, Never> in
+                .flatMap { [unowned self] user -> AnyPublisher<SessionState, Never> in
                     if let user {
                         statusRelay.send(.user(user))
                     } else {
@@ -85,7 +85,7 @@ final class SessionServiceImp: SessionService, Loggable {
         .eraseToAnyPublisher()
     }
 
-    private func getStatusRelay() -> AnyPublisher<SessionState?, Never> {
+    private func getStatusRelay() -> AnyPublisher<SessionState, Never> {
         statusRelay
             .removeDuplicates()
             .eraseToAnyPublisher()

@@ -21,6 +21,7 @@ final class UserCollectionsViewController: BaseCollectionViewController {
     // MARK: - Life cycle
 
     override func viewDidLoad() {
+        defaultBottomInset = 0
         super.viewDidLoad()
         view.backgroundColor = .Surfaces.background
         setupPager()

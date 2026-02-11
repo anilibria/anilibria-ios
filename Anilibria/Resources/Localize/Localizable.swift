@@ -343,6 +343,10 @@ enum L10n {
         static var `enabled`: String {
             return L10n.tr("Localizable", "common.enabled")
         }
+        /// episode
+        static var `episode`: String {
+            return L10n.tr("Localizable", "common.episode")
+        }
         /// Guest
         static var `guest`: String {
             return L10n.tr("Localizable", "common.guest")
@@ -391,9 +395,17 @@ enum L10n {
         static var `tomorrow`: String {
             return L10n.tr("Localizable", "common.tomorrow")
         }
+        /// Unmark all episodes as watched
+        static var `unwatchAll`: String {
+            return L10n.tr("Localizable", "common.unwatch_all")
+        }
         /// Vacation
         static var `vacation`: String {
             return L10n.tr("Localizable", "common.vacation")
+        }
+        /// Mark all episodes as watched
+        static var `watchAll`: String {
+            return L10n.tr("Localizable", "common.watch_all")
         }
         /// Yesterday
         static var `yesterday`: String {
@@ -697,23 +709,23 @@ enum L10n {
             static func downloaded(_ arg1: String, _ arg2: String) -> String {
                 return L10n.tr("Localizable", "screen.series.downloaded", arg1, arg2)
             }
-            /// Duration: 
+            /// Duration
             static var `duration`: String {
                 return L10n.tr("Localizable", "screen.series.duration")
             }
-            /// Episodes: 
+            /// Episodes
             static var `episodes`: String {
                 return L10n.tr("Localizable", "screen.series.episodes")
             }
-            /// Genres: 
+            /// Genres
             static var `genres`: String {
                 return L10n.tr("Localizable", "screen.series.genres")
             }
-            /// Season: 
+            /// Season
             static var `season`: String {
                 return L10n.tr("Localizable", "screen.series.season")
             }
-            /// Status: 
+            /// Status
             static var `status`: String {
                 return L10n.tr("Localizable", "screen.series.status")
             }
@@ -721,15 +733,15 @@ enum L10n {
             static var `title`: String {
                 return L10n.tr("Localizable", "screen.series.title")
             }
-            /// Type: 
+            /// Type
             static var `type`: String {
                 return L10n.tr("Localizable", "screen.series.type")
             }
-            /// Voices: 
+            /// Voices
             static var `voices`: String {
                 return L10n.tr("Localizable", "screen.series.voices")
             }
-            /// Year: 
+            /// Year
             static var `year`: String {
                 return L10n.tr("Localizable", "screen.series.year")
             }

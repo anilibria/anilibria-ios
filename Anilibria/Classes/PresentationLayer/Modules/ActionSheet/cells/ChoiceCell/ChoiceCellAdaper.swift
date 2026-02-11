@@ -23,15 +23,33 @@ public final class ChoiceGroup: SheetGroup {
 
 public final class ChoiceItem: NSObject {
     private let value: any ChoiceValue
-    let title: String
+    let title: NSAttributedString
     @Published var isSelected: Bool
     fileprivate var didSelect: ((ChoiceItem) -> Void)?
 
+    private static let builder = AttributeStringBuilder()
+        .set(color: .Text.monoLight)
+        .set(font: .font(ofSize: 17, weight: .regular))
+
     @Published fileprivate(set) var isLast: Bool = false
+
+    convenience init<T>(
+        value: T,
+        title: String,
+        isSelected: Bool,
+        didSelect: @escaping (T) -> Bool
+    ) {
+        self.init(
+            value: value,
+            title: Self.builder.build(title),
+            isSelected: isSelected,
+            didSelect: didSelect
+        )
+    }
 
     init<T>(
         value: T,
-        title: String,
+        title: NSAttributedString,
         isSelected: Bool,
         didSelect: @escaping (T) -> Bool
     ) {

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24128" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -14,6 +14,7 @@
             <connections>
                 <outlet property="anonceLabel" destination="ocU-HM-Qgc" id="fBA-9C-84x"/>
                 <outlet property="descTextView" destination="4LL-2m-eCb" id="nSP-fl-FmB"/>
+                <outlet property="episodesButton" destination="kHh-JB-516" id="Gah-lc-Ol2"/>
                 <outlet property="favoriteView" destination="ke8-ep-Qva" id="ucf-9k-W8d"/>
                 <outlet property="headerContainerView" destination="Tck-c2-HNR" id="PVH-gj-daq"/>
                 <outlet property="paramsTextView" destination="Vw4-G6-Mqn" id="dhb-IU-lpE"/>
@@ -77,7 +78,7 @@
                                             <rect key="frame" x="0.0" y="48.333333333333343" width="382" height="44"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="PsF-aT-laX">
-                                                    <rect key="frame" x="0.0" y="0.0" width="137" height="34"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="382" height="34"/>
                                                     <subviews>
                                                         <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ke8-ep-Qva" customClass="SeriesFavoriteView" customModule="AniLiberty" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="0.0" width="34" height="34"/>
@@ -181,6 +182,26 @@
                                                                 <outlet property="shimmerView" destination="ojc-Gx-bOj" id="1Ii-ZB-mFR"/>
                                                             </connections>
                                                         </view>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nv3-BH-JmO">
+                                                            <rect key="frame" x="145" y="0.0" width="142" height="34"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </view>
+                                                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kHh-JB-516" customClass="RippleButton" customModule="AniLiberty" customModuleProvider="target">
+                                                            <rect key="frame" x="295" y="0.0" width="87" height="34"/>
+                                                            <color key="backgroundColor" name="buttons/selected"/>
+                                                            <inset key="contentEdgeInsets" minX="12" minY="0.0" maxX="12" maxY="0.0"/>
+                                                            <state key="normal" title="Episodes">
+                                                                <color key="titleColor" name="text/monoLight"/>
+                                                            </state>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                    <real key="value" value="8"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
+                                                            <connections>
+                                                                <action selector="selectEpisodes:" destination="-1" eventType="touchUpInside" id="CvS-Ia-ebs"/>
+                                                            </connections>
+                                                        </button>
                                                     </subviews>
                                                 </stackView>
                                                 <view contentMode="scaleToFill" placeholderIntrinsicWidth="382" placeholderIntrinsicHeight="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="JHC-Np-JhB" customClass="TagsView" customModule="AniLiberty" customModuleProvider="target">
@@ -190,6 +211,7 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="JHC-Np-JhB" firstAttribute="leading" secondItem="wq2-WE-4Ii" secondAttribute="leading" id="2qn-VA-tt2"/>
+                                                <constraint firstAttribute="trailing" secondItem="PsF-aT-laX" secondAttribute="trailing" id="TT2-K9-aIT"/>
                                                 <constraint firstAttribute="trailing" secondItem="JHC-Np-JhB" secondAttribute="trailing" id="hHO-Rw-XTW"/>
                                             </constraints>
                                         </stackView>
@@ -276,7 +298,7 @@
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qZK-Ye-Nr9">
                                             <rect key="frame" x="0.0" y="286.33333333333331" width="382" height="77"/>
                                             <subviews>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ffy-n0-jv6" customClass="BorderedView" customModule="AniLiberty" customModuleProvider="target">
+                                                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ffy-n0-jv6" customClass="BorderedView" customModule="AniLiberty" customModuleProvider="target">
                                                     <rect key="frame" x="162.33333333333334" y="20" width="57.666666666666657" height="37"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9c0-4r-RCo">

@@ -10,7 +10,7 @@ public final class ChoiceCell: RippleViewCell {
 
     func configure(_ item: ChoiceItem) {
         cancellables.removeAll()
-        self.titleLabel.text = item.title
+        self.titleLabel.attributedText = item.title
         self.iconView.isHidden = !item.isSelected
         self.rippleContainerView.smoothCorners(with: 4)
 

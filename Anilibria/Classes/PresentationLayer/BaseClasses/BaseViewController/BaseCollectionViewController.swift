@@ -29,6 +29,11 @@ class BaseCollectionViewController: BaseViewController {
     }
     // MARK: - Setup
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.collectionView.contentInset.bottom = self.defaultBottomInset
+    }
+
     public override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         self.updateRefreshControlRect()

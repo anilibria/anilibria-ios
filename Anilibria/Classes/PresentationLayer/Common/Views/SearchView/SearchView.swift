@@ -10,6 +10,9 @@ public final class SearchView: LoadableView {
         }
     }
 
+    public private(set) var isSearching: Bool = false
+    public var text: String { self.searchField.text ?? "" }
+
     private var bag = Set<AnyCancellable>()
     private let queryRelay = PassthroughSubject<String, Never>()
 
@@ -38,7 +41,6 @@ public final class SearchView: LoadableView {
         .store(in: &bag)
     }
 
-    public private(set) var isSearching: Bool = false
 
     func querySequence() -> AnyPublisher<String, Never> {
         return self.queryRelay.removeDuplicates().eraseToAnyPublisher()

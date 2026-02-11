@@ -41,7 +41,7 @@ final class BarButton: UIBarButtonItem {
         button.tintColor = tintColor
         button.setImage(image, for: .normal)
         button.rippleColor = rippleColor
-        button.imageEdgeInsets = imageEdge
+        button.contentEdgeInsets = imageEdge
         button.imageView?.contentMode = .scaleAspectFit
         self.init(customView: button)
         self.normalImage = image

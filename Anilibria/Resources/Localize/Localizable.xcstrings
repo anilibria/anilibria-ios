@@ -649,6 +649,23 @@
         }
       }
     },
+    "common.episode" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "episode"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "эпизод"
+          }
+        }
+      }
+    },
     "common.filter_search.title" : {
       "extractionState" : "migrated",
       "localizations" : {
@@ -1075,6 +1092,23 @@
         }
       }
     },
+    "common.unwatch_all" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unmark all episodes as watched"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Снять все отметки о просмотре"
+          }
+        }
+      }
+    },
     "common.vacation" : {
       "extractionState" : "migrated",
       "localizations" : {
@@ -1088,6 +1122,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "В отпуске"
+          }
+        }
+      }
+    },
+    "common.watch_all" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mark all episodes as watched"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отметить все эпизоды как просмотренные"
           }
         }
       }
@@ -2436,13 +2487,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Duration: "
+            "value" : "Duration"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Длительность: "
+            "value" : "Длительность"
           }
         }
       }
@@ -2453,13 +2504,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Episodes: "
+            "value" : "Episodes"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Эпизоды: "
+            "value" : "Эпизоды"
           }
         }
       }
@@ -2470,13 +2521,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Genres: "
+            "value" : "Genres"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Жанр: "
+            "value" : "Жанр"
           }
         }
       }
@@ -2487,13 +2538,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Season: "
+            "value" : "Season"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Сезон: "
+            "value" : "Сезон"
           }
         }
       }
@@ -2504,13 +2555,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Status: "
+            "value" : "Status"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Состояние релиза: "
+            "value" : "Состояние релиза"
           }
         }
       }
@@ -2539,13 +2590,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Type: "
+            "value" : "Type"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Тип: "
+            "value" : "Тип"
           }
         }
       }
@@ -2556,13 +2607,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Voices: "
+            "value" : "Voices"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Голоса: "
+            "value" : "Голоса"
           }
         }
       }
@@ -2573,13 +2624,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Year: "
+            "value" : "Year"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Год: "
+            "value" : "Год"
           }
         }
       }

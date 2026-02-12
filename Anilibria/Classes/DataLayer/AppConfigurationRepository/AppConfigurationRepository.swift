@@ -14,7 +14,7 @@ final class AppConfigurationRepositoryPart: DIPart {
 protocol AppConfigurationRepository: AnyObject {
     func fetchBaseImageUrl() -> AnyPublisher<URL, any Error>
     func fetchBaseUrl() -> AnyPublisher<URL, Error>
-    func updateBaseUrl() -> AnyPublisher<URL, Error>
+    func updateBaseUrl(_ baseUrl: URL?) -> AnyPublisher<URL, Error>
 }
 
 final class AppConfigurationRepositoryImp: AppConfigurationRepository {
@@ -32,7 +32,7 @@ final class AppConfigurationRepositoryImp: AppConfigurationRepository {
             if let url {
                 .just(url)
             } else {
-                updateBaseUrl()
+                updateBaseUrl(nil)
             }
         }
         .receive(on: DispatchQueue.main)
@@ -41,39 +41,23 @@ final class AppConfigurationRepositoryImp: AppConfigurationRepository {
 
     func fetchBaseUrl() -> AnyPublisher<URL, any Error> {
         return AnyPublisher.create(asyncFunc: { [unowned self] in
-            return await baseUrlProvider.baseUrl
+            let value = await baseUrlProvider.baseUrl
+            return value
         })
         .flatMap { [unowned self] url -> AnyPublisher<URL, any Error> in
             return if let url {
                 .just(url)
             } else {
-                updateBaseUrl()
+                updateBaseUrl(nil)
             }
         }
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
 
-    func updateBaseUrl() -> AnyPublisher<URL, any Error> {
+    func updateBaseUrl(_ baseUrl: URL?) -> AnyPublisher<URL, any Error> {
         AnyPublisher.create { [unowned self] in
-            if !(await baseUrlProvider.isOutdated) {
-                await baseUrlProvider.extractAlternative()
-            } else {
-                do {
-                    let (data, _) = try await URLSession.shared.data(from: URLS.config)
-                    let config = try JSONDecoder().decode(AniConfig.self, from: data)
-                    await baseUrlProvider.update(with: config)
-                } catch(let error) {
-                    if await baseUrlProvider.containsAlternative() {
-                        await baseUrlProvider.extractAlternative()
-                    } else {
-                        throw error
-                    }
-                }
-            }
-        }
-        .flatMap { [unowned self] in
-            fetchBaseUrl()
+            return try await baseUrlProvider.next(for: baseUrl)
         }
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
@@ -81,10 +65,15 @@ final class AppConfigurationRepositoryImp: AppConfigurationRepository {
 }
 
 actor BaseUrlProvider {
+    private var activeTask: Task<URL, Error>?
     private let configRepository: ConfigRepository
 
     private var currentConfigData: AniConfigInfo
     private var infoItem: AniConfigInfo.Item?
+
+    private var isOutdated: Bool {
+        currentConfigData.isOutdated
+    }
 
     var baseUrl: URL? {
         infoItem?.address.baseUrl
@@ -94,32 +83,55 @@ actor BaseUrlProvider {
         infoItem?.address.baseImagesUrl
     }
 
-    var isOutdated: Bool {
-        currentConfigData.isOutdated
-    }
-
     init(configRepository: ConfigRepository) {
         self.configRepository = configRepository
         currentConfigData = configRepository.getConfig()
         infoItem = currentConfigData.topPriorityItem()
     }
 
-    func update(with config: AniConfig) {
-        currentConfigData.update(with: config)
-        configRepository.set(config: currentConfigData)
-        infoItem = currentConfigData.topPriorityItem()
+    func next(for url: URL?) async throws -> URL {
+        if let task = activeTask { return try await task.value }
+
+        let task = Task { try await fetch(with: url) }
+        activeTask = task
+        defer { activeTask = nil }
+
+        return try await task.value
     }
 
-    func containsAlternative() -> Bool {
-        currentConfigData.items.count > 1
+    private func fetch(with url: URL?) async throws -> URL {
+        if let baseUrl, url != baseUrl {
+            return baseUrl
+        }
+        if isOutdated {
+            do {
+                let (data, _) = try await URLSession.shared.data(from: URLS.config)
+                let config = try JSONDecoder().decode(AniConfig.self, from: data)
+                currentConfigData.update(with: config)
+                configRepository.set(config: currentConfigData)
+                infoItem = currentConfigData.topPriorityItem()
+            } catch {
+                try extractAlternative()
+            }
+        } else {
+            try extractAlternative()
+        }
+        if let url = baseUrl {
+            return url
+        }
+        throw AppError.error(code: MRKitErrorCode.noBaseUrl)
     }
 
-    func extractAlternative() {
+    private func extractAlternative() throws {
         guard var item = infoItem else { return }
         let count = currentConfigData.items.count
+        if count <= 1 {
+            throw AppError.error(code: MRKitErrorCode.noAlternative)
+        }
         currentConfigData.items.remove(item)
         item.priority -= count
         currentConfigData.items.insert(item)
+        configRepository.set(config: currentConfigData)
         infoItem = currentConfigData.topPriorityItem()
     }
 }

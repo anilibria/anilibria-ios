@@ -92,6 +92,7 @@ final class BackendRepositoryImp: BackendRepository, Loggable {
                 guard let retrier else { return .fail(error) }
                 return retry(
                     request: request,
+                    baseUrl: base,
                     with: retrier,
                     error: error,
                     retryNumber: retryNumber
@@ -110,13 +111,19 @@ final class BackendRepositoryImp: BackendRepository, Loggable {
 
     private func retry(
         request: any BackendAPIRequest,
+        baseUrl: URL?,
         with retrier: LoadRetrier,
         error: Error,
         retryNumber: Int
     ) -> AnyPublisher<NetworkResponse, Error> {
         Deferred<Future<Void, Error>> {
             Future<Void, Error> { promise in
-                retrier.need(retry: request, error: error, retryNumber: retryNumber) { needToRetry in
+                retrier.need(
+                    retry: request,
+                    baseURL: baseUrl,
+                    error: error,
+                    retryNumber: retryNumber
+                ) { needToRetry in
                     if needToRetry {
                         promise(.success(()))
                     } else {

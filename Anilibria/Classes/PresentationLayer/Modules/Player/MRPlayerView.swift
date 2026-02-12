@@ -311,7 +311,7 @@ final class PlayerViewController: BaseViewController {
                 .sink(onNext: { [weak self] duration in
                     guard let self else { return }
                     videoSliderView.set(duration: duration)
-                    playerView.set(time: playItem.time)
+                    playerView.set(time: playItem.startTime)
                     if previous?.index != playItem.index
                         && !playerView.isPlaying
                         && needsPlay {

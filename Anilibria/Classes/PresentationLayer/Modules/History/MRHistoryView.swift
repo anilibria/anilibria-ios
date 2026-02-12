@@ -13,7 +13,6 @@ final class HistoryViewController: BaseCollectionViewController {
         $0.title = L10n.Stub.title
     }
 
-    private var currentQuery: String = ""
     private let sectionAdapter = SectionAdapter([])
     private lazy var seriesHandler = RemovableSeriesCellAdapterHandler(
         select: { [weak self] item in
@@ -41,7 +40,6 @@ final class HistoryViewController: BaseCollectionViewController {
             self.navigationItem.titleView = value
             value.querySequence()
                 .sink(onNext: { [weak self] text in
-                    self?.currentQuery = text
                     self?.handler.search(query: text)
                 })
                 .store(in: &subscribers)
@@ -59,11 +57,12 @@ final class HistoryViewController: BaseCollectionViewController {
     }
 
     func updateEmptyView() {
+        guard let searchView else { return }
         var text = L10n.Stub.History.message
-        if self.searchView?.isSearching == true {
-            text = L10n.Stub.messageNotFound(self.currentQuery)
+        if searchView.isSearching {
+            text = L10n.Stub.messageNotFound(searchView.text)
         }
-        self.stubView?.message = text
+        stubView?.message = text
     }
 }
 

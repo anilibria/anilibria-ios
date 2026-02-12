@@ -1,5 +1,15 @@
+//
+//  HistoryRepository.swift
+//  Anilibria
+//
+//  Created by Ivan Morozov on 02.12.2025.
+//  Copyright © 2025 Иван Морозов. All rights reserved.
+//
+
 import DITranquillity
 import Foundation
+import Combine
+import CoreData
 
 final class HistoryRepositoryPart: DIPart {
     static func load(container: DIContainer) {
@@ -10,45 +20,123 @@ final class HistoryRepositoryPart: DIPart {
 }
 
 protocol HistoryRepository {
-    func set(item: HistoryData)
-    func remove(data id: Int)
-    func set(items: [HistoryData])
-    func getItems() -> [HistoryData]
+    func getSeriesHistory() -> AnyPublisher<[Series], Never>
+    func getActiveEpisode(for seriesID: Int) -> ActiveEpisode?
+    func add(series: Series, episodeID: String)
+    func remove(seriesID: Int)
 }
 
 final class HistoryRepositoryImp: HistoryRepository {
-    private let key: String = "HISTORY_KEY_2"
+    let holder: CoreDataHolder
 
-    private var buffered: HistoryHolder?
+    init(holder: CoreDataHolder) {
+        self.holder = holder
 
-    func set(items: [HistoryData]) {
-        self.buffered = HistoryHolder(items: items)
-        UserDefaults.standard[key] = self.buffered
+        self.migrationIfNeeded()
     }
 
-    func getItems() -> [HistoryData] {
-        if let data = self.buffered {
-            return data.items
+    func getSeriesHistory() -> AnyPublisher<[Series], Never> {
+        return holder.getBackgroundContext()
+            .map { context in
+                let decoder = JSONDecoder()
+                return context.fetch(
+                    SeriesDataEntity.self,
+                    sortDescriptors: [NSSortDescriptor(key: "updatedAt", ascending: false)]
+                )
+                .compactMap { $0.getSeries(with: decoder) }
+            }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+
+    func add(series: Series, episodeID: String) {
+        let context = holder.context
+        context.performAndWait {
+            let predicate = NSPredicate(
+                format: "id == %i",
+                series.id
+            )
+            let entity = context.fetch(SeriesDataEntity.self, predicate: predicate).first
+            if entity != nil {
+                entity?.update(with: series, episodeID: episodeID)
+            } else {
+                SeriesDataEntity.make(from: series, episodeID: episodeID, context: context)
+            }
+            context.saveIfNeeded()
         }
-
-        self.buffered = UserDefaults.standard[key] ?? HistoryHolder(items: [])
-        return self.buffered!.items
     }
 
-    func set(item: HistoryData) {
-        var items = self.getItems()
-        items.removeAll(where: { $0.series.id == item.series.id })
-        items.insert(item, at: 0)
-        self.set(items: items)
+    func remove(seriesID: Int) {
+        let context = holder.context
+        context.performAndWait {
+            let predicate = NSPredicate(
+                format: "id == %i",
+                seriesID
+            )
+            context.deleteAll(SeriesDataEntity.self, predicate: predicate)
+            context.saveIfNeeded()
+        }
     }
 
-    func remove(data id: Int) {
-        var items = self.getItems()
-        items.removeAll(where: { $0.series.id == id })
-        self.set(items: items)
+    func getActiveEpisode(for seriesID: Int) -> ActiveEpisode? {
+        let context = holder.context
+        return context.performAndWaitWithResult {
+            let predicate = NSPredicate(
+                format: "id == %i",
+                seriesID
+            )
+            let entity = context.fetch(SeriesDataEntity.self, predicate: predicate).first
+            if let id = entity?.activeEpisodeID {
+                return ActiveEpisode.id(id)
+            }
+
+            if let index = entity?.activeEpisodeIndex {
+                return ActiveEpisode.index(Int(index))
+            }
+
+            return nil
+        }
     }
 }
 
-private struct HistoryHolder: Codable {
-    var items: [HistoryData]
+extension SeriesDataEntity {
+    func getSeries(with decoder: JSONDecoder = JSONDecoder()) -> Series? {
+        guard let series else { return nil }
+        return try? decoder.decode(Series.self, from: series)
+    }
+
+    @discardableResult
+    static func make(
+        from series: Series,
+        episodeID: String? = nil,
+        episodeIndex: Int = -1,
+        updatedAt: Date = Date(),
+        context: NSManagedObjectContext
+    ) -> SeriesDataEntity? {
+        guard let data = try? JSONEncoder().encode(series) else {
+            return nil
+        }
+        let newEntity = SeriesDataEntity(context: context)
+        newEntity.id = Int64(series.id)
+        newEntity.series = data
+        newEntity.activeEpisodeID = episodeID
+        newEntity.activeEpisodeIndex = Int32(episodeIndex)
+        newEntity.updatedAt = updatedAt
+        return newEntity
+    }
+
+    func update(with series: Series, episodeID: String) {
+        guard let data = try? JSONEncoder().encode(series) else {
+            return
+        }
+        self.series = data
+        self.activeEpisodeID = episodeID
+        self.activeEpisodeIndex = -1
+        self.updatedAt = Date()
+    }
+}
+
+enum ActiveEpisode {
+    case id(String)
+    case index(Int)
 }

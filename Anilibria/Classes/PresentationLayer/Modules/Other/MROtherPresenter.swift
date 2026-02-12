@@ -41,8 +41,6 @@ extension OtherPresenter: OtherEventHandler {
                 case let .user(value):
                     self?.isAuthorized = true
                     self?.view.set(user: value, loading: false)
-                case nil:
-                    self?.view.set(user: nil, loading: true)
                 }
             })
             .store(in: &bag)

@@ -35,81 +35,127 @@ public struct Series: Codable, Hashable {
 
     private let originalDesc: String
 
+    enum CodingKeys: String, CodingKey {
+        case id
+        case type
+        case year
+        case name
+        case alias
+        case season
+        case notification
+
+        case poster
+        case src
+
+        case freshAt = "fresh_at"
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
+
+        case isOngoing = "is_ongoing"
+        case ageRating = "age_rating"
+        case publishDay = "publish_day"
+        case originalDesc = "description"
+        case episodesTotal = "episodes_total"
+        case isInProduction = "is_in_production"
+        case isBlockedByGeo = "is_blocked_by_geo"
+        case episodesAreUnknown = "episodes_are_unknown"
+        case isBlockedByCopyrights = "is_blocked_by_copyrights"
+        case averageDurationOfEpisode = "average_duration_of_episode"
+
+        case favorite = "added_in_users_favorites"
+        case planned = "added_in_planned_collection"
+        case watched = "added_in_watched_collection"
+        case watching = "added_in_watching_collection"
+        case postponed = "added_in_postponed_collection"
+        case abandoned = "added_in_abandoned_collection"
+
+        case genres
+        case members
+        case playlist = "episodes"
+        case torrents
+        case sponsor
+    }
+
     public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeyString.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         let urlConverter = URLConverter()
         let dateConverter = DateConverter()
         let atributedContverter = AttributedConverter(css: Css.text())
-        id = try container.decode(required: "id")
-        type = container.decode("type")
-        year = container.decode("year")
-        name = container.decode("name")
-        alias = container.decode("alias") ?? ""
-        season = container.decode("season")
-        poster = urlConverter.convert(from: container.decode("poster", "src"))
+        id = try container.decode(required: .id)
+        type = container.decode(.type)
+        year = container.decode(.year)
+        name = container.decode(.name)
+        alias = container.decode(.alias) ?? ""
+        season = container.decode(.season)
+        poster = urlConverter.convert(from: container.decode(.poster, .src))
 
-        freshAt = dateConverter.convert(from: container.decode("fresh_at"))
-        createdAt = dateConverter.convert(from: container.decode("created_at"))
-        updatedAt = dateConverter.convert(from:container.decode("updated_at"))
+        freshAt = dateConverter.convert(from: container.decode(.freshAt))
+        createdAt = dateConverter.convert(from: container.decode(.createdAt))
+        updatedAt = dateConverter.convert(from:container.decode(.updatedAt))
 
-        isOngoing = container.decode("is_ongoing") ?? false
-        ageRating = container.decode("age_rating")
-        publishDay = container.decode("publish_day")
-        originalDesc = container.decode("description") ?? ""
+        isOngoing = container.decode(.isOngoing) ?? false
+        ageRating = container.decode(.ageRating)
+        publishDay = container.decode(.publishDay)
+        originalDesc = container.decode(.originalDesc) ?? ""
         desc = atributedContverter.convert(from: originalDesc)
-        notification = container.decode("notification") ?? ""
-        episodesTotal = container.decode("episodes_total")
-        isInProduction = container.decode("is_in_production") ?? false
-        isBlockedByGeo = container.decode("is_blocked_by_geo") ?? false
-        episodesAreUnknown = container.decode("episodes_are_unknown") ?? true
-        isBlockedByCopyrights = container.decode("is_blocked_by_copyrights") ?? false
-        averageDurationOfEpisode = container.decode("average_duration_of_episode")
-        genres = (container.decode("genres") ?? []).sorted(by: { $0.name < $1.name })
-        members = container.decode("members") ?? []
-        playlist = container.decode("episodes") ?? []
-        torrents = container.decode("torrents") ?? []
-        sponsor = container.decode("sponsor")
+        notification = container.decode(.notification) ?? ""
+        episodesTotal = container.decode(.episodesTotal)
+        isInProduction = container.decode(.isInProduction) ?? false
+        isBlockedByGeo = container.decode(.isBlockedByGeo) ?? false
+        episodesAreUnknown = container.decode(.episodesAreUnknown) ?? true
+        isBlockedByCopyrights = container.decode(.isBlockedByCopyrights) ?? false
+        averageDurationOfEpisode = container.decode(.averageDurationOfEpisode)
+        genres = (container.decode(.genres) ?? []).sorted(by: { $0.name < $1.name })
+        members = container.decode(.members) ?? []
+        playlist = container.decode(.playlist) ?? []
+        torrents = container.decode(.torrents) ?? []
+        sponsor = container.decode(.sponsor)
 
         var info = [UserCollectionKey: Int]()
-        info[.favorite] = container.decode("added_in_users_favorites") ?? 0
-        info[.planned] = container.decode("added_in_planned_collection") ?? 0
-        info[.watched] = container.decode("added_in_watched_collection") ?? 0
-        info[.watching] = container.decode("added_in_watching_collection") ?? 0
-        info[.postponed] = container.decode("added_in_postponed_collection") ?? 0
-        info[.abandoned] = container.decode("added_in_abandoned_collection") ?? 0
+        info[.favorite] = container.decode(.favorite) ?? 0
+        info[.planned] = container.decode(.planned) ?? 0
+        info[.watched] = container.decode(.watched) ?? 0
+        info[.watching] = container.decode(.watching) ?? 0
+        info[.postponed] = container.decode(.postponed) ?? 0
+        info[.abandoned] = container.decode(.abandoned) ?? 0
         addedIn = info
 
     }
 
     public func encode(to encoder: Encoder) throws {
-        encoder.apply(CodingKeyString.self) { container in
-            container["id"] = id
-            container["type"] = type
-            container["year"] = year
-            container["name"] = name
-            container["alias"] = alias
-            container["season"] = season
-            container["poster"]["src"] = poster?.absoluteString
-            container["fresh_at"] = freshAt
-            container["created_at"] = createdAt
-            container["updated_at"] = updatedAt
-            container["is_ongoing"] = isOngoing
-            container["age_rating"] = ageRating
-            container["publish_day"] = publishDay
-            container["description"] = originalDesc
-            container["notification"] = notification
-            container["episodes_total"] = episodesTotal
-            container["is_in_production"] = isInProduction
-            container["is_blocked_by_geo"] = isBlockedByGeo
-            container["episodes_are_unknown"] = episodesAreUnknown
-            container["is_blocked_by_copyrights"] = isBlockedByCopyrights
-            container["average_duration_of_episode"] = averageDurationOfEpisode
-            container["added_in_users_favorites"] = addedIn[.favorite]
-            container["added_in_planned_collection"] = addedIn[.planned]
-            container["added_in_watched_collection"] = addedIn[.watched]
-            container["added_in_watching_collection"] = addedIn[.watching]
-            container["added_in_postponed_collection"] = addedIn[.postponed]
-            container["added_in_abandoned_collection"] = addedIn[.abandoned]
+        encoder.apply(CodingKeys.self) { container in
+            container[.id] = id
+            container[.type] = type
+            container[.year] = year
+            container[.name] = name
+            container[.alias] = alias
+            container[.season] = season
+            container[.poster][.src] = poster?.absoluteString
+            container[.freshAt] = freshAt
+            container[.createdAt] = createdAt
+            container[.updatedAt] = updatedAt
+            container[.isOngoing] = isOngoing
+            container[.ageRating] = ageRating
+            container[.publishDay] = publishDay
+            container[.originalDesc] = originalDesc
+            container[.notification] = notification
+            container[.episodesTotal] = episodesTotal
+            container[.isInProduction] = isInProduction
+            container[.isBlockedByGeo] = isBlockedByGeo
+            container[.episodesAreUnknown] = episodesAreUnknown
+            container[.isBlockedByCopyrights] = isBlockedByCopyrights
+            container[.averageDurationOfEpisode] = averageDurationOfEpisode
+            container[.favorite] = addedIn[.favorite]
+            container[.planned] = addedIn[.planned]
+            container[.watched] = addedIn[.watched]
+            container[.watching] = addedIn[.watching]
+            container[.postponed] = addedIn[.postponed]
+            container[.abandoned] = addedIn[.abandoned]
+            container[.genres] = genres
+            container[.members] = members
+            container[.playlist] = playlist
+            container[.torrents] = torrents
+            container[.sponsor] = sponsor
         }
     }
 }
@@ -146,7 +192,7 @@ struct AgeRating: Codable, Hashable {
     }
 }
 
-struct Genre: Decodable, Hashable {
+struct Genre: Codable, Hashable {
     let id: Int
     let name: String
     let totalReleases: Int?
@@ -160,9 +206,18 @@ struct Genre: Decodable, Hashable {
         totalReleases = container.decode("total_releases")
         imageURL = urlConverter.convert(from: container.decode("image", "preview"))
     }
+
+    public func encode(to encoder: Encoder) throws {
+        encoder.apply(CodingKeyString.self) { container in
+            container["id"] = id
+            container["name"] = name
+            container["total_releases"] = totalReleases
+            container["image"]["preview"] = imageURL?.absoluteString
+        }
+    }
 }
 
-struct Member: Decodable, Hashable {
+struct Member: Codable, Hashable {
     let id: String
     let name: String
     let role: DescribedValue<String>?
@@ -175,9 +230,18 @@ struct Member: Decodable, Hashable {
         role = container.decode("role")
         user = container.decode("user")
     }
+
+    public func encode(to encoder: Encoder) throws {
+        encoder.apply(CodingKeyString.self) { container in
+            container["id"] = id
+            container["nickname"] = name
+            container["role"] = role
+            container["user"] = user
+        }
+    }
 }
 
-struct Sponsor: Decodable, Hashable {
+struct Sponsor: Codable, Hashable {
     let id: String
     let title: String
     let description: String?

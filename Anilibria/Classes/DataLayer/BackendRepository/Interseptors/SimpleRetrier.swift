@@ -19,6 +19,7 @@ struct SimpleRetrier: LoadRetrier {
 
     func need(
         retry request: any BackendAPIRequest,
+        baseURL: URL?,
         error: any Error,
         retryNumber: Int,
         completion: @escaping RetryCompletion

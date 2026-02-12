@@ -19,6 +19,7 @@ final class SeriesPresenter {
 
     private let mainService: MainService
     private let sessionService: SessionService
+    private let playerService: PlayerService
     private let favoriteService: FavoriteService
     private let collectionsService: UserCollectionsService
     private let downloadService: DownloadService
@@ -27,15 +28,21 @@ final class SeriesPresenter {
     private var collectionType: UserCollectionType?
     private var requestBag = Set<AnyCancellable>()
     private var updatesBag = Set<AnyCancellable>()
-    private var isAutorized: Bool = false
+    private var userID: Int?
+
+    private var isAuthorized: Bool {
+        userID != nil
+    }
 
     init(mainService: MainService,
          sessionService: SessionService,
+         playerService: PlayerService,
          favoriteService: FavoriteService,
          downloadService: DownloadService,
          collectionsService: UserCollectionsService) {
         self.mainService = mainService
         self.sessionService = sessionService
+        self.playerService = playerService
         self.favoriteService = favoriteService
         self.downloadService = downloadService
         self.collectionsService = collectionsService
@@ -85,8 +92,8 @@ extension SeriesPresenter: SeriesEventHandler {
 
         self.sessionService.fetchState().sink { [weak self] state in
             switch state {
-            case .user: self?.isAutorized = true
-            default: self?.isAutorized = false
+            case .user(let user): self?.userID = user.id
+            default: self?.userID = nil
             }
 
             self?.load(self?.view.showUpdatesActivity())
@@ -117,7 +124,7 @@ extension SeriesPresenter: SeriesEventHandler {
 
     func favorite(_ activity: (any ActivityDisposable)?) {
         guard let favoriteState else { return }
-        if !isAutorized {
+        if !isAuthorized {
             router.signInScreen()
             return
         }
@@ -130,7 +137,7 @@ extension SeriesPresenter: SeriesEventHandler {
     }
 
     func selectCollection(_ activity: (any ActivityDisposable)?) {
-        if !isAutorized {
+        if !isAuthorized {
             router.signInScreen()
             return
         }
@@ -184,13 +191,14 @@ extension SeriesPresenter: SeriesEventHandler {
     private func load(_ activity: (any ActivityDisposable)? = nil) {
         requestBag.removeAll()
 
-        Publishers.CombineLatest3(
+        Publishers.CombineLatest4(
+            playerService.syncTimeCodes(userID: userID, seriesID: series.id),
             mainService.series(with: series.id),
-            isAutorized ? favoriteService.getFavoriteState(for: series.id) : .just(false),
-            isAutorized ? collectionsService.getCollection(for: series.id) : .just(nil)
+            isAuthorized ? favoriteService.getFavoriteState(for: series.id) : .just(false),
+            isAuthorized ? collectionsService.getCollection(for: series.id) : .just(nil)
         )
         .manageActivity(activity)
-        .sink { [weak self] item, state, collection in
+        .sink { [weak self] _, item, state, collection in
             guard let self else { return }
             series = item
             view.set(series: item)
@@ -212,7 +220,11 @@ extension SeriesPresenter: SeriesEventHandler {
     }
 
     func play() {
-        self.router.openPlayer(series: self.series)
+        self.router.openPlayer(userID: userID, series: series)
+    }
+
+    func episodes() {
+        self.router.openEpisodes(userID: userID, series: series)
     }
 
     func download(torrent: Torrent) {

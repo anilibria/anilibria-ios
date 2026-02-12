@@ -8,7 +8,7 @@ public protocol ErrorDisplayable {
 public enum AppError: Error {
     private static let errorDomain: String = "MRKitErrorDomain"
 
-    case error(code: Int)
+    case error(code: MRKitErrorCode)
     case network(statusCode: Int)
     case other(error: Error)
     case plain(message: String)
@@ -20,7 +20,7 @@ extension AppError: ErrorDisplayable {
         case let .other(error):
             return error.message
         case let .error(code):
-            return "Error: \(code)"
+            return "Error: \(code.rawValue)"
         case let .network(code):
             switch code {
             case 403: return L10n.Error.authorizationInvailid

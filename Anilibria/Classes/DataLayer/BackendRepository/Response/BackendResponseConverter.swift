@@ -25,7 +25,9 @@ public class JsonResponseConverter: BackendResponseConverter, Loggable {
             if T.ResponseObject.self == Data.self {
                 return (response.data as? T.ResponseObject, nil)
             }
-            let responseData = try JSONDecoder().decode(T.ResponseObject.self, from: response.data)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let responseData = try decoder.decode(T.ResponseObject.self, from: response.data)
             return (responseData, nil)
         } catch {
             if let type = T.ResponseObject.self as? ExpressibleByNilLiteral.Type,

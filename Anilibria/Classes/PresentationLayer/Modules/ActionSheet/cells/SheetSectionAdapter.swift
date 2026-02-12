@@ -16,7 +16,7 @@ class SheetSectionAdapter: SectionAdapterProtocol {
     private var context: AdapterContext?
     private var cancellable: AnyCancellable?
 
-    @Published var selectedValue: String?
+    @Published var selectedValue: NSAttributedString?
 
     let expandingChanged = PassthroughSubject<Void, Never>()
 
@@ -113,7 +113,7 @@ class SheetSectionAdapter: SectionAdapterProtocol {
             view.set(title: title)
             view.set(expanded: isExpanded, animated: false)
             cancellable = $selectedValue.sink(receiveValue: { [weak view] value in
-                view?.set(value: value)
+                view?.set(value: value?.string)
             })
             view.setValue(hidden: isExpanded != false)
             view.tapAction = { [weak self, weak view] in

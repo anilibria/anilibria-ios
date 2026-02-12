@@ -23,6 +23,7 @@ protocol SeriesEventHandler: ViewControllerEventHandler, RefreshEventHandler {
     func schedule()
     func back()
     func play()
+    func episodes()
     func download(torrent: Torrent)
 
     func favorite(_ activity: (any ActivityDisposable)?)

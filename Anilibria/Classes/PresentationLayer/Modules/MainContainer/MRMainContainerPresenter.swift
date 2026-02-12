@@ -54,7 +54,7 @@ extension MainContainerPresenter: MainContainerEventHandler {
             .fetchState()
             .sink(onNext: { [weak self] value in
                 switch value {
-                case .guest, nil:
+                case .guest:
                     if let current = self?.menuService.getSelected(), current == .collections {
                         self?.menuService.setMenuItem(type: .feed)
                     }

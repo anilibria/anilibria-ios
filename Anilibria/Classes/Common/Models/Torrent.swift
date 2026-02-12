@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Torrent: Decodable, Hashable {
+public struct Torrent: Codable, Hashable {
     let id: Int
     let torrentHash: String
     let size: Int64
@@ -38,20 +38,38 @@ public struct Torrent: Decodable, Hashable {
     }
 
     public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeyString.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         let dateConverter = DateConverter()
-        id = try container.decode(required: "id")
-        torrentHash = container.decode("hash") ?? ""
-        size = container.decode("size") ?? 0
-        type = container.decode("type")
-        label = container.decode("label") ?? ""
-        magnet = container.decode("magnet") ?? ""
-        filename = container.decode("filename") ?? ""
-        seeders = container.decode("seeders") ?? 0
-        leechers = container.decode("leechers") ?? 0
-        completed = container.decode("completed_times") ?? 0
-        description = container.decode("description") ?? ""
-        updatedAt = dateConverter.convert(from: container.decode("updated_at"))
+        id = try container.decode(required: .id)
+        torrentHash = container.decode(.torrentHash) ?? ""
+        size = container.decode(.size) ?? 0
+        type = container.decode(.type)
+        label = container.decode(.label) ?? ""
+        magnet = container.decode(.magnet) ?? ""
+        filename = container.decode(.filename) ?? ""
+        seeders = container.decode(.seeders) ?? 0
+        leechers = container.decode(.leechers) ?? 0
+        completed = container.decode(.completed) ?? 0
+        description = container.decode(.description) ?? ""
+        updatedAt = dateConverter.convert(from: container.decode(.updatedAt))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        let dateConverter = DateConverter()
+        encoder.apply(CodingKeys.self) { container in
+            container[.id] = id
+            container[.torrentHash] = torrentHash
+            container[.size] = size
+            container[.type] = type
+            container[.label] = label
+            container[.magnet] = magnet
+            container[.filename] = filename
+            container[.seeders] = seeders
+            container[.leechers] = leechers
+            container[.completed] = completed
+            container[.description] = description
+            container[.updatedAt] = dateConverter.convert(from: updatedAt)
+        }
     }
 }
 

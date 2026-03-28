@@ -23,21 +23,16 @@ final class MainRetrier: LoadRetrier {
             sessionService?.forceLogout()
             completion(false)
         case let error as URLError where [
-            .timedOut,
+            .notConnectedToInternet,
             .networkConnectionLost,
-            .cannotFindHost,
-            .cannotConnectToHost,
-            .badServerResponse,
-            .cannotParseResponse,
-            .resourceUnavailable
         ].contains(error.code):
+            // don't retry
+            completion(false)
+        default:
             appConfig.updateBaseUrl(baseURL).sink(
                 onNext: { _ in completion(true) },
                 onError: { _ in completion(false) }
             ).store(in: &cancellables)
-        default:
-            // don't retry
-            completion(false)
         }
     }
 }

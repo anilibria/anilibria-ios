@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24765" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24743"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SearchViewController" customModule="Anilibria" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SearchViewController" customModule="AniLiberty" customModuleProvider="target">
             <connections>
                 <outlet property="backview" destination="pJS-rq-fWi" id="mbf-rU-iME"/>
                 <outlet property="collectionHeightConstraint" destination="5BL-dJ-45L" id="XQR-OZ-ZO5"/>
@@ -26,10 +26,16 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d7b-dd-oxZ" customClass="ShadowView" customModule="Anilibria" customModuleProvider="target">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d7b-dd-oxZ" customClass="ShadowView" customModule="AniLiberty" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="96" width="414" height="732"/>
                     <subviews>
-                        <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w8J-re-mrl" customClass="BorderedView" customModule="Anilibria" customModuleProvider="target">
+                        <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1" verticalHuggingPriority="1" horizontalCompressionResistancePriority="1" verticalCompressionResistancePriority="1" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pf1-Q5-afI">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="732"/>
+                            <connections>
+                                <action selector="backAction:" destination="-1" eventType="touchUpInside" id="xSv-6K-pUN"/>
+                            </connections>
+                        </button>
+                        <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w8J-re-mrl" customClass="BorderedView" customModule="AniLiberty" customModuleProvider="target">
                             <rect key="frame" x="363" y="2" width="35" height="40"/>
                             <subviews>
                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CC9-9d-pBX">
@@ -55,6 +61,9 @@
                                     <state key="normal">
                                         <imageReference key="image" image="xmark" catalog="system" symbolScale="medium"/>
                                     </state>
+                                    <connections>
+                                        <action selector="backAction:" destination="-1" eventType="touchUpInside" id="9iL-ay-Uzw"/>
+                                    </connections>
                                 </button>
                             </subviews>
                             <color key="backgroundColor" name="surfaces/content"/>
@@ -77,13 +86,7 @@
                                 </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                         </view>
-                        <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1" verticalHuggingPriority="1" horizontalCompressionResistancePriority="1" verticalCompressionResistancePriority="1" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pf1-Q5-afI">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="732"/>
-                            <connections>
-                                <action selector="backAction:" destination="-1" eventType="touchUpInside" id="xSv-6K-pUN"/>
-                            </connections>
-                        </button>
-                        <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W6w-2u-Nrt" customClass="PassThrougScrollView" customModule="Anilibria" customModuleProvider="target">
+                        <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W6w-2u-Nrt" customClass="PassThrougScrollView" customModule="AniLiberty" customModuleProvider="target">
                             <rect key="frame" x="363" y="37" width="35" height="695"/>
                             <subviews>
                                 <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pJS-rq-fWi">
@@ -122,10 +125,10 @@
                             <viewLayoutGuide key="contentLayoutGuide" id="V48-oC-p5h"/>
                             <viewLayoutGuide key="frameLayoutGuide" id="9YH-eP-wu8"/>
                         </scrollView>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gHl-8P-eG4" customClass="HideableView" customModule="Anilibria" customModuleProvider="target">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gHl-8P-eG4" customClass="HideableView" customModule="AniLiberty" customModuleProvider="target">
                             <rect key="frame" x="363" y="37" width="35" height="5"/>
                             <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R7F-TS-uXO" customClass="GradientView" customModule="Anilibria" customModuleProvider="target">
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R7F-TS-uXO" customClass="GradientView" customModule="AniLiberty" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="35" height="5"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <userDefinedRuntimeAttributes>

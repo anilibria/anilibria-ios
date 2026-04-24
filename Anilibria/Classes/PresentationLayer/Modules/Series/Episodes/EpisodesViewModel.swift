@@ -10,38 +10,44 @@ import Foundation
 import Combine
 import DITranquillity
 
-final class EpisodesPart: DIPart {
-    static func load(container: DIContainer) {
-        container.register(EpisodesViewModel.init)
-            .lifetime(.objectGraph)
-    }
-}
-
 class EpisodesViewModel {
-    private var series: Series!
+    private var series: Series?
     private var userID: Int?
-    private var router: (any EpisodesRoutable)!
     private var reversed: Bool = false
 
-    let items = CurrentValueSubject<[EpisodeViewModel]?, Never>(nil)
-    private var list: [EpisodeViewModel] = []
     private var episodeIndexes: [String: Int] = [:]
     private var searchQuery: String = ""
 
+    let items = CurrentValueSubject<[EpisodeViewModel]?, Never>(nil)
+    private var list: [EpisodeViewModel] = [] {
+        didSet {
+            isEmpty = list.isEmpty
+        }
+    }
+    
+    @Published private(set) var isEmpty: Bool = true
+    @Published private(set) var activeEpisode: PlaylistItem?
+
     private let playerService: PlayerService
-    private var bag = Set<AnyCancellable>()
+    private var playerBag = Set<AnyCancellable>()
+    private var updatesBag = Set<AnyCancellable>()
+
+    var playHandler: ((PlaylistItem) -> Void)?
+    var showOptionsHandler: (([ChoiceGroup]) -> Void)?
 
     init(playerService: PlayerService) {
         self.playerService = playerService
     }
 
-    func bind(userID: Int?, series: Series, router: any EpisodesRoutable) {
+    func set(series: Series, userID: Int?) {
         self.userID = userID
         self.series = series
-        self.router = router
+        loadTimeCodes()
     }
 
-    func didLoad() {
+    private func loadTimeCodes() {
+        guard let series else { return }
+        playerBag.removeAll()
         playerService.getTimeCodes(userID: userID, seriesID: series.id)
             .sink { [weak self] data in
                 guard let self else { return }
@@ -54,9 +60,10 @@ class EpisodesViewModel {
                     )
                 }
                 items.value = list
-            }.store(in: &bag)
+                updateActive()
+            }.store(in: &playerBag)
 
-        playerService.observeTimecodesUpdates()
+        let timecodesUpdates = playerService.observeTimecodesUpdates()
             .filter { [series] in $0.seriesID == series.id }
             .receive(on: DispatchQueue.global(qos: .userInitiated))
             .map { [weak self] data -> Void in
@@ -68,11 +75,21 @@ class EpisodesViewModel {
                 }
             }
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in
-                guard let self else { return }
-                search(query: searchQuery)
-            }
-            .store(in: &bag)
+            .share()
+
+        timecodesUpdates.sink { [weak self] in
+            guard let self else { return }
+            search(query: searchQuery)
+        }
+        .store(in: &playerBag)
+
+        Publishers.CombineLatest(
+            timecodesUpdates,
+            playerService.observeHistoryUpdates()
+                .filter { [series] in $0.seriesID == series.id }
+        ).sink { [weak self] _, _ in
+            self?.updateActive()
+        }.store(in: &playerBag)
     }
 
     func search(query: String) {
@@ -98,7 +115,7 @@ class EpisodesViewModel {
     }
 
     func play(item: EpisodeViewModel) {
-        router?.openPlayer(userID: userID, series: series, episode: item.item)
+        self.playHandler?(item.item)
     }
 
     func toggleDirection() {
@@ -121,10 +138,11 @@ class EpisodesViewModel {
             )
         }
 
-        self.router.openSheet(with: [ChoiceGroup(items: items)])
+        showOptionsHandler?([ChoiceGroup(items: items)])
     }
 
     private func setAllAsWatched(isWatched: Bool) {
+        guard let series, !list.isEmpty else { return }
         playerService.set(
             timeCodes: list.lazy
                 .filter { $0.timecode.isWatched != isWatched }
@@ -134,10 +152,34 @@ class EpisodesViewModel {
     }
 
     private func toggle(watching episode: EpisodeViewModel) {
+        guard let series else { return }
         playerService.set(
             timeCodes: [episode.toggleWatching().timecode],
             for: series
         )
+    }
+
+
+    private func updateActive() {
+        guard let series else { return }
+        let activeIndex = playerService.getActiveEpisodeID(for: series).flatMap({ id in
+            list.firstIndex(where: { $0.item.id == id })
+        }) ?? list.count - 1
+
+        guard activeIndex > -1 else {
+            activeEpisode = nil
+            return
+        }
+
+        func searchActual(with index: Int) -> EpisodeViewModel {
+            let target = list[index]
+            if index == 0 || !target.timecode.isWatched {
+                return target
+            }
+            return searchActual(with: index - 1)
+        }
+
+        activeEpisode = searchActual(with: activeIndex).item
     }
 }
 
@@ -151,5 +193,14 @@ private extension EpisodeViewModel {
             result.timecode.time = 0
         }
         return result
+    }
+}
+
+private extension HistoryUpdates {
+    var seriesID: Int {
+        switch self {
+        case .added(let series), .removed(let series):
+            return series.id
+        }
     }
 }

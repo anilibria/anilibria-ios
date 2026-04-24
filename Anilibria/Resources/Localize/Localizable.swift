@@ -795,6 +795,10 @@ enum L10n {
         static func messageNotFound(_ arg1: String) -> String {
             return L10n.tr("Localizable", "stub.message_not_found", arg1)
         }
+        /// There is no available episodes
+        static var `noEpisodes`: String {
+            return L10n.tr("Localizable", "stub.no_episodes")
+        }
         /// Empty
         static var `title`: String {
             return L10n.tr("Localizable", "stub.title")

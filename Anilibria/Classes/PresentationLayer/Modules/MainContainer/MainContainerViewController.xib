@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24765" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24743"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MainContainerViewController" customModule="Anilibria" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MainContainerViewController" customModule="AniLiberty" customModuleProvider="target">
             <connections>
                 <outlet property="menuTabBar" destination="lbm-cD-8Dy" id="ZT7-L1-PEH"/>
                 <outlet property="pagerView" destination="Hng-aB-oz2" id="lC1-r2-Xqh"/>
@@ -22,7 +22,7 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hng-aB-oz2" customClass="PagerView" customModule="Anilibria" customModuleProvider="target">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hng-aB-oz2" customClass="PagerView" customModule="AniLiberty" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="96" width="414" height="688"/>
                     <viewLayoutGuide key="safeArea" id="p8R-MG-EL7"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -30,25 +30,27 @@
                         <outlet property="rootController" destination="-1" id="Pp1-Gj-x8L"/>
                     </connections>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gi0-Ok-EvC" customClass="ShadowView" customModule="Anilibria" customModuleProvider="target">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gi0-Ok-EvC" customClass="ShadowView" customModule="AniLiberty" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="784" width="414" height="112"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hlb-eq-Zu7">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="112"/>
                             <subviews>
-                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="lbm-cD-8Dy" customClass="MenuTabController" customModule="Anilibria" customModuleProvider="target">
+                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="lbm-cD-8Dy" customClass="MenuTabController" customModule="AniLiberty" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="44" id="U2b-Oa-t3K"/>
+                                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="440" id="UeN-x0-L3D"/>
                                     </constraints>
                                 </stackView>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstItem="lbm-cD-8Dy" firstAttribute="top" secondItem="hlb-eq-Zu7" secondAttribute="top" id="Rte-Zj-iwO"/>
-                                <constraint firstAttribute="trailing" secondItem="lbm-cD-8Dy" secondAttribute="trailing" id="hla-Qr-8vg"/>
-                                <constraint firstItem="lbm-cD-8Dy" firstAttribute="leading" secondItem="hlb-eq-Zu7" secondAttribute="leading" id="uWx-US-xAH"/>
+                                <constraint firstItem="lbm-cD-8Dy" firstAttribute="centerX" secondItem="hlb-eq-Zu7" secondAttribute="centerX" id="eno-eW-SLk"/>
+                                <constraint firstAttribute="trailing" secondItem="lbm-cD-8Dy" secondAttribute="trailing" priority="999" id="hla-Qr-8vg"/>
+                                <constraint firstItem="lbm-cD-8Dy" firstAttribute="leading" secondItem="hlb-eq-Zu7" secondAttribute="leading" priority="999" id="uWx-US-xAH"/>
                             </constraints>
                         </view>
                     </subviews>

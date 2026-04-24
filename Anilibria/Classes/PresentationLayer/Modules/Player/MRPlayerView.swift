@@ -70,14 +70,6 @@ final class PlayerViewController: BaseViewController {
         self.bottomShadowView.shadowOpacity = 1
         self.bottomShadowView.shadowColor = .black
 
-        #if targetEnvironment(macCatalyst)
-        let window = UIApplication.getWindow()
-        window?.windowScene?.sizeRestrictions?.minimumSize = Sizes.minSize
-        window?.windowScene?.sizeRestrictions?.maximumSize = Sizes.maxSize
-
-        MacOSHelper.shared.fullscreenButtonEnabled = true
-        #endif
-
         let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handle))
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handle))
         tapRecognizer.cancelsTouchesInView = false
@@ -90,14 +82,6 @@ final class PlayerViewController: BaseViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         viewModel.save()
-        #if targetEnvironment(macCatalyst)
-        let window = UIApplication.getWindow()
-        window?.windowScene?.sizeRestrictions?.minimumSize = Sizes.minSize
-        window?.windowScene?.sizeRestrictions?.maximumSize = Sizes.minSize
-
-        MacOSHelper.shared.toggleFullScreen()
-        MacOSHelper.shared.fullscreenButtonEnabled = false
-        #endif
     }
 
     override var canBecomeFirstResponder: Bool { true }

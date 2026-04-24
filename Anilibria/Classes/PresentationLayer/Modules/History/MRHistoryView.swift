@@ -13,7 +13,13 @@ final class HistoryViewController: BaseCollectionViewController {
         $0.title = L10n.Stub.title
     }
 
-    private let sectionAdapter = SectionAdapter([])
+    private let sectionAdapter: SectionAdapter = {
+        let section = SectionAdapter([])
+        section.estimatedHeight = 140
+        section.ipad = .init(expectedWidth: 320)
+        return section
+    }()
+
     private lazy var seriesHandler = RemovableSeriesCellAdapterHandler(
         select: { [weak self] item in
             self?.searchView?.resignFirstResponder()
@@ -31,7 +37,6 @@ final class HistoryViewController: BaseCollectionViewController {
         self.setupNavbar()
         self.addKeyboardObservers()
         self.handler.didLoad()
-        self.sectionAdapter.estimatedHeight = 140
         self.collectionView.contentInset.top = 10
     }
 

@@ -63,9 +63,6 @@ extension PlayerViewModel {
 
         if let episode {
             run(item: episode)
-        } else if let id = playerService.getActiveEpisodeID(for: series),
-                  let item = series.playlist.first(where: { $0.id == id }) {
-            run(item: item)
         } else if let item = series.playlist.first {
             run(item: item)
         }

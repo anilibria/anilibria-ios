@@ -5,20 +5,15 @@ import Combine
 
 final class SeriesViewController: BaseViewController {
     @IBOutlet var scrollView: UIScrollView!
-    @IBOutlet var headerContainerView: UIView!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var secondTitleLabel: UILabel!
     @IBOutlet var favoriteView: SeriesFavoriteView!
     @IBOutlet var typeView: SeriesCollectionTypeView!
-    @IBOutlet var episodesButton: UIButton!
+    @IBOutlet var donateButton: UIButton!
     @IBOutlet var tagsView: TagsView!
 
-    @IBOutlet var paramsTextView: AttributeLinksView!
-    @IBOutlet var descTextView: AttributeLinksView!
-    @IBOutlet var weekDayStackView: UIStackView!
-    @IBOutlet var weekDaysContainer: UIView!
+    @IBOutlet var infoTextView: AttributeLinksView!
     @IBOutlet var anonceLabel: UILabel!
-    @IBOutlet var separatorView: UIView!
     @IBOutlet var supportLabel: UILabel!
     @IBOutlet var supportLabelContainer: BorderedView!
     @IBOutlet var supportButton: UIButton!
@@ -29,27 +24,54 @@ final class SeriesViewController: BaseViewController {
     @IBOutlet var relatedShimmerView: ShimmerView!
     @IBOutlet var contentShimmerViews: [ShimmerView] = []
 
-    private var header: SeriesHeaderView!
-    private var weekDayViews: [WeekDayView] = []
+    @IBOutlet var playButtonLabel: UILabel!
+    @IBOutlet var playButtonContainer: ShadowView!
+
+    @IBOutlet var weekDayView: WeekDayView!
+    @IBOutlet var seriesImageView: UIImageView!
+
+    @IBOutlet var episodesContainer: UIView!
+    @IBOutlet var compactEpisodesContainer: UIView!
+
+    private let episodesView = EpisodesView()
+
+    private var bag = Set<AnyCancellable>()
+
+    private var episodesContainreHidden: Bool = true {
+        didSet {
+            if episodesContainreHidden != oldValue {
+                episodesContainer.isHidden = episodesContainreHidden
+                compactEpisodesContainer.isHidden = !episodesContainreHidden
+                updateEpisodesUI()
+            }
+        }
+    }
 
     var handler: SeriesEventHandler!
 
+    private var playButtonInset: CGFloat = 0 {
+        didSet { updateInsets() }
+    }
+    private var keyboardInset: CGFloat = 0 {
+        didSet { updateInsets() }
+    }
+
     private let boldTextBuilder = AttributeStringBuilder()
         .set(color: .Text.secondary)
-        .set(font: UIFont.font(ofSize: 14, weight: .bold))
+        .set(font: UIFont.font(ofSize: 16, weight: .bold))
 
     private let regularTextBuilder = AttributeStringBuilder()
         .set(color: .Text.main)
-        .set(font: UIFont.font(ofSize: 14, weight: .regular))
+        .set(font: UIFont.font(ofSize: 16, weight: .regular))
 
     // MARK: - Life cycle
 
     override func viewDidLoad() {
-        self.setupHeader()
-        self.setupWeekView()
         super.viewDidLoad()
         self.setupNavigationButtons()
         addRefreshControl(scrollView: scrollView)
+        seriesImageView.smoothCorners(with: 8)
+        updateEpisodesUI()
 
         let action: Action<URL> = { [weak self] url in
             if url.isAttributeLink {
@@ -61,22 +83,17 @@ final class SeriesViewController: BaseViewController {
             self?.handler.select(url: url)
         }
 
-        paramsTextView.setTapLink(handler: action)
-        descTextView.setTapLink(handler: action)
+        infoTextView.setTapLink(handler: action)
 
         let color = UIColor.Tint.active
-        paramsTextView.linkTextAttributes = [
+        infoTextView.linkTextAttributes = [
             .foregroundColor: color,
             .underlineColor: color
         ]
 
-        descTextView.linkTextAttributes = [
-            .foregroundColor: color,
-            .underlineColor: color
-        ]
-
-        descTextView.font = .font(ofSize: 14, weight: .regular)
-        descTextView.textColor = .Text.main
+        infoTextView.textContainerInset = .zero
+        infoTextView.font = .font(ofSize: 16, weight: .regular)
+        infoTextView.textColor = .Text.main
         supportLabelContainer.cornerRadius = 6
 
         relatedShimmerView.smoothCorners(with: 8)
@@ -90,6 +107,49 @@ final class SeriesViewController: BaseViewController {
             $0.shimmerColor = .Surfaces.base
             $0.run()
         }
+
+        seriesImageView.publisher(for: \.center).removeDuplicates().sink { [weak self] _ in
+            guard let self else { return }
+            infoTextView.textContainer.exclusionPaths = [
+                UIBezierPath(rect: seriesImageView.frame.inset(
+                    by: UIEdgeInsets(top: 0, left: -8, bottom: 8, right: 0)
+                ))
+            ]
+        }.store(in: &bag)
+
+        NotificationCenter.default
+            .publisher(for: UIApplication.keyboardWillChangeFrameNotification)
+            .sink { [weak self] notification in
+                self?.updateKeyboard(notification)
+            }
+            .store(in: &bag)
+    }
+
+    private func updateKeyboard(_ note: Notification) {
+        guard
+            let info = note.userInfo,
+            let endFrameScreen = info[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect
+        else { return }
+
+        let endFrameInView = view.convert(endFrameScreen, from: nil)
+        let overlap = view.bounds.intersection(endFrameInView).height
+
+        keyboardInset = max(0, overlap - view.safeAreaInsets.bottom)
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        episodesContainreHidden = view.bounds.width < 640
+        playButtonInset = playButtonContainer.frame.height + 30
+    }
+
+    public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        episodesView.invalidateLayout()
+    }
+
+    private func updateInsets() {
+        scrollView.contentInset.bottom = max(keyboardInset, playButtonInset)
     }
 
     override func setupStrings() {
@@ -97,8 +157,20 @@ final class SeriesViewController: BaseViewController {
         self.navigationItem.title = L10n.Screen.Series.title
         self.supportLabel.text = L10n.Common.donatePls
         self.relatedTitleLabel.text = L10n.Common.related
-        self.episodesButton.setTitle(L10n.Screen.Series.episodes, for: .normal)
+        self.donateButton.setTitle(L10n.Screen.Other.donate, for: .normal)
         self.handler.didLoad()
+    }
+
+    private func updateEpisodesUI() {
+        episodesView.removeFromSuperview()
+        if episodesContainreHidden {
+            episodesView.isCompact = true
+            compactEpisodesContainer.addSubview(episodesView)
+        } else {
+            episodesView.isCompact = false
+            episodesContainer.addSubview(episodesView)
+        }
+        episodesView.constraintEdgesToSuperview()
     }
 
     private func setupNavigationButtons() {
@@ -116,29 +188,6 @@ final class SeriesViewController: BaseViewController {
         items.append(refreshButton)
         #endif
         self.navigationItem.setRightBarButtonItems(items, animated: false)
-    }
-
-    private func setupHeader() {
-        if let header = SeriesHeaderView.fromNib() {
-            self.header = header
-            self.scrollView.contentInset.top = 320
-            self.headerContainerView.addSubview(header)
-            header.constraintEdgesToSuperview()
-            self.header.setPlay { [weak self] in
-                self?.handler.play()
-            }
-        }
-    }
-    
-    private func setupWeekView() {
-        let days = WeekDay.allCases
-        
-        for day in days {
-            let view = WeekDayView()
-            view.configure(day)
-            weekDayStackView.addArrangedSubview(view)
-            weekDayViews.append(view)
-        }
     }
 
     override func refresh() {
@@ -166,12 +215,8 @@ final class SeriesViewController: BaseViewController {
         self.handler.selectCollection(activity)
     }
 
-    @IBAction func selectEpisodes(_ sender: Any) {
-        self.handler.episodes()
-    }
-
-    @IBAction func weekDaysAction(_ sender: Any) {
-        self.handler.schedule()
+    @IBAction func play(_ sender: Any) {
+        handler.play()
     }
 }
 
@@ -190,8 +235,13 @@ extension SeriesViewController: SeriesViewBehavior {
         self.favoriteView.isUserInteractionEnabled = favorite
     }
 
-    func can(watch: Bool) {
-        self.header.setPlayVisible(value: watch)
+    func set(playInfo: String?) {
+        if let playInfo {
+            playButtonContainer.isHidden = false
+            playButtonLabel.text = playInfo
+        } else {
+            playButtonContainer.isHidden = true
+        }
     }
 
     func set(favorite: Bool) {
@@ -202,33 +252,34 @@ extension SeriesViewController: SeriesViewBehavior {
         typeView.configure(with: collection)
     }
 
+    func set(episodes: EpisodesViewModel) {
+        episodesView.configure(viewModel: episodes)
+    }
+
     func set(series: Series) {
+        seriesImageView.setImage(from: series.poster, placeholder: DefaultPlaceholder())
         contentShimmerViews.forEach {
             $0.stop()
             $0.isHidden = true
         }
-        self.header.configure(series)
         self.navigationItem.backButtonTitle = series.name?.main
-        self.episodesButton.isHidden = series.playlist.isEmpty
 
         self.set(name: series.name)
         self.setParams(from: series)
-        self.set(desc: series.desc)
 
         self.anonceLabel.text = series.notification
 
         if let publishDay = series.publishDay, series.isOngoing {
-            self.weekDayViews.first(where: { $0.day == publishDay.value })?.isSelected = true
+            weekDayView.configure(publishDay.value)
+            weekDayView.isSelected = true
+            weekDayView.isHidden = false
         } else {
-            self.weekDaysContainer.isHidden = true
+            weekDayView.isHidden = true
         }
 
         if series.notification.isEmpty {
             self.anonceLabel.isHidden = true
         }
-
-        self.separatorView.isHidden = self.weekDaysContainer.isHidden &&
-            self.anonceLabel.isHidden
 
         tagsView.set(tags: series.tags)
 
@@ -288,7 +339,7 @@ extension SeriesViewController: SeriesViewBehavior {
         }
     }
 
-    func setParams(from series: Series) {
+    private func setParams(from series: Series) {
         let strings = L10n.Screen.Series.self
         var result: NSMutableAttributedString = .init()
 
@@ -363,15 +414,11 @@ extension SeriesViewController: SeriesViewBehavior {
             }
         }
 
-        self.paramsTextView.attributedText = result
-    }
-
-    func set(desc: NSAttributedString?) {
-        guard let desc else {
-            self.descTextView.attributedText = nil
-            return
+        result = result + regularTextBuilder.build("\n")
+        if let desc = series.desc {
+            result = result + regularTextBuilder.build(desc)
         }
-        self.descTextView.attributedText = regularTextBuilder.build(desc)
+        self.infoTextView.attributedText = result
     }
 }
 
@@ -390,5 +437,11 @@ private extension Series {
 private extension String {
     func withColon() -> String {
         "\(self): "
+    }
+}
+
+public final class ExpandedSpaceView: UIView {
+    public override var intrinsicContentSize: CGSize {
+        UIView.layoutFittingExpandedSize
     }
 }

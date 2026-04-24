@@ -39,7 +39,6 @@ public final class WeekDayView: CircleView {
         backgroundColor = .clear
         
         titleLabel.constraintEdgesToSuperview(.init(top: 10, left: 4, bottom: 10, right: 4))
-        widthAnchor.constraint(equalTo: heightAnchor, multiplier: 1).isActive = true
     }
     
     func configure(_ weekDay: WeekDay) {

@@ -86,4 +86,9 @@ public class CollectionContext {
         }
         return result
     }
+
+    func checkVisiblility(for cell: UICollectionViewCell?) -> Bool {
+        guard let cell else { return false }
+        return collectioView?.visibleCells.contains(cell) == true
+    }
 }

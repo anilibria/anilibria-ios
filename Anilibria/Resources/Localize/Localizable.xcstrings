@@ -2772,6 +2772,23 @@
         }
       }
     },
+    "stub.no_episodes" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "There is no available episodes"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет доступных эпизодов"
+          }
+        }
+      }
+    },
     "stub.title" : {
       "comment" : "STUB VIEW",
       "extractionState" : "migrated",

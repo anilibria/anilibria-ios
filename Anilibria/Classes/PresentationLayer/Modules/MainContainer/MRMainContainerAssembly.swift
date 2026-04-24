@@ -54,32 +54,102 @@ public final class MenuItemsControllersFactory {
             return BaseNavigationController(rootViewController: module)
         }
 
-        let splitview = UISplitViewController()
+        let splitview = if type == .other {
+            MRSplitViewController(
+                primaryController: module,
+                secondaryController: HistoryAssembly.createModule()
+            )
+        } else {
+            MRSplitViewController(
+                primaryController: module,
+                secondaryController: nil
+            )
+        }
         splitview.preferredPrimaryColumnWidthFraction = 0.5
 
-        #if targetEnvironment(macCatalyst)
-        splitview.maximumPrimaryColumnWidth = Sizes.minSize.width / 2
-        splitview.minimumPrimaryColumnWidth = Sizes.minSize.width / 2
-        #else
-        splitview.maximumPrimaryColumnWidth = 2000
-        #endif
+        splitview.maximumPrimaryColumnWidth = 500
+        splitview.minimumPrimaryColumnWidth = 320
 
         splitview.presentsWithGesture = true
         splitview.preferredDisplayMode = .oneBesideSecondary
 
-        if type == .other {
-            let history = HistoryAssembly.createModule()
-            splitview.viewControllers = [
-                BaseNavigationController(rootViewController: module),
-                BaseNavigationController(rootViewController: history)
-            ]
+        return splitview
+    }
+}
+
+final class MRSplitViewController: UISplitViewController, UISplitViewControllerDelegate {
+    private let primaryRootController: UIViewController
+    private let secondaryRootController: UIViewController?
+
+    init(primaryController: UIViewController, secondaryController: UIViewController?) {
+        self.primaryRootController = primaryController
+        self.secondaryRootController = secondaryController
+        super.init(nibName: nil, bundle: nil)
+        viewControllers.append(BaseNavigationController(rootViewController: primaryController))
+        if let secondaryRootController {
+            viewControllers.append(BaseNavigationController(rootViewController: secondaryRootController))
         } else {
-            splitview.viewControllers = [
-                BaseNavigationController(rootViewController: module),
-                PlaceholderViewController()
-            ]
+            viewControllers.append(PlaceholderNavigationController())
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.delegate = self
+    }
+
+    func primaryViewController(
+        forCollapsing splitViewController: UISplitViewController
+    ) -> UIViewController? {
+        splitViewController.viewControllers.first
+    }
+
+    func splitViewController(
+        _ splitViewController: UISplitViewController,
+        collapseSecondary secondaryViewController: UIViewController,
+        onto primaryViewController: UIViewController
+    ) -> Bool {
+        switch secondaryViewController {
+        case let controller as BaseNavigationController:
+            if let primary = primaryViewController as? BaseNavigationController {
+                let secondary = controller.viewControllers
+                controller.viewControllers = []
+                primary.viewControllers.append(contentsOf: secondary)
+            }
+        default:
+            break
+        }
+        return true
+    }
+
+    func primaryViewController(forExpanding splitViewController: UISplitViewController) -> UIViewController? {
+        splitViewController.viewControllers.first
+    }
+
+    func splitViewController(
+        _ splitViewController: UISplitViewController,
+        separateSecondaryFrom primaryViewController: UIViewController
+    ) -> UIViewController? {
+        if let primary = primaryViewController as? BaseNavigationController {
+            let controllers: [UIViewController] = primary.viewControllers
+            let index = controllers.firstIndex(where: {
+                $0 is SeriesViewController || $0 == secondaryRootController
+            }) ?? 0
+            if index > 0 {
+                primary.viewControllers = Array(controllers[..<index])
+                let secondary = BaseNavigationController()
+                secondary.viewControllers = Array(controllers[index...])
+                return secondary
+            }
+        }
+        if let secondaryRootController {
+            return BaseNavigationController(rootViewController: secondaryRootController)
         }
 
-        return splitview
+        return PlaceholderNavigationController()
     }
 }

@@ -10,7 +10,7 @@ import Foundation
 import Combine
 
 class PaginationViewModel: NSObject {
-    private(set) var isLoading: Bool = false
+    @Published private(set) var isLoading: Bool = false
     private let loadAction: Action<Action<Bool>>
     let isReady = CurrentValueSubject<Bool, Never>(false)
 

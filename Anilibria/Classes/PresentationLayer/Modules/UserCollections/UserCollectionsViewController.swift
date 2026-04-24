@@ -39,7 +39,10 @@ final class UserCollectionsViewController: BaseCollectionViewController {
         if UIDevice.current.userInterfaceIdiom != .pad {
             let conf = UICollectionViewCompositionalLayoutConfiguration()
             conf.scrollDirection = .horizontal
-            self.adapter.setLayout(configuration: conf)
+            self.adapter.setLayout(
+                type: UICollectionViewCompositionalLayout.self,
+                configuration: conf
+            )
         }
 
         let section = UserCollectionKeySectionAdapter(

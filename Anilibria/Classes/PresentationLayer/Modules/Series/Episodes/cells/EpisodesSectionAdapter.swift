@@ -1,25 +1,21 @@
 //
-//  SectionAdapter.swift
-//  Anilibria
+//  EpisodesSectionAdapter.swift
+//  AniLiberty
 //
-//  Created by Ivan Morozov on 02.11.2024.
-//  Copyright © 2024 Иван Морозов. All rights reserved.
+//  Created by Ivan Morozov on 30.04.2026.
+//  Copyright © 2026 Иван Морозов. All rights reserved.
 //
 
 import UIKit
 
-class SectionAdapter: SectionAdapterProtocol {
-    struct Configuration {
-        let expectedWidth: CGFloat
-    }
-
+class EpisodesSectionAdapter: SectionAdapterProtocol {
     let uid: AnyHashable = UUID()
-    var insets: NSDirectionalEdgeInsets = .zero
-    var minimumLineSpacing: CGFloat = 0
-    var minimumInteritemSpacing: CGFloat = 0
-    var estimatedHeight: CGFloat = 50
-    var ipad: Configuration?
     private(set) var items: OrderedSet<AnyCellAdapter> = []
+
+    private let insets = NSDirectionalEdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8)
+    private let expectedWidth: CGFloat = 220
+    private let estimatedHeight: CGFloat = 156
+    var isCompact: Bool = true
 
 
     init(_ items: [AnyCellAdapter]) {
@@ -56,18 +52,15 @@ class SectionAdapter: SectionAdapterProtocol {
         environment: any NSCollectionLayoutEnvironment
     ) -> NSCollectionLayoutSection? {
         guard identifier == uid else { return nil }
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            if let configuration = ipad {
-                return getIPadLayout(environment, configuration: configuration)
-            }
+        if isCompact {
+            return getCompactLayout(environment)
         }
-        return getDefaultLayout(environment)
+        return getLayout(environment)
     }
 
-    private func getIPadLayout(_ environment: NSCollectionLayoutEnvironment,
-                               configuration: Configuration) -> NSCollectionLayoutSection? {
-        let itemsPerLine = max(floor(environment.container.effectiveContentSize.width / configuration.expectedWidth), 1)
-        let horizontalInsets: CGFloat = minimumInteritemSpacing * (itemsPerLine - 1) + insets.leading + insets.trailing
+    private func getLayout(_ environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
+        let itemsPerLine = max(floor(environment.container.effectiveContentSize.width / expectedWidth), 1)
+        let horizontalInsets: CGFloat = insets.leading + insets.trailing
         let width = floor((environment.container.effectiveContentSize.width - horizontalInsets) / itemsPerLine)
 
         let itemSize = NSCollectionLayoutSize(
@@ -84,32 +77,28 @@ class SectionAdapter: SectionAdapterProtocol {
             layoutSize: groupSize,
             subitems: Array(repeating: item, count: Int(itemsPerLine))
         )
-        group.interItemSpacing = .flexible(minimumInteritemSpacing)
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = insets
-        section.interGroupSpacing = minimumLineSpacing
         return section
     }
 
-    private func getDefaultLayout(_ environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
+    private func getCompactLayout(_ environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(estimatedHeight)
+            widthDimension: .estimated(expectedWidth),
+            heightDimension: .absolute(estimatedHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(estimatedHeight)
+            widthDimension: .estimated(expectedWidth),
+            heightDimension: .absolute(estimatedHeight)
         )
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,
             subitems: [item]
         )
-        group.interItemSpacing = .flexible(minimumInteritemSpacing)
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = insets
-        section.interGroupSpacing = minimumLineSpacing
         return section
     }
 }

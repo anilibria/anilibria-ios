@@ -29,11 +29,11 @@ class CollectionViewAdapter: NSObject {
         self.dataSource = makeDataSource()
         self.adapterContext = AdapterContext(dataSource: dataSource)
         self.collectionView.delegate = self
-        self.setLayout()
+        self.setLayout(type: UICollectionViewCompositionalLayout.self)
     }
 
     func setLayout<Layout: UICollectionViewCompositionalLayout>(
-        type: Layout.Type = UICollectionViewCompositionalLayout.self,
+        type: Layout.Type,
         configuration: UICollectionViewCompositionalLayoutConfiguration? = nil,
         populator: ((Layout) -> Void)? = nil
     ) {
@@ -115,6 +115,14 @@ extension CollectionViewAdapter: UICollectionViewDelegate {
                         willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
         item(for: indexPath)?.willDisplay(at: indexPath)
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        didEndDisplaying cell: UICollectionViewCell,
+        forItemAt indexPath: IndexPath
+    ) {
+        item(for: indexPath)?.didEndDisplaying(at: indexPath)
     }
 }
 

@@ -1,5 +1,5 @@
 //
-//  EpisodeCellAdapterHandler.swift
+//  EpisodeCellAdapter.swift
 //  Anilibria
 //
 //  Created by Ivan Morozov on 28.11.2025.

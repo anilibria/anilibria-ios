@@ -10,7 +10,7 @@ import Combine
 import Foundation
 
 final class CatalogViewModel: SeriesViewModelProtocol {
-    private let limit: Int = 25
+    private let limit: Int = 26
     private var nextPage: Int = 1
     private var pageSubscriber: AnyCancellable?
     private let catalogService: CatalogService

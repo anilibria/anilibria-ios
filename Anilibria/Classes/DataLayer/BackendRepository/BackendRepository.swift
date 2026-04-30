@@ -146,9 +146,9 @@ final class BackendRepositoryImp: BackendRepository, Loggable {
                                                        data: NetworkResponse) throws -> T.ResponseObject {
         var (response, error): (T.ResponseObject?, Error?)
         if let converter = request.customResponseConverter {
-            (response, error) = converter.convert(T.self, response: data)
+            (response, error) = converter.convert(request: request, response: data)
         } else {
-            (response, error) = self.config.converter.convert(T.self, response: data)
+            (response, error) = self.config.converter.convert(request: request, response: data)
         }
         if let result = response {
             return result

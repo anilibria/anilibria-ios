@@ -1,16 +1,13 @@
 import Foundation
 
-/// Protocol of convert NetworkResponse to pair (ResponseData?, Error?).
+/// Protocol of convert NetworkResponse to pair (ResponseObject?, Error?).
 ///
 /// This protocol required for initialisation of BackendConfiguration
 /// and response processing
 ///
 /// For example see JsonResponseConverter
 protocol BackendResponseConverter: AnyObject {
-    /// Convert NetworkResponse to pair (ResponseData?, Error?)
-    /// - parameter data: Response from NetworkService
-    /// - returns: (ResponseData?, Error?)
-    func convert<T: BackendAPIRequest>(_ type: T.Type,
+    func convert<T: BackendAPIRequest>(request: T,
                                        response: NetworkResponse) -> (T.ResponseObject?, Error?)
 }
 
@@ -19,13 +16,16 @@ public class JsonResponseConverter: BackendResponseConverter, Loggable {
         return .unnamed
     }
 
-    func convert<T: BackendAPIRequest>(_ type: T.Type,
+    func convert<T: BackendAPIRequest>(request: T,
                                        response: NetworkResponse) -> (T.ResponseObject?, Error?) {
         do {
             if T.ResponseObject.self == Data.self {
                 return (response.data as? T.ResponseObject, nil)
             }
             let decoder = JSONDecoder()
+            if let info = request.decodingInfo {
+                decoder.userInfo = info
+            }
             decoder.dateDecodingStrategy = .iso8601
             let responseData = try decoder.decode(T.ResponseObject.self, from: response.data)
             return (responseData, nil)

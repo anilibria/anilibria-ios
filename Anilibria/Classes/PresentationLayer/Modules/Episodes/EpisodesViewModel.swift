@@ -42,14 +42,14 @@ class EpisodesViewModel {
     }
 
     func didLoad() {
-        playerService.getTimeCodes(userID: userID, seriesID: series.id)
+        playerService.getTimeCodes(userID: userID, episodeIDs: series.playlist.map(\.id))
             .sink { [weak self] data in
                 guard let self else { return }
-                list = series.playlist.reversed().enumerated().map { [userID] offset, item in
+                list = series.playlist.reversed().enumerated().map { offset, item in
                     self.episodeIndexes[item.id] = offset
                     return EpisodeViewModel(
                         item: item,
-                        timecode: data[item.id, default: .init(episodeID: item.id, userID: userID)],
+                        timecode: data[item.id, default: .init(episodeID: item.id)],
                         didTapOnWatched: { [weak self] in self?.toggle(watching: $0) }
                     )
                 }
@@ -129,14 +129,16 @@ class EpisodesViewModel {
             timeCodes: list.lazy
                 .filter { $0.timecode.isWatched != isWatched }
                 .map { $0.toggleWatching().timecode },
-            for: series
+            series: series,
+            userID: userID
         )
     }
 
     private func toggle(watching episode: EpisodeViewModel) {
         playerService.set(
             timeCodes: [episode.toggleWatching().timecode],
-            for: series
+            series: series,
+            userID: userID
         )
     }
 }

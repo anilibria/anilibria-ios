@@ -23,9 +23,9 @@ protocol PlayerService: AnyObject {
 
     func observeTimecodesUpdates() -> AnyPublisher<TimeCodeUpdates, Never>
     func getTimeCode(userID: Int?, episodeID: String) -> TimeCodeData?
-    func getTimeCodes(userID: Int?, seriesID: Int) -> AnyPublisher<[String : TimeCodeData], Never>
-    func syncTimeCodes(userID: Int?, seriesID: Int) -> AnyPublisher<Void, any Error>
-    func set(timeCodes: [TimeCodeData], for series: Series)
+    func getTimeCodes(userID: Int?, episodeIDs: [String]) -> AnyPublisher<[String : TimeCodeData], Never>
+    func syncTimeCodes(userID: Int?) -> AnyPublisher<Void, any Error>
+    func set(timeCodes: [TimeCodeData], series: Series, userID: Int?)
 }
 
 final class PlayerServiceImp: PlayerService {
@@ -39,6 +39,14 @@ final class PlayerServiceImp: PlayerService {
 
     private var cancellabes: Set<AnyCancellable> = []
 
+    private let syncTimeKey: String = "SYNC_TIME_KEY"
+
+    private var lastSyncTime: Date? {
+        didSet {
+            UserDefaults.standard[syncTimeKey] = lastSyncTime
+        }
+    }
+
     init(backendRepository: BackendRepository,
          settingsRepository: PlayerSettingsRepository,
          historyRepository: HistoryRepository,
@@ -48,6 +56,7 @@ final class PlayerServiceImp: PlayerService {
         self.historyRepository = historyRepository
         self.episodesRepository = episodesRepository
         settings = .init(settingsRepository.getSettings())
+        self.lastSyncTime = UserDefaults.standard[syncTimeKey]
     }
 
     func fetchSettings() -> PlayerSettings {
@@ -84,8 +93,8 @@ final class PlayerServiceImp: PlayerService {
         episodesRepository.getTimeCode(for: userID, episodeID: episodeID)
     }
 
-    func getTimeCodes(userID: Int?, seriesID: Int) -> AnyPublisher<[String : TimeCodeData], Never> {
-        episodesRepository.getTimeCodes(for: userID, seriesID: seriesID)
+    func getTimeCodes(userID: Int?, episodeIDs: [String]) -> AnyPublisher<[String : TimeCodeData], Never> {
+        episodesRepository.getTimeCodes(for: userID, episodeIDs: episodeIDs)
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
@@ -107,80 +116,46 @@ final class PlayerServiceImp: PlayerService {
         historyUpdates.send(.added(series: series))
     }
 
-    func set(timeCodes: [TimeCodeData], for series: Series) {
-        episodesRepository.set(timeCodeData: timeCodes, for: series.id)
+    func set(timeCodes: [TimeCodeData], series: Series, userID: Int?) {
+        episodesRepository.set(timeCodeData: timeCodes, for: userID)
         backendRepository.request(SaveTimecodesRequest(items: timeCodes))
             .sink { _ in }
             .store(in: &cancellabes)
         timecodesUpdates.send(TimeCodeUpdates(seriesID: series.id, timeCodes: timeCodes))
     }
 
-    func syncTimeCodes(userID: Int?, seriesID: Int) -> AnyPublisher<Void, any Error> {
+    func syncTimeCodes(userID: Int?) -> AnyPublisher<Void, any Error> {
         if let userID {
-            return getUserCodes(userID: userID, seriesID: seriesID)
+            return getUserCodes(userID: userID)
         }
         return .just(())
     }
 
-    private func getUserCodes(userID: Int, seriesID: Int) -> AnyPublisher<Void, any Error> {
-        Publishers.CombineLatest(
-            episodesRepository.getTimeCodes(for: userID, seriesID: seriesID)
-                .setFailureType(to: Error.self),
-            backendRepository.request(GetTimecodesRequest(seriesID: seriesID))
-        )
+    private func getUserCodes(userID: Int) -> AnyPublisher<Void, any Error> {
+        let request = GetTimecodesRequest(since: lastSyncTime?.addingTimeInterval(-60 * 2))
+        return backendRepository.request(request)
         .receive(on: DispatchQueue.global(qos: .userInitiated))
-        .flatMap { [unowned self] localCodes, remoteCodes in
-            handleCodes(seriesID: seriesID, local: localCodes, remote: remoteCodes)
+        .flatMap { [unowned self] remoteCodes in
+            handleCodes(
+                userID: userID,
+                remote: remoteCodes,
+                date: request.date
+            )
         }
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
 
     private func handleCodes(
-        seriesID: Int,
-        local: [String: TimeCodeData],
-        remote: [TimeCodeData]
+        userID: Int,
+        remote: [TimeCodeData],
+        date: Date
     ) -> AnyPublisher<Void, any Error> {
-        if local.isEmpty {
-            episodesRepository.set(timeCodeData: remote, for: seriesID)
-            return .just(())
-        }
+        lastSyncTime = date
 
-        if remote.isEmpty {
-            return backendRepository.request(SaveTimecodesRequest(items: Array(local.values)))
-                .map { _ in }
-                .eraseToAnyPublisher()
+        if !remote.isEmpty {
+            episodesRepository.set(timeCodeData: remote, for: userID)
         }
-
-        var toSend: [TimeCodeData] = []
-        var toSave: [TimeCodeData] = []
-        remote.forEach { remoteCode in
-            if let localCode = local[remoteCode.episodeID] {
-                switch (remoteCode.updatedAt, localCode.updatedAt) {
-                case (let remoteDate?, let localDate?):
-                    if remoteDate > localDate {
-                        toSave.append(remoteCode)
-                    } else if remoteDate < localDate {
-                        toSend.append(localCode)
-                    }
-                case (_?, nil):
-                    toSave.append(remoteCode)
-                default: break
-                }
-            } else {
-                toSave.append(remoteCode)
-            }
-        }
-        if !toSave.isEmpty {
-            episodesRepository.set(timeCodeData: toSave, for: seriesID)
-        }
-
-        if !toSend.isEmpty {
-            return backendRepository.request(SaveTimecodesRequest(items: toSend))
-                .map { _ in }
-                .eraseToAnyPublisher()
-        }
-
         return .just(())
     }
 

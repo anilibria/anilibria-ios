@@ -36,10 +36,12 @@ protocol BackendAPIRequest {
     associatedtype ResponseObject: Decodable
     var requestData: RequestData { get set }
     var customResponseConverter: BackendResponseConverter? { get }
+    var decodingInfo: [CodingUserInfoKey : any Sendable]? { get }
 }
 
 extension BackendAPIRequest {
     var customResponseConverter: BackendResponseConverter? { nil }
+    var decodingInfo: [CodingUserInfoKey : any Sendable]? { nil }
 }
 
 public struct Unit: Decodable, ExpressibleByNilLiteral {

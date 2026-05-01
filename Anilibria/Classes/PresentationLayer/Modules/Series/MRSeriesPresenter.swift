@@ -214,7 +214,7 @@ extension SeriesPresenter: SeriesEventHandler {
         requestBag.removeAll()
 
         Publishers.CombineLatest4(
-            playerService.syncTimeCodes(userID: userID, seriesID: series.id),
+            playerService.syncTimeCodes(userID: userID),
             mainService.series(with: series.id),
             isAuthorized ? favoriteService.getFavoriteState(for: series.id) : .just(false),
             isAuthorized ? collectionsService.getCollection(for: series.id) : .just(nil)

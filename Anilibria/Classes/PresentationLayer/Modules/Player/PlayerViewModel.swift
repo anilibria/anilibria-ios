@@ -100,7 +100,7 @@ extension PlayerViewModel {
         guard let index = series?.playlist.firstIndex(of: item) else { return }
 
         self.currentTimeCode = playerService.getTimeCode(userID: userID, episodeID: item.id)
-            ?? TimeCodeData(episodeID: item.id, userID: userID)
+            ?? TimeCodeData(episodeID: item.id)
 
         if currentTimeCode?.isWatched == true {
             currentTimeCode?.isWatched = false
@@ -290,7 +290,8 @@ extension PlayerViewModel {
 
         self.playerService.set(
             timeCodes: [currentTimeCode],
-            for: series
+            series: series,
+            userID: userID
         )
         self.playerService.setActiveEpisodeID(
             playItem.value.id,

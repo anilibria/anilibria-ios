@@ -70,15 +70,6 @@ class BaseViewController: UIViewController, WaitingBehavior, Loggable {
         }
     }
 
-    // MARK: - App Terminated
-
-    func addTermenateAppObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.appWillTerminate),
-                                               name: UIApplication.willTerminateNotification, object: nil)
-    }
-
-    @objc func appWillTerminate() {}
-
     // MARK: - Keyboard
 
     private var addedValue: CGFloat = 0

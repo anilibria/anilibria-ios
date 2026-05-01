@@ -52,7 +52,6 @@ final class PlayerViewController: BaseViewController {
         super.viewDidLoad()
         view.backgroundColor = .black
         self.setup()
-        self.addTermenateAppObserver()
         self.setupPlayer()
         self.setupAirPlay()
         self.setupPictureInPicture()
@@ -141,6 +140,12 @@ final class PlayerViewController: BaseViewController {
         viewModel.$playbackRate
             .sink { [weak self] rate in
                 self?.playerView.set(rate: rate)
+            }.store(in: &subscribers)
+
+        NotificationCenter.default
+            .publisher(for: UIApplication.willResignActiveNotification)
+            .sink { [weak self] _ in
+                self?.viewModel.save()
             }.store(in: &subscribers)
     }
 
@@ -334,12 +339,6 @@ final class PlayerViewController: BaseViewController {
     }
 
     // MARK: - Actions
-
-    override func appWillTerminate() {
-        super.appWillTerminate()
-        viewModel.save()
-        sleep(2) // this used for to give time for save async data
-    }
 
     override func viewWillTransition(
         to size: CGSize,

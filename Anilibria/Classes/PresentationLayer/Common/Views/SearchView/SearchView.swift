@@ -19,8 +19,15 @@ public final class SearchView: LoadableView {
     private var cancelIsHidden: Bool = true {
         didSet {
             if self.cancelIsHidden != oldValue {
+                if !cancelIsHidden {
+                    self.cancelButton.isHidden = false
+                }
                 UIView.animate(withDuration: 0.3) {
                     self.cancelButton.alpha = self.cancelIsHidden ? 0 : 1
+                } completion: { _ in
+                    if self.cancelIsHidden {
+                        self.cancelButton.isHidden = true
+                    }
                 }
             }
         }

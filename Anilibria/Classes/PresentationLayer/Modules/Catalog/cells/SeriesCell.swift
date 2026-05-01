@@ -7,13 +7,13 @@ public final class SeriesCell: RippleViewCell {
     @IBOutlet var descLabel: UILabel!
 
     private static let textBuilder: AttributeStringBuilder = AttributeStringBuilder()
-        .set(font: .font(ofSize: 13, weight: .regular))
+        .set(font: .font(ofSize: 14, weight: .regular))
         .set(color: .Text.secondary)
         .set(lineBreakMode: .byTruncatingTail)
 
     public override func awakeFromNib() {
         super.awakeFromNib()
-        titleLabel.font = .font(ofSize: 14, weight: .bold)
+        titleLabel.font = .font(ofSize: 16, weight: .bold)
         titleLabel.textColor = .Text.main
         containerView.smoothCorners(with: 4)
         containerView.backgroundColor = .Surfaces.content

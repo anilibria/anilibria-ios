@@ -63,9 +63,6 @@ extension PlayerViewModel {
 
         if let episode {
             run(item: episode)
-        } else if let id = playerService.getActiveEpisodeID(for: series),
-                  let item = series.playlist.first(where: { $0.id == id }) {
-            run(item: item)
         } else if let item = series.playlist.first {
             run(item: item)
         }
@@ -103,7 +100,7 @@ extension PlayerViewModel {
         guard let index = series?.playlist.firstIndex(of: item) else { return }
 
         self.currentTimeCode = playerService.getTimeCode(userID: userID, episodeID: item.id)
-            ?? TimeCodeData(episodeID: item.id, userID: userID)
+            ?? TimeCodeData(episodeID: item.id)
 
         if currentTimeCode?.isWatched == true {
             currentTimeCode?.isWatched = false
@@ -293,7 +290,8 @@ extension PlayerViewModel {
 
         self.playerService.set(
             timeCodes: [currentTimeCode],
-            for: series
+            series: series,
+            userID: userID
         )
         self.playerService.setActiveEpisodeID(
             playItem.value.id,

@@ -27,7 +27,7 @@ extension SeriesRoute where Self: RouterProtocol {
             } else {
                 let result = BaseNavigationController(rootViewController: module)
                 self.controller.showDetailViewController(result, sender: nil)
-                UIApplication.getWindow()?.fadeTransition()
+                controller.view?.fadeTransition()
             }
         default:
             PushRouter(target: module, parent: self.controller).move()

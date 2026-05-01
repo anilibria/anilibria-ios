@@ -22,13 +22,12 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         window.backgroundColor = .black
 
-        #if targetEnvironment(macCatalyst)
-        windowScene.titlebar?.titleVisibility = .hidden
-        windowScene.sizeRestrictions?.minimumSize = Sizes.minSize
-        windowScene.sizeRestrictions?.maximumSize = Sizes.minSize
-        MacOSHelper.shared.removeMenuItems()
-        MacOSHelper.shared.fullscreenButtonEnabled = false
-        #endif
+#if targetEnvironment(macCatalyst)
+        if let titlebar = windowScene.titlebar {
+            titlebar.titleVisibility = .hidden
+            titlebar.toolbar = nil
+        }
+#endif
 
         self.window = window
         MainAppCoordinator.shared.start(on: window)

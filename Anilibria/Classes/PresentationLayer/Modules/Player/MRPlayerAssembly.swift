@@ -25,20 +25,11 @@ final class PlayerAssembly {
 // MARK: - Route
 
 protocol PlayerRoute {
-    func openPlayer(userID: Int?, series: Series)
-    func openPlayer(userID: Int?, series: Series, episode: PlaylistItem)
+    func openPlayer(userID: Int?, series: Series, episode: PlaylistItem?)
 }
 
 extension PlayerRoute where Self: RouterProtocol {
-    func openPlayer(userID: Int?, series: Series) {
-        play(userID: userID, series: series, episode: nil)
-    }
-
-    func openPlayer(userID: Int?, series: Series, episode: PlaylistItem) {
-        play(userID: userID, series: series, episode: episode)
-    }
-
-    private func play(userID: Int?, series: Series, episode: PlaylistItem?) {
+    func openPlayer(userID: Int?, series: Series, episode: PlaylistItem?) {
         let module = PlayerAssembly.createModule(
             series: series,
             userID: userID,

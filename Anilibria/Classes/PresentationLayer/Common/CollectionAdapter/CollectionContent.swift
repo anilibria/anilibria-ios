@@ -57,6 +57,7 @@ class AnyCellAdapter: Hashable {
 
     func didSelect(at index: IndexPath) {}
     func willDisplay(at index: IndexPath) {}
+    func didEndDisplaying(at index: IndexPath) {}
 }
 
 struct SectionData: Hashable {

@@ -10,7 +10,7 @@ public final class RemovableSeriesCell: DraggableRippleCell {
     private var deleteHandler: ActionFunc?
 
     private static let textBuilder: AttributeStringBuilder = AttributeStringBuilder()
-        .set(font: .font(ofSize: 13, weight: .regular))
+        .set(font: .font(ofSize: 14, weight: .regular))
         .set(color: .Text.secondary)
         .set(lineBreakMode: .byTruncatingTail)
 

@@ -30,6 +30,8 @@ final class SeriesPresenter {
     private var updatesBag = Set<AnyCancellable>()
     private var userID: Int?
 
+    let episodesModel: EpisodesViewModel
+
     private var isAuthorized: Bool {
         userID != nil
     }
@@ -46,6 +48,16 @@ final class SeriesPresenter {
         self.favoriteService = favoriteService
         self.downloadService = downloadService
         self.collectionsService = collectionsService
+        self.episodesModel = EpisodesViewModel(playerService: playerService)
+
+        episodesModel.playHandler = { [weak self] episode in
+            guard let self else { return }
+            router?.openPlayer(userID: userID, series: series, episode: episode)
+        }
+
+        episodesModel.showOptionsHandler = { [weak self] options in
+            self?.router?.openSheet(with: options)
+        }
     }
 }
 
@@ -59,6 +71,8 @@ extension SeriesPresenter: SeriesEventHandler {
     }
 
     func didLoad() {
+        view.set(episodes: episodesModel)
+
         self.favoriteService.favoritesUpdates().sink { [weak self] update in
             switch update {
             case .added(let series) where series.id == self?.series.id:
@@ -97,6 +111,14 @@ extension SeriesPresenter: SeriesEventHandler {
             }
 
             self?.load(self?.view.showUpdatesActivity())
+        }.store(in: &updatesBag)
+
+        episodesModel.$activeEpisode.sink { [weak view] item in
+            view?.set(playInfo: item.map {
+                L10n.Buttons.watch + ($0.episode.flatMap {
+                    " \($0)"
+                } ?? "")
+            })
         }.store(in: &updatesBag)
     }
 
@@ -192,7 +214,7 @@ extension SeriesPresenter: SeriesEventHandler {
         requestBag.removeAll()
 
         Publishers.CombineLatest4(
-            playerService.syncTimeCodes(userID: userID, seriesID: series.id),
+            playerService.syncTimeCodes(userID: userID),
             mainService.series(with: series.id),
             isAuthorized ? favoriteService.getFavoriteState(for: series.id) : .just(false),
             isAuthorized ? collectionsService.getCollection(for: series.id) : .just(nil)
@@ -201,8 +223,8 @@ extension SeriesPresenter: SeriesEventHandler {
         .sink { [weak self] _, item, state, collection in
             guard let self else { return }
             series = item
+            episodesModel.set(series: item, userID: userID)
             view.set(series: item)
-            view.can(watch: item.playlist.isEmpty == false)
             updateFavoriteState(state)
             updateCollection(collection)
         } onError: { [weak self] error in
@@ -211,20 +233,16 @@ extension SeriesPresenter: SeriesEventHandler {
         .store(in: &requestBag)
     }
 
-    func schedule() {
-        self.router.execute(ScheduleCommand())
-    }
-
     func back() {
         self.router.back()
     }
 
     func play() {
-        self.router.openPlayer(userID: userID, series: series)
-    }
-
-    func episodes() {
-        self.router.openEpisodes(userID: userID, series: series)
+        self.router.openPlayer(
+            userID: userID,
+            series: series,
+            episode: episodesModel.activeEpisode
+        )
     }
 
     func download(torrent: Torrent) {
@@ -249,5 +267,3 @@ extension SeriesPresenter: SeriesEventHandler {
         }
     }
 }
-
-public struct ScheduleCommand: RouteCommand {}

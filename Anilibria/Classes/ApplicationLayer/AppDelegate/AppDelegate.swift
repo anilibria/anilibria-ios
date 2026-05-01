@@ -18,4 +18,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         return .all
     }
+
+    override func buildMenu(with builder: any UIMenuBuilder) {
+        super.buildMenu(with: builder)
+        if builder.system == UIMenuSystem.main {
+            builder.remove(menu: .file)
+            builder.remove(menu: .edit)
+            builder.remove(menu: .format)
+            builder.remove(menu: .help)
+            builder.remove(menu: .about)
+        }
+    }
 }

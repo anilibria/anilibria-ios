@@ -7,23 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4880C22C23DAD192006FABE1 /* MacBundle.bundle in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 4880C21F23DACDCD006FABE1 /* MacBundle.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C72BFEEA2B0F687E0093FD64 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C72BFEE92B0F687E0093FD64 /* Kingfisher */; };
 		C72BFEED2B0F69160093FD64 /* DITranquillity in Frameworks */ = {isa = PBXBuildFile; productRef = C72BFEEC2B0F69160093FD64 /* DITranquillity */; };
 		C7B0F2CC22D6F0B100540CA9 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7B0F2CB22D6F0B100540CA9 /* WebKit.framework */; };
 		C7F05CA82E4EFC45006A021F /* AppMetricaCore in Frameworks */ = {isa = PBXBuildFile; platformFilter = ios; productRef = C7F05CA72E4EFC45006A021F /* AppMetricaCore */; };
 		C7F05CAA2E4EFC45006A021F /* AppMetricaCrashes in Frameworks */ = {isa = PBXBuildFile; platformFilter = ios; productRef = C7F05CA92E4EFC45006A021F /* AppMetricaCrashes */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		4880C22D23DAD192006FABE1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C7D4623722CC73DF00E763DF /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4880C21E23DACDCD006FABE1;
-			remoteInfo = MacBundle;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		4880C22F23DAD192006FABE1 /* Embed PlugIns */ = {
@@ -32,7 +21,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				4880C22C23DAD192006FABE1 /* MacBundle.bundle in Embed PlugIns */,
 			);
 			name = "Embed PlugIns";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -40,7 +28,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4880C21F23DACDCD006FABE1 /* MacBundle.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacBundle.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7B0F2CB22D6F0B100540CA9 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		C7D4623F22CC73DF00E763DF /* AniLiberty.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AniLiberty.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -56,28 +43,13 @@
 			);
 			target = C7D4623E22CC73DF00E763DF /* AniLiberty */;
 		};
-		C72B5FB12CB11F4700AC89EE /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				MacApp.m,
-			);
-			target = 4880C21E23DACDCD006FABE1 /* MacBundle */;
-		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		C72B5E612CB11F3B00AC89EE /* Anilibria */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (C72B5FAB2CB11F3B00AC89EE /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {Classes/PresentationLayer/Modules/ActionSheet/ActionSheetContracts.swift = sourcecode.swift; Classes/PresentationLayer/Modules/ActionSheet/ActionSheetPresenter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/ActionSheet/ActionSheetRouter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Catalog/MRCatalogAssembly.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Catalog/MRCatalogContracts.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Catalog/MRCatalogPresenter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Catalog/MRCatalogRouter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Catalog/MRCatalogView.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Feed/MRFeedAssembly.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Feed/MRFeedContracts.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Feed/MRFeedPresenter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Feed/MRFeedRouter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Feed/MRFeedView.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Filter/MRFilterAssembly.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Filter/MRFilterContracts.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Filter/MRFilterPresenter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Filter/MRFilterRouter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Filter/MRFilterView.swift = sourcecode.swift; Classes/PresentationLayer/Modules/History/MRHistoryAssembly.swift = sourcecode.swift; Classes/PresentationLayer/Modules/History/MRHistoryContracts.swift = sourcecode.swift; Classes/PresentationLayer/Modules/History/MRHistoryPresenter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/History/MRHistoryRouter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/History/MRHistoryView.swift = sourcecode.swift; Classes/PresentationLayer/Modules/MainContainer/MRMainContainerAssembly.swift = sourcecode.swift; Classes/PresentationLayer/Modules/MainContainer/MRMainContainerContracts.swift = sourcecode.swift; Classes/PresentationLayer/Modules/MainContainer/MRMainContainerPresenter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/MainContainer/MRMainContainerRouter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/MainContainer/MRMainContainerView.swift = sourcecode.swift; Classes/PresentationLayer/Modules/News/MRNewsAssembly.swift = sourcecode.swift; Classes/PresentationLayer/Modules/News/MRNewsContracts.swift = sourcecode.swift; Classes/PresentationLayer/Modules/News/MRNewsPresenter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/News/MRNewsRouter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/News/MRNewsView.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Other/MROtherAssembly.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Other/MROtherContracts.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Other/MROtherPresenter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Other/MROtherRouter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Other/MROtherView.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Player/MRPlayerAssembly.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Player/MRPlayerRouter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Player/MRPlayerView.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Player/PlayerViewModel.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Schedule/MRScheduleAssembly.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Schedule/MRScheduleContracts.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Schedule/MRSchedulePresenter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Schedule/MRScheduleRouter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Schedule/MRScheduleView.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Search/MRSearchAssembly.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Search/MRSearchContracts.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Search/MRSearchPresenter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Search/MRSearchRouter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Search/MRSearchView.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Series/MRSeriesAssembly.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Series/MRSeriesContracts.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Series/MRSeriesPresenter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Series/MRSeriesRouter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Series/MRSeriesView.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Settings/MRSettingsAssembly.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Settings/MRSettingsContracts.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Settings/MRSettingsPresenter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Settings/MRSettingsRouter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/Settings/MRSettingsView.swift = sourcecode.swift; Classes/PresentationLayer/Modules/SignIn/MRSignInAssembly.swift = sourcecode.swift; Classes/PresentationLayer/Modules/SignIn/MRSignInContracts.swift = sourcecode.swift; Classes/PresentationLayer/Modules/SignIn/MRSignInPresenter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/SignIn/MRSignInRouter.swift = sourcecode.swift; Classes/PresentationLayer/Modules/SignIn/MRSignInView.swift = sourcecode.swift; }; explicitFolders = (); path = Anilibria; sourceTree = "<group>"; };
-		C72B5FAF2CB11F4700AC89EE /* MacBundle */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (C72B5FB12CB11F4700AC89EE /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = MacBundle; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		4880C21C23DACDCD006FABE1 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		C7D4623C22CC73DF00E763DF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -105,7 +77,6 @@
 			isa = PBXGroup;
 			children = (
 				C72B5E612CB11F3B00AC89EE /* Anilibria */,
-				C72B5FAF2CB11F4700AC89EE /* MacBundle */,
 				C7D4624022CC73DF00E763DF /* Products */,
 				1E00FA7C1790713686A9CDAF /* Frameworks */,
 			);
@@ -115,7 +86,6 @@
 			isa = PBXGroup;
 			children = (
 				C7D4623F22CC73DF00E763DF /* AniLiberty.app */,
-				4880C21F23DACDCD006FABE1 /* MacBundle.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -123,23 +93,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		4880C21E23DACDCD006FABE1 /* MacBundle */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4880C22223DACDCD006FABE1 /* Build configuration list for PBXNativeTarget "MacBundle" */;
-			buildPhases = (
-				4880C21B23DACDCD006FABE1 /* Sources */,
-				4880C21C23DACDCD006FABE1 /* Frameworks */,
-				4880C21D23DACDCD006FABE1 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = MacBundle;
-			productName = MacBundle;
-			productReference = 4880C21F23DACDCD006FABE1 /* MacBundle.bundle */;
-			productType = "com.apple.product-type.bundle";
-		};
 		C7D4623E22CC73DF00E763DF /* AniLiberty */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C7D4625122CC73E100E763DF /* Build configuration list for PBXNativeTarget "AniLiberty" */;
@@ -154,7 +107,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				4880C22E23DAD192006FABE1 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				C72B5E612CB11F3B00AC89EE /* Anilibria */,
@@ -181,9 +133,6 @@
 				LastUpgradeCheck = 1640;
 				ORGANIZATIONNAME = "Иван Морозов";
 				TargetAttributes = {
-					4880C21E23DACDCD006FABE1 = {
-						CreatedOnToolsVersion = 11.3.1;
-					};
 					C7D4623E22CC73DF00E763DF = {
 						CreatedOnToolsVersion = 10.2.1;
 						SystemCapabilities = {
@@ -217,19 +166,11 @@
 			projectRoot = "";
 			targets = (
 				C7D4623E22CC73DF00E763DF /* AniLiberty */,
-				4880C21E23DACDCD006FABE1 /* MacBundle */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		4880C21D23DACDCD006FABE1 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		C7D4623D22CC73DF00E763DF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -283,13 +224,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		4880C21B23DACDCD006FABE1 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		C7D4623B22CC73DF00E763DF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -299,54 +233,7 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		4880C22E23DAD192006FABE1 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			platformFilter = maccatalyst;
-			target = 4880C21E23DACDCD006FABE1 /* MacBundle */;
-			targetProxy = 4880C22D23DAD192006FABE1 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
-		4880C22323DACDCD006FABE1 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEAD_CODE_STRIPPING = YES;
-				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO;
-				INFOPLIST_FILE = MacBundle/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				PRODUCT_BUNDLE_IDENTIFIER = com.allui.MacBundle;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = NO;
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Debug;
-		};
-		4880C22423DACDCD006FABE1 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEAD_CODE_STRIPPING = YES;
-				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO;
-				INFOPLIST_FILE = MacBundle/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				PRODUCT_BUNDLE_IDENTIFIER = com.allui.MacBundle;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = NO;
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Release;
-		};
 		C7D4624F22CC73E100E763DF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -492,7 +379,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.6.1;
+				MARKETING_VERSION = 2.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = tv.anilibria.anilibria;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -520,7 +407,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.6.1;
+				MARKETING_VERSION = 2.7.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = tv.anilibria.anilibria;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -536,15 +423,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4880C22223DACDCD006FABE1 /* Build configuration list for PBXNativeTarget "MacBundle" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4880C22323DACDCD006FABE1 /* Debug */,
-				4880C22423DACDCD006FABE1 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		C7D4623A22CC73DF00E763DF /* Build configuration list for PBXProject "Anilibria" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

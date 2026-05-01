@@ -52,7 +52,6 @@ final class PlayerViewController: BaseViewController {
         super.viewDidLoad()
         view.backgroundColor = .black
         self.setup()
-        self.addTermenateAppObserver()
         self.setupPlayer()
         self.setupAirPlay()
         self.setupPictureInPicture()
@@ -70,14 +69,6 @@ final class PlayerViewController: BaseViewController {
         self.bottomShadowView.shadowOpacity = 1
         self.bottomShadowView.shadowColor = .black
 
-        #if targetEnvironment(macCatalyst)
-        let window = UIApplication.getWindow()
-        window?.windowScene?.sizeRestrictions?.minimumSize = Sizes.minSize
-        window?.windowScene?.sizeRestrictions?.maximumSize = Sizes.maxSize
-
-        MacOSHelper.shared.fullscreenButtonEnabled = true
-        #endif
-
         let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handle))
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handle))
         tapRecognizer.cancelsTouchesInView = false
@@ -90,14 +81,6 @@ final class PlayerViewController: BaseViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         viewModel.save()
-        #if targetEnvironment(macCatalyst)
-        let window = UIApplication.getWindow()
-        window?.windowScene?.sizeRestrictions?.minimumSize = Sizes.minSize
-        window?.windowScene?.sizeRestrictions?.maximumSize = Sizes.minSize
-
-        MacOSHelper.shared.toggleFullScreen()
-        MacOSHelper.shared.fullscreenButtonEnabled = false
-        #endif
     }
 
     override var canBecomeFirstResponder: Bool { true }
@@ -157,6 +140,12 @@ final class PlayerViewController: BaseViewController {
         viewModel.$playbackRate
             .sink { [weak self] rate in
                 self?.playerView.set(rate: rate)
+            }.store(in: &subscribers)
+
+        NotificationCenter.default
+            .publisher(for: UIApplication.willResignActiveNotification)
+            .sink { [weak self] _ in
+                self?.viewModel.save()
             }.store(in: &subscribers)
     }
 
@@ -350,12 +339,6 @@ final class PlayerViewController: BaseViewController {
     }
 
     // MARK: - Actions
-
-    override func appWillTerminate() {
-        super.appWillTerminate()
-        viewModel.save()
-        sleep(2) // this used for to give time for save async data
-    }
 
     override func viewWillTransition(
         to size: CGSize,

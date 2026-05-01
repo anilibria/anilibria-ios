@@ -32,17 +32,14 @@ final class BarButton: UIBarButtonItem {
                      rippleColor: UIColor? = nil,
                      imageEdge: UIEdgeInsets = .zero,
                      action: ActionFunc?) {
-        let tintColor = tintColor ?? .Tint.main
-        let rippleColor = rippleColor ?? .Tint.main
-
-        let button = BarRippleButton(type: type)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.contentSize = CGSize(width: 30, height: 44)
-        button.tintColor = tintColor
-        button.setImage(image, for: .normal)
-        button.rippleColor = rippleColor
-        button.contentEdgeInsets = imageEdge
-        button.imageView?.contentMode = .scaleAspectFit
+        let button = BarRippleButton.make(
+            type: type,
+            image: image,
+            activeImage: activeImage,
+            tintColor: tintColor,
+            rippleColor: rippleColor,
+            imageEdge: imageEdge
+        )
         self.init(customView: button)
         self.normalImage = image
         self.activeImage = activeImage
@@ -91,5 +88,25 @@ public class BarRippleButton: RippleButton {
             right: .margins(0)
         ))
         rippleContainerView = container
+    }
+
+    static func make(type: UIButton.ButtonType = .system,
+                     image: UIImage,
+                     activeImage: UIImage? = nil,
+                     tintColor: UIColor? = nil,
+                     rippleColor: UIColor? = nil,
+                     imageEdge: UIEdgeInsets = .zero) -> BarRippleButton {
+        let tintColor = tintColor ?? .Tint.main
+        let rippleColor = rippleColor ?? .Tint.main
+
+        let button = BarRippleButton(type: type)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.contentSize = CGSize(width: 30, height: 44)
+        button.tintColor = tintColor
+        button.setImage(image, for: .normal)
+        button.rippleColor = rippleColor
+        button.contentEdgeInsets = imageEdge
+        button.imageView?.contentMode = .scaleAspectFit
+        return button
     }
 }

@@ -36,31 +36,9 @@
                                             <constraint firstAttribute="height" constant="16" id="ngb-Ae-oHX"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N5O-6O-tKk">
-                                        <rect key="frame" x="0.0" y="124" width="120" height="41"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="В случае с братом медицина бессильна! 3" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dk5-Jf-Vqx">
-                                                <rect key="frame" x="8" y="6" width="104" height="29"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="bottom" secondItem="dk5-Jf-Vqx" secondAttribute="bottom" constant="6" id="Iss-dR-CTz"/>
-                                            <constraint firstAttribute="trailing" secondItem="dk5-Jf-Vqx" secondAttribute="trailing" constant="8" id="KNp-6P-ScS"/>
-                                            <constraint firstItem="dk5-Jf-Vqx" firstAttribute="leading" secondItem="N5O-6O-tKk" secondAttribute="leading" constant="8" id="NCG-ZA-cex"/>
-                                            <constraint firstAttribute="height" constant="41" id="Q8e-q0-Tex"/>
-                                            <constraint firstItem="dk5-Jf-Vqx" firstAttribute="top" secondItem="N5O-6O-tKk" secondAttribute="top" constant="6" id="SiI-Gj-xFB"/>
-                                        </constraints>
-                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="N5O-6O-tKk" secondAttribute="bottom" id="B2M-Ri-qzF"/>
-                                    <constraint firstItem="N5O-6O-tKk" firstAttribute="leading" secondItem="GHe-KK-moN" secondAttribute="leading" id="aH8-za-1Ni"/>
-                                    <constraint firstAttribute="trailing" secondItem="N5O-6O-tKk" secondAttribute="trailing" id="d6k-RW-Nyl"/>
                                     <constraint firstAttribute="bottom" secondItem="pNj-Ol-tSE" secondAttribute="bottom" id="hQU-0c-u1l"/>
                                     <constraint firstAttribute="trailing" secondItem="hYm-Dp-ez2" secondAttribute="trailing" constant="-5" id="oLG-Ju-WbX"/>
                                     <constraint firstItem="pNj-Ol-tSE" firstAttribute="leading" secondItem="GHe-KK-moN" secondAttribute="leading" id="r4x-RY-PFr"/>
@@ -104,12 +82,11 @@
             <size key="customSize" width="320" height="247"/>
             <connections>
                 <outlet property="imageView" destination="pNj-Ol-tSE" id="jpg-ic-l4c"/>
-                <outlet property="releaseTitleLabel" destination="dk5-Jf-Vqx" id="tj5-Hj-vO6"/>
                 <outlet property="rippleContainerView" destination="GHe-KK-moN" id="2eS-eK-tQ3"/>
                 <outletCollection property="releaseIndicatorView" destination="hYm-Dp-ez2" collectionClass="NSMutableArray" id="B4b-4f-S3j"/>
                 <outletCollection property="releaseIndicatorView" destination="Rvo-De-N4E" collectionClass="NSMutableArray" id="J4c-Tj-kVn"/>
             </connections>
-            <point key="canvasLocation" x="33.333333333333336" y="43.526785714285715"/>
+            <point key="canvasLocation" x="33.333333333333336" y="43.191964285714285"/>
         </collectionViewCell>
     </objects>
     <resources>

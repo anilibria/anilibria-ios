@@ -40,6 +40,25 @@ final class HistoryViewController: BaseCollectionViewController {
         self.collectionView.contentInset.top = 10
     }
 
+    override var canBecomeFirstResponder: Bool { true }
+
+    override var keyCommands: [UIKeyCommand]? {
+        let command = UIKeyCommand(
+            input: "f",
+            modifierFlags: [.command],
+            action: #selector(self.focusSearchFieldAction)
+        )
+        if #available(iOS 15.0, macCatalyst 15.0, *) {
+            command.wantsPriorityOverSystemBehavior = true
+        }
+        command.discoverabilityTitle = L10n.Common.Search.byName
+        return [command]
+    }
+
+    @objc private func focusSearchFieldAction() {
+        self.searchView?.becomeFirstResponder()
+    }
+
     private func setupNavbar() {
         if let value = self.searchView {
             self.navigationItem.titleView = value

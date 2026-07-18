@@ -2,7 +2,7 @@ import UIKit
 
 // MARK: - View Controller
 
-final class CatalogViewController: BaseCollectionViewController {
+final class CatalogViewController: BaseCollectionViewController, SearchHotkeyProviding {
     var handler: CatalogEventHandler!
 
     private lazy var searchButton = BarButton(image: .System.search,
@@ -30,6 +30,16 @@ final class CatalogViewController: BaseCollectionViewController {
         self.addRefreshControl(scrollView: collectionView)
         self.handler.didLoad()
         self.collectionView.contentInset.top = 10
+    }
+
+    override var canBecomeFirstResponder: Bool { true }
+
+    override var keyCommands: [UIKeyCommand]? {
+        [searchHotkeyCommand(action: #selector(self.searchHotkeyAction))]
+    }
+
+    @objc private func searchHotkeyAction() {
+        self.handler.search()
     }
 
     override func setupStrings() {

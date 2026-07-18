@@ -6,6 +6,21 @@ public final class SearchResultCell: RippleViewCell {
     @IBOutlet var iconView: UIImageView!
     @IBOutlet var titleLabel: UILabel!
 
+    public override var isSelected: Bool {
+        didSet {
+            updateHighlight()
+        }
+    }
+
+    public override func awakeFromNib() {
+        super.awakeFromNib()
+        updateHighlight()
+    }
+
+    private func updateHighlight() {
+        backView.backgroundColor = isSelected ? UIColor.Tint.main.withAlphaComponent(0.12) : .clear
+    }
+
     func configure(_ item: SearchValue) {
         switch item {
         case let .series(value):

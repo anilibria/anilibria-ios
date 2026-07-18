@@ -9,7 +9,7 @@ protocol SeriesViewBehavior: WaitingBehavior, RefreshBehavior {
     func set(collection: UserCollectionType?)
     func set(playInfo: String?)
     func set(series: [Series], current: Series)
-    
+
     func showUpdatesActivity() -> ActivityDisposable?
 }
 
@@ -29,4 +29,5 @@ protocol SeriesEventHandler: ViewControllerEventHandler, RefreshEventHandler {
     func selectCollection(_ activity: (any ActivityDisposable)?)
     func donate()
     func share()
+    func search()
 }

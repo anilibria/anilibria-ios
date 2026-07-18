@@ -117,12 +117,20 @@ final class PlayerViewController: BaseViewController {
             action: #selector(self.playPauseAction(_:))
         )
 
+        let search = UIKeyCommand(
+            input: "f",
+            modifierFlags: [.command],
+            action: #selector(self.searchAction)
+        )
+        search.discoverabilityTitle = L10n.Common.Search.byName
+
         if #available(iOS 15.0, macCatalyst 15.0, *) {
             back.wantsPriorityOverSystemBehavior = true
             forward.wantsPriorityOverSystemBehavior = true
+            search.wantsPriorityOverSystemBehavior = true
         }
 
-        var commands = [playPause, back, forward]
+        var commands = [playPause, back, forward, search]
 
         #if targetEnvironment(macCatalyst)
         let volumeUp = UIKeyCommand(
@@ -352,6 +360,13 @@ final class PlayerViewController: BaseViewController {
 
     @objc private func rewindBack() {
         self.apply(rewind: -5.0)
+    }
+
+    @objc private func searchAction() {
+        if playerView.isPlaying {
+            playPauseAction(self)
+        }
+        viewModel.showSearch()
     }
 
     private func setupAirPlay() {

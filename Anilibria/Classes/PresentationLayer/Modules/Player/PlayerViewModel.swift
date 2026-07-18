@@ -301,6 +301,10 @@ extension PlayerViewModel {
         self.router.back()
     }
 
+    func showSearch() {
+        self.router.openSearchScreen()
+    }
+
     func save() {
         guard changed, let playItem, var currentTimeCode else { return }
         let time: TimeInterval

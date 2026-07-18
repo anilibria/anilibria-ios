@@ -2,7 +2,7 @@ import UIKit
 
 // MARK: - View Controller
 
-final class FeedViewController: BaseCollectionViewController {
+final class FeedViewController: BaseCollectionViewController, SearchHotkeyProviding {
     var handler: FeedEventHandler!
 
     private lazy var searchButton = BarButton(image: .System.search,
@@ -34,6 +34,16 @@ final class FeedViewController: BaseCollectionViewController {
     override func setupStrings() {
         super.setupStrings()
         self.navigationItem.title = L10n.Screen.Feed.title
+    }
+
+    override var canBecomeFirstResponder: Bool { true }
+
+    override var keyCommands: [UIKeyCommand]? {
+        [searchHotkeyCommand(action: #selector(self.searchHotkeyAction))]
+    }
+
+    @objc private func searchHotkeyAction() {
+        self.handler.search()
     }
 
     override func viewDidAppear(_ animated: Bool) {

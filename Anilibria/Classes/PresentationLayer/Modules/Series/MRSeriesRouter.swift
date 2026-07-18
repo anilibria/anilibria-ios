@@ -11,6 +11,7 @@ protocol SeriesRoutable: BaseRoutable,
                          CatalogRoute,
                          SignInRoute,
                          ActionSheetRoute,
+                         SearchRoute,
                          SeriesRoute {}
 
 final class SeriesRouter: BaseRouter, SeriesRoutable {}

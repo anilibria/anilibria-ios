@@ -3,7 +3,7 @@ import Combine
 
 // MARK: - View Controller
 
-final class SeriesViewController: BaseViewController {
+final class SeriesViewController: BaseViewController, SearchHotkeyProviding {
     @IBOutlet var scrollView: UIScrollView!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var secondTitleLabel: UILabel!
@@ -193,6 +193,16 @@ final class SeriesViewController: BaseViewController {
     override func refresh() {
         super.refresh()
         handler.refresh()
+    }
+
+    override var canBecomeFirstResponder: Bool { true }
+
+    override var keyCommands: [UIKeyCommand]? {
+        [searchHotkeyCommand(action: #selector(self.searchHotkeyAction))]
+    }
+
+    @objc private func searchHotkeyAction() {
+        self.handler.search()
     }
 
     @IBAction func donateAction(_ sender: Any) {

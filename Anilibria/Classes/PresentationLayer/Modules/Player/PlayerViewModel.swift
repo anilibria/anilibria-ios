@@ -58,6 +58,15 @@ final class PlayerViewModel {
     }
 }
 
+extension PlayerViewModel: RouterCommandResponder {
+    func respond(command: RouteCommand) -> Bool {
+        if command is SearchResultCommand {
+            self.router.dismissPresentedStack()
+        }
+        return false
+    }
+}
+
 extension PlayerViewModel {
     func bind(router: PlayerRoutable,
               series: Series,
@@ -66,6 +75,7 @@ extension PlayerViewModel {
         self.router = router
         self.series = series
         self.userID = userID
+        self.router.responder = self
 
         if let episode {
             run(item: episode)
@@ -299,6 +309,10 @@ extension PlayerViewModel {
 
     func back() {
         self.router.back()
+    }
+
+    func showSearch() {
+        self.router.openSearchScreen()
     }
 
     func save() {

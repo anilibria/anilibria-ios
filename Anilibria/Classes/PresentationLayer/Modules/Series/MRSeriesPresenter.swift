@@ -277,4 +277,8 @@ extension SeriesPresenter: SeriesEventHandler {
             self.router.openShare(items: [url])
         }
     }
+
+    func search() {
+        self.router.openSearchScreen()
+    }
 }

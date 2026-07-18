@@ -111,6 +111,18 @@ final class PlayerViewController: BaseViewController {
             action: #selector(self.rewindForward)
         )
 
+        let previousEpisode = UIKeyCommand(
+            input: UIKeyCommand.inputLeftArrow,
+            modifierFlags: [.command],
+            action: #selector(self.runPreviousItemAction)
+        )
+
+        let nextEpisode = UIKeyCommand(
+            input: UIKeyCommand.inputRightArrow,
+            modifierFlags: [.command],
+            action: #selector(self.runNextItemAction)
+        )
+
         let playPause = UIKeyCommand(
             input: UIKeyCommand.inputSpace,
             modifierFlags: [],
@@ -120,9 +132,14 @@ final class PlayerViewController: BaseViewController {
         if #available(iOS 15.0, macCatalyst 15.0, *) {
             back.wantsPriorityOverSystemBehavior = true
             forward.wantsPriorityOverSystemBehavior = true
+            previousEpisode.wantsPriorityOverSystemBehavior = true
+            nextEpisode.wantsPriorityOverSystemBehavior = true
         }
 
-        var commands = [playPause, back, forward]
+        previousEpisode.discoverabilityTitle = "Previous Episode"
+        nextEpisode.discoverabilityTitle = "Next Episode"
+
+        var commands = [playPause, back, forward, previousEpisode, nextEpisode]
 
         #if targetEnvironment(macCatalyst)
         let volumeUp = UIKeyCommand(

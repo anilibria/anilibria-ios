@@ -36,7 +36,7 @@ class SheetHeaderView: UICollectionReusableView {
         contentView.spacing = 8
         contentView.alignment = .center
 
-        chevronView.tintColor = .Text.monoLight
+        chevronView.tintColor = .label
         chevronView.image = .System.Chevrone.right
         chevronView.heightAnchor.constraint(equalToConstant: 18).isActive = true
         chevronView.widthAnchor.constraint(equalToConstant: 10).isActive = true
@@ -45,11 +45,11 @@ class SheetHeaderView: UICollectionReusableView {
         contentView.addArrangedSubview(chevronView)
 
         titleLabel.font = UIFont.font(ofSize: 14, weight: .bold)
-        titleLabel.textColor = .Text.monoLight
+        titleLabel.textColor = .label
         contentView.addArrangedSubview(titleLabel)
 
         selectedValueLabel.font = UIFont.font(ofSize: 12, weight: .semibold)
-        selectedValueLabel.textColor = .Text.monoLight
+        selectedValueLabel.textColor = .secondaryLabel
         selectedValueLabel.setContentHuggingPriority(.required, for: .horizontal)
         selectedValueLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         selectedValueLabel.isHidden = true

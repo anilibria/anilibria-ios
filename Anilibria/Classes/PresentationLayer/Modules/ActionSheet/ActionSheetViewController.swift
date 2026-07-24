@@ -59,12 +59,12 @@ final class ActionSheetViewController: BaseCollectionViewController {
             type: SectionBackgroundCollectionViewCompositionalLayout.self,
             configuration: conf
         ) { layout in
-            layout.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+            layout.backgroundColor = .clear
             layout.cornerRadius = 4
             layout.backgroundInsets = .init(top: 0, left: 8, bottom: 0, right: 8)
         }
     }
-    
+
     override func setupStrings() {
         super.setupStrings()
         backButton.setTitle(L10n.Buttons.done, for: .normal)

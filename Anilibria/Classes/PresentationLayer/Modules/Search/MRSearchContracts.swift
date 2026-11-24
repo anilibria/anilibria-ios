@@ -4,6 +4,7 @@ import UIKit
 
 protocol SearchViewBehavior: AnyObject {
     func set(items: [SearchValue])
+    func showSearchFailure()
 }
 
 protocol SearchEventHandler: ViewControllerEventHandler {
@@ -11,5 +12,6 @@ protocol SearchEventHandler: ViewControllerEventHandler {
 
     func back()
     func search(query: String)
+    func retry()
     func select(item: SearchValue)
 }

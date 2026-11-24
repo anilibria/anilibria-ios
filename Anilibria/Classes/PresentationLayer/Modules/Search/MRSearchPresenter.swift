@@ -38,26 +38,39 @@ extension SearchPresenter: SearchEventHandler {
     }
 
     func search(query: String) {
-        self.currentQuery = query
-        if query.isEmpty {
-            handle([])
-            return
-        }
-        self.cancellable = mainService.search(query: query)
+        let query = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard query != currentQuery else { return }
+        currentQuery = query
+        cancellable = nil
+        view.set(items: [])
+        guard !query.isEmpty else { return }
+        cancellable = Just(query)
+            .delay(for: .milliseconds(250), scheduler: DispatchQueue.main)
+            .setFailureType(to: Error.self)
+            .flatMap(mainService.search(query:))
             .sink(onNext: { [weak self] items in
-                self?.handle(items)
+                guard let self, self.currentQuery == query else { return }
+                self.handle(items)
             }, onError: { [weak self] error in
-                self?.log(.error, error.message)
+                guard let self, self.currentQuery == query else { return }
+                self.view.set(items: [])
+                self.view.showSearchFailure()
+                self.log(.error, error.message)
             })
     }
 
+    func retry() {
+        let query = currentQuery
+        currentQuery = ""
+        search(query: query)
+    }
+
     func select(item: SearchValue) {
-        self.router.execute(SearchResultCommand(value: item))
-        self.router.back()
+        router.close(selecting: item)
     }
 
     func back() {
-        self.router.back()
+        router.close(selecting: nil)
     }
 
     private func handle(_ items: [Series]) {

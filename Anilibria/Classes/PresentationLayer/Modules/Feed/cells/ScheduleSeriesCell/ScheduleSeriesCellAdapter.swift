@@ -51,10 +51,11 @@ final class ScheduleSeriesSectionAdapter: SectionAdapterProtocol {
         environment: any NSCollectionLayoutEnvironment
     ) -> NSCollectionLayoutSection? {
         guard identifier == uid else { return nil }
-        let itemsCount: CGFloat = 3
         let inset: CGFloat = 16
-        let horizontalInsets: CGFloat = inset * itemsCount + inset
-        let width = floor((environment.container.effectiveContentSize.width - horizontalInsets) / itemsCount)
+        let availableWidth = max(1, environment.container.effectiveContentSize.width - 2 * inset)
+        let minimumWidth: CGFloat = environment.traitCollection.preferredContentSizeCategory.isAccessibilityCategory ? 168 : 100
+        let columns = max(1, Int(floor((availableWidth + inset) / (minimumWidth + inset))))
+        let width = floor((availableWidth - CGFloat(columns - 1) * inset) / CGFloat(columns))
         let heightDimension: NSCollectionLayoutDimension = .absolute(280.0 * width / 195)
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .absolute(width),
@@ -68,10 +69,10 @@ final class ScheduleSeriesSectionAdapter: SectionAdapterProtocol {
         )
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,
-            subitems: [item]
+            subitems: Array(repeating: item, count: columns)
         )
 
-        group.interItemSpacing = .flexible(inset)
+        group.interItemSpacing = .fixed(inset)
 
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = inset

@@ -14,7 +14,7 @@
             <connections>
                 <outlet property="bottomShadowView" destination="FQz-SE-DYR" id="y84-da-EPX"/>
                 <outlet property="container" destination="Jpx-rh-VQC" id="zhu-Ga-IBu"/>
-                <outlet property="elapsedTimeLabel" destination="hcn-Af-hkk" id="zyH-CJ-ZQ0"/>
+                <outlet property="elapsedTimeLabel" destination="lmJ-Xa-b6t" id="zyH-CJ-ZQ0"/>
                 <outlet property="loaderContainer" destination="FIu-QE-9Gx" id="ojR-Uq-1G7"/>
                 <outlet property="nextContainer" destination="IMe-Ch-GEm" id="G2J-Hj-J74"/>
                 <outlet property="pipButton" destination="Ydc-Y1-Xpa" id="vXK-pm-c1m"/>
@@ -24,7 +24,7 @@
                 <outlet property="previousContainer" destination="bIn-u6-QZM" id="puW-f3-nvW"/>
                 <outlet property="seriesSelectorLabel" destination="mRY-G0-C00" id="FNz-kO-KY7"/>
                 <outlet property="skipContainer" destination="yjQ-b9-EuL" id="SEc-p9-kRe"/>
-                <outlet property="timeLeftLabel" destination="lmJ-Xa-b6t" id="Hjf-fu-Hvn"/>
+                <outlet property="timeLeftLabel" destination="hcn-Af-hkk" id="Hjf-fu-Hvn"/>
                 <outlet property="titleLabel" destination="8D0-tm-A1Z" id="k3M-HP-9Rg"/>
                 <outlet property="topShadowView" destination="iA8-Jg-EAd" id="DuE-rH-DQz"/>
                 <outlet property="videoSliderView" destination="XrI-iq-FAF" id="5sa-Vm-VB9"/>
@@ -44,6 +44,9 @@
                         <outlet property="bottomStackView" destination="RdM-6v-qgZ" id="0ZD-fL-Ucz"/>
                         <outlet property="controlsContainer" destination="uj7-lm-xJf" id="CKU-LZ-0lS"/>
                         <outlet property="headerContainer" destination="6Zg-Em-KU3" id="ziu-Ta-aAS"/>
+                        <outlet property="timelineLeading" destination="vL4-44-48w" id="R2F-e7-y17"/>
+                        <outlet property="transportCenterX" destination="8c6-ec-mr6" id="A46-h4-29D"/>
+                        <outlet property="transportCenterY" destination="obj-sN-jX9" id="R13-8h-a7Z"/>
                         <outlet property="rewindView" destination="Pbz-Zx-8Bt" id="RJv-bA-kYo"/>
                     </connections>
                 </view>

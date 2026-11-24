@@ -16,7 +16,7 @@ final class NewsViewController: BaseCollectionViewController {
     private let sectionAdapter: SectionAdapter = {
         let section = SectionAdapter([])
         section.estimatedHeight = 250
-        section.ipad = .init(expectedWidth: 320)
+        section.minimumColumnWidth = 320
         return section
     }()
 

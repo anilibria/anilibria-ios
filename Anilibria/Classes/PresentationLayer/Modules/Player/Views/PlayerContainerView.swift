@@ -15,6 +15,9 @@ final class PlayerContainerView: UIView {
     @IBOutlet var controlsContainer: UIView!
     @IBOutlet var bottomContainer: UIView!
     @IBOutlet var bottomStackView: UIStackView!
+    @IBOutlet var transportCenterX: NSLayoutConstraint!
+    @IBOutlet var transportCenterY: NSLayoutConstraint!
+    @IBOutlet var timelineLeading: NSLayoutConstraint!
 
     var didRequestRewind: ((Double) -> Void)?
 
@@ -22,6 +25,7 @@ final class PlayerContainerView: UIView {
     private var rewindTime: Double = 0
     private var rewindStepTime: Double = 10
     private var tapTimerSubscriber: AnyCancellable?
+    private var videoEdges: [NSLayoutConstraint] = []
 
     private var rewindIsVisible: Bool = false {
         didSet {
@@ -45,6 +49,52 @@ final class PlayerContainerView: UIView {
 
         let pan = UIPanGestureRecognizer(target: self, action: #selector(pan(with:)))
         self.addGestureRecognizer(pan)
+    }
+
+    func installVideo(_ video: UIView) {
+        insertSubview(video, at: 0)
+        video.translatesAutoresizingMaskIntoConstraints = false
+        videoEdges = [
+            video.topAnchor.constraint(equalTo: topAnchor),
+            video.leadingAnchor.constraint(equalTo: leadingAnchor),
+            video.bottomAnchor.constraint(equalTo: bottomAnchor),
+            video.trailingAnchor.constraint(equalTo: trailingAnchor)
+        ]
+        NSLayoutConstraint.activate(videoEdges)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guard !videoEdges.isEmpty, let transportCenterX, let transportCenterY, let timelineLeading else { return }
+        var frame = bounds
+        var transport = CGPoint(x: bounds.midX, y: bounds.midY)
+        var timelineInset: CGFloat = 0
+        switch duoDivision {
+        case let .book(gap)
+            where gap.lowerBound - bounds.minX >= 220 && bounds.maxX - gap.upperBound >= 220:
+            frame.size.width = gap.lowerBound - bounds.minX
+            transport.x = (gap.upperBound + bounds.maxX) / 2
+            timelineInset = max(0, gap.upperBound - bounds.minX - safeAreaInsets.left)
+        case let .tabletop(gap)
+            where gap.lowerBound - bounds.minY >= 150 && bounds.maxY - gap.upperBound >= 150:
+            frame.size.height = gap.lowerBound - bounds.minY
+            transport.y = (gap.upperBound + bounds.maxY) / 2
+        default:
+            break
+        }
+        let offsets = [
+            frame.minY - bounds.minY,
+            frame.minX - bounds.minX,
+            frame.maxY - bounds.maxY,
+            frame.maxX - bounds.maxX,
+            transport.x - bounds.midX,
+            transport.y - bounds.midY,
+            timelineInset
+        ]
+        for (constraint, offset) in zip(videoEdges + [transportCenterX, transportCenterY, timelineLeading], offsets)
+            where constraint.constant != offset {
+            constraint.constant = offset
+        }
     }
 
     @objc private func tap(with gesture: UITapGestureRecognizer) {

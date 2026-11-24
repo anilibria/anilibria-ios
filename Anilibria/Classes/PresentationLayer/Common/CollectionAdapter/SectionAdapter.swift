@@ -9,18 +9,13 @@
 import UIKit
 
 class SectionAdapter: SectionAdapterProtocol {
-    struct Configuration {
-        let expectedWidth: CGFloat
-    }
-
     let uid: AnyHashable = UUID()
     var insets: NSDirectionalEdgeInsets = .zero
     var minimumLineSpacing: CGFloat = 0
     var minimumInteritemSpacing: CGFloat = 0
     var estimatedHeight: CGFloat = 50
-    var ipad: Configuration?
+    var minimumColumnWidth: CGFloat?
     private(set) var items: OrderedSet<AnyCellAdapter> = []
-
 
     init(_ items: [AnyCellAdapter]) {
         self.set(items)
@@ -56,22 +51,17 @@ class SectionAdapter: SectionAdapterProtocol {
         environment: any NSCollectionLayoutEnvironment
     ) -> NSCollectionLayoutSection? {
         guard identifier == uid else { return nil }
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            if let configuration = ipad {
-                return getIPadLayout(environment, configuration: configuration)
-            }
+        let availableWidth = environment.container.effectiveContentSize.width - insets.leading - insets.trailing
+        let gap = minimumInteritemSpacing
+        let columns: Int
+        if let minimumColumnWidth, !environment.traitCollection.preferredContentSizeCategory.isAccessibilityCategory {
+            columns = max(1, Int(floor((availableWidth + gap) / (minimumColumnWidth + gap))))
+        } else {
+            columns = 1
         }
-        return getDefaultLayout(environment)
-    }
-
-    private func getIPadLayout(_ environment: NSCollectionLayoutEnvironment,
-                               configuration: Configuration) -> NSCollectionLayoutSection? {
-        let itemsPerLine = max(floor(environment.container.effectiveContentSize.width / configuration.expectedWidth), 1)
-        let horizontalInsets: CGFloat = minimumInteritemSpacing * (itemsPerLine - 1) + insets.leading + insets.trailing
-        let width = floor((environment.container.effectiveContentSize.width - horizontalInsets) / itemsPerLine)
-
+        let width = floor((availableWidth - CGFloat(columns - 1) * gap) / CGFloat(columns))
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(width),
+            widthDimension: columns == 1 ? .fractionalWidth(1) : .absolute(width),
             heightDimension: .estimated(estimatedHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -82,31 +72,9 @@ class SectionAdapter: SectionAdapterProtocol {
         )
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,
-            subitems: Array(repeating: item, count: Int(itemsPerLine))
+            subitems: Array(repeating: item, count: columns)
         )
-        group.interItemSpacing = .flexible(minimumInteritemSpacing)
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = insets
-        section.interGroupSpacing = minimumLineSpacing
-        return section
-    }
-
-    private func getDefaultLayout(_ environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(estimatedHeight)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(estimatedHeight)
-        )
-        let group = NSCollectionLayoutGroup.horizontal(
-            layoutSize: groupSize,
-            subitems: [item]
-        )
-        group.interItemSpacing = .flexible(minimumInteritemSpacing)
+        group.interItemSpacing = .fixed(gap)
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = insets
         section.interGroupSpacing = minimumLineSpacing

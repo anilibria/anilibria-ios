@@ -22,6 +22,7 @@ public struct MainTheme: AppTheme {
     func configureNavBar() {
         let navbar = UINavigationBar.appearance()
         navbar.tintColor = .Tint.main
+        if #available(iOS 26.0, *) { return }
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = .Surfaces.background
         appearance.titleTextAttributes = [

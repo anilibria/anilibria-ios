@@ -9,7 +9,7 @@ protocol MainContainerViewBehavior: WaitingBehavior {
 }
 
 protocol MainContainerEventHandler: ViewControllerEventHandler {
-    func bind(view: MainContainerViewBehavior, router: MainContainerRoutable)
+    func bind(view: MainContainerViewBehavior)
 
     func select(item: MenuItemType)
 }

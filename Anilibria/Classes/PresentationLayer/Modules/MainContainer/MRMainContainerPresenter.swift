@@ -1,6 +1,5 @@
 import DITranquillity
 import Combine
-import UIKit
 
 final class MainContainerPart: DIPart {
     static func load(container: DIContainer) {
@@ -14,27 +13,21 @@ final class MainContainerPart: DIPart {
 
 final class MainContainerPresenter {
     private weak var view: MainContainerViewBehavior!
-    private var router: MainContainerRoutable!
-
     private let menuService: MenuService
     private let sessionService: SessionService
-    private let mainService: MainService
 
     private var bag = Set<AnyCancellable>()
 
     init(menuService: MenuService,
-         sessionService: SessionService,
-         mainService: MainService) {
+         sessionService: SessionService) {
         self.menuService = menuService
         self.sessionService = sessionService
-        self.mainService = mainService
     }
 }
 
 extension MainContainerPresenter: MainContainerEventHandler {
-    func bind(view: MainContainerViewBehavior, router: MainContainerRoutable) {
+    func bind(view: MainContainerViewBehavior) {
         self.view = view
-        self.router = router
     }
 
     func didLoad() {
@@ -46,7 +39,6 @@ extension MainContainerPresenter: MainContainerEventHandler {
         self.menuService.fetchCurrentItem()
             .sink(onNext: { [weak self] type in
                 self?.view.set(selected: type)
-                self?.router.open(menu: type)
             })
             .store(in: &bag)
 

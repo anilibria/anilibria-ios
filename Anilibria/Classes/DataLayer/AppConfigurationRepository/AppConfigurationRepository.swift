@@ -14,7 +14,7 @@ final class AppConfigurationRepositoryPart: DIPart {
 protocol AppConfigurationRepository: AnyObject {
     func fetchBaseImageUrl() -> AnyPublisher<URL, any Error>
     func fetchBaseUrl() -> AnyPublisher<URL, Error>
-    func updateBaseUrl(_ baseUrl: URL?) -> AnyPublisher<URL, Error>
+    func updateBaseUrl(_ baseUrl: URL?, attempts: Int) -> AnyPublisher<URL, Error>
 
     func fetchLinks() -> AnyPublisher<AniLinks?, any Error>
 }
@@ -34,7 +34,7 @@ final class AppConfigurationRepositoryImp: AppConfigurationRepository {
             if let url {
                 .just(url)
             } else {
-                updateBaseUrl(nil)
+                updateBaseUrl(nil, attempts: 0)
             }
         }
         .receive(on: DispatchQueue.main)
@@ -50,16 +50,16 @@ final class AppConfigurationRepositoryImp: AppConfigurationRepository {
             return if let url {
                 .just(url)
             } else {
-                updateBaseUrl(nil)
+                updateBaseUrl(nil, attempts: 0)
             }
         }
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
     }
 
-    func updateBaseUrl(_ baseUrl: URL?) -> AnyPublisher<URL, any Error> {
+    func updateBaseUrl(_ baseUrl: URL?, attempts: Int) -> AnyPublisher<URL, any Error> {
         AnyPublisher.create { [unowned self] in
-            return try await provider.next(for: baseUrl)
+            return try await provider.next(for: baseUrl, attempts: attempts)
         }
         .receive(on: DispatchQueue.main)
         .eraseToAnyPublisher()
@@ -99,7 +99,10 @@ private actor AniConfigProvider {
         infoItem = currentConfigData.topPriorityItem()
     }
 
-    func next(for url: URL?) async throws -> URL {
+    func next(for url: URL?, attempts: Int) async throws -> URL {
+        guard attempts == 0 || attempts < currentConfigData.items.count else {
+            throw AppError.error(code: MRKitErrorCode.noAlternative)
+        }
         if let task = activeTask { return try await task.value }
 
         let task = Task { try await fetch(with: url) }

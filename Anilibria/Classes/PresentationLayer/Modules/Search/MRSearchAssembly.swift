@@ -19,8 +19,8 @@ protocol SearchRoute {
 extension SearchRoute where Self: RouterProtocol {
     func openSearchScreen() {
         let module = SearchAssembly.createModule(parent: self)
-        module.modalTransitionStyle = .crossDissolve
-        module.modalPresentationStyle = .overFullScreen
-        ModalRouter(target: module, parent: self.controller).move()
+        let navigation = BaseNavigationController(rootViewController: module)
+        navigation.modalPresentationStyle = .pageSheet
+        ModalRouter(target: navigation, parent: self.controller).move()
     }
 }

@@ -15,10 +15,15 @@ final class EpisodesView: UIView {
     private var actionTopConstraint: NSLayoutConstraint?
     private var actionBottomConstraint: NSLayoutConstraint?
 
-    private let actionsContainer: UIView = {
-        let view = UIView()
-        view.backgroundColor = .Buttons.unselected
-        view.smoothCorners(with: EpisodesView.actionsViewHeight / 2)
+    private let actionsContainer: UIVisualEffectView = {
+        if #available(iOS 26.0, *) {
+            let view = UIVisualEffectView(effect: UIGlassEffect(style: .regular))
+            view.cornerConfiguration = .capsule()
+            return view
+        }
+        let view = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
+        view.layer.cornerRadius = EpisodesView.actionsViewHeight / 2
+        view.clipsToBounds = true
         return view
     }()
 
@@ -26,19 +31,9 @@ final class EpisodesView: UIView {
 
     public lazy var adapter = CollectionViewAdapter(collectionView: collectionView)
 
-    private let searchView: SearchView = SearchView(
-        frame: CGRect(origin: .zero, size: .init(width: 320, height: 40))
-    )
-
-    private lazy var reverseButton = BarRippleButton.make(
-        image: .System.upDownArrows,
-        imageEdge: inset(5, 5, 5, 5)
-    )
-
-    private lazy var optionsButton = BarRippleButton.make(
-        image: .System.pencil,
-        imageEdge: inset(5, 5, 5, 5)
-    )
+    private let searchField = UISearchTextField()
+    private let reverseButton = UIButton(type: .system)
+    private let optionsButton = UIButton(type: .system)
 
     private let stubView: StubView? = StubView.fromNib()?.apply {
         $0.set(image: .System.play, color: .Text.secondary)
@@ -54,7 +49,7 @@ final class EpisodesView: UIView {
 
     private lazy var episodesHandler = EpisodeCellAdapterHandler(
         select: { [weak self] item in
-            self?.searchView.resignFirstResponder()
+            self?.searchField.resignFirstResponder()
             self?.viewModel?.play(item: item)
         }
     )
@@ -157,18 +152,32 @@ final class EpisodesView: UIView {
     }
 
     private func setupSearchView() {
+        searchField.placeholder = L10n.Common.Search.byName
+        searchField.clearButtonMode = .whileEditing
+        searchField.returnKeyType = .search
+        searchField.accessibilityIdentifier = "episodes.query"
+        reverseButton.setImage(.System.upDownArrows, for: .normal)
+        reverseButton.accessibilityLabel = L10n.Screen.Filter.sotring
+        optionsButton.setImage(.System.pencil, for: .normal)
+        optionsButton.accessibilityLabel = L10n.Buttons.settings
+
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.spacing = 8
-        actionsContainer.addSubview(stackView)
-        stackView.constraintEdgesToSuperview(.init(right: 8))
-        stackView.addArrangedSubview(searchView)
+        stackView.spacing = 4
+        actionsContainer.contentView.addSubview(stackView)
+        stackView.constraintEdgesToSuperview(.init(left: 6, right: 6))
+        stackView.addArrangedSubview(searchField)
         stackView.addArrangedSubview(reverseButton)
         stackView.addArrangedSubview(optionsButton)
-        optionsButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        reverseButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        let optionsWidth = optionsButton.widthAnchor.constraint(equalToConstant: 44)
+        let reverseWidth = reverseButton.widthAnchor.constraint(equalToConstant: 44)
+        optionsWidth.priority = .defaultHigh
+        reverseWidth.priority = .defaultHigh
+        NSLayoutConstraint.activate([optionsWidth, reverseWidth])
 
-        searchView.querySequence()
+        searchField.textPublisher
+            .map { $0 ?? "" }
+            .removeDuplicates()
             .sink(onNext: { [weak self] text in
                 self?.viewModel?.search(query: text)
                 if text.isEmpty {
@@ -178,6 +187,10 @@ final class EpisodesView: UIView {
                 }
             })
             .store(in: &subscribers)
+        searchField.publisher(for: .primaryActionTriggered).sink { [weak self] in
+            self?.searchField.resignFirstResponder()
+        }
+        .store(in: &subscribers)
 
         optionsButton.publisher(for: .touchUpInside).sink { [weak self] in
             self?.viewModel?.showOptions()

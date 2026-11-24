@@ -29,7 +29,7 @@ final class MainRetrier: LoadRetrier {
             // don't retry
             completion(false)
         default:
-            appConfig.updateBaseUrl(baseURL).sink(
+            appConfig.updateBaseUrl(baseURL, attempts: retryNumber + 1).sink(
                 onNext: { _ in completion(true) },
                 onError: { _ in completion(false) }
             ).store(in: &cancellables)

@@ -1,105 +1,91 @@
-import Combine
 import UIKit
 
-// MARK: - View Controller
-
 final class SearchViewController: BaseCollectionViewController {
-    @IBOutlet var scrollView: UIScrollView!
-    @IBOutlet var collectionHeightConstraint: NSLayoutConstraint!
-    @IBOutlet var searchContainerConstraint: NSLayoutConstraint!
-    @IBOutlet var searchField: UITextField!
-    @IBOutlet var backview: UIView!
-
     var handler: SearchEventHandler!
 
-    private var bag: Any?
+    private lazy var search = UISearchController(searchResultsController: nil)
+    private var didActivateSearch = false
 
-    // MARK: - Life cycle
+    override func loadView() {
+        view = UIView()
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.keyboardDismissMode = .interactive
+        view.addSubview(collectionView)
+        let safeArea = view.safeAreaLayoutGuide
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: safeArea.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor)
+        ])
+    }
 
     override func viewDidLoad() {
-        self.defaultBottomInset = 0
+        defaultBottomInset = 12
         super.viewDidLoad()
-        collectionView.layoutMargins = .zero
-        view.backgroundColor = .black.withAlphaComponent(0.5)
-        addKeyboardObservers()
+        definesPresentationContext = true
+        search.obscuresBackgroundDuringPresentation = false
+        search.hidesNavigationBarDuringPresentation = false
+        search.automaticallyShowsCancelButton = false
+        search.delegate = self
+        search.searchResultsUpdater = self
+        search.searchBar.searchTextField.accessibilityIdentifier = "search.query"
+        navigationItem.searchController = search
+        navigationItem.hidesSearchBarWhenScrolling = false
+        navigationItem.rightBarButtonItem = UIBarButtonItem(systemItem: .close, primaryAction: UIAction { [weak self] _ in
+            self?.handler.back()
+        })
         handler.didLoad()
-
-        scrollView.isScrollEnabled = false
-        collectionHeightConstraint.constant = 1
-        backview.layer.cornerRadius = 5
-        backview.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        collectionView.layer.cornerRadius = 5
-        collectionView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        bag = collectionView.publisher(for: \.contentSize).removeDuplicates().sink { [weak self] _ in
-            if let height = self?.collectionView.contentSize.height {
-                self?.collectionHeightConstraint.constant = max(height, 1)
-                UIView.animate(withDuration: 0.2) {
-                    self?.view.layoutIfNeeded()
-                }
-            }
-        }
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.showSearchView()
-        }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        guard !didActivateSearch else { return }
+        didActivateSearch = true
+        search.isActive = true
     }
 
-    private func setupSearchField() {
-        self.searchField.placeholder = L10n.Common.Search.byName
-        self.searchField.publisher(for: .editingChanged)
-            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
-            .sink(onNext: { [weak self] in
-                if let text = self?.searchField.text {
-                    self?.handler.search(query: text)
-                }
-            })
-            .store(in: &subscribers)
+    override func setupStrings() {
+        navigationItem.title = L10n.Screen.Catalog.title
+        search.searchBar.placeholder = L10n.Common.Search.byName
+    }
+}
+
+extension SearchViewController: UISearchControllerDelegate, UISearchResultsUpdating {
+    func didPresentSearchController(_ searchController: UISearchController) {
+        searchController.searchBar.becomeFirstResponder()
     }
 
-    override func keyBoardWillShow(keyboardHeight: CGFloat) {
-        self.scrollView.contentInset.bottom = keyboardHeight + 20
-    }
-
-    override func keyBoardWillHide() {
-        self.scrollView.contentInset.bottom = 20
-    }
-
-    private func showSearchView() {
-        let width = UIApplication.getWindow()?.frame.width ?? 0
-        self.searchContainerConstraint.constant = width - 32
-        UIView.animate(withDuration: 0.3) {
-            self.view.layoutIfNeeded()
-        }
-        self.searchField.becomeFirstResponder()
-        self.setupSearchField()
-    }
-
-    @IBAction func backAction(_ sender: Any) {
-        self.searchField.resignFirstResponder()
-        self.searchField.isUserInteractionEnabled = false
-        self.set(sections: []) { [weak self] in
-            self?.searchContainerConstraint.constant = 35
-            UIView.animate(withDuration: 0.3,
-                           animations: { self?.view.layoutIfNeeded() },
-                           completion: { _ in self?.handler.back() })
-        }
+    func updateSearchResults(for searchController: UISearchController) {
+        handler.search(query: searchController.searchBar.text ?? "")
     }
 }
 
 extension SearchViewController: SearchViewBehavior {
     func set(items: [SearchValue]) {
-        self.scrollView.isScrollEnabled = !items.isEmpty
-        self.set(sections:[
-            SectionAdapter(
-                items.map {
-                    SearchResultAdapter(viewModel: $0) { [weak self] item in
-                        self?.handler.select(item: item)
-                    }
-                }
-            )
-        ])
+        if #available(iOS 17.0, *) {
+            contentUnavailableConfiguration = nil
+        }
+        let section = SectionAdapter(items.map {
+            SearchResultAdapter(viewModel: $0, seclect: { [weak self] item in
+                self?.handler.select(item: item)
+            })
+        })
+        section.minimumColumnWidth = 285
+        set(sections: [section], animated: false)
+    }
+
+    func showSearchFailure() {
+        if #available(iOS 17.0, *) {
+            var configuration = UIContentUnavailableConfiguration.empty()
+            configuration.text = L10n.Common.Search.unavailable
+            configuration.button = .tinted()
+            configuration.button.title = L10n.Buttons.retry
+            configuration.buttonProperties.primaryAction = UIAction { [weak self] _ in
+                self?.handler.retry()
+            }
+            contentUnavailableConfiguration = configuration
+        }
     }
 }

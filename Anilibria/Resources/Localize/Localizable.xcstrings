@@ -530,6 +530,22 @@
         }
       }
     },
+    "common.collections.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Collections"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Коллекции"
+          }
+        }
+      }
+    },
     "common.collections.watched" : {
       "extractionState" : "migrated",
       "localizations" : {
@@ -968,6 +984,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Поиск по названию"
+          }
+        }
+      }
+    },
+    "common.search.unavailable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't search"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось выполнить поиск"
           }
         }
       }
@@ -2238,6 +2270,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Список команды"
+          }
+        }
+      }
+    },
+    "screen.other.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "More"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ещё"
           }
         }
       }

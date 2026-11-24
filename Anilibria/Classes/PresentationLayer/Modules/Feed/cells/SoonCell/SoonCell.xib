@@ -55,7 +55,6 @@
                             <segment title="Завтра"/>
                         </segments>
                         <color key="tintColor" name="text/main"/>
-                        <color key="selectedSegmentTintColor" name="buttons/selected"/>
                     </segmentedControl>
                 </subviews>
             </view>

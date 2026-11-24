@@ -124,6 +124,10 @@ enum L10n {
             static var `postponed`: String {
                 return L10n.tr("Localizable", "common.collections.postponed")
             }
+            /// Collections
+            static var `title`: String {
+                return L10n.tr("Localizable", "common.collections.title")
+            }
             /// Watched
             static var `watched`: String {
                 return L10n.tr("Localizable", "common.collections.watched")
@@ -187,6 +191,10 @@ enum L10n {
             /// Search by name
             static var `byName`: String {
                 return L10n.tr("Localizable", "common.search.by_name")
+            }
+            /// Couldn't search
+            static var `unavailable`: String {
+                return L10n.tr("Localizable", "common.search.unavailable")
             }
 
         }
@@ -633,6 +641,10 @@ enum L10n {
             /// Our team
             static var `team`: String {
                 return L10n.tr("Localizable", "screen.other.team")
+            }
+            /// More
+            static var `title`: String {
+                return L10n.tr("Localizable", "screen.other.title")
             }
 
         }

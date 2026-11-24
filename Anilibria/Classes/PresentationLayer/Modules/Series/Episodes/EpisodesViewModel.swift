@@ -48,7 +48,9 @@ class EpisodesViewModel {
     private func loadTimeCodes() {
         guard let series else { return }
         playerBag.removeAll()
+        episodeIndexes.removeAll(keepingCapacity: true)
         playerService.getTimeCodes(userID: userID, episodeIDs: series.playlist.map(\.id))
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] data in
                 guard let self else { return }
                 list = series.playlist.reversed().enumerated().map { offset, item in
@@ -59,13 +61,13 @@ class EpisodesViewModel {
                         didTapOnWatched: { [weak self] in self?.toggle(watching: $0) }
                     )
                 }
-                items.value = list
+                search(query: searchQuery)
                 updateActive()
             }.store(in: &playerBag)
 
         let timecodesUpdates = playerService.observeTimecodesUpdates()
             .filter { [series] in $0.seriesID == series.id }
-            .receive(on: DispatchQueue.global(qos: .userInitiated))
+            .receive(on: DispatchQueue.main)
             .map { [weak self] data -> Void in
                 guard let self else { return }
                 data.timeCodes.forEach {
@@ -74,7 +76,6 @@ class EpisodesViewModel {
                     }
                 }
             }
-            .receive(on: DispatchQueue.main)
             .share()
 
         timecodesUpdates.sink { [weak self] in
@@ -87,6 +88,7 @@ class EpisodesViewModel {
             timecodesUpdates,
             playerService.observeHistoryUpdates()
                 .filter { [series] in $0.seriesID == series.id }
+                .receive(on: DispatchQueue.main)
         ).sink { [weak self] _, _ in
             self?.updateActive()
         }.store(in: &playerBag)
@@ -94,24 +96,10 @@ class EpisodesViewModel {
 
     func search(query: String) {
         searchQuery = query.lowercased()
-        DispatchQueue.global().async { [weak self] in
-            guard let self else { return }
-            var result = self.list
-            if searchQuery.isEmpty == false {
-                result = result.filter {
-                    $0.fullName.lowercased().contains(self.searchQuery)
-                }
-            }
-
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                if self.reversed {
-                    self.items.value = result.reversed()
-                } else {
-                    self.items.value = result
-                }
-            }
+        let result = searchQuery.isEmpty ? list : list.filter {
+            $0.fullName.lowercased().contains(searchQuery)
         }
+        items.value = reversed ? Array(result.reversed()) : result
     }
 
     func play(item: EpisodeViewModel) {

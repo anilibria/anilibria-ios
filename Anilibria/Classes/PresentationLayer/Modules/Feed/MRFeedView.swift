@@ -5,11 +5,6 @@ import UIKit
 final class FeedViewController: BaseCollectionViewController {
     var handler: FeedEventHandler!
 
-    private lazy var searchButton = BarButton(image: .System.search,
-                                              imageEdge: inset(0, 5, 0, 5)) { [weak self] in
-        self?.handler.search()
-    }
-
     #if targetEnvironment(macCatalyst)
     private lazy var refreshButton = BarButton(image: .System.refresh) { [weak self] in
         _ = self?.showRefreshIndicator()
@@ -47,7 +42,11 @@ final class FeedViewController: BaseCollectionViewController {
     }
 
     private func setupNavbar() {
-        var items = [self.searchButton]
+        let search = UIBarButtonItem(systemItem: .search, primaryAction: UIAction { [weak self] _ in
+            self?.handler.search()
+        })
+        search.accessibilityIdentifier = "feed.search"
+        var items = [search]
         #if targetEnvironment(macCatalyst)
         items.append(self.refreshButton)
         #endif
@@ -63,7 +62,10 @@ final class FeedViewController: BaseCollectionViewController {
         case let model as TitleItem:
             return SectionAdapter([TitleCellAdapter(viewModel: model)])
         case let items as [ActionItem]:
-            return SectionAdapter(items.map(ActionCellAdapter.init))
+            let section = SectionAdapter(items.map(ActionCellAdapter.init))
+            section.minimumColumnWidth = 250
+            section.insets.top = 8
+            return section
         default:
             return nil
         }

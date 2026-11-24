@@ -9,8 +9,7 @@
 import UIKit
 
 final class SeriesFavoriteView: UIView {
-    @IBOutlet var starView: UIImageView!
-    @IBOutlet var button: RippleButton!
+    @IBOutlet var button: UIButton!
     @IBOutlet var shimmerView: ShimmerView!
 
     var isLoading: Bool = false {
@@ -28,20 +27,24 @@ final class SeriesFavoriteView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        smoothCorners(with: 8)
         shimmerView.backgroundColor = .Tint.shimmer
         shimmerView.shimmerColor = .Surfaces.base
         isLoading = false
+        button.accessibilityIdentifier = "series.favorite"
+        button.accessibilityLabel = L10n.Common.Collections.favorites
+        set(favorite: false)
     }
 
     func set(favorite: Bool) {
-        if favorite {
-            backgroundColor = .Buttons.selected
-            starView.tintColor = .Text.monoLight
+        var configuration: UIButton.Configuration
+        if #available(iOS 26.0, *) {
+            configuration = favorite ? .prominentGlass() : .glass()
         } else {
-            backgroundColor = .Buttons.unselected
-            starView.tintColor = .Text.main
+            configuration = favorite ? .filled() : .tinted()
         }
-        fadeTransition()
+        configuration.image = UIImage(systemName: favorite ? "star.fill" : "star")
+        configuration.preferredSymbolConfigurationForImage = .init(textStyle: .body)
+        button.configuration = configuration
+        button.accessibilityTraits = favorite ? [.button, .selected] : [.button]
     }
 }

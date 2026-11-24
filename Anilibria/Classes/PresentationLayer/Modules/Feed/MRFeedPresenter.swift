@@ -155,13 +155,6 @@ extension FeedPresenter: FeedEventHandler {
     private func create(promo: [PromoItem], schedule: ShortSchedule) {
         var items: [any Hashable] = []
 
-        let promoModel = PromoViewModel(items: promo) { [weak self] item in
-            self?.open(promo: item)
-        }
-
-        items.append(promoModel)
-        items.append([randomSeries, history])
-
         if schedule.items.isEmpty == false {
             soonViewModel = SoonViewModel(schedule)
             soonViewModel?.selectSeries = { [weak self] series in
@@ -171,6 +164,13 @@ extension FeedPresenter: FeedEventHandler {
                 self?.allSchedule()
             }
             items.append(soonViewModel)
+        }
+
+        items.append([randomSeries, history])
+        if !promo.isEmpty {
+            items.append(PromoViewModel(items: promo) { [weak self] item in
+                self?.open(promo: item)
+            })
         }
 
         view.set(items: items)

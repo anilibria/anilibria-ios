@@ -30,7 +30,6 @@ final class PlayerViewController: BaseViewController {
     private var hideUISubscriber: AnyCancellable?
     private var pipObservation: Any?
     private var needsPlay = false
-    private var needsClose = false
     private let userInteractionSubject = PassthroughSubject<Void, Never>()
 
     #if targetEnvironment(macCatalyst)
@@ -59,6 +58,7 @@ final class PlayerViewController: BaseViewController {
         view.backgroundColor = .black
         self.setup()
         self.setupPlayer()
+        self.setupTransportMaterial()
         self.setupAirPlay()
         self.setupPictureInPicture()
         #if targetEnvironment(macCatalyst)
@@ -97,6 +97,20 @@ final class PlayerViewController: BaseViewController {
     }
 
     override var canBecomeFirstResponder: Bool { true }
+
+    private func setupTransportMaterial() {
+        guard #available(iOS 26.0, *) else { return }
+        let containers = [previousContainer, playPauseIconView.superview, nextContainer].compactMap { $0 }
+        for container in containers {
+            let effect = UIGlassEffect(style: .regular)
+            let material = UIVisualEffectView(effect: effect)
+            material.cornerConfiguration = .capsule()
+            material.isUserInteractionEnabled = false
+            container.backgroundColor = .clear
+            container.insertSubview(material, at: 0)
+            material.constraintEdgesToSuperview()
+        }
+    }
 
     override var keyCommands: [UIKeyCommand]? {
         let back = UIKeyCommand(
@@ -164,6 +178,8 @@ final class PlayerViewController: BaseViewController {
         needsPlay = viewModel.playOnStartup
 
         videoSliderView.set(duration: 0)
+        playPauseButton.accessibilityIdentifier = "player.playPause"
+        elapsedTimeLabel.accessibilityIdentifier = "player.elapsedTime"
         setLoader(visible: true)
 
         viewModel.$orientation.sink { [weak self] value in
@@ -201,8 +217,7 @@ final class PlayerViewController: BaseViewController {
     }
 
     private func setupPlayer() {
-        self.playerContainer.addSubview(self.playerView)
-        self.playerView.constraintEdgesToSuperview()
+        playerContainer.installVideo(playerView)
 
         self.playerView.getCurrentTime()
             .filter { [weak self] _ in
@@ -240,7 +255,7 @@ final class PlayerViewController: BaseViewController {
             if isPlaiyng {
                 self?.startAutoHiddingUI()
             } else {
-                self?.stopAutoHiddingUI()
+                self?.stopAutoHidingUI()
             }
         }.store(in: &subscribers)
 
@@ -289,7 +304,7 @@ final class PlayerViewController: BaseViewController {
             })
     }
 
-    private func stopAutoHiddingUI() {
+    private func stopAutoHidingUI() {
         hideUISubscriber?.cancel()
     }
 
@@ -407,9 +422,9 @@ final class PlayerViewController: BaseViewController {
             timeLeftLabel.text = "--:--"
             elapsedTimeLabel.text = "--:--"
         } else {
-            timeLeftLabel.text = timeFormatter.string(from: progress)
-            let elapsed = self.timeFormatter.string(from: duration - progress) ?? ""
-            elapsedTimeLabel.text = "-\(elapsed)"
+            elapsedTimeLabel.text = timeFormatter.string(from: progress)
+            let remaining = timeFormatter.string(from: duration - progress) ?? ""
+            timeLeftLabel.text = "-\(remaining)"
         }
     }
 
@@ -467,37 +482,8 @@ final class PlayerViewController: BaseViewController {
 
     // MARK: - Actions
 
-    override func viewWillTransition(
-        to size: CGSize,
-        with coordinator: UIViewControllerTransitionCoordinator
-    ) {
-        super.viewWillTransition(to: size, with: coordinator)
-        coordinator.animate(alongsideTransition: nil, completion: { [weak self] _ in
-            guard let self else { return }
-            if needsClose {
-                needsClose = false
-                viewModel.back()
-            }
-        })
-    }
-
     @IBAction func closeAction(_ sender: Any) {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            self.viewModel.back()
-        } else {
-            if needsClose { return }
-            if orientation == .portrait {
-                self.viewModel.back()
-            } else {
-                self.orientation = .portrait
-                if UIScreen.main.interfaceOrientation == .portrait {
-                    self.viewModel.back()
-                } else {
-                    self.needsClose = true
-                    updateOrientation()
-                }
-            }
-        }
+        viewModel.back()
     }
 
     private func updateOrientation() {

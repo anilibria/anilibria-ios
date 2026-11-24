@@ -8,14 +8,25 @@
 
 import Foundation
 
-public protocol LoadRetrier {
+protocol LoadRetrier {
     typealias RetryCompletion = (Bool) -> Void
-    func need(retry request: URLRequest,
+    func need(retry request: any BackendAPIRequest,
+              baseURL: URL?,
               error: Error,
               retryNumber: Int,
               completion: @escaping RetryCompletion)
 }
 
-public protocol RequestModifier {
-    func modify(_ urlRequest: URLRequest) -> URLRequest
+protocol AsyncRequestModifier {
+    func modify(_ request: any BackendAPIRequest, completion: @escaping (any BackendAPIRequest) -> Void)
+}
+
+protocol RequestModifier: AsyncRequestModifier {
+    func modify(_ request: any BackendAPIRequest) -> any BackendAPIRequest
+}
+
+extension RequestModifier {
+    func modify(_ request: any BackendAPIRequest, completion: @escaping (any BackendAPIRequest) -> Void) {
+        completion(modify(request))
+    }
 }

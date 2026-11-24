@@ -1,63 +1,47 @@
 import Foundation
 
-/// Request configuration protocol
-public protocol BackendAPIRequest {
-    associatedtype ResponseObject: Decodable
+struct RequestData {
     /// Server url
     ///
     /// Example: "http://example.com"
-    var baseUrl: String { get }
+    var baseUrl: String? = nil
 
     /// Path of request without baseUrl and version of API
     ///
     /// Example: "users/detail"
-    var endpoint: String { get }
+    var endpoint: String = ""
 
     /// Version of API
     ///
-    /// Default: ""
-    var apiVersion: String { get }
+    /// Default: "api/v1"
+    var apiVersion: String = "api/v1"
 
     /// Network method like GET, POST and etc
-    var method: NetworkManager.Method { get }
+    var method: NetworkManager.Method = .GET
 
-    /// Parameters passed to equest
+    /// Query parameters passed to request
     /// Default: empty
-    var parameters: [String: Any] { get }
+    var parameters: [String: Any] = [:]
+
+    /// Body passed to request
+    /// Default: nil
+    var body: (any Encodable)?
 
     /// Headers passed to equest
-    /// Default: empty
-    var headers: [String: String] { get }
-
-    /// Converter for processing the response, if the default converter for this request does inappropriate
-    /// from the configuration of BeckendService
-    ///
-    /// You need this, if API is shit
-    ///
-    /// Default: nil
-    var customResponseConverter: BackendResponseConverter? { get }
+    var headers: [String: String] = ["Content-Type": "application/json"]
 }
 
-public extension BackendAPIRequest {
-    var baseUrl: String {
-        return Configuration.server
-    }
+/// Request configuration protocol
+protocol BackendAPIRequest {
+    associatedtype ResponseObject: Decodable
+    var requestData: RequestData { get set }
+    var customResponseConverter: BackendResponseConverter? { get }
+    var decodingInfo: [CodingUserInfoKey : any Sendable]? { get }
+}
 
-    var apiVersion: String {
-        return ""
-    }
-
-    var parameters: [String: Any] {
-        return [:]
-    }
-
-    var headers: [String: String] {
-        return [:]
-    }
-
-    var customResponseConverter: BackendResponseConverter? {
-        return nil
-    }
+extension BackendAPIRequest {
+    var customResponseConverter: BackendResponseConverter? { nil }
+    var decodingInfo: [CodingUserInfoKey : any Sendable]? { nil }
 }
 
 public struct Unit: Decodable, ExpressibleByNilLiteral {

@@ -5,13 +5,13 @@ import UIKit
 final class FeedViewController: BaseCollectionViewController {
     var handler: FeedEventHandler!
 
-    private lazy var searchButton = BarButton(image: UIImage(resource: .menuItemSearch),
-                                              imageEdge: inset(12, 5, 12, 5)) { [weak self] in
+    private lazy var searchButton = BarButton(image: .System.search,
+                                              imageEdge: inset(0, 5, 0, 5)) { [weak self] in
         self?.handler.search()
     }
 
     #if targetEnvironment(macCatalyst)
-    private lazy var refreshButton = BarButton(image: UIImage(resource: .iconRefresh)) { [weak self] in
+    private lazy var refreshButton = BarButton(image: .System.refresh) { [weak self] in
         _ = self?.showRefreshIndicator()
         self?.collectionView.setContentOffset(.init(x: 0, y: -10), animated: false)
         self?.handler.refresh()
@@ -25,14 +25,20 @@ final class FeedViewController: BaseCollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupNavbar()
-        self.addRefreshControl()
+        self.addRefreshControl(scrollView: collectionView)
         self.handler.didLoad()
         self.collectionView.contentInset.top = 10
+        self.collectionView.contentInset.bottom = 16
     }
 
     override func setupStrings() {
         super.setupStrings()
         self.navigationItem.title = L10n.Screen.Feed.title
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.handler.refreshIfNeeded()
     }
 
     override func refresh() {
@@ -48,26 +54,16 @@ final class FeedViewController: BaseCollectionViewController {
         self.navigationItem.setRightBarButtonItems(items, animated: false)
     }
 
-    private func map(item: NSObject) -> (any CellAdapterProtocol)? {
+    private func map(item: any Hashable) -> (any SectionAdapterProtocol)? {
         switch item {
-        case let model as Series:
-            return SeriesCellAdapter(viewModel: model) { [weak self] item in
-                self?.handler.select(series: item)
-            }
-        case let model as News:
-            return NewsCellAdapter(viewModel: model) { [weak self] item in
-                self?.handler.select(news: item)
-            }
-        case let model as Schedule:
-            return SoonCellAdapter(viewModel: model) { [weak self] item in
-                self?.handler.select(series: item)
-            }
+        case let model as PromoViewModel:
+            return SectionAdapter([PromoCellAdapter(viewModel: model)])
+        case let model as SoonViewModel:
+            return SoonSectionsAdapter(model)
         case let model as TitleItem:
-            return TitleCellAdapter(viewModel: model)
-        case let model as ActionItem:
-            return ActionCellAdapter(viewModel: model)
-        case let model as PaginationViewModel:
-            return PaginationAdapter(viewModel: model)
+            return SectionAdapter([TitleCellAdapter(viewModel: model)])
+        case let items as [ActionItem]:
+            return SectionAdapter(items.map(ActionCellAdapter.init))
         default:
             return nil
         }
@@ -75,15 +71,7 @@ final class FeedViewController: BaseCollectionViewController {
 }
 
 extension FeedViewController: FeedViewBehavior {
-    func set(items: [NSObject]) {
-        reload(sections: [SectionAdapter(items.compactMap(self.map(item:)))])
-    }
-
-    func append(items: [NSObject]) {
-        append(sections: [SectionAdapter(items.compactMap(self.map(item:)))])
-    }
-
-    func loadPageProgress() -> ActivityDisposable? {
-        return nil
+    func set(items: [any Hashable]) {
+        set(sections: items.compactMap(map))
     }
 }

@@ -126,6 +126,7 @@ private struct DefaultAlertViewFactory: AlertViewFactory {
                        userData: Any?,
                        tapBlock: ((Int) -> Void)?) -> UIViewController {
         let alert = MRAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.view.tintColor = .Tint.active
         for (offset, item) in buttons.enumerated() {
             alert.addAction(UIAlertAction(title: item.text, style: item.style, handler: { _ in
                 tapBlock?(offset)
@@ -148,15 +149,6 @@ private final class MRAlertController: UIAlertController {
 
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return .portrait
-    }
-
-    deinit {
-        MacOSHelper.shared.fullscreenButtonEnabled = false
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        MacOSHelper.shared.fullscreenButtonEnabled = false
     }
 }
 

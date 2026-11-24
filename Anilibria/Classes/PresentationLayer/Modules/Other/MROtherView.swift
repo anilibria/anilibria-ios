@@ -5,8 +5,10 @@ import UIKit
 final class OtherViewController: BaseViewController {
     @IBOutlet var userNameLabel: UILabel!
     @IBOutlet var authButton: UIButton!
-    @IBOutlet var linksStakView: UIStackView!
-    
+    @IBOutlet var linksStackView: UIStackView!
+
+    @IBOutlet var linkDeviceLabel: UILabel!
+    @IBOutlet var linkDeviceView: UIView!
     @IBOutlet var historyTitleLabel: UILabel!
     @IBOutlet var historyView: UIView!
     @IBOutlet var teamTitleLabel: UILabel!
@@ -14,6 +16,8 @@ final class OtherViewController: BaseViewController {
     @IBOutlet var settingsTitleLabel: UILabel!
 
     var handler: OtherEventHandler!
+
+    override var isNavigationBarVisible: Bool { false }
 
     // MARK: - Life cycle
 
@@ -28,30 +32,11 @@ final class OtherViewController: BaseViewController {
     override func setupStrings() {
         super.setupStrings()
         handler.didLoad()
+        linkDeviceLabel.text = L10n.Screen.LinkDevice.title
         historyTitleLabel.text = L10n.Screen.Feed.history
         teamTitleLabel.text = L10n.Screen.Other.team
         donateTitleLabel.text = L10n.Screen.Other.donate
         settingsTitleLabel.text = L10n.Screen.Settings.title
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
 
     // MARK: - Actions
@@ -75,13 +60,24 @@ final class OtherViewController: BaseViewController {
     @IBAction func settingsAction(_ sender: Any) {
         self.handler.settings()
     }
+
+    @IBAction func linkDeviceAction(_ sender: Any) {
+        self.handler.linkDevice()
+    }
 }
 
 extension OtherViewController: OtherViewBehavior {
-    func set(user: User?) {
+    func set(user: User?, loading: Bool) {
+        self.userNameLabel.isHidden = loading
+        self.authButton.isHidden = loading
         self.userNameLabel.text = user?.name ?? L10n.Common.guest
-        let title = user == nil ? L10n.Buttons.signIn : L10n.Buttons.signOut
-        self.authButton.setTitle(title, for: .normal)
+        if user == nil {
+            self.authButton.setTitle(L10n.Buttons.signIn, for: .normal)
+            self.linkDeviceView.isHidden = true
+        } else {
+            self.authButton.setTitle(L10n.Buttons.signOut, for: .normal)
+            self.linkDeviceView.isHidden = false
+        }
     }
 
     func set(links: [LinkData]) {
@@ -93,11 +89,11 @@ extension OtherViewController: OtherViewBehavior {
             }
             return view
         }
-        self.linksStakView.arrangedSubviews.forEach {
+        self.linksStackView.arrangedSubviews.forEach {
             $0.removeFromSuperview()
         }
         for view in views {
-            self.linksStakView.addArrangedSubview(view)
+            self.linksStackView.addArrangedSubview(view)
         }
     }
 }

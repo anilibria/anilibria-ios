@@ -1,14 +1,14 @@
-public struct FavoriteListRequest: BackendAPIRequest {
+public struct FavoriteListRequest: AuthorizableAPIRequest {
     typealias ResponseObject = PageData<Series>
 
-    private(set) var endpoint: String = "/public/api/index.php"
-    private(set) var method: NetworkManager.Method = .POST
-    private(set) var parameters: [String: Any]
+    var requestData: RequestData = .init(
+        endpoint: "/accounts/users/me/favorites/releases"    )
 
-    init() {
-        self.parameters = [
-            "query": "favorites",
-            "filter": "id,code,poster,names,last,series,description"
-        ]
+    init(data: SeriesSearchData, page: Int, limit: Int) {
+        var results = data.parameters
+        results["page"] = page
+        results["limit"] = limit
+
+        requestData.parameters = results
     }
 }

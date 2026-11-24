@@ -13,63 +13,92 @@ final class SessionServicePart: DIPart {
 protocol SessionService: AnyObject {
     func fetchState() -> AnyPublisher<SessionState, Never>
 
-    func signIn(login: String, password: String, code: String) -> AnyPublisher<User, Error>
-    func signInSocial(url: URL) -> AnyPublisher<User, Error>
+    func signIn(login: String, password: String) -> AnyPublisher<User, Error>
+    func signIn(with data: AuthProviderData) -> AnyPublisher<User, Error>
+    func getDataFor(provider: AuthProvider) -> AnyPublisher<AuthProviderData, Error>
 
     func fetchUser() -> AnyPublisher<User, Error>
 
-    func fetchSocialData() -> AnyPublisher<SocialOAuthData?, Error>
+    func accept(otp code: String) -> AnyPublisher<Void, Error>
 
     func forceLogout()
     func logout()
+
+    func forgetPassword(email: String) -> AnyPublisher<Void, Error>
+    func resetPassword(token: String, password: String) -> AnyPublisher<Void, Error>
 }
 
 final class SessionServiceImp: SessionService, Loggable {
     var defaultLoggingTag: LogTag { .service }
-    
-    let backendRepository: BackendRepository
-    let userRepository: UserRepository
-    let clearManager: ClearableManager
+
+    private let backendRepository: BackendRepository
+    private let appConfig: AppConfigurationRepository
+    private let userRepository: UserRepository
+    private let tokenRepository: TokenRepository
+    private let clearManager: ClearableManager
 
     private var bag = Set<AnyCancellable>()
-    private var data: SocialOAuthData?
 
-    private let statusRelay: CurrentValueSubject<SessionState, Never>
+    private let statusRelay = CurrentValueSubject<SessionState, Never>(.guest)
 
     init(clearManager: ClearableManager,
          backendRepository: BackendRepository,
-         userRepository: UserRepository) {
+         userRepository: UserRepository,
+         tokenRepository: TokenRepository,
+         appConfig: AppConfigurationRepository) {
         self.clearManager = clearManager
         self.backendRepository = backendRepository
         self.userRepository = userRepository
-
-        if let user = self.userRepository.getUser() {
-            self.statusRelay = CurrentValueSubject(.user(user))
-        } else {
-            self.statusRelay = CurrentValueSubject(.guest)
-        }
+        self.tokenRepository = tokenRepository
+        self.appConfig = appConfig
     }
 
     func fetchState() -> AnyPublisher<SessionState, Never> {
-        return self.statusRelay
-            .receive(on: DispatchQueue.main)
+        return tokenRepository.getToken().flatMap { [unowned self] value -> AnyPublisher<SessionState, Never> in
+            if value == nil {
+                statusRelay.send(.guest)
+                return getStatusRelay()
+            }
+            if let user = userRepository.getUser() {
+                statusRelay.send(.user(user))
+                return getStatusRelay()
+            }
+            return backendRepository
+                .request(UserRequest())
+                .map { user -> User? in return user }
+                .catch { [unowned self] _ -> AnyPublisher<User?, Never> in
+                    forceLogout()
+                    return .just(nil)
+                }
+                .flatMap { [unowned self] user -> AnyPublisher<SessionState, Never> in
+                    if let user {
+                        statusRelay.send(.user(user))
+                    } else {
+                        statusRelay.send(.guest)
+                    }
+
+                    return getStatusRelay()
+                }
+                .eraseToAnyPublisher()
+        }
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
+    }
+
+    private func getStatusRelay() -> AnyPublisher<SessionState, Never> {
+        statusRelay
+            .removeDuplicates()
             .eraseToAnyPublisher()
     }
 
-    func signIn(login: String, password: String, code: String) -> AnyPublisher<User, Error> {
+    func signIn(login: String, password: String) -> AnyPublisher<User, Error> {
         return Deferred { [unowned self] in
-            let request = LoginRequest(login: login,
-                                       password: password,
-                                       code: code)
+            let request = LoginRequest(login: login, password: password)
             return self.backendRepository
                 .request(request)
                 .flatMap { [unowned self] data in
-                    if data.error == nil || data.key == .authorized {
-                        let request = UserRequest()
-                        return self.backendRepository
-                            .request(request)
-                    }
-                    return AnyPublisher<User, Error>.fail(AppError.server(message: L10n.Error.authorizationFailed))
+                    self.tokenRepository.set(token: data.token)
+                    return self.backendRepository.request(UserRequest())
                 }
                 .do(onNext: { [unowned self] user in
                     self.userRepository.set(user: user)
@@ -81,25 +110,40 @@ final class SessionServiceImp: SessionService, Loggable {
         .eraseToAnyPublisher()
     }
 
-    func signInSocial(url: URL) -> AnyPublisher<User, Error> {
-        return Deferred<AnyPublisher<User, Error>> { [unowned self] in
-            let request = JustURLRequest<Unit>(url: url)
+    func getDataFor(provider: AuthProvider) -> AnyPublisher<AuthProviderData, Error> {
+        return appConfig.fetchBaseUrl().flatMap { url in
+            let request = AuthProviderDataRequest(
+                provider: provider,
+                baseUrl: url
+            )
             return self.backendRepository
                 .request(request)
-                .flatMap { [unowned self] _ in
-                    let request = UserRequest()
-                    return self.backendRepository
-                        .request(request)
+        }
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
+    }
+
+    func signIn(with data: AuthProviderData) -> AnyPublisher<User, Error> {
+        return Deferred { [unowned self] in
+            let request = LoginRequest(provider: data)
+            return self.backendRepository
+                .request(request, retrier: SimpleRetrier { error, _, completion in
+                    if case let .network(code) = error as? AppError, code == 404 {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+                            completion(true)
+                        })
+                    } else {
+                        completion(false)
+                    }
+                })
+                .flatMap { [unowned self] data in
+                    self.tokenRepository.set(token: data.token)
+                    return self.backendRepository.request(UserRequest())
                 }
                 .do(onNext: { [unowned self] user in
                     self.userRepository.set(user: user)
                     self.statusRelay.send(.user(user))
                 })
-                .mapError { [weak self] in
-                    self?.log(.error, $0.localizedDescription)
-                    return AppError.server(message: L10n.Error.socialAuthorizationFailed)
-                }
-                .eraseToAnyPublisher()
         }
         .subscribe(on: DispatchQueue.global())
         .receive(on: DispatchQueue.main)
@@ -120,22 +164,12 @@ final class SessionServiceImp: SessionService, Loggable {
         .eraseToAnyPublisher()
     }
 
-    func fetchSocialData() -> AnyPublisher<SocialOAuthData?, Error> {
-        return Deferred<AnyPublisher<SocialOAuthData?, Error>> { [unowned self] in
-            if let data = self.data {
-                return AnyPublisher<SocialOAuthData?, Error>.just(data)
-            }
-
-            let request = SocialDataRequest()
+    func accept(otp code: String) -> AnyPublisher<Void, Error> {
+        return Deferred { [unowned self] in
+            let request = AcceptOTPRequest(code: code)
             return self.backendRepository
                 .request(request)
-                .map {
-                    $0.first(where: { $0.key == .vk })
-                }
-                .do(onNext: { [unowned self] item in
-                    self.data = item
-                })
-                .eraseToAnyPublisher()
+                .map { _ in }
         }
         .subscribe(on: DispatchQueue.global())
         .receive(on: DispatchQueue.main)
@@ -158,5 +192,29 @@ final class SessionServiceImp: SessionService, Loggable {
         .store(in: &bag)
 
         self.forceLogout()
+    }
+
+    func forgetPassword(email: String) -> AnyPublisher<Void, Error> {
+        return Deferred { [unowned self] in
+            let request = ForgotPasswordRequest(email: email)
+            return self.backendRepository
+                .request(request)
+                .map { _ in }
+        }
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
+    }
+
+    func resetPassword(token: String, password: String) -> AnyPublisher<Void, Error> {
+        return Deferred { [unowned self] in
+            let request = ResetPasswordRequest(token: token, password: password)
+            return self.backendRepository
+                .request(request)
+                .map { _ in }
+        }
+        .subscribe(on: DispatchQueue.global())
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
 }

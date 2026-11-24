@@ -20,12 +20,12 @@ final class HistoryPresenter {
     private var bag = Set<AnyCancellable>()
 
     let playerService: PlayerService
-    let feedService: FeedService
+    let mainService: MainService
 
     init(playerService: PlayerService,
-         feedService: FeedService) {
+         mainService: MainService) {
         self.playerService = playerService
-        self.feedService = feedService
+        self.mainService = mainService
     }
 }
 
@@ -36,6 +36,22 @@ extension HistoryPresenter: HistoryEventHandler {
     }
 
     func didLoad() {
+        self.playerService
+            .observeHistoryUpdates()
+            .sink { [weak self] update in
+                guard let self else { return }
+                switch update {
+                case .removed(let series):
+                    remove(series: series)
+                case .added(let series):
+                    remove(series: series)
+                    items.insert(series, at: 0)
+                }
+                showItems()
+            }
+            .store(in: &bag)
+
+
         self.playerService
             .fetchSeriesHistory()
             .manageActivity(self.view.showLoading(fullscreen: false))
@@ -48,23 +64,18 @@ extension HistoryPresenter: HistoryEventHandler {
             .store(in: &bag)
     }
 
+    private func remove(series: Series) {
+        if let index = items.firstIndex(where: { $0.id == series.id }) {
+            items.remove(at: index)
+        }
+    }
+
     func delete(series: Series) {
-        self.items.removeAll(where: { $0.id == series.id })
-        self.showItems()
         self.playerService.removeHistory(for: series)
-            .sink()
-            .store(in: &bag)
     }
 
     func select(series: Series) {
-        self.feedService.series(with: series.code)
-            .manageActivity(self.view.showLoading(fullscreen: false))
-            .sink(onNext: { [weak self] item in
-                self?.router.open(series: item)
-            }, onError: { [weak self] error in
-                self?.router.show(error: error)
-            })
-            .store(in: &bag)
+        router.open(series: series)
     }
 
     func search(query: String) {
@@ -80,7 +91,7 @@ extension HistoryPresenter: HistoryEventHandler {
 
             if query.isEmpty == false {
                 result = result.filter {
-                    $0.names.contains(where: { $0.lowercased().contains(query) })
+                    ($0.name?.main ?? "").contains(where: { $0.lowercased().contains(query) })
                 }
             }
 

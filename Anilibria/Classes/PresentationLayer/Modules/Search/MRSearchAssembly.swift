@@ -1,7 +1,7 @@
 import UIKit
 
 final class SearchAssembly {
-    class func createModule(parent: Router? = nil) -> SearchViewController {
+    static func createModule(parent: Router? = nil) -> SearchViewController {
         let module = SearchViewController()
         let router = SearchRouter(view: module, parent: parent)
         module.handler = MainAppCoordinator.shared.container.resolve()
@@ -20,6 +20,7 @@ extension SearchRoute where Self: RouterProtocol {
     func openSearchScreen() {
         let module = SearchAssembly.createModule(parent: self)
         module.modalTransitionStyle = .crossDissolve
-        ModalRouter(target: module, parent: nil).move()
+        module.modalPresentationStyle = .overFullScreen
+        ModalRouter(target: module, parent: self.controller).move()
     }
 }

@@ -1,10 +1,8 @@
-public struct LogoutRequest: BackendAPIRequest {
+public struct LogoutRequest: AuthorizableAPIRequest {
     typealias ResponseObject = Unit
 
-    private(set) var endpoint: String = "/public/logout.php"
-    private(set) var method: NetworkManager.Method = .POST
-    private(set) var parameters: [String: Any] = [:]
-    var customResponseConverter: BackendResponseConverter? = FullDataResponseConverter()
-
-    init() {}
+    var requestData: RequestData = .init(
+        endpoint: "/accounts/users/auth/logout",
+        method: .POST
+    )
 }

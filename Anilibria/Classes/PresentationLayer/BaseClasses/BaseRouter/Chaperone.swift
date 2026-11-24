@@ -12,7 +12,6 @@ public protocol StatusBarChangeable: AnyObject {
 public class ModalRouter: NSObject, ChaperoneRouter {
     fileprivate weak var target: UIViewController!
     fileprivate weak var parent: UIViewController?
-    fileprivate var windowLevel: UIWindow.Level = .normal
 
     init(target: UIViewController, parent: UIViewController?) {
         self.target = target
@@ -20,11 +19,6 @@ public class ModalRouter: NSObject, ChaperoneRouter {
         if parent == nil {
             self.target.modalPresentationStyle = .fullScreen
         }
-    }
-
-    public func set(level: UIWindow.Level) -> Self {
-        self.windowLevel = level
-        return self
     }
 
     public func move() {
@@ -40,12 +34,8 @@ public class ModalRouter: NSObject, ChaperoneRouter {
     }
 
     private func presentModal(_ controller: UIViewController) {
-        let windowLevel = self.windowLevel + CGFloat(UIApplication.shared.windows.count)
-        let window: UIWindow? = MRWindow.create(level: windowLevel)
-        controller.storeLink(window)
-        DispatchQueue.main.async {
-            window?.rootViewController?.present(controller, animated: true)
-        }
+        guard let current = UIApplication.getWindow() else { return }
+        current.topControllerInHierarchy()?.present(controller, animated: true)
     }
 }
 
@@ -93,7 +83,7 @@ public class PushRouter: ChaperoneRouter {
     }
 }
 
-public final class ShowWindowRouter: ChaperoneRouter {
+public final class SetWindowRouter: ChaperoneRouter {
     let target: UIViewController
     let window: UIWindow
     let transition: ViewTransition
@@ -196,15 +186,6 @@ public final class PresentRouter<T: UIPresentationController>: ModalRouter, UIVi
         self.target.storeLink(self)
     }
 
-    public func set(_ modalPresentationStyle: UIModalPresentationStyle) -> Self {
-        self.target.modalPresentationStyle = modalPresentationStyle
-        return self
-    }
-
-    public override func move() {
-        super.move()
-    }
-
     public func presentationController(forPresented presented: UIViewController,
                                        presenting: UIViewController?,
                                        source: UIViewController) -> UIPresentationController? {
@@ -216,59 +197,43 @@ public final class PresentRouter<T: UIPresentationController>: ModalRouter, UIVi
 
 // MARK: - Support classes
 
-private final class MRWindow: UIWindow {
-    class func create(level: UIWindow.Level? = nil,
-                      frame: CGRect = UIScreen.main.bounds,
-                      statusBarStyle: UIStatusBarStyle? = nil) -> UIWindow {
-        let windowLavel = level ?? UIWindow.Level.alert + 1
-        let alertWindow = MRWindow(frame: frame)
-        let controller = MRViewController()
-        let test = UIApplication.getWindow()
-        let root = test?.rootViewController
-        if let style = statusBarStyle {
-            controller.style = style
-        } else if let presented = root?.presentedViewController {
-            if let style = (presented as? UINavigationController)?.viewControllers.last?.preferredStatusBarStyle {
-                controller.style = style
-            } else {
-                controller.style = presented.preferredStatusBarStyle
-            }
-        } else if let style = (root as? UINavigationController)?.viewControllers.last?.preferredStatusBarStyle {
-            controller.style = style
-        } else if let style = root?.preferredStatusBarStyle {
-            controller.style = style
-        }
-
-        alertWindow.rootViewController = controller
-        alertWindow.windowLevel = windowLavel
-        alertWindow.makeKeyAndVisible()
-        return alertWindow
-    }
-}
-
-private class MRViewController: UIViewController {
-    var style: UIStatusBarStyle = .default
-
-    public override var preferredStatusBarStyle: UIStatusBarStyle {
-        return self.style
-    }
-}
-
 private extension UIViewController {
     func storeLink(_ item: Any?) {
-        let shit = ShitView()
-        shit.storedObject = item
-        self.view.addSubview(shit)
+        let holder = HolderHelper()
+        holder.storedObject = item
+        self.view.addLayoutGuide(holder)
     }
 }
 
-private final class ShitView: UIView {
+private final class HolderHelper: UILayoutGuide {
     var storedObject: Any?
 
     deinit {
-        if let value = storedObject as? UIWindow {
-            value.isHidden = true
-        }
         storedObject = nil
+    }
+}
+
+private extension UIWindow {
+
+    func topControllerInHierarchy() -> UIViewController? {
+        var topController = self.rootViewController
+
+        while topController?.presentedViewController != nil {
+            topController = topController?.presentedViewController
+        }
+
+        guard let topViewController: UIViewController = topController else {
+            return topController
+        }
+
+        if let tabBarController = topViewController as? UITabBarController {
+            if let navController = tabBarController.selectedViewController as? UINavigationController {
+                topController = navController.visibleViewController
+            }
+        } else if let topNavController = topViewController as? UINavigationController {
+            topController = topNavController.visibleViewController
+        }
+
+        return topController
     }
 }

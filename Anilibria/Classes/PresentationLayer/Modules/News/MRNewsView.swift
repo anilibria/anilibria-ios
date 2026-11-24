@@ -6,21 +6,26 @@ final class NewsViewController: BaseCollectionViewController {
     var handler: NewsEventHandler!
 
     #if targetEnvironment(macCatalyst)
-    private lazy var refreshButton = BarButton(image: UIImage(resource: .iconRefresh)) { [weak self] in
+    private lazy var refreshButton = BarButton(image: .System.refresh) { [weak self] in
         _ = self?.showRefreshIndicator()
         self?.collectionView.setContentOffset(.init(x: 0, y: -10), animated: false)
         self?.handler.refresh()
     }
     #endif
 
-    private let sectionAdapter = SectionAdapter([])
+    private let sectionAdapter: SectionAdapter = {
+        let section = SectionAdapter([])
+        section.estimatedHeight = 250
+        section.ipad = .init(expectedWidth: 320)
+        return section
+    }()
 
     // MARK: - Life cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupNavbar()
-        self.addRefreshControl()
+        self.addRefreshControl(scrollView: collectionView)
         self.handler.didLoad()
         self.collectionView.contentInset.top = 10
     }
@@ -45,33 +50,21 @@ final class NewsViewController: BaseCollectionViewController {
 
     // MARK: - Adapter creators
 
-    private func createAdapter(for model: NSObject) -> (any CellAdapterProtocol)? {
+    private func createAdapter(for model: any Hashable) -> AnyCellAdapter? {
         switch model {
         case let item as News:
             return NewsCellAdapter(viewModel: item, seclect: { [weak self] item in
                 self?.handler.select(news: item)
             })
-        case let item as PaginationViewModel:
-            return PaginationAdapter(viewModel: item)
         default:
             return nil
         }
-        
     }
 }
 
 extension NewsViewController: NewsViewBehavior {
-    func loadPageProgress() -> ActivityDisposable? {
-        return nil
-    }
-
-    func set(items: [NSObject]) {
+    func set(items: [any Hashable]) {
         sectionAdapter.set(items.compactMap(createAdapter))
-        reload(sections: [sectionAdapter])
-    }
-
-    func append(items: [NSObject]) {
-        sectionAdapter.set(items.compactMap(createAdapter))
-        append(sections: [sectionAdapter])
+        set(sections: [sectionAdapter])
     }
 }

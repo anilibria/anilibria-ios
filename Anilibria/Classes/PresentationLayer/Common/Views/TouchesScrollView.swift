@@ -22,3 +22,12 @@ public final class TouchesScrollView: UIScrollView {
         return super.touchesShouldCancel(in: view)
     }
 }
+
+public final class PassThrougScrollView: UIScrollView {
+    public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let view = super.hitTest(point, with: event)
+        if view != self { return view }
+        return nil
+    }
+}
+

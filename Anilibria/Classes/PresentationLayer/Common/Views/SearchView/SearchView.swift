@@ -1,14 +1,17 @@
 import Combine
 import UIKit
 
-public final class SearchView: UIView {
+public final class SearchView: LoadableView {
     @IBOutlet var cancelButton: UIButton!
     @IBOutlet var searchField: UITextField! {
         didSet {
-            self.layer.zPosition = CGFloat.greatestFiniteMagnitude
+            self.layer.zPosition = 1000
             self.setupSearchField()
         }
     }
+
+    public private(set) var isSearching: Bool = false
+    public var text: String { self.searchField.text ?? "" }
 
     private var bag = Set<AnyCancellable>()
     private let queryRelay = PassthroughSubject<String, Never>()
@@ -16,8 +19,15 @@ public final class SearchView: UIView {
     private var cancelIsHidden: Bool = true {
         didSet {
             if self.cancelIsHidden != oldValue {
+                if !cancelIsHidden {
+                    self.cancelButton.isHidden = false
+                }
                 UIView.animate(withDuration: 0.3) {
                     self.cancelButton.alpha = self.cancelIsHidden ? 0 : 1
+                } completion: { _ in
+                    if self.cancelIsHidden {
+                        self.cancelButton.isHidden = true
+                    }
                 }
             }
         }
@@ -32,9 +42,12 @@ public final class SearchView: UIView {
                 self?.isSearching = !text.isEmpty
             })
             .store(in: &bag)
+        self.searchField.publisher(for: .primaryActionTriggered).sink { [weak self] _ in
+            self?.searchField.resignFirstResponder()
+        }
+        .store(in: &bag)
     }
 
-    public private(set) var isSearching: Bool = false
 
     func querySequence() -> AnyPublisher<String, Never> {
         return self.queryRelay.removeDuplicates().eraseToAnyPublisher()
@@ -51,6 +64,7 @@ public final class SearchView: UIView {
         self.isSearching = false
         self.searchField.text = ""
         self.queryRelay.send("")
+        self.cancelIsHidden = true
     }
 
     public override var intrinsicContentSize: CGSize {

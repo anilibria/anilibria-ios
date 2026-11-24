@@ -7,6 +7,8 @@ protocol OtherRoutable: BaseRoutable,
     SafariRoute,
     SignInRoute,
     SettingsRoute,
-    HistoryRoute {}
+    HistoryRoute,
+    LinkDeviceRoute,
+    TeamRoute {}
 
 final class OtherRouter: BaseRouter, OtherRoutable {}

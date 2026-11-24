@@ -5,101 +5,148 @@ import AVKit
 // MARK: - View Controller
 
 final class PlayerViewController: BaseViewController {
-    @IBOutlet var hidableViews: [UIView]!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var pipButton: UIButton!
     @IBOutlet var playPauseButton: RippleButton!
     @IBOutlet var playPauseIconView: UIImageView!
-    @IBOutlet var switcherView: SwitcherView!
+    @IBOutlet var seriesSelectorLabel: UILabel!
     @IBOutlet var timeLeftLabel: UILabel!
     @IBOutlet var elapsedTimeLabel: UILabel!
-    @IBOutlet var videoSliderView: TouchableSlider!
-    @IBOutlet var playerContainer: UIView!
+    @IBOutlet var videoSliderView: PlayerProgressView!
+    @IBOutlet var playerContainer: PlayerContainerView!
+    @IBOutlet var nextContainer: UIView!
+    @IBOutlet var previousContainer: UIView!
     @IBOutlet var loaderContainer: UIView!
     @IBOutlet var container: UIView!
-    @IBOutlet var rewindButtons: [RewindView] = []
-    @IBOutlet var skipContainer: UIView!
-    @IBOutlet var skipButtonLabel: UILabel!
+    @IBOutlet var skipContainer: SkipContainerView!
+    @IBOutlet var topShadowView: ShadowView!
+    @IBOutlet var bottomShadowView: ShadowView!
 
-    private let playerView = PlayerView()
+    var playerView: (any Player)!
     private let airplayView = AVRoutePickerView()
     private var pictureInPictureController: AVPictureInPictureController?
     private let timeFormatter = FormatterFactory.time.create()
-    private var canUpdateTime: Bool = true
-    private var playlist: [PlaylistItem] = []
-    private var currentIndex: Int = 0
-    private var currentTime: Double = 0
     private var bag: AnyCancellable?
+    private var hideUISubscriber: AnyCancellable?
     private var pipObservation: Any?
+    private var needsPlay = false
+    private var needsClose = false
+    private let userInteractionSubject = PassthroughSubject<Void, Never>()
 
-    private var currentQuality: VideoQuality = .fullHd
     private var orientation: UIInterfaceOrientationMask = .all
 
-    private let rewindTimes: [Double] = [-15, -5, 5, 15]
+    let viewModel: PlayerViewModel
 
-    private var uiIsVisible: Bool = true {
-        didSet {
-            self.setUI(visible: self.uiIsVisible)
-        }
+    init(viewModel: PlayerViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
     }
     
-    private let skipButtonShowingSeconds = 10
-    
-    private var currentListItem: PlaylistItem? {
-        playlist[safe: currentIndex]
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
-
-    var handler: PlayerEventHandler!
-
+    
     // MARK: - Life cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.handler.didLoad()
-        self.addTermenateAppObserver()
+        view.backgroundColor = .black
+        self.setup()
         self.setupPlayer()
-        self.setupSwitcher()
-        self.setupRewind()
         self.setupAirPlay()
         self.setupPictureInPicture()
-        self.videoSliderView.setThumbImage(UIImage(resource: .iconCircle), for: .normal)
 
         let font: UIFont = UIFont.monospacedDigitSystemFont(ofSize: 12, weight: .regular)
         self.timeLeftLabel.font = font
         self.elapsedTimeLabel.font = font
-        self.clearLabels()
 
-        #if targetEnvironment(macCatalyst)
-        let window = UIApplication.getWindow()
-        window?.windowScene?.sizeRestrictions?.minimumSize = Sizes.minSize
-        window?.windowScene?.sizeRestrictions?.maximumSize = Sizes.maxSize
+        self.topShadowView.shadowY = 20
+        self.topShadowView.shadowRadius = 40
+        self.topShadowView.shadowOpacity = 1
+        self.topShadowView.shadowColor = .black
+        self.bottomShadowView.shadowY = -50
+        self.bottomShadowView.shadowRadius = 80
+        self.bottomShadowView.shadowOpacity = 1
+        self.bottomShadowView.shadowColor = .black
 
-        MacOSHelper.shared.fullscreenButtonEnabled = true
-        #endif
-    }
-
-    override func setupStrings() {
-        super.setupStrings()
-        skipButtonLabel.text = L10n.Buttons.skip
+        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handle))
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handle))
+        tapRecognizer.cancelsTouchesInView = false
+        tapRecognizer.delegate = self
+        panRecognizer.delegate = self
+        view.addGestureRecognizer(tapRecognizer)
+        view.addGestureRecognizer(panRecognizer)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.saveState()
-        #if targetEnvironment(macCatalyst)
-        let window = UIApplication.getWindow()
-        window?.windowScene?.sizeRestrictions?.minimumSize = Sizes.minSize
-        window?.windowScene?.sizeRestrictions?.maximumSize = Sizes.minSize
-
-        MacOSHelper.shared.toggleFullScreen()
-        MacOSHelper.shared.fullscreenButtonEnabled = false
-        #endif
+        viewModel.save()
     }
 
-    private func setupSwitcher() {
-        self.switcherView.didTapTitle { [weak self] in
-            self?.handler.select(playItemIndex: $0)
+    override var canBecomeFirstResponder: Bool { true }
+
+    override var keyCommands: [UIKeyCommand]? {
+        let back = UIKeyCommand(
+            input: UIKeyCommand.inputLeftArrow,
+            modifierFlags: [],
+            action: #selector(self.rewindBack)
+        )
+
+        let forward = UIKeyCommand(
+            input: UIKeyCommand.inputRightArrow,
+            modifierFlags: [],
+            action: #selector(self.rewindForward)
+        )
+
+        let playPause = UIKeyCommand(
+            input: UIKeyCommand.inputSpace,
+            modifierFlags: [],
+            action: #selector(self.playPauseAction(_:))
+        )
+
+        if #available(iOS 15.0, macCatalyst 15.0, *) {
+            back.wantsPriorityOverSystemBehavior = true
+            forward.wantsPriorityOverSystemBehavior = true
         }
+
+        return [playPause, back, forward]
+    }
+
+    private func setup() {
+        skipContainer.configure(with: viewModel.skipViewModel)
+        viewModel.skipViewModel.skipHandler = { [weak self] time in
+            self?.apply(rewind: time)
+        }
+
+        titleLabel.text = viewModel.seriesName
+        needsPlay = viewModel.playOnStartup
+
+        videoSliderView.set(duration: 0)
+        setLoader(visible: true)
+
+        viewModel.$orientation.sink { [weak self] value in
+            self?.orientation = value.mask
+            self?.updateOrientation()
+        }.store(in: &subscribers)
+
+        viewModel.$playItem
+            .scan((nil, nil), { ($0.1, $1) })
+            .sink { [weak self] (old, next) in
+                if let next {
+                    self?.set(playItem: next, previous: old)
+                }
+            }.store(in: &subscribers)
+
+        viewModel.$playbackRate
+            .sink { [weak self] rate in
+                self?.playerView.set(rate: rate)
+            }.store(in: &subscribers)
+
+        NotificationCenter.default
+            .publisher(for: UIApplication.willResignActiveNotification)
+            .sink { [weak self] _ in
+                self?.viewModel.save()
+            }.store(in: &subscribers)
     }
 
     private func setupPlayer() {
@@ -108,55 +155,86 @@ final class PlayerViewController: BaseViewController {
 
         self.playerView.getCurrentTime()
             .filter { [weak self] _ in
-                self?.canUpdateTime ?? false
+                !(self?.videoSliderView.isDragging ?? true)
             }
             .sink(onNext: { [weak self] time in
-                let value = Float(time)
-                self?.currentTime = time
-                self?.videoSliderView.setValue(value, animated: true)
-                self?.updateLabels()
-                self?.updateSkipButton(time: Int(time))
+                guard let self else { return }
+                viewModel.update(time: time)
+                videoSliderView.set(progress: time)
+            })
+            .store(in: &subscribers)
+
+        self.playerView.getBufferTime()
+            .sink(onNext: { [weak self] time in
+                self?.videoSliderView.set(buffering: time)
             })
             .store(in: &subscribers)
 
         self.playerView.getPlayChanges()
             .sink(onNext: { [weak self] value in
-                let image = UIImage(resource: value ? .iconPause : .iconPlay)
-                self?.playPauseIconView.templateImage = image
+                let image: UIImage = value ? .System.pause : .System.play
+                self?.playPauseIconView.image = image
+                self?.viewModel.skipViewModel.isActive = value
             })
             .store(in: &subscribers)
+
+        Publishers.CombineLatest(
+            playerView.getPlayChanges(),
+            userInteractionSubject.throttle(
+                for: .seconds(0.5),
+                scheduler: DispatchQueue.main,
+                latest: true
+            )
+        ).sink { [weak self] isPlaiyng, _ in
+            if isPlaiyng {
+                self?.startAutoHiddingUI()
+            } else {
+                self?.stopAutoHiddingUI()
+            }
+        }.store(in: &subscribers)
 
         self.playerView.getStatusSequence()
             .sink(onNext: { [weak self] value in
                 switch value {
                 case .unknown, .waitingToPlay:
                     self?.setLoader(visible: true)
-                case .pause:
-                    break
                 default:
-                    self?.canUpdateTime = true
                     self?.setLoader(visible: false)
                 }
             })
             .store(in: &subscribers)
 
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.playerTapped))
-        tap.numberOfTapsRequired = 1
-        tap.numberOfTouchesRequired = 1
-        self.playerContainer.addGestureRecognizer(tap)
-    }
+        playerContainer.didRequestRewind = { [weak self] in
+            self?.apply(rewind: $0)
+        }
 
-    private func setupRewind() {
-        rewindButtons.enumerated().forEach { offset, view in
-            view.set(time: rewindTimes[offset])
-            view.setDidTap { [weak self] in self?.apply(rewind: $0) }
+        videoSliderView.didSelectProgress = { [weak self] time in
+            self?.playerView.set(time: time)
+        }
+
+        videoSliderView.changeValue = { [weak self] progress, duration in
+            self?.updateLabels(progress: progress, duration: duration)
         }
     }
 
+    private func startAutoHiddingUI() {
+        hideUISubscriber = Timer.publish(every: 3, on: .main, in: .common)
+            .autoconnect()
+            .first()
+            .sink(receiveValue: { [weak self] _ in
+                self?.playerContainer.uiIsVisible = false
+            })
+    }
+
+    private func stopAutoHiddingUI() {
+        hideUISubscriber?.cancel()
+    }
+
     func setupPictureInPicture() {
-        if AVPictureInPictureController.isPictureInPictureSupported() {
+        if let layer = playerView.playerLayer,
+           AVPictureInPictureController.isPictureInPictureSupported() {
             pipButton.isHidden = false
-            pictureInPictureController = AVPictureInPictureController(playerLayer: playerView.playerLayer)
+            pictureInPictureController = AVPictureInPictureController(playerLayer: layer)
             pictureInPictureController?.delegate = self
 
             pipObservation = pictureInPictureController?.observe(
@@ -171,19 +249,24 @@ final class PlayerViewController: BaseViewController {
     }
 
     private func apply(rewind time: Double) {
-        guard playerView.duration != nil else { return }
-        let newTime = videoSliderView.value + Float(time)
+        guard playerView.duration != nil, time != 0 else { return }
+        let newTime = videoSliderView.progress + time
 
         let playing = playerView.isPlaying
         if playing { playerView.togglePlay() }
 
-        sliderTouchDown(self)
-        videoSliderView.setValue(newTime, animated: true)
-        sliderValueChanged(self)
-        sliderTouchUp(self)
+        videoSliderView.set(progress: newTime)
+        playerView.set(time: newTime)
 
         if playing { playerView.togglePlay() }
-        updateSkipButton(time: Int(newTime))
+    }
+
+    @objc private func rewindForward() {
+        self.apply(rewind: 10.0)
+    }
+
+    @objc private func rewindBack() {
+        self.apply(rewind: -5.0)
     }
 
     private func setupAirPlay() {
@@ -192,71 +275,45 @@ final class PlayerViewController: BaseViewController {
         airplayView.constraintEdgesToSuperview()
     }
 
-    private func clearLabels() {
-        self.timeLeftLabel.text = "--:--"
-        self.elapsedTimeLabel.text = "--:--"
-    }
-
-    private func updateLabels() {
-        let value = self.videoSliderView.value
-        self.timeLeftLabel.text = self.timeFormatter.string(from: value)
-        let max = self.videoSliderView.maximumValue
-        let elapsed = self.timeFormatter.string(from: max - value) ?? ""
-        self.elapsedTimeLabel.text = "-\(elapsed)"
-    }
-    
-    private func updateSkipButton(time: Int) {
-        if let canSkip = currentListItem?.skips?.canSkip(
-            time: time,
-            length: skipButtonShowingSeconds
-        ), canSkip {
-            skipContainer.isHidden = false
+    private func updateLabels(progress: Double, duration: Double) {
+        if duration == 0 {
+            timeLeftLabel.text = "--:--"
+            elapsedTimeLabel.text = "--:--"
         } else {
-            skipContainer.isHidden = true
+            timeLeftLabel.text = timeFormatter.string(from: progress)
+            let elapsed = self.timeFormatter.string(from: duration - progress) ?? ""
+            elapsedTimeLabel.text = "-\(elapsed)"
         }
     }
 
-    private func saveState() {
-        self.handler.save(quality: self.currentQuality,
-                          number: self.currentIndex,
-                          time: self.currentTime)
-    }
+    private func set(playItem: PlayItem, previous: PlayItem? = nil) {
+        seriesSelectorLabel.text = playItem.name
+        videoSliderView.set(duration: 0)
 
-    private func set(playItem index: Int, seek time: Double) {
-        self.clearLabels()
-        self.currentIndex = index
-        self.currentTime = time
-        let item = self.playlist[index]
-        let qualities = item.supportedQualities()
-        guard let bestQuality = qualities.first else {
-            return
-        }
-        if qualities.contains(self.currentQuality) == false {
-            self.currentQuality = bestQuality
-        }
-        if let url = item.video[self.currentQuality] {
+        change(enabled: !playItem.isFirst, view: previousContainer)
+        change(enabled: !playItem.isLast, view: nextContainer)
+
+        if let url = playItem.url {
             self.bag = self.playerView.setVideo(url: url)
                 .filter { $0 != nil }
                 .map { $0! }
                 .sink(onNext: { [weak self] duration in
-                    self?.videoSliderView.minimumValue = Float(0)
-                    self?.videoSliderView.maximumValue = Float(duration)
-                    if duration == 0 {
-                        self?.clearLabels()
-                    } else {
-                        self?.updateLabels()
+                    guard let self else { return }
+                    videoSliderView.set(duration: duration)
+                    playerView.set(time: playItem.startTime)
+                    if previous?.index != playItem.index
+                        && !playerView.isPlaying
+                        && needsPlay {
+                        playerView.togglePlay()
+                        playerContainer.uiIsVisible = false
                     }
-                    self?.playerView.set(time: time)
                 })
         }
     }
 
-    private func setUI(visible: Bool) {
-        UIView.animate(withDuration: 0.3) {
-            self.hidableViews.forEach {
-                $0.alpha = visible ? 1 : 0
-            }
-        }
+    private func change(enabled: Bool, view: UIView) {
+        view.isUserInteractionEnabled = enabled
+        view.alpha = enabled ? 1 : 0.5
     }
 
     private func setLoader(visible: Bool) {
@@ -283,52 +340,73 @@ final class PlayerViewController: BaseViewController {
 
     // MARK: - Actions
 
-    override func appWillTerminate() {
-        super.appWillTerminate()
-        self.saveState()
-        sleep(2) // this used for to give time for save async data
-    }
-
-    @objc func playerTapped() {
-        self.uiIsVisible.toggle()
+    override func viewWillTransition(
+        to size: CGSize,
+        with coordinator: UIViewControllerTransitionCoordinator
+    ) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: nil, completion: { [weak self] _ in
+            guard let self else { return }
+            if needsClose {
+                needsClose = false
+                viewModel.back()
+            }
+        })
     }
 
     @IBAction func closeAction(_ sender: Any) {
-        self.orientation = .portrait
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            self.viewModel.back()
+        } else {
+            if needsClose { return }
+            if orientation == .portrait {
+                self.viewModel.back()
+            } else {
+                self.orientation = .portrait
+                if UIScreen.main.interfaceOrientation == .portrait {
+                    self.viewModel.back()
+                } else {
+                    self.needsClose = true
+                    updateOrientation()
+                }
+            }
+        }
+    }
+
+    private func updateOrientation() {
         if #available(iOS 16.0, *) {
             self.setNeedsUpdateOfSupportedInterfaceOrientations()
         } else {
-            UIViewController.attemptRotationToDeviceOrientation()
+            if orientation != .all {
+                let value = UIInterfaceOrientation.from(mask: orientation)
+                UIDevice.current.setValue(value.rawValue, forKey: "orientation")
+                UIViewController.attemptRotationToDeviceOrientation()
+            }
         }
-        self.handler.back()
     }
-
-    @IBAction func downloadAction(_ sender: Any) {}
 
     @IBAction func playPauseAction(_ sender: Any) {
+        needsPlay.toggle()
         self.playerView.togglePlay()
         if self.playerView.isPlaying {
-            self.uiIsVisible = false
+            self.playerContainer.uiIsVisible = false
         }
     }
 
-    @IBAction func sliderValueChanged(_ sender: Any) {
-        self.updateLabels()
+    @IBAction func runNextItemAction() {
+        viewModel.selectNext()
     }
 
-    @IBAction func sliderTouchUp(_ sender: Any) {
-        let time = self.videoSliderView.value
-        self.playerView.set(time: Double(time))
-    }
-
-    @IBAction func sliderTouchDown(_ sender: Any) {
-        self.canUpdateTime = false
+    @IBAction func runPreviousItemAction() {
+        viewModel.selectPrevious()
     }
 
     @IBAction func settingAction(_ sender: Any) {
-        let index = self.switcherView.currentIndex
-        let item = self.playlist[index]
-        self.handler.settings(quality: self.currentQuality, for: item)
+        viewModel.showSettings()
+    }
+
+    @IBAction func toogleVideoGravity() {
+        playerView.toogleVideoGravity()
     }
 
     @IBAction func togglePictureInPictureMode(_ sender: UIButton) {
@@ -339,59 +417,13 @@ final class PlayerViewController: BaseViewController {
             pipController.startPictureInPicture()
         }
     }
-    
-    @IBAction func skipDidTap() {
-        let currentTime = Int(videoSliderView.value)
-        guard
-            let currentListItem = currentListItem,
-            let skips = currentListItem.skips,
-            let endTime = skips.upperBound(time: currentTime),
-            endTime > currentTime
-        else {
-            return
-        }
-        
-        self.apply(rewind: Double(endTime - currentTime))
-    }
-}
 
-extension PlayerViewController: PlayerViewBehavior {
-    func set(name: String,
-             playlist: [PlaylistItem],
-             playItemIndex: Int,
-             time: Double,
-             preffered quality: VideoQuality) {
-        self.titleLabel.text = name
-        self.playlist = playlist
-
-        self.switcherView.set(items: self.playlist,
-                              index: playItemIndex,
-                              title: { $0.title })
-        self.switcherView.getSelectedSequence()
-            .do(onNext: { [weak self] _ in
-                self?.clearLabels()
-                self?.setLoader(visible: true)
-            })
-            .debounce(for: .seconds(1), scheduler: RunLoop.main)
-            .sink(onNext: { [weak self] index in
-                self?.currentQuality = quality
-                var seekTime = 0.0
-                if index == playItemIndex {
-                    seekTime = time
-                }
-                self?.set(playItem: index, seek: seekTime)
-            })
-            .store(in: &subscribers)
+    @IBAction func selectVideoDidTap() {
+        viewModel.selectPlayItem()
     }
 
-    func set(playItemIndex: Int) {
-        self.switcherView.set(current: playItemIndex)
-    }
-
-    func set(quality: VideoQuality) {
-        let index = self.switcherView.currentIndex
-        self.currentQuality = quality
-        self.set(playItem: index, seek: self.currentTime)
+    @objc private func handle(recognizer: UIPanGestureRecognizer) {
+        userInteractionSubject.send()
     }
 }
 
@@ -404,55 +436,19 @@ extension PlayerViewController: AVPictureInPictureControllerDelegate {
     }
 }
 
-public final class TouchableSlider: UISlider {
-    private var firstLocation: CGPoint?
-
-    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        guard let touch = touches.first else {
-            return
-        }
-
-        self.firstLocation = touch.location(in: self)
+extension PlayerViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+    ) -> Bool {
+        true
     }
 
-    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-
-        guard let touch = touches.first else {
-            return
-        }
-
-        let location = touch.location(in: self)
-
-        if floor(location.x) != floor(self.firstLocation?.x ?? 0) {
-            return
-        }
-
-        let thumbWidth = self.currentThumbImage?.size.width ?? 0
-        let percent = Float((location.x - thumbWidth/2) / (self.frame.width - thumbWidth))
-        self.setValue(percent * self.maximumValue, animated: false)
-        self.sendActions(for: .touchDown)
-        self.sendActions(for: .touchUpInside)
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        true
     }
 }
 
-final class RewindView: CircleView {
-    @IBOutlet var titleLabel: UILabel!
-    private var tapHandler: Action<Double>?
-
-    private var time: Double = 0
-
-    func set(time: Double) {
-        self.time = time
-        self.titleLabel.text = "\(Int(abs(time)))"
-    }
-
-    func setDidTap(_ action: Action<Double>?) {
-        self.tapHandler = action
-    }
-
-    @IBAction func tapAction(_ sender: Any) {
-        self.tapHandler?(time)
-    }
+private extension UIKeyCommand {
+    static let inputSpace = " "
 }

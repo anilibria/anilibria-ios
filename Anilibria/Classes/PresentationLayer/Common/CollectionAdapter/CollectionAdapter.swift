@@ -10,133 +10,120 @@ import UIKit
 
 class CollectionViewAdapter: NSObject {
 
-    typealias DataSource = UICollectionViewDiffableDataSource<Int, CellAdapterWrapper>
-    typealias Snapshot = NSDiffableDataSourceSnapshot<Int, CellAdapterWrapper>
+    typealias DataSource = UICollectionViewDiffableDataSource<SectionData, AnyCellAdapter>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<SectionData, AnyCellAdapter>
 
     private let collectionView: UICollectionView
     private var dataSource: DataSource!
     private let context: CollectionContext
-    private var content: CollectionContent?
+    private var sectionsHolder: Any?
+    private var adapterContext: AdapterContext!
 
     weak var scrollViewDelegate: UIScrollViewDelegate?
+    private(set) weak var layout: UICollectionViewCompositionalLayout?
 
     init(collectionView: UICollectionView) {
         self.collectionView = collectionView
         self.context = CollectionContext(collectionView)
         super.init()
         self.dataSource = makeDataSource()
+        self.adapterContext = AdapterContext(dataSource: dataSource)
         self.collectionView.delegate = self
+        self.setLayout(type: UICollectionViewCompositionalLayout.self)
     }
 
-    func reload(content: CollectionContent, animated: Bool = true, completion: (() -> Void)? = nil) {
-        var snapshot = Snapshot()
-
-        snapshot.appendSections(content.sections.compactMap { $0.sectionId })
-        for section in content.sections {
-            snapshot.appendItems(section.items, toSection: section.sectionId)
-        }
-
-        dataSource.apply(snapshot, animatingDifferences: animated, completion: completion)
-        self.content = content
-    }
-
-    func append(content: CollectionContent, animated: Bool = true, completion: (() -> Void)? = nil) {
-        var snapshot = dataSource.snapshot()
-
-        snapshot.appendSections(content.sections.compactMap {
-            if self.content?.contains($0) == true {
+    func setLayout<Layout: UICollectionViewCompositionalLayout>(
+        type: Layout.Type,
+        configuration: UICollectionViewCompositionalLayoutConfiguration? = nil,
+        populator: ((Layout) -> Void)? = nil
+    ) {
+        let layout: Layout
+        let provider: UICollectionViewCompositionalLayoutSectionProvider = { [weak self] sectionIndex, environment in
+            guard
+                let section = self?.dataSource.getSection(for: sectionIndex)
+            else {
                 return nil
             }
-            return $0.sectionId
-        })
-        for section in content.sections {
-            let currentItems = snapshot.itemIdentifiers
-            let toDelete = section.items.filter { currentItems.contains($0) }
-            if !toDelete.isEmpty {
-                snapshot.deleteItems(toDelete)
-            }
-            
-            snapshot.appendItems(section.items, toSection: section.sectionId)
+            return section.getSectionLayout(environment: environment)
         }
 
+        if let configuration {
+            layout = Layout(
+                sectionProvider: provider,
+                configuration: configuration
+            )
+        } else {
+            layout = Layout(
+                sectionProvider: provider
+            )
+        }
+        populator?(layout)
+
+        collectionView.collectionViewLayout = layout
+        self.layout = layout
+    }
+
+    func set(sections: [any SectionAdapterProtocol], animated: Bool = true, completion: (() -> Void)? = nil) {
+        self.sectionsHolder = sections
+        var snapshot = Snapshot()
+
+        for section in sections {
+            section.set(context: adapterContext)
+            section.getIdentifiers().forEach { id in
+                let sectionId = SectionData(id: id, section: section)
+                snapshot.appendSections([sectionId])
+                snapshot.appendItems(section.getItems(for: id), toSection: sectionId)
+            }
+        }
         dataSource.apply(snapshot, animatingDifferences: animated, completion: completion)
-        self.content?.append(content)
+        if snapshot.itemIdentifiers.isEmpty {
+            collectionView.collectionViewLayout.invalidateLayout()
+        }
     }
 
     private func makeDataSource() -> DataSource {
-        DataSource(collectionView: collectionView) { [weak self] _, indexPath, wrapper in
-            guard let self = self else { return nil }
-            return wrapper.item.cellForItem(at: indexPath, context: self.context)
+        let dataSource = DataSource(collectionView: collectionView) { [weak self] _, indexPath, item in
+            guard let self else { return nil }
+            return item.cellForItem(at: indexPath, context: context)
         }
+
+        dataSource.supplementaryViewProvider = { [weak self, weak dataSource] _, kind, indexPath in
+            guard let self, let section = dataSource?.getSection(for: indexPath.section) else { return nil }
+            return section.supplementaryFor(elementKind: kind, index: indexPath, context: context)
+        }
+
+        return dataSource
     }
 
-    private func item(for index: IndexPath) -> (any CellAdapterProtocol)? {
-        dataSource.itemIdentifier(for: index)?.item
+    private func item(for index: IndexPath) -> AnyCellAdapter? {
+        dataSource.itemIdentifier(for: index)
     }
 
-    private func item(for section: Int) -> (any CellAdapterProtocol)? {
-        dataSource.itemIdentifier(for: IndexPath(item: 0, section: section))?.item
+    func item<T: AnyCellAdapter>(type: T.Type = T.self, for index: IndexPath) -> T? {
+        dataSource.itemIdentifier(for: index) as? T
     }
-
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
-extension CollectionViewAdapter: UICollectionViewDelegateFlowLayout {
+extension CollectionViewAdapter: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         item(for: indexPath)?.didSelect(at: indexPath)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
         item(for: indexPath)?.willDisplay(at: indexPath)
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-        item(for: indexPath)?.sizeForItem(at: indexPath,
-                                          collectionView: collectionView,
-                                          layout: collectionViewLayout) ?? .zero
+    func collectionView(
+        _ collectionView: UICollectionView,
+        didEndDisplaying cell: UICollectionViewCell,
+        forItemAt indexPath: IndexPath
+    ) {
+        item(for: indexPath)?.didEndDisplaying(at: indexPath)
     }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        insetForSectionAt section: Int) -> UIEdgeInsets {
-        item(for: section)?
-            .section?
-            .collectionView(collectionView, layout: collectionViewLayout, insetForSectionAt: section) ?? .zero
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        item(for: section)?
-            .section?
-            .collectionView(collectionView, layout: collectionViewLayout, minimumInteritemSpacingForSectionAt: section) ?? 0
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        item(for: section)?
-            .section?
-            .collectionView(collectionView, layout: collectionViewLayout, minimumLineSpacingForSectionAt: section) ?? 0
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        referenceSizeForHeaderInSection section: Int) -> CGSize {
-        .zero
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        referenceSizeForFooterInSection section: Int) -> CGSize {
-        .zero
-    }
-
 }
 
 // MARK: - UIScrollViewDelegate
@@ -169,5 +156,65 @@ extension CollectionViewAdapter {
 
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         scrollViewDelegate?.scrollViewDidEndScrollingAnimation?(scrollView)
+    }
+}
+
+final class AdapterContext {
+    private weak var dataSource: UICollectionViewDiffableDataSource<SectionData, AnyCellAdapter>?
+
+    init(
+        dataSource: UICollectionViewDiffableDataSource<SectionData, AnyCellAdapter>?
+    ) {
+        self.dataSource = dataSource
+    }
+
+    func reloadItems(in section: (any SectionAdapterProtocol)?, animated: Bool = true) {
+        guard let section, let dataSource else { return }
+        var snapshot = dataSource.snapshot()
+
+        section.getIdentifiers().forEach { id in
+            let sectionId = SectionData(id: id, section: section)
+            let current = snapshot.itemIdentifiers(inSection: sectionId)
+            snapshot.deleteItems(current)
+            snapshot.appendItems(section.getItems(for: id), toSection: sectionId)
+        }
+
+        dataSource.apply(snapshot, animatingDifferences: animated)
+    }
+
+    func reload(section: (any SectionAdapterProtocol)?, animated: Bool = true) {
+        guard let section, let dataSource else { return }
+        var snapshot = dataSource.snapshot()
+
+        section.getIdentifiers().forEach { id in
+            let sectionId = SectionData(id: id, section: section)
+            if snapshot.sectionIdentifiers.contains(sectionId) {
+                snapshot.deleteSections([sectionId])
+            }
+            snapshot.appendSections([sectionId])
+            snapshot.appendItems(section.getItems(for: id), toSection: sectionId)
+        }
+
+        dataSource.apply(snapshot, animatingDifferences: animated)
+    }
+
+    func removeSections(identifiers: Set<AnyHashable>, animated: Bool = true) {
+        guard let dataSource else { return }
+        var snapshot = dataSource.snapshot()
+
+        snapshot.deleteSections(identifiers.map { SectionData(id: $0, section: nil) })
+
+        dataSource.apply(snapshot, animatingDifferences: animated)
+    }
+}
+
+
+extension UICollectionViewDiffableDataSource {
+    func getSection(for index: Int) -> SectionIdentifierType? {
+        if #available(iOS 15.0, *) {
+            self.sectionIdentifier(for: index)
+        } else {
+            self.snapshot().sectionIdentifiers[safe: index]
+        }
     }
 }

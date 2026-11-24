@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PlayItemFilterView" customModule="Anilibria" customModuleProvider="target">
+            <connections>
+                <outlet property="sortingButton" destination="v6q-S0-69F" id="Zxj-gq-PFP"/>
+                <outlet property="textField" destination="sKA-6O-mIE" id="yZM-1X-Em6"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="40"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uQH-RG-n5m">
+                    <rect key="frame" x="0.0" y="0.0" width="393" height="40"/>
+                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Yn9-G7-Fd2">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="40"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="q09-UX-NWw">
+                                <rect key="frame" x="16" y="4" width="369" height="32"/>
+                                <subviews>
+                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sKA-6O-mIE">
+                                        <rect key="frame" x="0.0" y="0.0" width="327" height="32"/>
+                                        <color key="tintColor" name="text/monoLight"/>
+                                        <color key="textColor" name="text/monoLight"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v6q-S0-69F">
+                                        <rect key="frame" x="337" y="0.0" width="32" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="32" id="RQu-aO-mjH"/>
+                                            <constraint firstAttribute="width" constant="32" id="WeY-jw-2cs"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <color key="tintColor" name="text/monoLight"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="arrow.up.arrow.down.square.fill" catalog="system"/>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="q09-UX-NWw" secondAttribute="trailing" constant="8" id="Pav-08-Ccf"/>
+                            <constraint firstItem="q09-UX-NWw" firstAttribute="leading" secondItem="Yn9-G7-Fd2" secondAttribute="leading" constant="16" id="PwF-M8-eWL"/>
+                            <constraint firstItem="q09-UX-NWw" firstAttribute="top" secondItem="Yn9-G7-Fd2" secondAttribute="top" constant="4" id="gEr-Nf-Khj"/>
+                            <constraint firstAttribute="bottom" secondItem="q09-UX-NWw" secondAttribute="bottom" constant="4" id="jK6-u9-GkQ"/>
+                        </constraints>
+                    </view>
+                    <blurEffect style="light"/>
+                </visualEffectView>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="uQH-RG-n5m" secondAttribute="bottom" id="CRh-LZ-Rex"/>
+                <constraint firstItem="uQH-RG-n5m" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="DlM-4G-DAp"/>
+                <constraint firstAttribute="trailing" secondItem="uQH-RG-n5m" secondAttribute="trailing" id="Tlm-6W-xkf"/>
+                <constraint firstItem="uQH-RG-n5m" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="j2X-CC-put"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="64.885496183206101" y="20.422535211267608"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="arrow.up.arrow.down.square.fill" catalog="system" width="128" height="114"/>
+        <namedColor name="text/monoLight">
+            <color red="0.99607843137254903" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

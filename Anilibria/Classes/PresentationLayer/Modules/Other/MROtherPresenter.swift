@@ -37,10 +37,10 @@ extension OtherPresenter: OtherEventHandler {
                 switch state {
                 case .guest:
                     self?.isAuthorized = false
-                    self?.view.set(user: nil)
+                    self?.view.set(user: nil, loading: false)
                 case let .user(value):
                     self?.isAuthorized = true
-                    self?.view.set(user: value)
+                    self?.view.set(user: value, loading: false)
                 }
             })
             .store(in: &bag)
@@ -63,7 +63,7 @@ extension OtherPresenter: OtherEventHandler {
     }
 
     func team() {
-        self.router.open(url: URLS.team)
+        self.router.openTeam()
     }
 
     func donate() {
@@ -82,6 +82,10 @@ extension OtherPresenter: OtherEventHandler {
         if let url = link.url {
             self.router.open(url: url)
         }
+    }
+
+    func linkDevice() {
+        router.openDeviceLinker()
     }
 
     func loginOrLogout() {

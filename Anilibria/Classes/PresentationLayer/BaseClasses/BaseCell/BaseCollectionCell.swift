@@ -29,11 +29,7 @@ class BaseCollectionCell: UICollectionViewCell {
 
     // MARK: - Methods
 
-    public func reload(sections: [any SectionAdapterProtocol]) {
-        self.adapter.reload(content: .init(sections))
-    }
-
-    public func append(sections: [any SectionAdapterProtocol]) {
-        self.adapter.append(content: .init(sections))
+    public func set(sections: [any SectionAdapterProtocol]) {
+        self.adapter.set(sections: .init(sections))
     }
 }

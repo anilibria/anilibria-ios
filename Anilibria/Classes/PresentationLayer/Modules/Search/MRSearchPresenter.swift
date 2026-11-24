@@ -16,12 +16,12 @@ final class SearchPresenter {
     private weak var view: SearchViewBehavior!
     private var router: SearchRoutable!
 
-    private let feedService: FeedService
+    private let mainService: MainService
     private var cancellable: AnyCancellable?
     private var currentQuery: String = ""
 
-    init(feedService: FeedService) {
-        self.feedService = feedService
+    init(mainService: MainService) {
+        self.mainService = mainService
     }
 }
 
@@ -39,7 +39,11 @@ extension SearchPresenter: SearchEventHandler {
 
     func search(query: String) {
         self.currentQuery = query
-        self.cancellable = feedService.search(query: query)
+        if query.isEmpty {
+            handle([])
+            return
+        }
+        self.cancellable = mainService.search(query: query)
             .sink(onNext: { [weak self] items in
                 self?.handle(items)
             }, onError: { [weak self] error in

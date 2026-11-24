@@ -1,7 +1,7 @@
 import UIKit
 
 final class OtherAssembly {
-    class func createModule(parent: Router? = nil) -> OtherViewController {
+    static func createModule(parent: Router? = nil) -> OtherViewController {
         let module = OtherViewController()
         let router = OtherRouter(view: module, parent: parent)
         module.handler = MainAppCoordinator.shared.container.resolve()

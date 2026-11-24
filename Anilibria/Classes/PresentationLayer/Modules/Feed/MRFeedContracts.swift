@@ -3,8 +3,7 @@ import UIKit
 // MARK: - Contracts
 
 protocol FeedViewBehavior: WaitingBehavior, RefreshBehavior {
-    func set(items: [NSObject])
-    func append(items: [NSObject])
+    func set(items: [any Hashable])
 }
 
 protocol FeedEventHandler: ViewControllerEventHandler, RefreshEventHandler {
@@ -14,4 +13,5 @@ protocol FeedEventHandler: ViewControllerEventHandler, RefreshEventHandler {
     func select(series: Series)
     func allSchedule()
     func search()
+    func refreshIfNeeded()
 }

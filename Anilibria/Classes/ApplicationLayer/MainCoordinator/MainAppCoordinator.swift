@@ -19,37 +19,30 @@ public class MainAppCoordinator: Loggable {
     public var container: DIContainer
 
     private let router: AppRouter
-    private let appService: AppConfigurationService
     private var bag = Set<AnyCancellable>()
+
+    public var window: UIWindow? {
+        return router.window
+    }
 
     init(configuration: DependenciesConfiguration) {
         self.configuration = configuration
         self.configuration.setup()
         self.container = self.configuration.configuredContainer()
         self.router = AppRouter()
-        self.appService = self.container.resolve()
 
         self.log(.debug, "Dependencies are configured")
     }
 
-    func start() {
+    func start(on window: UIWindow) {
         MainTheme.shared.apply()
         self.log(.debug, "App coordinator started")
-        self.openMainModule()
+        self.openMainModule(on: window)
     }
 
     // MARK: - Modules routing
 
-    private func openMainModule() {
-        self.appService.fetchState()
-            .sink(onNext: { [weak self] state in
-                switch state {
-                case .started:
-                    self?.router.openLoadingScene()
-                case .completed:
-                    self?.router.openDefaultScene()
-                }
-            })
-            .store(in: &bag)
+    private func openMainModule(on window: UIWindow) {
+        router.openDefaultScene(on: window)
     }
 }

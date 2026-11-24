@@ -1,129 +1,119 @@
 import Foundation
 
-extension CodingUserInfoKey {
-	fileprivate static let decodingContext: CodingUserInfoKey = CodingUserInfoKey(rawValue: "decodingContext")!
-}
+public extension KeyedDecodingContainer {
+    enum DecoderError: Error {
+        case keyRequired
+        case noValueDecoded
+    }
 
-public extension Decoder {
-	var decodingContext: Any? {
-		return userInfo[.decodingContext]
-	}
-}
+    func decode<T: Decodable>(oneOf keys: Key...) throws -> T {
+        for key in keys {
+            if let result: T = decode(key) {
+                return result
+            }
+        }
+        throw DecoderError.noValueDecoded
+    }
 
-public extension JSONDecoder {
-	convenience init(context: Any) {
-		self.init()
-		self.userInfo[.decodingContext] = context
-	}
-}
+    func decode<T: Decodable>(_ keys: Key...) -> T? {
+        decode(keys)
+    }
 
-public extension Decoder {
-	subscript<T>(key: T.Type) -> T? where T: Decodable {
-		return try? self.singleValueContainer().decode(key)
-	}
+    func decode<T: Decodable>(_ keys: [Key]) -> T? {
+        if let data = try? self.find(by: keys) {
+            return try? data.container.decodeIfPresent(T.self, forKey: data.key)
+        }
+        return nil
+    }
 
-	subscript<T, K>(key: K..., default defaultValue: @autoclosure () -> T) -> T where T: Decodable, K: CodingKey {
-		return (try? self.container(keyedBy: K.self)[key]) ?? defaultValue()
-	}
+    func decode<T: Decodable>(required keys: Key...) throws -> T {
+        try decode(required: keys)
+    }
 
-	subscript<T, K>(key: K...) -> T? where T: Decodable, K: CodingKey {
-		return try? self.container(keyedBy: K.self)[key]
-	}
+    func decode<T: Decodable>(required keys: [Key]) throws -> T {
+        let data = try self.find(by: keys)
+        return try data.container.decode(T.self, forKey: data.key)
+    }
 
+    private func find(by keys: [Key]) throws -> (key: K, container: KeyedDecodingContainer) {
+        guard keys.isEmpty == false else {
+            assertionFailure("Key is required")
+            throw DecoderError.keyRequired
+        }
+
+        if keys.count == 1 {
+            return (keys[0], self)
+        }
+
+        let last = keys.count - 1
+        var currentContainer: KeyedDecodingContainer = self
+        for index in 0..<last {
+            currentContainer = try currentContainer.nestedContainer(keyedBy: Key.self, forKey: keys[index])
+        }
+
+        return (keys[last], currentContainer)
+    }
 }
 
 public extension Encoder {
-	func apply(_ action: (inout KeyedEncodingContainer<String>) -> Void) {
-		var container = self.container(keyedBy: String.self)
-		action(&container)
-	}
-
-	func apply<Key: CodingKey>(_ type: Key.Type, action: (inout KeyedEncodingContainer<Key>) -> Void) {
-		var container = self.container(keyedBy: type)
-		action(&container)
-	}
-}
-
-public extension Encodable {
-	var dictionary: [String: Any]? {
-		guard let data = try? JSONEncoder().encode(self) else { return nil }
-		return (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)).flatMap { $0 as? [String: Any] }
-	}
-
-	var jsonString: String? {
-		guard let data = try? JSONEncoder().encode(self) else { return nil }
-		return String(data: data, encoding: .utf8)
-	}
-}
-
-// MARK: -
-
-public extension KeyedDecodingContainer {
-	subscript<T>(key: Key, default defaultValue: @autoclosure () -> T) -> T where T: Decodable {
-		return self[key] ?? defaultValue()
-	}
-
-	subscript<T>(key: Key) -> T? where T: Decodable {
-		try? self.decodeIfPresent(T.self, forKey: key)
-	}
-
-	subscript<T>(key: Key..., default defaultValue: @autoclosure () -> T) -> T where T: Decodable {
-		return self[key] ?? defaultValue()
-	}
-
-	subscript<T>(key: Key...) -> T? where T: Decodable {
-		self[key]
-	}
-
-	fileprivate subscript<T>(key: [Key]) -> T? where T: Decodable {
-		if let data = self.find(keys: key) {
-			return try? data.container.decodeIfPresent(T.self, forKey: data.key)
-		}
-		return nil
-	}
-
-	private func find(keys: [Key]) -> (key: Key, container: KeyedDecodingContainer)? {
-		guard keys.isEmpty == false else { return nil}
-
-		if keys.count == 1 {
-			return (keys[0], self)
-		}
-
-		let last = keys.count - 1
-		var container: KeyedDecodingContainer? = self
-		for index in 0..<last {
-			container = try? container?.nestedContainer(keyedBy: Key.self, forKey: keys[index])
-		}
-
-		if let value = container {
-			return (keys[last], value)
-		}
-
-		return nil
-	}
+    /// Syntactic sugar for encoding
+    /// ### Usage: ###
+    /// ```
+    /// func encode(to encoder: Encoder) throws {
+    ///     encoder.apply(CodingKeys.self) { container in
+    ///         container[.number] = number
+    ///         container[.seed] = seed
+    ///         container[.user][.name] = userName
+    ///         container[ifPresent: .price] = price
+    ///    }
+    /// }
+    /// ```
+    func apply<Key: CodingKey>(_ type: Key.Type, action: (inout KeyedEncodingContainer<Key>) -> Void) {
+        var container = self.container(keyedBy: type)
+        action(&container)
+    }
 }
 
 public extension KeyedEncodingContainer {
-	subscript<T>(key: Key) -> T? where T: Encodable {
-		get { nil }
-		set { try? self.encode(newValue, forKey: key) }
-	}
+    subscript<T>(key: Key) -> T? where T: Encodable {
+        get { nil  }
+        set { try? self.encode(newValue, forKey: key) }
+    }
+
+    subscript<T>(ifPresent key: Key) -> T? where T: Encodable {
+        get { nil }
+        set { try? self.encodeIfPresent(newValue, forKey: key) }
+    }
+
+    subscript(key: Key) -> KeyedEncodingContainer {
+        mutating get { self.nestedContainer(keyedBy: Key.self, forKey: key)  }
+        set { }
+    }
 }
 
-extension String: CodingKey {
-	public var stringValue: String {
-		self
-	}
+public struct CodingKeyString: ExpressibleByStringLiteral {
+    public typealias StringLiteralType = String
+    private let value: String
 
-	public var intValue: Int? {
-		nil
-	}
+    public init(stringLiteral value: Self.StringLiteralType) {
+        self.value = value
+    }
+}
 
-	public init?(intValue: Int) {
-		nil
-	}
+extension CodingKeyString: CodingKey {
+    public var stringValue: String {
+        self.value
+    }
 
-	public init?(stringValue: String) {
-		self = stringValue
-	}
+    public var intValue: Int? {
+        nil
+    }
+
+    public init?(intValue: Int) {
+       nil
+    }
+
+    public init?(stringValue: String) {
+        self.value = stringValue
+    }
 }

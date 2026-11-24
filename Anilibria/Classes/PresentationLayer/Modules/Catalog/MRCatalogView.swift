@@ -5,19 +5,19 @@ import UIKit
 final class CatalogViewController: BaseCollectionViewController {
     var handler: CatalogEventHandler!
 
-    private lazy var searchButton = BarButton(image: UIImage(resource: .menuItemSearch),
-                                              imageEdge: inset(12, 5, 12, 5)) { [weak self] in
+    private lazy var searchButton = BarButton(image: .System.search,
+                                              imageEdge: inset(0, 5, 0, 5)) { [weak self] in
         self?.handler.search()
     }
 
-    private lazy var filterButton = BarButton(image: UIImage(resource: .iconFilter)) { [weak self] in
+    private lazy var filterButton = BarButton(image: .iconFilter) { [weak self] in
         self?.handler.openFilter()
     }
 
     #if targetEnvironment(macCatalyst)
-    private lazy var refreshButton = BarButton(image: UIImage(resource: .iconRefresh)) { [weak self] in
+    private lazy var refreshButton = BarButton(image: .System.refresh) { [weak self] in
         _ = self?.showRefreshIndicator()
-        self?.collectionView.setContentOffset(.init(x: 0, y: -10), animated: false)
+        self?.scrollToTop()
         self?.handler.refresh()
     }
     #endif
@@ -27,7 +27,7 @@ final class CatalogViewController: BaseCollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupNavbar()
-        self.addRefreshControl()
+        self.addRefreshControl(scrollView: collectionView)
         self.handler.didLoad()
         self.collectionView.contentInset.top = 10
     }
@@ -49,36 +49,23 @@ final class CatalogViewController: BaseCollectionViewController {
         #endif
         self.navigationItem.setRightBarButtonItems(items ,animated: false)
     }
-
-    private func createAdapter(for model: NSObject) -> (any CellAdapterProtocol)? {
-        switch model {
-        case let item as Series:
-            return SeriesCellAdapter(viewModel: item, seclect: { [weak self] item in
-                self?.handler.select(series: item)
-            })
-        case let item as PaginationViewModel:
-            return PaginationAdapter(viewModel: item)
-        default:
-            return nil
-        }
-    }
 }
 
 extension CatalogViewController: CatalogViewBehavior {
-    func set(items: [NSObject]) {
+    func scrollToTop() {
         self.collectionView.contentOffset = CGPoint(x: 0, y: -collectionView.contentInset.top)
-        self.reload(sections: [SectionAdapter(items.compactMap(createAdapter))])
     }
 
-    func append(items: [NSObject]) {
-        append(sections: [SectionAdapter(items.compactMap(createAdapter))])
+    func set(model: CatalogViewModel) {
+        scrollToTop()
+        self.set(sections: [SeriesSectionsAdapter(model)])
     }
 
     func setFilter(active: Bool) {
-        self.filterButton.tintColor = active ? MainTheme.shared.red : MainTheme.shared.black
-    }
-
-    func loadPageProgress() -> ActivityDisposable? {
-        return nil
+        self.filterButton.tintColor = if active {
+            .Tint.active
+        } else {
+            .Tint.main
+        }
     }
 }

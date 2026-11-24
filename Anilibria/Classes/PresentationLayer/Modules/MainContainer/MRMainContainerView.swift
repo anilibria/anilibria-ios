@@ -5,6 +5,8 @@ import UIKit
 final class MainContainerViewController: BaseViewController {
     @IBOutlet var menuTabBar: MenuTabController!
     @IBOutlet var pagerView: PagerView!
+    @IBOutlet var shadowView: ShadowView!
+    @IBOutlet var tabBarContainer: UIView!
 
     var handler: MainContainerEventHandler!
     private var pages: [MenuControllerData] = []
@@ -13,8 +15,12 @@ final class MainContainerViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupPager()
-        self.handler.didLoad()
+        shadowView.shadowX = 10
+        shadowView.shadowRadius = 10
+        tabBarContainer.backgroundColor = .Surfaces.background
+        setupPager()
+        handler.didLoad()
+        view.backgroundColor = .Surfaces.background
     }
 
     func setupPager() {

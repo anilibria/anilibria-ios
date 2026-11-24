@@ -33,9 +33,9 @@ private class TimeFormatter: Formatting {
         var seconds: Int?
         
         if let value = from as? Double {
-            seconds = Int(value)
+            seconds = abs(Int(value))
         } else if let value = from as? Float {
-            seconds = Int(value)
+            seconds = abs(Int(value))
         }
         
         guard let sec = seconds else {

@@ -8,6 +8,7 @@ final class SearchViewController: BaseCollectionViewController {
     @IBOutlet var collectionHeightConstraint: NSLayoutConstraint!
     @IBOutlet var searchContainerConstraint: NSLayoutConstraint!
     @IBOutlet var searchField: UITextField!
+    @IBOutlet var backview: UIView!
 
     var handler: SearchEventHandler!
 
@@ -18,15 +19,20 @@ final class SearchViewController: BaseCollectionViewController {
     override func viewDidLoad() {
         self.defaultBottomInset = 0
         super.viewDidLoad()
-        self.addKeyboardObservers()
-        self.handler.didLoad()
+        collectionView.layoutMargins = .zero
+        view.backgroundColor = .black.withAlphaComponent(0.5)
+        addKeyboardObservers()
+        handler.didLoad()
 
-        self.scrollView.isScrollEnabled = false
-        self.collectionView.layer.cornerRadius = 5
-        self.collectionView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        self.bag = self.collectionView.observe(\UICollectionView.contentSize) { [weak self] _, _ in
+        scrollView.isScrollEnabled = false
+        collectionHeightConstraint.constant = 1
+        backview.layer.cornerRadius = 5
+        backview.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        collectionView.layer.cornerRadius = 5
+        collectionView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        bag = collectionView.publisher(for: \.contentSize).removeDuplicates().sink { [weak self] _ in
             if let height = self?.collectionView.contentSize.height {
-                self?.collectionHeightConstraint.constant = height
+                self?.collectionHeightConstraint.constant = max(height, 1)
                 UIView.animate(withDuration: 0.2) {
                     self?.view.layoutIfNeeded()
                 }
@@ -74,7 +80,7 @@ final class SearchViewController: BaseCollectionViewController {
     @IBAction func backAction(_ sender: Any) {
         self.searchField.resignFirstResponder()
         self.searchField.isUserInteractionEnabled = false
-        self.reload(sections: []) { [weak self] in
+        self.set(sections: []) { [weak self] in
             self?.searchContainerConstraint.constant = 35
             UIView.animate(withDuration: 0.3,
                            animations: { self?.view.layoutIfNeeded() },
@@ -86,7 +92,7 @@ final class SearchViewController: BaseCollectionViewController {
 extension SearchViewController: SearchViewBehavior {
     func set(items: [SearchValue]) {
         self.scrollView.isScrollEnabled = !items.isEmpty
-        self.reload(sections:[
+        self.set(sections:[
             SectionAdapter(
                 items.map {
                     SearchResultAdapter(viewModel: $0) { [weak self] item in

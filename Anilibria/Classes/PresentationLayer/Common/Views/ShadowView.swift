@@ -9,20 +9,10 @@ public final class ShadowView: UIView {
         }
     }
 
-    @IBInspectable
     public var shadowColor: UIColor? {
-        get {
-            if let color = layer.shadowColor {
-                return UIColor(cgColor: color)
-            }
-            return nil
-        }
-        set {
-            layer.shadowColor = newValue?.cgColor
-        }
+        didSet { updateShadowColor() }
     }
 
-    @IBInspectable
     public var shadowX: CGFloat {
         get {
             return layer.shadowOffset.width
@@ -33,7 +23,6 @@ public final class ShadowView: UIView {
         }
     }
 
-    @IBInspectable
     public var shadowY: CGFloat {
         get {
             return layer.shadowOffset.height
@@ -44,7 +33,6 @@ public final class ShadowView: UIView {
         }
     }
 
-    @IBInspectable
     public var shadowOpacity: Float {
         get {
             return layer.shadowOpacity
@@ -54,7 +42,6 @@ public final class ShadowView: UIView {
         }
     }
 
-    @IBInspectable
     public var shadowRadius: CGFloat {
         get {
             return layer.shadowRadius
@@ -62,5 +49,32 @@ public final class ShadowView: UIView {
         set {
             layer.shadowRadius = newValue
         }
+    }
+
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
+    }
+
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setup()
+    }
+
+    private func setup() {
+        shadowX = 0
+        shadowY = 5
+        shadowRadius = 8
+        shadowOpacity = 0.15
+        shadowColor = .black
+    }
+
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        updateShadowColor()
+    }
+
+    private func updateShadowColor() {
+        layer.shadowColor = shadowColor?.cgColor
     }
 }

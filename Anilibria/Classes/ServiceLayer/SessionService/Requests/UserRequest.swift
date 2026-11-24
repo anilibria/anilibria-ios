@@ -1,13 +1,7 @@
-public struct UserRequest: BackendAPIRequest {
+public struct UserRequest: AuthorizableAPIRequest {
     typealias ResponseObject = User
 
-    private(set) var endpoint: String = "/public/api/index.php"
-    private(set) var method: NetworkManager.Method = .POST
-    private(set) var parameters: [String: Any]
-
-    init() {
-        self.parameters = [
-            "query": "user"
-        ]
-    }
+    var requestData: RequestData = .init(
+        endpoint: "/accounts/users/me/profile"
+    )
 }

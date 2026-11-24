@@ -1,7 +1,7 @@
 import UIKit
 
 final class NewsAssembly {
-    class func createModule(parent: Router? = nil) -> NewsViewController {
+    static func createModule(parent: Router? = nil) -> NewsViewController {
         let module = NewsViewController()
         let router = NewsRouter(view: module, parent: parent)
         module.handler = MainAppCoordinator.shared.container.resolve()

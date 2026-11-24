@@ -18,16 +18,16 @@ final class MainContainerPresenter {
 
     private let menuService: MenuService
     private let sessionService: SessionService
-    private let feedService: FeedService
+    private let mainService: MainService
 
     private var bag = Set<AnyCancellable>()
 
     init(menuService: MenuService,
          sessionService: SessionService,
-         feedService: FeedService) {
+         mainService: MainService) {
         self.menuService = menuService
         self.sessionService = sessionService
-        self.feedService = feedService
+        self.mainService = mainService
     }
 }
 
@@ -55,12 +55,12 @@ extension MainContainerPresenter: MainContainerEventHandler {
             .sink(onNext: { [weak self] value in
                 switch value {
                 case .guest:
-                    if let current = self?.menuService.getSelected(), current == .favorite {
+                    if let current = self?.menuService.getSelected(), current == .collections {
                         self?.menuService.setMenuItem(type: .feed)
                     }
-                    self?.view.change(visible: false, for: .favorite)
+                    self?.view.change(visible: false, for: .collections)
                 case .user:
-                    self?.view.change(visible: true, for: .favorite)
+                    self?.view.change(visible: true, for: .collections)
                 }
 
             })

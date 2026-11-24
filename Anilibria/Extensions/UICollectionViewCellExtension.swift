@@ -7,7 +7,7 @@ extension UICollectionViewCell {
 
     static func loadFromNib(frame: CGRect? = nil) -> Self? {
         let item = Bundle.main.loadNibNamed(defaultNibName, owner: nil, options: nil)?.first
-        let view = item >> self
+        let view = item as? Self
         if let value = frame {
             view?.updateFrame(value)
         }

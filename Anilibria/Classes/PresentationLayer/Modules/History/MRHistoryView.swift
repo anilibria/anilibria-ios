@@ -5,14 +5,21 @@ import UIKit
 final class HistoryViewController: BaseCollectionViewController {
     var handler: HistoryEventHandler!
 
-    private let searchView: SearchView? = SearchView.fromNib()
+    private let searchView: SearchView? = SearchView(
+        frame: CGRect(origin: .zero, size: .init(width: 320, height: 40))
+    )
     private let stubView: StubView? = StubView.fromNib()?.apply {
-        $0.set(image: UIImage(resource: .iconHistory), color: .darkGray)
+        $0.set(image: .System.history, color: .Text.secondary)
         $0.title = L10n.Stub.title
     }
 
-    private var currentQuery: String = ""
-    private var sectionAdapter = SectionAdapter([])
+    private let sectionAdapter: SectionAdapter = {
+        let section = SectionAdapter([])
+        section.estimatedHeight = 140
+        section.ipad = .init(expectedWidth: 320)
+        return section
+    }()
+
     private lazy var seriesHandler = RemovableSeriesCellAdapterHandler(
         select: { [weak self] item in
             self?.searchView?.resignFirstResponder()
@@ -38,7 +45,6 @@ final class HistoryViewController: BaseCollectionViewController {
             self.navigationItem.titleView = value
             value.querySequence()
                 .sink(onNext: { [weak self] text in
-                    self?.currentQuery = text
                     self?.handler.search(query: text)
                 })
                 .store(in: &subscribers)
@@ -56,11 +62,12 @@ final class HistoryViewController: BaseCollectionViewController {
     }
 
     func updateEmptyView() {
+        guard let searchView else { return }
         var text = L10n.Stub.History.message
-        if self.searchView?.isSearching == true {
-            text = L10n.Stub.messageNotFound(self.currentQuery)
+        if searchView.isSearching {
+            text = L10n.Stub.messageNotFound(searchView.text)
         }
-        self.stubView?.message = text
+        stubView?.message = text
     }
 }
 
@@ -76,6 +83,6 @@ extension HistoryViewController: HistoryViewBehavior {
         sectionAdapter.set(items.map {
             RemovableSeriesCellAdapter(viewModel: $0, handler: seriesHandler)
         })
-        self.reload(sections: [sectionAdapter])
+        self.set(sections: [sectionAdapter])
     }
 }

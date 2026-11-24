@@ -1,11 +1,11 @@
 import UIKit
 
 final class CatalogAssembly {
-    class func createModule(filter: SeriesFilter = SeriesFilter(), parent: Router? = nil) -> CatalogViewController {
+    static func createModule(data: SeriesSearchData = SeriesSearchData(), parent: Router? = nil) -> CatalogViewController {
         let module = CatalogViewController()
         let router = CatalogRouter(view: module, parent: parent)
         module.handler = MainAppCoordinator.shared.container.resolve()
-        module.handler.bind(view: module, router: router, filter: filter)
+        module.handler.bind(view: module, router: router, data: data)
         return module
     }
 }
@@ -13,12 +13,12 @@ final class CatalogAssembly {
 // MARK: - Route
 
 protocol CatalogRoute {
-    func openCatalog(filter: SeriesFilter)
+    func openCatalog(data: SeriesSearchData)
 }
 
 extension CatalogRoute where Self: RouterProtocol {
-    func openCatalog(filter: SeriesFilter) {
-        let module = CatalogAssembly.createModule(filter: filter, parent: self)
+    func openCatalog(data: SeriesSearchData) {
+        let module = CatalogAssembly.createModule(data: data, parent: self)
         PushRouter(target: module, parent: self.controller).move()
     }
 }

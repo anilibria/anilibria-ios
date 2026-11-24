@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 
 public enum MenuItemType: String, CaseIterable {
-    case feed, catalog, news, favorite, other
+    case feed, catalog, news, collections, other
 
     var index: Int {
         return MenuItemType.allCases.firstIndex(of: self) ?? 0
@@ -13,9 +13,9 @@ public typealias DoubleImage = (normal: UIImage, selected: UIImage)
 
 public final class MenuItem: NSObject {
     let type: MenuItemType
-    let icon: UIImage
+    let icon: UIImage?
 
-    public init(type: MenuItemType, icon: UIImage) {
+    public init(type: MenuItemType, icon: UIImage?) {
         self.type = type
         self.icon = icon
     }
@@ -33,11 +33,11 @@ public final class MenuListItem: ListItem<[MenuItem]> {}
 public final class MenuItemsFactory {
     static func create() -> [MenuItem] {
         return [
-            MenuItem(type: .feed, icon: UIImage(resource: .menuItemFeed)),
-            MenuItem(type: .catalog, icon: UIImage(resource: .menuItemSearch)),
-            MenuItem(type: .news, icon: UIImage(resource: .menuItemYoutube)),
-            MenuItem(type: .favorite, icon: UIImage(resource: .starOutline)),
-            MenuItem(type: .other, icon: UIImage(resource: .menuItemSettings))
+            MenuItem(type: .feed, icon: .System.news),
+            MenuItem(type: .catalog, icon: .System.search),
+            MenuItem(type: .news, icon: .iconYoutube),
+            MenuItem(type: .collections, icon: .System.book),
+            MenuItem(type: .other, icon: .System.dots)
         ]
     }
 }

@@ -20,21 +20,21 @@ public final class SearchResultCell: RippleViewCell {
     private func configure(item: Series) {
         self.iconView.isHidden = true
         self.imageView.setImage(from: item.poster,
-                                placeholder: UIImage(resource: .imgPlaceholder))
-        self.titleLabel.text = item.names.first
+                                placeholder: DefaultPlaceholder())
+        self.titleLabel.text = item.name?.main
     }
 
     private func configure(query: String) {
         self.imageView.image = nil
         self.iconView.isHidden = false
-        self.iconView.image = UIImage(resource: .iconGoogle)
+        self.iconView.image = .iconGoogle.withRenderingMode(.alwaysTemplate)
         self.titleLabel.text = L10n.Common.GoogleSearch.query(query)
     }
 
     private func configure() {
         self.imageView.image = nil
         self.iconView.isHidden = false
-        self.iconView.image = UIImage(resource: .menuItemSearch)
+        self.iconView.image = .System.search.withRenderingMode(.alwaysTemplate)
         self.titleLabel.text = L10n.Common.FilterSearch.title
     }
 }

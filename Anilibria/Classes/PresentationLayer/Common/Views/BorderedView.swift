@@ -4,10 +4,10 @@ public class CircleView: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         self.clipsToBounds = true
-        self.layer.cornerRadius = min(self.bounds.height, self.bounds.width) / 2
+        self.smoothCorners(with: min(bounds.height, bounds.width) / 2)
     }
 
-    @IBInspectable public var borderThickness: CGFloat {
+    public var borderThickness: CGFloat {
         get {
             return self.layer.borderWidth
         }
@@ -16,13 +16,19 @@ public class CircleView: UIView {
         }
     }
 
-    @IBInspectable public var borderColor: UIColor? {
-        get {
-            return self.layer.borderColor != nil ? UIColor(cgColor: self.layer.borderColor!) : nil
+    public var borderColor: UIColor? {
+        didSet {
+            updateBorderColor()
         }
-        set {
-            self.layer.borderColor = newValue?.cgColor
-        }
+    }
+
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        updateBorderColor()
+    }
+
+    private func updateBorderColor() {
+        layer.borderColor = borderColor?.cgColor
     }
 }
 
@@ -59,7 +65,7 @@ public class BorderedView: UIView {
         self.setupPath()
     }
 
-    @IBInspectable public var cornerRadius: CGFloat {
+    public var cornerRadius: CGFloat {
         get {
             return layer.cornerRadius
         }
@@ -69,7 +75,7 @@ public class BorderedView: UIView {
         }
     }
 
-    @IBInspectable public var borderThickness: CGFloat {
+    public var borderThickness: CGFloat {
         get {
             return self.border.lineWidth
         }
@@ -78,16 +84,13 @@ public class BorderedView: UIView {
         }
     }
 
-    @IBInspectable public var borderColor: UIColor? {
-        get {
-            return self.border.strokeColor != nil ? UIColor(cgColor: self.border.strokeColor!) : nil
-        }
-        set {
-            self.border.strokeColor = newValue?.cgColor
+    public var borderColor: UIColor? {
+        didSet {
+            updateBorderColor()
         }
     }
 
-    @IBInspectable public var dashLength: Int {
+    public var dashLength: Int {
         get {
             return self.border.lineDashPattern?.first?.intValue ?? 0
         }
@@ -96,12 +99,21 @@ public class BorderedView: UIView {
         }
     }
 
-    @IBInspectable public var dashSpace: Int {
+    public var dashSpace: Int {
         get {
             return self.border.lineDashPattern?.last?.intValue ?? 0
         }
         set {
             self.border.lineDashPattern = [NSNumber(value: dashLength), NSNumber(value: newValue)]
         }
+    }
+
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        updateBorderColor()
+    }
+
+    private func updateBorderColor() {
+        border.strokeColor = borderColor?.cgColor
     }
 }

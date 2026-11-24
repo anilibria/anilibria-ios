@@ -1,16 +1,30 @@
 public struct LoginRequest: BackendAPIRequest {
-    typealias ResponseObject = ServerResponse
+    typealias ResponseObject = LoginResponse
 
-    private(set) var endpoint: String = "/public/login.php"
-    private(set) var method: NetworkManager.Method = .POST
-    private(set) var parameters: [String: Any]
-    var customResponseConverter: BackendResponseConverter? = FullDataResponseConverter()
+    var requestData: RequestData
 
-    init(login: String, password: String, code: String) {
-        self.parameters = [
-            "mail": login,
-            "passwd": password,
-            "fa2code": code
-        ]
+    init(login: String, password: String) {
+        requestData = .init(
+            endpoint: "/accounts/users/auth/login",
+            method: .POST,
+            body: LoginBody(login: login, password: password)
+        )
     }
+
+    init(provider: AuthProviderData) {
+        requestData = .init(
+            endpoint: "/accounts/users/auth/social/authenticate",
+            method: .GET,
+            parameters: ["state": provider.state]
+        )
+    }
+}
+
+private struct LoginBody: Encodable {
+    let login: String
+    let password: String
+}
+
+struct LoginResponse: Decodable {
+    let token: String
 }

@@ -7,6 +7,8 @@ final class AttributeLinksView: UITextView {
         super.awakeFromNib()
         self.textDragInteraction?.isEnabled = false
         self.delegate = self
+        self.textContainer.lineFragmentPadding = 0
+        self.textContainerInset = .zero
     }
 
     public func setTapLink(handler: Action<URL>?) {

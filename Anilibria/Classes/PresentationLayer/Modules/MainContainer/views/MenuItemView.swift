@@ -8,7 +8,11 @@ final class MenuItemView: LoadableView {
 
     public var isSelected: Bool = false {
         didSet {
-            self.iconView.tintColor = self.isSelected ? .red : .black
+            self.iconView.tintColor = if isSelected {
+                .Tint.active
+            } else {
+                .Tint.main
+            }
         }
     }
 

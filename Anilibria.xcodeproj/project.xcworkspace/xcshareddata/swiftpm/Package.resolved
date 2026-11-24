@@ -1,5 +1,15 @@
 {
+  "originHash" : "0163f16b870a6f4d87d9232aec1e18771ca1d8ddb0fdd762e42c36d6fa7b5a8a",
   "pins" : [
+    {
+      "identity" : "appmetrica-sdk-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/appmetrica/appmetrica-sdk-ios",
+      "state" : {
+        "revision" : "5c2dfd7532e355fd5b487c1d773834a4ff01a755",
+        "version" : "5.12.0"
+      }
+    },
     {
       "identity" : "ditranquillity",
       "kind" : "remoteSourceControl",
@@ -19,14 +29,23 @@
       }
     },
     {
+      "identity" : "kscrash",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kstenerud/KSCrash",
+      "state" : {
+        "revision" : "c0177658fc771ae833b6d3b8f5f3f5a14d59ec03",
+        "version" : "2.1.2"
+      }
+    },
+    {
       "identity" : "swiftlazy",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ivlevAstef/SwiftLazy.git",
       "state" : {
-        "revision" : "49a47304bb06643fa22d981b6b8301acc5bcb366",
-        "version" : "1.2.0"
+        "revision" : "ed594b3be371defd7a44ae1c078e91b39d78a523",
+        "version" : "1.7.0"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

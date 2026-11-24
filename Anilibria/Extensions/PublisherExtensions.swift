@@ -28,3 +28,112 @@ public extension Publisher {
         }
     }
 }
+
+public extension AnyPublisher {
+    @frozen enum PromiseResult {
+        case send(Output)
+        case failure(Failure)
+        case completed
+    }
+
+    typealias Promise = (PromiseResult) -> Void
+
+    static func create(_ attemptToFulfill: @escaping (@escaping Promise) -> AnyCancellable) -> AnyPublisher<Output, Failure> {
+        return PromisePublisher(attemptToFulfill).eraseToAnyPublisher()
+    }
+}
+
+extension AnyPublisher {
+    struct PromisePublisher: Publisher {
+        let attemptToFulfill: (@escaping Promise) -> AnyCancellable
+
+        init(_ attemptToFulfill: @escaping (@escaping Promise) -> AnyCancellable) {
+            self.attemptToFulfill = attemptToFulfill
+        }
+
+        func receive<S>(subscriber: S) where S: Subscriber, Failure == S.Failure, Output == S.Input {
+            let subscription = PromiseSubscription(attemptToFulfill, subscriber: subscriber)
+            subscriber.receive(subscription: subscription)
+        }
+    }
+}
+
+extension AnyPublisher {
+    class PromiseSubscription<S: Subscriber>: Subscription where S.Input == Output, S.Failure == Failure {
+        let attemptToFulfill: (@escaping Promise) -> AnyCancellable
+        var subscriber: S?
+        var cancellable: AnyCancellable?
+
+        init(_ attemptToFulfill: @escaping (@escaping Promise) -> AnyCancellable, subscriber: S) {
+            self.attemptToFulfill = attemptToFulfill
+            self.subscriber = subscriber
+        }
+
+        func request(_ demand: Subscribers.Demand) {
+            let promise: Promise = { [weak self] result in
+                switch result {
+                case .send(let value):
+                    _ = self?.subscriber?.receive(value)
+                case .failure(let error):
+                    self?.subscriber?.receive(completion: .failure(error))
+                case .completed:
+                    self?.subscriber?.receive(completion: .finished)
+                }
+            }
+
+            self.cancellable = attemptToFulfill(promise)
+        }
+
+        func cancel() {
+            subscriber = nil
+            cancellable = nil
+        }
+    }
+}
+
+public extension AnyPublisher where Failure == Error {
+    static func create<T: AsyncSequence>(
+        _ sequence: T,
+        priority: TaskPriority? = nil
+    ) -> AnyPublisher<Output, Failure> where T.Element == Output {
+        create { promise in
+            let task = Task(priority: priority) {
+                do {
+                    for try await result in sequence {
+                        promise(.send(result))
+                    }
+                    promise(.completed)
+                } catch {
+                    promise(.failure(error))
+                }
+            }
+
+            return AnyCancellable { task.cancel() }
+        }
+        .receive(on: RunLoop.current)
+        .eraseToAnyPublisher()
+    }
+
+    static func create(
+        priority: TaskPriority? = nil,
+        asyncFunc: @escaping () async throws -> Output
+    ) -> AnyPublisher<Output, Failure> {
+        Deferred {
+            return create { promise in
+                let task = Task(priority: priority) {
+                    do {
+                        let result = try await asyncFunc()
+                        promise(.send(result))
+                        promise(.completed)
+                    } catch {
+                        promise(.failure(error))
+                    }
+                }
+                return AnyCancellable {
+                    task.cancel()
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+}

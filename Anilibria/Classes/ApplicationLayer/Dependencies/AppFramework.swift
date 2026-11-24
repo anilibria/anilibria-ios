@@ -12,10 +12,15 @@ public class AppFramework: DIFramework {
 
 private class RepositoriesPart: DIPart {
     static let parts: [DIPart.Type] = [
+        CoreDataHolderPart.self,
+        SecureStoragePart.self,
         ConfigRepositoryPart.self,
         HistoryRepositoryPart.self,
+        EpisodesRepositoryPart.self,
+        AppContextRepositoryPart.self,
         PlayerSettingsRepositoryPart.self,
         UserRepositoryPart.self,
+        TokenRepositoryPart.self,
         LinksRepositoryPart.self,
         BackendRepositoryPart.self
     ]
@@ -35,14 +40,16 @@ private class RepositoriesPart: DIPart {
 
 private class ServicesPart: DIPart {
     static let parts: [DIPart.Type] = [
-        AppConfigurationServicePart.self,
+        AppConfigurationRepositoryPart.self,
         PlayerServicePart.self,
         FavoriteServicePart.self,
         SessionServicePart.self,
         MenuServicePart.self,
-        FeedServicePart.self,
+        MainServicePart.self,
         LinksServicePart.self,
-        DownloadServicePart.self
+        DownloadServicePart.self,
+        CatalogServicePart.self,
+        UserCollectionsServicePart.self
     ]
 
     static func load(container: DIContainer) {
@@ -54,26 +61,25 @@ private class ServicesPart: DIPart {
 
 private class PersentersPart: DIPart {
     static let parts: [DIPart.Type] = [
-        ConfigurationPart.self,
         MainContainerPart.self,
         HistoryPart.self,
         SettingsPart.self,
         FavoritePart.self,
-        SocialAuthPart.self,
+        UserCollectionPart.self,
         SignInPart.self,
         OtherPart.self,
-        ChoiceSheetPart.self,
+        ActionSheetPart.self,
         PlayerPart.self,
-        CommentsAuthPart.self,
-        SeriesContainerPart.self,
-        CommentsPart.self,
         SeriesPart.self,
         SearchPart.self,
         FilterPart.self,
         CatalogPart.self,
         SchedulePart.self,
         FeedPart.self,
-        NewsPart.self
+        NewsPart.self,
+        TeamPart.self,
+        LinkDevicePart.self,
+        RestorePasswordPart.self
     ]
 
     static func load(container: DIContainer) {
@@ -87,8 +93,8 @@ private class SomePart: DIPart {
     static func load(container: DIContainer) {
         container.register {
             BackendConfiguration(converter: JsonResponseConverter(),
-                                 interceptor: nil,
-                                 retrier: $0)
+                                 interceptor: MainRequestModifier(tokenRepository: $0),
+                                 retrier: $1)
         }
         .lifetime(.single)
 

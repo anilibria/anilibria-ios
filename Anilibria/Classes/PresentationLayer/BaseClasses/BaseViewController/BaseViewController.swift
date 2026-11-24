@@ -6,6 +6,9 @@ class BaseViewController: UIViewController, WaitingBehavior, Loggable {
     
     var subscribers = Set<AnyCancellable>()
 
+    public private(set) var refreshControl: RefreshIndicator?
+    private weak var refreshActivity: ActivityDisposable?
+
     public var statusBarStyle: UIStatusBarStyle = .default
 
     deinit {
@@ -27,6 +30,12 @@ class BaseViewController: UIViewController, WaitingBehavior, Loggable {
         super.viewDidLoad()
         self.setupBackButton()
         self.setupStrings()
+        view.backgroundColor = .Surfaces.base
+    }
+
+    public override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        updateRefreshControlRect()
     }
 
     func initialize() {
@@ -49,20 +58,17 @@ class BaseViewController: UIViewController, WaitingBehavior, Loggable {
     }
 
     func setupBackButton() {
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "",
-                                                                style: .plain,
-                                                                target: nil,
-                                                                action: nil)
+        if #available(iOS 14.0, *) {
+            self.navigationItem.backButtonDisplayMode = .minimal
+        } else {
+            self.navigationItem.backBarButtonItem = UIBarButtonItem(
+                title: "",
+                style: .plain,
+                target: nil,
+                action: nil
+            )
+        }
     }
-
-    // MARK: - App Terminated
-
-    func addTermenateAppObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.appWillTerminate),
-                                               name: UIApplication.willTerminateNotification, object: nil)
-    }
-
-    @objc func appWillTerminate() {}
 
     // MARK: - Keyboard
 
@@ -102,5 +108,63 @@ class BaseViewController: UIViewController, WaitingBehavior, Loggable {
 
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return .portrait
+    }
+
+    // MARK: - Refresh
+
+    public func addRefreshControl(scrollView: UIScrollView, color: UIColor? = nil) {
+        if self.refreshControl != nil {
+            return
+        }
+        scrollView.alwaysBounceVertical = true
+        let refreshControl = RefreshIndicator(style: .prominent)
+        refreshControl.indicator.lineColor = color ?? .Text.main
+        scrollView.addSubview(refreshControl)
+        refreshControl.addTarget(
+            self,
+            action: #selector(self.refresh),
+            for: .valueChanged
+        )
+        self.refreshControl = refreshControl
+    }
+
+    public func removeRefreshControl() {
+        self.refreshControl?.removeFromSuperview()
+        self.refreshControl = nil
+    }
+
+    public func updateRefreshControlRect() {
+        guard let view = refreshControl?.superview else { return }
+        self.refreshControl?.center.x = view.bounds.width / 2
+    }
+
+    public func isRefreshing() -> Bool {
+        return self.refreshControl?.isRefreshing ?? false
+    }
+
+    @objc
+    public func refresh() {
+        // override me
+    }
+}
+
+extension BaseViewController: RefreshBehavior {
+    func showRefreshIndicator() -> ActivityDisposable? {
+        if self.refreshActivity?.isDisposed == false {
+            return self.refreshActivity
+        }
+        if self.isRefreshing() == false {
+            self.refreshControl?.startRefreshing()
+        }
+        return self.createActivity()
+    }
+
+    private func createActivity() -> ActivityDisposable? {
+        let activity = ActivityHolder { [weak self] in
+            self?.refreshControl?.endRefreshing()
+        }
+
+        self.refreshActivity = activity
+        return activity
     }
 }

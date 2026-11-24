@@ -8,7 +8,7 @@ extension String {
 }
 
 extension Dictionary where Key == String, Value == Any {
-    func stringFromHttpParameters() -> String {
+    func stringFromHttpParameters() -> String? {
         let parameterArray = self.compactMap { (key, value) -> String? in
             let percentEscapedKey = key.stringByAddingPercentEncodingForURLQueryValue()!
             if let array = value as? [AnyObject] {
@@ -22,6 +22,9 @@ extension Dictionary where Key == String, Value == Any {
             }
             let percentEscapedValue = "\(value)".stringByAddingPercentEncodingForURLQueryValue()!
             return "\(percentEscapedKey)=\(percentEscapedValue)"
+        }
+        if parameterArray.isEmpty {
+            return nil
         }
         return parameterArray.joined(separator: "&")
     }

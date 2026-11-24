@@ -1,6 +1,6 @@
 import Foundation
 
-public enum VideoQuality: Int, CaseIterable, Codable {
+public enum VideoQuality: Int32, CaseIterable, Codable {
     case fullHd
     case hd
     case sd
@@ -28,60 +28,96 @@ public enum VideoQuality: Int, CaseIterable, Codable {
     }
 }
 
-struct Skips: Decodable {
-    let opening: Range<Int>?
-    let ending: Range<Int>?
-    
-    public init(from decoder: Decoder) throws {
-        let rangeConverter = RangeConverter()
-        self.opening = (decoder["opening"] <- rangeConverter)
-        self.ending = (decoder["ending"] <- rangeConverter)
-    }
-}
+public struct PlaylistItem: Codable, Hashable {
+    let id: String
+    let title: String?
+    let preview: URL?
+    let ordinal: Double?
+    let video: [VideoQuality: URL]
+    let openingRange: Range<Int>?
+    let endingRange: Range<Int>?
+    let duration: TimeInterval
 
-public final class PlaylistItem: NSObject, Decodable {
-    var id: Int = 0
-    var title: String = ""
-    var video: [VideoQuality: URL] = [:]
-    var skips: Skips?
+    var episode: String? {
+        ordinal.map { "\(NSNumber(value: $0)) \(L10n.Common.episode)" }
+    }
 
     public func supportedQualities() -> [VideoQuality] {
         return self.video.keys.sorted(by: { $0.rawValue < $1.rawValue })
     }
 
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case nameEnglish = "name_english"
+        case ordinal
+        case duration
+
+        case preview
+        case src
+
+        case opening
+        case ending
+        case start
+        case stop
+
+        case hls1080 = "hls_1080"
+        case hls720 = "hls_720"
+        case hls480 = "hls_480"
+    }
+
     public init(from decoder: Decoder) throws {
-        super.init()
-        let urlConverter = URLConverter(Configuration.server)
-		self.id <- decoder["id"]
-		self.title <- decoder["title"]
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let urlConverter = URLConverter()
+        self.id = try container.decode(required: .id)
+        self.title = container.decode(.name) ?? container.decode(.nameEnglish)
+        self.ordinal = container.decode(.ordinal)
+
+        let openingStart: Int? = container.decode(.opening, .start)
+        let openingStop: Int? = container.decode(.opening, .stop)
+        let endingStart: Int? = container.decode(.ending, .start)
+        let endingStop: Int? = container.decode(.ending, .stop)
+
+        self.openingRange = if let openingStart, let openingStop, openingStart <= openingStop {
+            .init(uncheckedBounds: (openingStart, openingStop))
+        } else { nil }
+
+        self.endingRange = if let endingStart, let endingStop, endingStart <= endingStop  {
+            .init(uncheckedBounds: (endingStart, endingStop))
+        } else { nil }
 
 		var result: [VideoQuality: URL] = [:]
-		if let url: URL = decoder["fullhd"] <- urlConverter {
+        if let url: URL = container.decode(.hls1080) {
 			result[.fullHd] = url
 		}
-		if let url: URL = decoder["hd"] <- urlConverter {
+        if let url: URL = container.decode(.hls720) {
 			result[.hd] = url
 		}
-		if let url: URL = decoder["sd"] <- urlConverter {
+        if let url: URL = container.decode(.hls480) {
 			result[.sd] = url
 		}
 		self.video = result
-        self.skips <- decoder["skips"]
-    }
-}
-
-extension Skips {
-    func canSkip(time: Int, length: Int) -> Bool {
-        [opening, ending]
-            .compactMap { $0 }
-            .compactMap { Range(uncheckedBounds: ($0.lowerBound, $0.lowerBound + length)) }
-            .contains(where: { $0.contains(time) })
+        self.duration = container.decode(.duration) ?? 0
+        self.preview = urlConverter.convert(from: container.decode(.preview, .src))
     }
 
-    func upperBound(time: Int) -> Int? {
-        [opening, ending]
-            .compactMap { $0 }
-            .first(where: { $0.contains(time) })?
-            .upperBound
+    public func encode(to encoder: Encoder) throws {
+        encoder.apply(CodingKeys.self) { container in
+            container[.id] = id
+            container[.name] = title
+            container[.ordinal] = ordinal
+            container[.duration] = duration
+
+            container[.opening][.start] = openingRange?.lowerBound
+            container[.opening][.ending] = openingRange?.upperBound
+            container[.ending][.start] = endingRange?.lowerBound
+            container[.ending][.ending] = endingRange?.upperBound
+
+            container[.hls1080] = video[.fullHd]?.absoluteString
+            container[.hls720] = video[.hd]?.absoluteString
+            container[.hls480] = video[.sd]?.absoluteString
+
+            container[.preview][.src] = preview?.absoluteString
+        }
     }
 }

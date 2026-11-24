@@ -1,3 +1,11 @@
+//
+//  AttributedConverter.swift
+//  Anilibria
+//
+//  Created by Ivan Morozov on 20.12.2024.
+//  Copyright © 2024 Иван Морозов. All rights reserved.
+//
+
 import Foundation
 
 public final class AttributedConverter: Converter {

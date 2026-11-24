@@ -11,4 +11,8 @@ public struct MRKitErrorCode {
     public static let emptyResponse = 10400
     /// Error parsing response
     public static let parsingError = 10401
+    /// No available base url
+    public static let noBaseUrl = 10402
+    /// No alternative server
+    public static let noAlternative = 10403
 }

@@ -1,4 +1,7 @@
+import Foundation
+#if canImport(UIKit)
 import UIKit
+#endif
 
 public extension UserDefaults {
     subscript<T>(key: String) -> T? where T: Codable {

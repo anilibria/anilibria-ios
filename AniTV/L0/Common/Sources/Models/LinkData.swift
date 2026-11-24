@@ -1,4 +1,7 @@
+import Foundation
+#if canImport(UIKit)
 import UIKit
+#endif
 
 public enum LinkType: String, Codable {
     case vk
@@ -13,7 +16,8 @@ public enum LinkType: String, Codable {
     case site
     case unknown
 
-    public var icon: UIImage? {
+    #if canImport(UIKit)
+public var icon: UIImage? {
         switch self {
         case .vk:
             return UIImage(named: "icon_vk")
@@ -31,6 +35,7 @@ public enum LinkType: String, Codable {
             return UIImage(named: "icon_anilibria")
         }
     }
+#endif
 }
 
 public final class LinkData: NSObject, Codable {

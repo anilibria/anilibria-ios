@@ -1,4 +1,9 @@
+import Foundation
+#if canImport(UIKit)
+#if canImport(UIKit)
 import UIKit
+#endif
+#endif
 
 public extension String {
     static func pluralsString(number: Int,
@@ -35,6 +40,7 @@ public extension String {
     }
 }
 
+#if canImport(UIKit)
 public extension String {
     func height(for width: CGFloat, font: UIFont) -> CGFloat {
         let maxSize = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
@@ -76,6 +82,8 @@ public extension String {
         return nil
     }
 }
+
+#endif
 
 public extension String {
     func toURL() -> URL? {

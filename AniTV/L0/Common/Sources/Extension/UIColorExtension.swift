@@ -1,4 +1,8 @@
+import Foundation
+#if canImport(UIKit)
 import UIKit
+#endif
+#if canImport(UIKit)
 
 public extension UIColor {
     convenience init?(hexString: String) {

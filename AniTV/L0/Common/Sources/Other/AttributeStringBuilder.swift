@@ -1,5 +1,9 @@
+import Foundation
+#if canImport(UIKit)
 import UIKit
+#endif
 
+#if canImport(UIKit)
 public final class AttributeStringBuilder {
     private var attributes: [NSAttributedString.Key: Any] = [:]
     private var paragraphStyle = NSMutableParagraphStyle()
@@ -125,3 +129,4 @@ private extension Dictionary {
         }
     }
 }
+#endif

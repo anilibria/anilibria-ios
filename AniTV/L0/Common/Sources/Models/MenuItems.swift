@@ -1,5 +1,7 @@
 import Foundation
+#if canImport(UIKit)
 import UIKit
+#endif
 
 public enum MenuItemType: String, CaseIterable {
     case feed, catalog, news, favorite, other
@@ -9,6 +11,7 @@ public enum MenuItemType: String, CaseIterable {
     }
 }
 
+#if canImport(UIKit)
 public typealias DoubleImage = (normal: UIImage, selected: UIImage)
 
 public final class MenuItem: NSObject {
@@ -41,3 +44,5 @@ public final class MenuItemsFactory {
         ]
     }
 }
+
+#endif

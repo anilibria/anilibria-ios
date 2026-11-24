@@ -16,8 +16,8 @@ let package = Package(
             targets: ["ServiceLayer"]),
     ],
     dependencies: [
-        .package(path: "../L0/Common"),
-        .package(path: "../L1/DataLayer"),
+        .package(path: "../../L0/Common"),
+        .package(path: "../../L1/DataLayer"),
         .package(url: "https://github.com/ivlevAstef/DITranquillity.git", .upToNextMajor(from: "4.5.0")),
     ],
     targets: [

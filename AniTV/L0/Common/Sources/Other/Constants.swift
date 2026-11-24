@@ -1,4 +1,7 @@
+import Foundation
+#if canImport(UIKit)
 import UIKit
+#endif
 
 public typealias ActionFunc = () -> Void
 public typealias Action<T> = (T) -> Void
@@ -9,6 +12,7 @@ public struct Constants {
     static let downloadFolder: String = "Anilibria Files"
 }
 
+#if canImport(UIKit)
 public struct Sizes {
     public static let maxWidth: CGFloat = 500
     public static let minSize: CGSize = CGSize(width: 1000, height: 800)
@@ -19,11 +23,13 @@ public struct Sizes {
         return width > maxWidth ? maxWidth : width
     }
 }
+#endif
 
 public struct VKCookie {
     public static let name = "remixsid"
 }
 
+#if canImport(UIKit)
 public struct Css {
     static func text(_ size: Double = 15, color: UIColor? = nil) -> String {
         var cssColor = ""
@@ -34,6 +40,13 @@ public struct Css {
         return "<style type=\"text/css\"> * { font-size: \(size)px; font-family: -apple-system; \(cssColor)} </style>"
     }
 }
+#else
+public struct Css {
+    static func text(_ size: Double = 15, color: Any? = nil) -> String {
+        return "<style type=\"text/css\"> * { font-size: \(size)px; font-family: -apple-system; } </style>"
+    }
+}
+#endif
 
 public struct URLS {
     public static let team: URL? = URL(string: "https://www.anilibria.tv/pages/team.php")
